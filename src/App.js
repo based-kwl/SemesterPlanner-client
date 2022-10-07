@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -15,11 +15,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Semester Planner App
         </a>
       </header>
     </div>
   );
 }
 
-module.export = App
