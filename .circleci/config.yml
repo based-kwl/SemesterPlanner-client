@@ -18,9 +18,6 @@ jobs:
       - run:
           command: npm run build
           name: Build app
-      - persist_to_workspace:
-          root: ~/SemesterPlanner-client
-          paths: .
 
 
 workflows:
