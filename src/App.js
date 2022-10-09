@@ -1,12 +1,22 @@
 import './App.css';
-import {Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import UserSignIn from './components/Authentication/userSignIn';
 
 export default function App() {
-  return (
-      <Routes>
-        <Route path="/login" element={[<UserSignIn/>]} />
-      </Routes>
+    return (
+        <BrowserRouter>
+            <AppRoutes />
+        </BrowserRouter>
+    );
+}
+
+function AppRoutes() {
+    return (
+        <Routes>
+            <Route path="/login" element={<UserSignIn />} />
+        </Routes>
+    );
+}
     // <div className="App">
     //   <header className="App-header">
     //     <p>
@@ -22,5 +32,4 @@ export default function App() {
     //     </a>
     //   </header>
     // </div>
-  );
-}
+
