@@ -1,0 +1,7 @@
+Connecting FE to BE
+
+- Ensure FE has a state for all attributes that need to be saved
+- Require axios in FE form
+- In FE onSubmit:
+    - axios.post('http://localhost:3005/users/add', user).then(res => console.log(res.data));
+    - user is the state attributes collected in FE
