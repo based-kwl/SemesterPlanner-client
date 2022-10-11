@@ -10,25 +10,17 @@ import axios from 'axios';
 
 
 export default function UserSignIn() {
-    const [username, setUsername] = useState('test1')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [firstName, setFirstName] = useState('jake')
-    const [lastName, setLastName] = useState('lop')
-    const [program, setProgram] = useState('soen')
-    
+
     const handleSubmit = () => {
         const user = {
-            username,
             email,
             password,
-            firstName,
-            lastName,
-            program
         }
 
-        axios.post('http://localhost:5000/users/add', user)
-            .then(res => console.log(res.data))
+        axios.post('http://localhost:5000/login', user)
+            .then(res => console.log('User found: ' + res.data))
             .catch(err => console.log(`Error: ${err}`));
     }
 
