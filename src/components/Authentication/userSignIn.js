@@ -23,7 +23,7 @@ export default function UserSignIn() {
         }
 
         //API call
-        axios.post('http://localhost:5001/login/', user)
+        axios.post('http://localhost:5000/login/', user)
             .then(res => {
                 console.log(res.data);
                 setLogin(true)
@@ -31,7 +31,7 @@ export default function UserSignIn() {
             })
             .catch(err => console.log(`Error: ${err}`));
     }
-    
+
     return (
         <Card variant='outlined' style={{
             width: '372px',
