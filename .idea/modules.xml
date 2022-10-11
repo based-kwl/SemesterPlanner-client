@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../SemesterPlanner-Server/.idea/SemesterPlanner-Server.iml" filepath="$PROJECT_DIR$/../SemesterPlanner-Server/.idea/SemesterPlanner-Server.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/SemesterPlanner-client.iml" filepath="$PROJECT_DIR$/.idea/SemesterPlanner-client.iml" />
     </modules>
   </component>

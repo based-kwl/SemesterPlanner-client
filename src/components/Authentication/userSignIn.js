@@ -4,11 +4,33 @@ import {Box, Button, InputAdornment, Link, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import Card from '@mui/material/Card';
+import {useState} from "react";
+import axios from 'axios';
 
 
 
 export default function UserSignIn() {
+    const [username, setUsername] = useState('test1')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [firstName, setFirstName] = useState('jake')
+    const [lastName, setLastName] = useState('lop')
+    const [program, setProgram] = useState('soen')
+    
+    const handleSubmit = () => {
+        const user = {
+            username,
+            email,
+            password,
+            firstName,
+            lastName,
+            program
+        }
 
+        axios.post('http://localhost:5000/users/add', user)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(`Error: ${err}`));
+    }
 
     return (
         <Card variant='outlined' style={{
@@ -38,7 +60,7 @@ export default function UserSignIn() {
                 height: '400px',
                 marginTop: '50px'
             }} variant='outlined'>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <Box>
                         <Typography align='center' style={{fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold'}}>Sign
                             in</Typography>
@@ -51,6 +73,7 @@ export default function UserSignIn() {
                                            required
                                            label="Email"
                                            variant='outlined'
+                                           onChange={(e) => setEmail(e.target.value)}
                                            InputProps={{
                                                endAdornment: <InputAdornment
                                                    position="end"><MailOutlineIcon/></InputAdornment>,
@@ -66,6 +89,7 @@ export default function UserSignIn() {
                                            required
                                            label="Password"
                                            variant='outlined'
+                                           onChange={(e) => setPassword(e.target.value)}
                                            InputProps={{
                                                endAdornment: <InputAdornment
                                                    position="end"><VisibilityIcon/></InputAdornment>,
