@@ -12,7 +12,7 @@ import {useNavigate} from "react-router";
 export default function UserSignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [login, setLogin] = useState(false);
+    // const [login, setLogin] = useState(false);
     const navigate= useNavigate();
 
     const handleSubmit = (e) => {
@@ -26,7 +26,7 @@ export default function UserSignIn() {
         axios.post('http://localhost:5000/login/', user)
             .then(res => {
                 console.log(res.data);
-                setLogin(true)
+                // setLogin(true)
                 navigate('/home');
             })
             .catch(err => console.log(`Error: ${err}`));
