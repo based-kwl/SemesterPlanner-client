@@ -17,7 +17,7 @@ function AppRoutes() {
         <Routes>
             <Route path="/login" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/calendar3" element={<Calendar />} />
+            <Route path="/calendar" element={<Calendar />} />
 
         </Routes>
     );

@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { Box, Button, InputAdornment, Link, Typography } from "@mui/material";
-import Card from '@mui/material/Card';
 import { useState } from "react";
 import Calendar from 'react-calendar';
-import Grid from '@mui/material/Grid';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import { BackgroundCard, BackgroundCard2, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
@@ -69,11 +67,7 @@ export default function CalendarView() {
 
         </React.Fragment>
     )
-    const eventContentCard = (
-        <React.Fragment>
-            <EventCard width='360px' height='30px' marginTop='50px' content={eventList} backgroundColor='#8CC63E' />
-        </React.Fragment>
-    )
+
 
     const calendarPage = (
         <BackgroundCard2 width='372px' height='785px' content={calendarCard} content2={eventCard} />

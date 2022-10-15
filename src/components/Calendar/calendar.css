@@ -87,6 +87,10 @@
   .react-calendar__century-view .react-calendar__tile {
     padding: 2em 0.5em;
   }
+
+  .highlight {
+    color:red;
+ }
   .react-calendar__tile {
     max-width: 100%;
     padding: 10px 6.6667px;
