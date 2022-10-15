@@ -9,7 +9,8 @@ import { BackgroundCard, BackgroundCard2, CustomWhiteCard, EventCard } from '../
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
-    const mark = [
+   //  use this to mark certain days and change the colout using .highlight in celendar.css
+    const mark = [ 
         '04-03-2022',
         '03-03-2022',
         '05-03-2022'
@@ -18,12 +19,11 @@ export default function CalendarView() {
     const celendarMonth = (
         <React.Fragment>
             <Calendar onChange={setDate} value={date} 
-           
+
             />
         </React.Fragment>
     )
 
-  
     const calendarCard = (
         <React.Fragment>
             <CustomWhiteCard width='360px' height='400px' marginTop='50px' content={celendarMonth} />
@@ -41,8 +41,6 @@ export default function CalendarView() {
             </CardContent>
         </React.Fragment>
     )
-
-    
   
     const eventList = (
         <CardContent>
@@ -58,7 +56,6 @@ export default function CalendarView() {
         </CardContent>
     )
 
-    
     const eventCard = (
         <React.Fragment>
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' content={eventHeader} backgroundColor='#8CC63E' />
@@ -67,7 +64,6 @@ export default function CalendarView() {
 
         </React.Fragment>
     )
-
 
     const calendarPage = (
         <BackgroundCard2 width='372px' height='785px' content={calendarCard} content2={eventCard} />
