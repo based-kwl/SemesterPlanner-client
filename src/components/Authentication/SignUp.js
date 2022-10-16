@@ -26,6 +26,7 @@ export default function SignUp() {
         program: 'Actuarial Mathematics',
         privateProfile: true
     });
+    const [registrationError, setRegistrationError] = React.useState({message: '', hasError: false});
     const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
     const navigate = useNavigate();
     const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
@@ -81,7 +82,10 @@ export default function SignUp() {
                 // setLogin(true)
                 navigate('/home');
             })
-            .catch(err => console.log(`Error: ${err}`));
+            .catch(err => {
+                setRegistrationError({ ...registrationError, message: err});
+                setRegistrationError({ ...registrationError, hasError: true});
+                console.log(`Error: ${err}`)});
     }
 
     function handleProgramChange(e) {
@@ -116,6 +120,11 @@ export default function SignUp() {
     }
 
 
+    const pageError = (
+        <Typography align="center" color="#DA3A16">
+            {registrationError.message}
+        </Typography>
+    );
 
     const ProgramSelect = (
         <Container maxWidth="md" component="main">
@@ -136,6 +145,7 @@ export default function SignUp() {
 
     const SignUpForm = (
         <React.Fragment>
+            {registrationError.hasError && pageError}
             <form onSubmit={handleSubmit} style={{paddingLeft: '10px', paddingRight: '10px'}}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField
