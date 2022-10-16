@@ -17,17 +17,11 @@ import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import {faculties, programs} from "../Authentication/SignUp";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
+import {useEffect} from "react";
 
 export default function EditProfile() {
 
-    const [userData, setUserData] = React.useState({
-        username: '',
-        email: '',
-        password: '',
-        faculty: 'Art & Science',
-        program: 'Actuarial Mathematics',
-        privateProfile: true
-    });
+    const [userData, setUserData] = React.useState(null);
     const [registrationError, setRegistrationError] = React.useState({
         message: "Error, please try again later",
         hasError: false
@@ -35,9 +29,17 @@ export default function EditProfile() {
     const [confirmPassword, setConfirmPassword] = React.useState({password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
+    useEffect(() => {
+
+    })
+
     function handleEditProfile() {
         console.log(userData);
-        axios.post('http://localhost:5000/users/update/', userData)
+
+        const config = {
+            headers: {authorization: "Bearer " + "Tokens goes here"} //todo : define the token
+        }
+        axios.post('http://localhost:5000/users/update/', userData, config)
             .then(res => {
                 console.log(res.data);
                 // setLogin(true)
