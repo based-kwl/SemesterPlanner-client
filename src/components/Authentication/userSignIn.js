@@ -41,8 +41,6 @@ export default function UserSignIn() {
                 backgroundColor: '#E9E3D3',
                 margin: 'auto'
             }}>
-                {/*TODO: remove NavDrawer; NavDrawer is not supposed to be available on login page*/}
-                <NavDrawer navbarTitle={'Login'}/>
                 <p align='center' style={{
                     fontFamily: 'Roboto',
                     fontSize: '34px',
