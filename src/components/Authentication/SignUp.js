@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import {PrimaryButton, SelectButton} from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2, SelectButton} from '../CustomMUIComponents/CustomButtons';
 import {useNavigate} from "react-router";
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +26,7 @@ export default function SignUp() {
         program: 'Actuarial Mathematics',
         privateProfile: true
     });
-    const [registrationError, setRegistrationError] = React.useState({message: '', hasError: false});
+    const [registrationError, setRegistrationError] = React.useState({message: "Error, please try again later", hasError: false});
     const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
     const navigate = useNavigate();
     const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
@@ -74,7 +74,7 @@ export default function SignUp() {
         ]
     };
 
-    const handleSubmit = () => {
+    function handleRegistration() {
         console.log(userData);
         axios.post('http://localhost:5000/register/', userData)
             .then(res => {
@@ -83,8 +83,10 @@ export default function SignUp() {
                 navigate('/home');
             })
             .catch(err => {
-                setRegistrationError({ ...registrationError, message: err});
+                console.log(err)
+                setRegistrationError({ ...registrationError, message: "Error connecting to database"});
                 setRegistrationError({ ...registrationError, hasError: true});
+                console.log(registrationError);
                 console.log(`Error: ${err}`)});
     }
 
@@ -120,11 +122,12 @@ export default function SignUp() {
     }
 
 
-    const pageError = (
+    const PageError =  registrationError.hasError ? (
         <Typography align="center" color="#DA3A16">
             {registrationError.message}
         </Typography>
-    );
+    ) :
+        (<React.Fragment/>);
 
     const ProgramSelect = (
         <Container maxWidth="md" component="main">
@@ -145,8 +148,8 @@ export default function SignUp() {
 
     const SignUpForm = (
         <React.Fragment>
-            {registrationError.hasError && pageError}
-            <form onSubmit={handleSubmit} style={{paddingLeft: '10px', paddingRight: '10px'}}>
+            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
+                <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField
                         fullWidth
@@ -241,7 +244,7 @@ export default function SignUp() {
                             />
                         } label={userData.privateProfile ? "Public" : "Private"} />
                 </div>
-                <PrimaryButton width='305px' content="Register" />
+                <PrimaryButton2 width='305px' content="Register" onClick={handleRegistration} />
             </form>
         </React.Fragment>
     )
