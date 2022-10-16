@@ -21,7 +21,7 @@ export const programs = {
     'Art & Science' : [
         'Actuarial Mathematics',
         'Adult Education',
-        'Anthropoly',
+        'Anthropology',
         'Athletic Therapy',
         'Behavior NeuroScience',
         'Biochemistry',

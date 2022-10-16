@@ -11,6 +11,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
+import MockUser from "./Mocks/mockUser.json";
 import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -19,7 +20,9 @@ import {faculties, programs} from "../Authentication/SignUp";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useEffect} from "react";
 
-export default function EditProfile() {
+const user = MockUser[0];
+
+export default function EditProfile(userId) {
 
     const [userData, setUserData] = React.useState({
         username: '',
@@ -29,6 +32,7 @@ export default function EditProfile() {
         program: 'Actuarial Mathematics',
         privateProfile: true
     });
+
     const [registrationError, setRegistrationError] = React.useState({
         message: "Error, please try again later",
         hasError: false
@@ -36,8 +40,18 @@ export default function EditProfile() {
     const [confirmPassword, setConfirmPassword] = React.useState({password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
+
     useEffect(() => {
-        // fetch user and assign userData
+        // TODO: fetch user from server
+
+        setUserData({
+            ...userData, 
+            email: user.email,
+            username: user.username,
+            faculty: user.faculty,
+            program: user.program,
+            privateProfile: user.privateProfile
+        })
     })
 
     function handleEditProfile() {
