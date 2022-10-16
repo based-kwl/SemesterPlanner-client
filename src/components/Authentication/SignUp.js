@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
-import {Box, InputAdornment, Link, Typography} from "@mui/material";
+import { InputAdornment, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
