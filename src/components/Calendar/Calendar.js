@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { Box, Button, InputAdornment, Link, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import { BackgroundCard, BackgroundCard2, CustomWhiteCard, ReminderCard } from '../CustomMUIComponents/CustomCards';
+import { BackgroundCard, CustomWhiteCard, ReminderCard } from '../CustomMUIComponents/CustomCards';
 
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
    //  use this to mark certain days and change the colour using .highlight in celendar.css
-    const mark = [ 
-        '04-03-2022',
-        '03-03-2022',
-        '05-03-2022'
-    ]
+    // const mark = [ 
+    //     '04-03-2022',
+    //     '03-03-2022',
+    //     '05-03-2022'
+    // ]
 
     const celendarMonth = (
         <React.Fragment>
@@ -43,11 +43,11 @@ export default function CalendarView() {
     )
   
     const reminderList = (
-        <CardContent>
+        <CardContent style={{ paddingBottom: 0, paddingTop:0}}>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                 14:00-17:00
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
+            <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto'  }}>
                 School Meeting
             </Typography>
             <Typography variant="body2" color="text.secondary" >
@@ -58,10 +58,9 @@ export default function CalendarView() {
 
     const reminderDisplay = (
         <React.Fragment>
-            <ReminderCard justifyContent='auto' width='360px' height='30px' marginTop='15px' content={reminderHeader} backgroundColor='#8CC63E' />
-            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={reminderList}  />
-            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={reminderList}  />
-
+            <ReminderCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'  content={reminderHeader} backgroundColor='#8CC63E' />
+            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={reminderList}  />
+            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={reminderList}  />
         </React.Fragment>
     )
 
@@ -71,7 +70,6 @@ export default function CalendarView() {
         {reminderDisplay}
         </React.Fragment>
         )
-
 
     const calendarPage = (
         <BackgroundCard width='372px' height='785px' content={calendarPageCards} />
