@@ -4,12 +4,12 @@ import { useState } from "react";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import { BackgroundCard, BackgroundCard2, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
+import { BackgroundCard, BackgroundCard2, CustomWhiteCard, ReminderCard } from '../CustomMUIComponents/CustomCards';
 
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
-   //  use this to mark certain days and change the colout using .highlight in celendar.css
+   //  use this to mark certain days and change the colour using .highlight in celendar.css
     const mark = [ 
         '04-03-2022',
         '03-03-2022',
@@ -30,7 +30,7 @@ export default function CalendarView() {
         </React.Fragment>
     )
 
-    const eventHeader = (
+    const reminderHeader = (
         <React.Fragment>
             <CardContent>
                 <Typography color="#ffffff" fontWeight={500} style={{
@@ -42,7 +42,7 @@ export default function CalendarView() {
         </React.Fragment>
     )
   
-    const eventList = (
+    const reminderList = (
         <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                 14:00-17:00
@@ -56,17 +56,25 @@ export default function CalendarView() {
         </CardContent>
     )
 
-    const eventCard = (
+    const reminderDisplay = (
         <React.Fragment>
-            <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' content={eventHeader} backgroundColor='#8CC63E' />
-            <EventCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={eventList}  />
-            <EventCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={eventList}  />
+            <ReminderCard justifyContent='auto' width='360px' height='30px' marginTop='15px' content={reminderHeader} backgroundColor='#8CC63E' />
+            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={reminderList}  />
+            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' content={reminderList}  />
 
         </React.Fragment>
     )
 
+    const calendarPageCards = (
+        <React.Fragment>
+        {calendarCard}
+        {reminderDisplay}
+        </React.Fragment>
+        )
+
+
     const calendarPage = (
-        <BackgroundCard2 width='372px' height='785px' content={calendarCard} content2={eventCard} />
+        <BackgroundCard width='372px' height='785px' content={calendarPageCards} />
     )
 
     return calendarPage;

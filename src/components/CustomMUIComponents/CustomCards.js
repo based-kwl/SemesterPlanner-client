@@ -32,7 +32,7 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
-export const EventCard = ({width, height, marginTop, justifyContent, content, content2, backgroundColor}) => {
+export const ReminderCard = ({width, height, marginTop, justifyContent, content, content2, backgroundColor}) => {
     return (
         <Card style={{
             borderRadius: '15px',
@@ -53,20 +53,4 @@ export const EventCard = ({width, height, marginTop, justifyContent, content, co
 
         </Card>
     );
-}
-// contains two cards
-export const BackgroundCard2 = ({width, height, content, content2}) => {
-    return (
-        <Card variant='outlined' style={{
-            width: width,
-            height:  height,
-            justifyContent: 'center',
-            backgroundColor: '#E9E3D3',
-            margin: 'auto'
-        }}>
-            {content}
-            {content2}
-
-        </Card>
-    )
 }

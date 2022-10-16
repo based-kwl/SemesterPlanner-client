@@ -4,7 +4,7 @@
     "endDate": "10-05-2022",
     "startTime": "14:00",
     "endTime": "17:00",
-    "eventTitle": "School Meeting",
+    "reminderHeader": "School Meeting",
     "description": "Start from screen 16"
 },
 {
@@ -12,7 +12,7 @@
     "endDate": "10-04-2022",
     "startTime": "14:00",
     "endTime": "17:00",
-    "eventTitle": "Gym",
+    "reminderHeader": "Gym",
     "description": "Workout with Zack"
 },
 {
@@ -20,7 +20,7 @@
     "endDate": "10-10-2022",
     "startTime": "19:00",
     "endTime": "20:00",
-    "eventTitle": "Volunteer ",
+    "reminderHeader": "Volunteer ",
     "description": "Visit Elderly"
 },
 {
@@ -28,7 +28,7 @@
     "endDate": "01-10-2023",
     "startTime": "12:00",
     "endTime": "17:20",
-    "eventTitle": "Work Meeting",
+    "reminderHeader": "Work Meeting",
     "description": "Meet John"
 },
 {
@@ -36,7 +36,7 @@
     "endDate": "11-20-2022",
     "startTime": "10:00",
     "endTime": "12:00",
-    "eventTitle": "School Exam",
+    "reminderHeader": "School Exam",
     "description": "Rm. 164"
 },
 {
@@ -44,7 +44,7 @@
     "endDate": "02-15-2023",
     "startTime": "14:50",
     "endTime": "17:00",
-    "eventTitle": "Walk dog",
+    "reminderHeader": "Walk dog",
     "description": "--"
 },
 {
@@ -52,7 +52,7 @@
     "endDate": "12-01-2022",
     "startTime": "01:00",
     "endTime": "24:00",
-    "eventTitle": "Dad Birthday",
+    "reminderHeader": "Dad Birthday",
     "description": "Get present"
 },
 {
@@ -60,7 +60,7 @@
     "endDate": "01-01-2023",
     "startTime": "23:59",
     "endTime": "24:00",
-    "eventTitle": "New Years",
+    "reminderHeader": "New Years",
     "description": "Happy New Year!!"
 },
 {
@@ -68,7 +68,7 @@
     "endDate": "12-20-2022",
     "startTime": "15:00",
     "endTime": "16:00",
-    "eventTitle": "Gift Shopping",
+    "reminderHeader": "Gift Shopping",
     "description": "Get Jenny a gift"
 }
 
