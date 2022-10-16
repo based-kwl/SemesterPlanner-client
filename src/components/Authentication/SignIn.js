@@ -108,3 +108,7 @@ export default function SignIn() {
 
     return signInPage;
 }
+
+export function StoreAuthResults(res) {
+    console.log(res)
+}

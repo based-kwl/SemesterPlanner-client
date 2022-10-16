@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import {StoreAuthResults} from "./SignIn";
 
 export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
 export const programs = {
@@ -77,10 +78,10 @@ export default function SignUp() {
 
     function handleRegistration() {
         console.log(userData);
-        axios.post('http://localhost:5000/register/', userData)
-            .then(res => {
-                console.log(res.data);
-                navigate('/calendar');
+        axios.post('http://localhost:5000/users/add', userData)
+            .then(()=> {
+                console.log();
+                navigate('/login');
             })
             .catch(err => {
                 console.log(err)
