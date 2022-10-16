@@ -16,6 +16,51 @@ import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 
+export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
+export const programs = {
+    'Art & Science' : [
+        'Actuarial Mathematics',
+        'Adult Education',
+        'Anthropoly',
+        'Athletic Therapy',
+        'Behavior NeuroScience',
+        'Biochemistry',
+        'Biology',
+        'Chemistry'
+    ],
+    'Fine Arts' : [
+        'Art History',
+        'Ceramics',
+        'Computation Arts',
+        'Contemporary Dance',
+        'Design',
+        'Film Animation',
+        'Game Design',
+        'Music'
+    ],
+    'Engineering': [
+        'Aerospace Engineering',
+        'Building Engineering',
+        'Civil Engineering',
+        'Computer Engineering',
+        'Electrical Engineering',
+        'Industrial Engineering',
+        'Mechinical Engineering',
+        'Software Engineering'
+    ],
+    'Business': [
+        'Accountancy',
+        'Administration',
+        'Data Intelligence',
+        'Economics',
+        'Entrepreneurship',
+        'Finance',
+        'Management',
+        'Marketing',
+        'Real Estate'
+    ]
+};
+
 export default function SignUp() {
 
     const [userData, setUserData] = React.useState({
@@ -29,58 +74,13 @@ export default function SignUp() {
     const [registrationError, setRegistrationError] = React.useState({message: "Error, please try again later", hasError: false});
     const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
     const navigate = useNavigate();
-    const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
-    const programs = {
-        'Art & Science' : [
-            'Actuarial Mathematics',
-            'Adult Education',
-            'Anthropoly',
-            'Athletic Therapy',
-            'Behavior NeuroScience',
-            'Biochemistry',
-            'Biology',
-            'Chemistry'
-        ],
-        'Fine Arts' : [
-            'Art History',
-            'Ceramics',
-            'Computation Arts',
-            'Contemporary Dance',
-            'Design',
-            'Film Animation',
-            'Game Design',
-            'Music'
-        ],
-        'Engineering': [
-            'Aerospace Engineering',
-            'Building Engineering',
-            'Civil Engineering',
-            'Computer Engineering',
-            'Electrical Engineering',
-            'Industrial Engineering',
-            'Mechinical Engineering',
-            'Software Engineering'
-        ],
-        'Business': [
-            'Accountancy',
-            'Administration',
-            'Data Intelligence',
-            'Economics',
-            'Entrepreneurship',
-            'Finance',
-            'Management',
-            'Marketing',
-            'Real Estate'
-        ]
-    };
 
     function handleRegistration() {
         console.log(userData);
         axios.post('http://localhost:5000/register/', userData)
             .then(res => {
                 console.log(res.data);
-                // setLogin(true)
-                navigate('/home');
+                navigate('/calendar');
             })
             .catch(err => {
                 console.log(err)

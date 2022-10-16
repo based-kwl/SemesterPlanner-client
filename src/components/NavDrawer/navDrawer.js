@@ -92,13 +92,13 @@ export default function PersistentDrawerLeft(params) {
     const redirect = (buttonName) => {
         //TODO: remove below line; line exists to suppress warning due to currently unused 'openSearch' state
         if (openSearch === true)
-
+            console.log()
             switch (buttonName) {
                 case 'Home':
-                    navigate('/'); //TODO: set the proper path to the calendar page once it is implemented
+                    navigate('/calendar'); //TODO: set the proper path to the calendar page once it is implemented
                     break;
                 case 'Profile':
-                    navigate('/'); //TODO: set the proper path to the profile page once it is implemented
+                    navigate('/editProfile'); //TODO: set the proper path to the profile page once it is implemented
                     break;
                 case 'Progress Report':
                     navigate('/'); //TODO: set the proper path to the progress report page once it is implemented
