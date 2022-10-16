@@ -41,6 +41,7 @@ export default function EditProfile(userId) {
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
+        // todo : fetch the user from server
         setUserData({
             ...userData,
             username: user.username,

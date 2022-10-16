@@ -27,7 +27,7 @@ export default function SignIn() {
         axios.post('http://localhost:5000/login/', user)
             .then(res => {
                 console.log(res.data);
-                // setLogin(true)
+                // TODO:  set token and email in local storage
                 navigate('/home');
             })
             .catch(err => console.log(`Error: ${err}`));
