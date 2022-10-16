@@ -37,7 +37,7 @@ export default function EditProfile() {
         console.log(userData);
 
         const config = {
-            headers: {authorization: "Bearer " + "Tokens goes here"} //todo : define the token
+            headers: {authorization: "Bearer Tokens goes here"} //todo : define the token
         }
         axios.post('http://localhost:5000/users/update/', userData, config)
             .then(res => {
@@ -71,7 +71,7 @@ export default function EditProfile() {
         setUserData({...userData, password: e.target.value})
     }
 
-    function handlePrivacyChange(e) {
+    function handlePrivacyChange() {
         setUserData({...userData, privateProfile: !userData.privateProfile})
     }
 
