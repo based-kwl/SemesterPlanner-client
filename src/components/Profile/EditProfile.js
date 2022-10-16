@@ -18,9 +18,8 @@ import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import {faculties, programs} from "../Authentication/SignUp";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 
-const user = MockUser[0];
 
 export default function EditProfile(userId) {
 
@@ -33,6 +32,7 @@ export default function EditProfile(userId) {
         privateProfile: true
     });
 
+    const user = MockUser[0];
     const [registrationError, setRegistrationError] = React.useState({
         message: "Error, please try again later",
         hasError: false
@@ -40,19 +40,20 @@ export default function EditProfile(userId) {
     const [confirmPassword, setConfirmPassword] = React.useState({password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-        // TODO: fetch user from server
-
+    const fetchData = useCallback(() => {
         setUserData({
-            ...userData, 
-            email: user.email,
+            ...userData,
             username: user.username,
             faculty: user.faculty,
             program: user.program,
             privateProfile: user.privateProfile
         })
-    })
+    }, [])
+
+    useEffect(() => {
+        // TODO: fetch user from server
+        fetchData();
+    },[fetchData])
 
     function handleEditProfile() {
         console.log(userData);
@@ -81,10 +82,6 @@ export default function EditProfile(userId) {
 
     function handleUsernameChange(e) {
         setUserData({...userData, username: e.target.value})
-    }
-
-    function handleEmailChange(e) {
-        setUserData({...userData, email: e.target.value})
     }
 
     function handlePasswordChange(e) {
@@ -145,22 +142,7 @@ export default function EditProfile(userId) {
                         onChange={handleUsernameChange}
                     />
                 </div>
-                <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    <TextField
-                        fullWidth
-                        id='email'
-                        value={userData.email}
-                        type='email'
-                        required
-                        label="Email"
-                        variant='outlined'
-                        onChange={handleEmailChange}
-                        InputProps={{
-                            endAdornment: <InputAdornment
-                                position="end"><MailOutlineIcon/></InputAdornment>,
-                        }}
-                    />
-                </div>
+
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField fullWidth
                                id='password'
