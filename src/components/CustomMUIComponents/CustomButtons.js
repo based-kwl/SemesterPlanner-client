@@ -15,10 +15,14 @@ export const PrimaryButton = ({content, width}) => {
     );
 }
 
-export const SelectButton = ({isSelected, content, handleButtonSelect}) => {
+export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {
-        return (!isSelected ? '#057D78' : '#CBB576');
+        return (!(content === userData.faculty) ? '#057D78' : '#CBB576');
+    }
+
+    function handleButtonSelect() {
+        setUserData({ ...userData, faculty: content})
     }
 
         return (

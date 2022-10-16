@@ -1,22 +1,20 @@
 import * as React from 'react';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import {PrimaryButton, SelectButton} from '../CustomMUIComponents/CustomButtons';
+import {useNavigate} from "react-router";
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
-import {Box, InputAdornment, Link, Typography} from "@mui/material";
+import {InputAdornment, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import { PrimaryButton, SelectButton } from '../CustomMUIComponents/CustomButtons';
-import {useNavigate} from "react-router";
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-
 
 export default function SignUp() {
 
@@ -24,12 +22,12 @@ export default function SignUp() {
         username: '',
         email: '',
         password: '',
-        confirmedPassword: '',
         faculty: 'Art & Science',
-        program: 'null',
+        program: 'Actuarial Mathematics',
         privateProfile: true
     });
-    const navigate= useNavigate();
+    const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
+    const navigate = useNavigate();
     const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
     const programs = {
         'Art & Science' : [
@@ -46,7 +44,7 @@ export default function SignUp() {
             'Art History',
             'Ceramics',
             'Computation Arts',
-            'Contemporay Dance',
+            'Contemporary Dance',
             'Design',
             'Film Animation',
             'Game Design',
@@ -75,8 +73,8 @@ export default function SignUp() {
         ]
     };
 
-    const handleSubmit = (e) => {
-        //API call
+    const handleSubmit = () => {
+        console.log(userData);
         axios.post('http://localhost:5000/register/', userData)
             .then(res => {
                 console.log(res.data);
@@ -86,17 +84,37 @@ export default function SignUp() {
             .catch(err => console.log(`Error: ${err}`));
     }
 
-    function ValidateEmail(e) {
-        const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        return regex.test(e);
-    }
-    function handleProgramSelect() {
-        // todo
+    function handleProgramChange(e) {
+        setUserData({ ...userData, program: e.target.value})
     }
 
-    function handleProgramChange(e) {
-        //todo
+    function handleUsernameChange(e) {
+        setUserData({ ...userData, username: e.target.value})
     }
+
+    function handleEmailChange(e) {
+        setUserData({ ...userData, email: e.target.value})
+    }
+
+    function handlePasswordChange(e) {
+        //todo: add validation to password (ie should have one number, 6 letters, etc)
+        setUserData({...userData, password: e.target.value})
+    }
+
+    function handlePrivacyChange(e) {
+        setUserData({...userData, privateProfile: !userData.privateProfile})
+    }
+
+    function handleConfirmPasswordChange(e) {
+        setConfirmPassword({...confirmPassword, password: e.target.value});
+        if (e.target.value === userData.password) {
+            setConfirmPassword( { ...confirmPassword, isEqualToPassword: true});
+        }
+        else {
+            setConfirmPassword( { ...confirmPassword, isEqualToPassword: false});
+        }
+    }
+
 
 
     const ProgramSelect = (
@@ -109,7 +127,7 @@ export default function SignUp() {
                         xs={6}
                         md={6}
                     >
-                        <SelectButton isSelected={item === userData.faculty} content={item} handleButtonSelect={handleProgramSelect()} />
+                        <SelectButton userData={userData} setUserData={setUserData} content={item}  />
                     </Grid>
                 ))}
             </Grid>
@@ -123,21 +141,23 @@ export default function SignUp() {
                     <TextField
                         fullWidth
                         id='username'
+                        value={userData.username}
                         required
                         label="Username"
                         variant='outlined'
-                        onChange={(e) => setUserData({...userData, username: e})}
+                        onChange={handleUsernameChange}
                     />
                 </div>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField
                         fullWidth
                         id='email'
+                        value={userData.email}
                         type='email'
                         required
                         label="Email"
                         variant='outlined'
-                        onChange={(e) => setUserData({...userData, email: e})}
+                        onChange={handleEmailChange}
                         InputProps={{
                             endAdornment: <InputAdornment
                                 position="end"><MailOutlineIcon/></InputAdornment>,
@@ -149,9 +169,10 @@ export default function SignUp() {
                                id='password'
                                type='password'
                                required
+                               value={userData.password}
                                label="Password"
                                variant='outlined'
-                               onChange={(e) => setUserData({...userData, password: e})}
+                               onChange={handlePasswordChange}
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -163,9 +184,11 @@ export default function SignUp() {
                                id='confirmPassword'
                                type='password'
                                required
+                               error={!confirmPassword.isEqualToPassword && !(confirmPassword.password === '')}
+                               helperText={confirmPassword.isEqualToPassword || confirmPassword.password === '' ? '' : 'Passwords must match'}
                                label="Confirm Password"
                                variant='outlined'
-                               onChange={(e) => setUserData({...userData, confirmP: e})}
+                               onChange={handleConfirmPasswordChange}
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -182,44 +205,53 @@ export default function SignUp() {
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Please Select Your Program</InputLabel>
-                    <Select
-                        id="program"
-                        value={userData.faculty}
-                        label="Program"
-                        onChange={handleProgramChange()}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
+                        <InputLabel id="demo-simple-select-label">Program</InputLabel>
+                        <Select
+                            id="program"
+                            value={userData.program}
+                            label="Program"
+                            onChange={handleProgramChange}
+                        >
+                            {programs[userData.faculty].map((item) => (
+                                <MenuItem key={item} value={item}>
+                                    <em>{item}</em>
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </FormControl>
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
-                    <Typography>
-                        Hide my profile
-                    </Typography>
-                    <FormGroup>
-                        <FormControlLabel control={<Switch defaultChecked />} label="Public" />
-                    </FormGroup>
+                        <Typography>
+                            Hide my profile
+                        </Typography>
+                        <FormControlLabel sx={{display: 'block'}} control={
+                            <Switch
+                                checked={userData.privateProfile}
+                                onChange={handlePrivacyChange}
+                            />
+                        } label={userData.privateProfile ? "Public" : "Private"} />
                 </div>
                 <PrimaryButton width='305px' content="Register" />
             </form>
         </React.Fragment>
     )
 
-    const CardContent = (
-        <CustomWhiteCard width='326px' height='780px' marginTop='50px' content={SignUpForm} />
-    )
+    const InfoEdit = (
+        <React.Fragment>
+            <Typography align='center' style={{fontFamily: 'Roboto', fontSize: '34px', fontWeight: 'bold'}}>
+                Welcome!
+            </Typography>
+            <Typography align='center' style={{fontFamily: 'Roboto', fontSize: '18px', fontWeight: 'bold'}}>
+                Create your account.
+            </Typography>
+            <CustomWhiteCard width='326px' height='780px' marginTop='30px' content={SignUpForm} />
+        </React.Fragment>
 
-    const SignUpPage = (
-        <BackgroundCard width='372px' height='850px' content={CardContent} />
+)
+
+    return (
+        <BackgroundCard width='372px' height='920px' content={InfoEdit}/>
     );
-
-    return SignUpPage;
 
 
 }
