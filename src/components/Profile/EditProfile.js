@@ -21,7 +21,14 @@ import {useEffect} from "react";
 
 export default function EditProfile() {
 
-    const [userData, setUserData] = React.useState(null);
+    const [userData, setUserData] = React.useState({
+        username: '',
+        email: '',
+        password: '',
+        faculty: 'Art & Science',
+        program: 'Actuarial Mathematics',
+        privateProfile: true
+    });
     const [registrationError, setRegistrationError] = React.useState({
         message: "Error, please try again later",
         hasError: false
@@ -30,7 +37,7 @@ export default function EditProfile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
+        // fetch user and assign userData
     })
 
     function handleEditProfile() {
@@ -146,7 +153,7 @@ export default function EditProfile() {
                                type='password'
                                required
                                value={userData.password}
-                               label="Password"
+                               label="New Password"
                                variant='outlined'
                                onChange={handlePasswordChange}
                                InputProps={{
