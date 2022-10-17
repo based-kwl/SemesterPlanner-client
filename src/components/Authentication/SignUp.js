@@ -15,7 +15,6 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import {StoreAuthResults} from "./SignIn";
 
 export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
 export const programs = {

@@ -6,7 +6,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import {PrimaryButton2, SelectButton} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
