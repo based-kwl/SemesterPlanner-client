@@ -48,7 +48,7 @@ export default function EditProfile(userId) {
             program: user.program,
             privateProfile: user.privateProfile
         })
-    }, [])
+    }, [userData, user.username, user.faculty, user.program, user.privateProfile])
 
     useEffect(() => {
         // TODO: fetch user from server
