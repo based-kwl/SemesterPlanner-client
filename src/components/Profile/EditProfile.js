@@ -33,6 +33,7 @@ export default function EditProfile() {
     });
 
     const user = MockUser[0];
+    const userEmail = JSON.parse(localStorage.getItem("email"));
     const [registrationError, setRegistrationError] = React.useState({
         message: "Error, please try again later",
         hasError: false
@@ -41,12 +42,15 @@ export default function EditProfile() {
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
-        axios.get("http://localhost:5000/users/email/"+JSON.parse(localStorage.getItem("email")))
+        console.log(userEmail)
+        axios.get("http://localhost:5000/users/email/"+userEmail)
             .then((res) => {
+                console.log("USER "+ JSON.stringify(res.data));
                 const data = res.data;
                 setUserData({
                     ...userData,
                     username: data.username,
+                    email: userEmail,
                     //faculty: data.faculty, TODO: Add this property to server
                     program: data.program,
                     // privateProfile: user.privateProfile TODO: Add this property to server
@@ -58,21 +62,23 @@ export default function EditProfile() {
             faculty: user.faculty,
             privateProfile: user.privateProfile
         })
-    }, [userData, user.username, user.faculty, user.program, user.privateProfile])
+    }, [])
 
     useEffect(() => {
         // TODO: fetch user from server
         fetchData();
+        console.log(userData);
     },[fetchData])
 
     function handleEditProfile() {
         console.log(userData);
 
         const token = JSON.parse(localStorage.getItem("token"));
+        console.log(token);
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
-        axios.post('http://localhost:5000/users/update/', userData, config)
+        axios.post('http://localhost:5000/users/update/'+userEmail, userData, config)
             .then(res => {
                 console.log(res.data);
                 navigate('/calendar');
