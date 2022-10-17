@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
@@ -6,7 +7,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import {PrimaryButton2, SelectButton} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -21,7 +21,7 @@ import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useCallback, useEffect} from "react";
 
 
-export default function EditProfile(userId) {
+export default function EditProfile() {
 
     const [userData, setUserData] = React.useState({
         username: '',
@@ -41,12 +41,21 @@ export default function EditProfile(userId) {
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
-        // todo : fetch the user from server
+        axios.get("http://localhost:5000/users/email/"+JSON.parse(localStorage.getItem("email")))
+            .then((res) => {
+                const data = res.data;
+                setUserData({
+                    ...userData,
+                    username: data.username,
+                    //faculty: data.faculty, TODO: Add this property to server
+                    program: data.program,
+                    // privateProfile: user.privateProfile TODO: Add this property to server
+                })
+            }
+        );
         setUserData({
             ...userData,
-            username: user.username,
             faculty: user.faculty,
-            program: user.program,
             privateProfile: user.privateProfile
         })
     }, [])
@@ -59,13 +68,13 @@ export default function EditProfile(userId) {
     function handleEditProfile() {
         console.log(userData);
 
+        const token = JSON.parse(localStorage.getItem("token"));
         const config = {
-            headers: {authorization: "Bearer Tokens goes here"} //todo : define the token
+            headers: {authorization: `Bearer ${token}`}
         }
         axios.post('http://localhost:5000/users/update/', userData, config)
             .then(res => {
                 console.log(res.data);
-                // setLogin(true)
                 navigate('/calendar');
             })
             .catch(err => {
