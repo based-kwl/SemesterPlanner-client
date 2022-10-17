@@ -15,10 +15,28 @@ export const PrimaryButton = ({content, width}) => {
     );
 }
 
-export const SelectButton = ({isSelected, content, handleButtonSelect}) => {
+export const PrimaryButton2 = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#912338'
+            }}>
+            {content}
+        </Button>
+    );
+}
+
+export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {
-        return (!isSelected ? '#057D78' : '#CBB576');
+        return (!(content === userData.faculty) ? '#057D78' : '#CBB576');
+    }
+
+    function handleButtonSelect() {
+        setUserData({ ...userData, faculty: content})
     }
 
         return (
@@ -26,7 +44,9 @@ export const SelectButton = ({isSelected, content, handleButtonSelect}) => {
                 variant="contained"
                 fullWidth
                 onClick={handleButtonSelect}
-                style={{backgroundColor: buttonColor()}}>
+                style={{
+                    backgroundColor: buttonColor(),
+                    height: '60px'}}>
                 {content}
             </Button>
         )
