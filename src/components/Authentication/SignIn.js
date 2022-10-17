@@ -1,11 +1,11 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import {Box, InputAdornment, Link, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
-import { PrimaryButton } from '../CustomMUIComponents/CustomButtons';
-import {useState} from "react";
+import {PrimaryButton} from '../CustomMUIComponents/CustomButtons';
 import axios from 'axios';
 import {useNavigate} from "react-router";
 
@@ -14,7 +14,14 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     // const [login, setLogin] = useState(false);
-    const navigate= useNavigate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(localStorage.getItem("email")){
+            if(localStorage.getItem("email") === "")
+                window.location = "/calendar"
+        }
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -26,9 +33,9 @@ export default function SignIn() {
         //API call
         axios.post('http://localhost:5000/login/', user)
             .then(res => {
-                console.log(res.data);
-                // TODO:  set token and email in local storage
-                navigate('/home');
+                console.log(res);
+                SetLocalStorage(res);
+                navigate('/calendar');
             })
             .catch(err => console.log(`Error: ${err}`));
     }
@@ -102,13 +109,12 @@ export default function SignIn() {
 
     );
 
-    const signInPage = (
+    return (
         <BackgroundCard width='372px' height='785px' content={signInCard}/>
-    )
-
-    return signInPage;
+    );
 }
 
-export function StoreAuthResults(res) {
-    console.log(res)
+export function SetLocalStorage(res) {
+    localStorage.setItem("email", JSON.stringify(res.data.profile.email));
+    localStorage.setItem("token", JSON.stringify(res.data.token));
 }

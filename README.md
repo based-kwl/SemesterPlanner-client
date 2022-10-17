@@ -15,6 +15,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+
+To run e2e tests, you can run:
+### `npx cypress open`
+this will open the cypress app and show all your tests.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\

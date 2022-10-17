@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Typography } from "@mui/material";
-import { useState } from "react";
+import {useState} from 'react';
+import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import { BackgroundCard, CustomWhiteCard, ReminderCard } from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, CustomWhiteCard, ReminderCard} from '../CustomMUIComponents/CustomCards';
+import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 
 
 export default function CalendarView() {
@@ -71,9 +72,12 @@ export default function CalendarView() {
         </React.Fragment>
         )
 
-    const calendarPage = (
-        <BackgroundCard width='372px' height='785px' content={calendarPageCards} />
-    )
-
-    return calendarPage;
+    return (
+        <React.Fragment>
+            <PersistentDrawerLeft/>
+            <div style={{paddingTop: '60px'}}>
+                <BackgroundCard width='372px' height='785px' content={calendarPageCards}/>
+            </div>
+        </React.Fragment>
+    );
 }

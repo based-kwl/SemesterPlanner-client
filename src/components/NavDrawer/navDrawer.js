@@ -89,6 +89,13 @@ export default function PersistentDrawerLeft(params) {
     // };
 
     let navigate = useNavigate();
+
+    function handleLogout() {
+        localStorage.setItem("token", JSON.stringify(""));
+        localStorage.setItem("email", JSON.stringify(""));
+        window.location = "/login";
+    }
+
     const redirect = (buttonName) => {
         //TODO: remove below line; line exists to suppress warning due to currently unused 'openSearch' state
         if (openSearch === true) {
@@ -109,6 +116,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/'); //TODO: set the proper path to the study groups page once it is implemented
                 break;
             case 'Logout':
+                handleLogout();
                 navigate('/login'); //TODO: ensure that user tokens are destroyed when routing (once user tokens are implemented)
                 break;
             default:

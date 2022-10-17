@@ -20,6 +20,7 @@ function AppRoutes() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/editProfile" element={<EditProfile />} />
+            <Route exact path='/' element={<SignIn />} />
         </Routes>
     );
 }
