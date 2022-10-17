@@ -1,0 +1,75 @@
+[
+{
+    "startDate": "10-03-2022",
+    "endDate": "10-05-2022",
+    "startTime": "14:00",
+    "endTime": "17:00",
+    "reminderHeader": "School Meeting",
+    "description": "Start from screen 16"
+},
+{
+    "startDate": "10-04-2022",
+    "endDate": "10-04-2022",
+    "startTime": "14:00",
+    "endTime": "17:00",
+    "reminderHeader": "Gym",
+    "description": "Workout with Zack"
+},
+{
+    "startDate": "10-06-2022",
+    "endDate": "10-10-2022",
+    "startTime": "19:00",
+    "endTime": "20:00",
+    "reminderHeader": "Volunteer ",
+    "description": "Visit Elderly"
+},
+{
+    "startDate": "01-10-2023",
+    "endDate": "01-10-2023",
+    "startTime": "12:00",
+    "endTime": "17:20",
+    "reminderHeader": "Work Meeting",
+    "description": "Meet John"
+},
+{
+    "startDate": "11-15-2022",
+    "endDate": "11-20-2022",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "reminderHeader": "School Exam",
+    "description": "Rm. 164"
+},
+{
+    "startDate": "02-09-2023",
+    "endDate": "02-15-2023",
+    "startTime": "14:50",
+    "endTime": "17:00",
+    "reminderHeader": "Walk dog",
+    "description": "--"
+},
+{
+    "startDate": "12-01-2022",
+    "endDate": "12-01-2022",
+    "startTime": "01:00",
+    "endTime": "24:00",
+    "reminderHeader": "Dad Birthday",
+    "description": "Get present"
+},
+{
+    "startDate": "12-31-2022",
+    "endDate": "01-01-2023",
+    "startTime": "23:59",
+    "endTime": "24:00",
+    "reminderHeader": "New Years",
+    "description": "Happy New Year!!"
+},
+{
+    "startDate": "12-20-2022",
+    "endDate": "12-20-2022",
+    "startTime": "15:00",
+    "endTime": "16:00",
+    "reminderHeader": "Gift Shopping",
+    "description": "Get Jenny a gift"
+}
+
+]

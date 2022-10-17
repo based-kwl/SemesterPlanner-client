@@ -31,3 +31,25 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
         </Card>
     );
 }
+
+export const ReminderCard = ({width, height, marginTop, justifyContent, content, backgroundColor, overflow}) => {
+    return (
+        <Card style={{
+            borderRadius: '15px',
+            margin: 'auto',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: justifyContent,
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            backgroundColor: backgroundColor,
+            paddingTop: '8px',
+            overflow: overflow,
+
+        }} variant='outlined'>
+            {content}
+
+        </Card>
+    );
+}
