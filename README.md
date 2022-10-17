@@ -18,7 +18,8 @@ You may also see any lint errors in the console.
 
 To run e2e tests, you can run:
 ### `npx cypress open`
-this will open the cypress app and show all your tests.
+this will open the cypress app and show all your tests. 
+*Note : you need to start both client and server in order to run these tests.
 
 ### `npm test`
 
