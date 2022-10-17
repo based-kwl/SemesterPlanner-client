@@ -91,27 +91,29 @@ export default function PersistentDrawerLeft(params) {
     let navigate = useNavigate();
     const redirect = (buttonName) => {
         //TODO: remove below line; line exists to suppress warning due to currently unused 'openSearch' state
-        if (openSearch === true)
+        if (openSearch === true) {
+            console.log()
+        }
 
-            switch (buttonName) {
-                case 'Home':
-                    navigate('/'); //TODO: set the proper path to the calendar page once it is implemented
-                    break;
-                case 'Profile':
-                    navigate('/'); //TODO: set the proper path to the profile page once it is implemented
-                    break;
-                case 'Progress Report':
-                    navigate('/'); //TODO: set the proper path to the progress report page once it is implemented
-                    break;
-                case 'Study Groups':
-                    navigate('/'); //TODO: set the proper path to the study groups page once it is implemented
-                    break;
-                case 'Logout':
-                    navigate('/login'); //TODO: ensure that user tokens are destroyed when routing (once user tokens are implemented)
-                    break;
-                default:
-                    break;
-            }
+        switch (buttonName) {
+            case 'Home':
+                navigate('/calendar');
+                break;
+            case 'Profile':
+                navigate('/editProfile');
+                break;
+            case 'Progress Report':
+                navigate('/'); //TODO: set the proper path to the progress report page once it is implemented
+                break;
+            case 'Study Groups':
+                navigate('/'); //TODO: set the proper path to the study groups page once it is implemented
+                break;
+            case 'Logout':
+                navigate('/login'); //TODO: ensure that user tokens are destroyed when routing (once user tokens are implemented)
+                break;
+            default:
+                break;
+        }
     }
 
     return (
