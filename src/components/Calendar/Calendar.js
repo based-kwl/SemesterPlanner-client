@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import {BackgroundCard, CustomWhiteCard, ReminderCard} from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 
 
@@ -31,7 +31,7 @@ export default function CalendarView() {
         </React.Fragment>
     )
 
-    const reminderHeader = (
+    const eventHeader = (
         <React.Fragment>
             <CardContent>
                 <Typography color="#ffffff" fontWeight={500} style={{
@@ -43,7 +43,7 @@ export default function CalendarView() {
         </React.Fragment>
     )
   
-    const reminderList = (
+    const eventList = (
         <CardContent style={{ paddingBottom: 0, paddingTop:0}}>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                 14:00-17:00
@@ -57,18 +57,18 @@ export default function CalendarView() {
         </CardContent>
     )
 
-    const reminderDisplay = (
+    const eventDisplay = (
         <React.Fragment>
-            <ReminderCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'  content={reminderHeader} backgroundColor='#8CC63E' />
-            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={reminderList}  />
-            <ReminderCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={reminderList}  />
+            <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'  content={eventHeader} backgroundColor='#8CC63E' />
+            <EventCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={eventList}  />
+            <EventCard justifyContent='left' width='360px' height='90px' marginTop='10px' overflow='auto' content={eventList}  />
         </React.Fragment>
     )
 
     const calendarPageCards = (
         <React.Fragment>
         {calendarCard}
-        {reminderDisplay}
+        {eventDisplay}
         </React.Fragment>
         )
 

@@ -32,7 +32,7 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
-export const ReminderCard = ({width, height, marginTop, justifyContent, content, backgroundColor, overflow}) => {
+export const EventCard = ({width, height, marginTop, justifyContent, content, backgroundColor, overflow}) => {
     return (
         <Card style={{
             borderRadius: '15px',
