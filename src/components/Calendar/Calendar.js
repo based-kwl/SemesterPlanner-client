@@ -20,7 +20,7 @@ export default function CalendarView() {
     const celendarMonth = (
         <React.Fragment>
             <Calendar onChange={setDate} value={date} 
-
+            selectRange={true} 
             />
         </React.Fragment>
     )
