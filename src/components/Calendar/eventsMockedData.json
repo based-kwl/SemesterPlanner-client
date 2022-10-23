@@ -1,14 +1,14 @@
 [
 {
-    "startDate": "10-03-2022",
+    "startDate": "Mon Oct 03 2022 00:00:00 GMT-0400 (Eastern Daylight Time)",
     "endDate": "10-05-2022",
     "startTime": "14:00",
     "endTime": "17:00",
-    "eventHeader": "School Meeting",
+    "eventHeader": "TEst",
     "description": "Start from screen 16"
 },
 {
-    "startDate": "10-04-2022",
+    "startDate": "Tue Oct 04 2022 00:00:00 GMT-0400 (Eastern Daylight Time)",
     "endDate": "10-04-2022",
     "startTime": "14:00",
     "endTime": "17:00",
@@ -16,7 +16,7 @@
     "description": "Workout with Zack"
 },
 {
-    "startDate": "10-06-2022",
+    "startDate": "Thu Oct 06 2022 00:00:00 GMT-0400 (Eastern Daylight Time)",
     "endDate": "10-10-2022",
     "startTime": "19:00",
     "endTime": "20:00",
@@ -24,7 +24,7 @@
     "description": "Visit Elderly"
 },
 {
-    "startDate": "01-10-2023",
+    "startDate": "Mon Oct 10 2022 00:00:00 GMT-0400 (Eastern Daylight Time)",
     "endDate": "01-10-2023",
     "startTime": "12:00",
     "endTime": "17:20",
