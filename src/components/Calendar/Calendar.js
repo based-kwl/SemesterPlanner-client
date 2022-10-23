@@ -1,12 +1,13 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-
+import { useNavigate } from "react-router";
+import {PrimaryButton2, SelectButton} from '../CustomMUIComponents/CustomButtons';
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
@@ -16,7 +17,22 @@ export default function CalendarView() {
     //     '03-03-2022',
     //     '05-03-2022'
     // ]
+    const [event, setEvent] = useState(
+        localStorage.getItem('event') ? 
+          JSON.parse(localStorage.getItem('event')) : 
+          []
+      );
 
+      useEffect(() => {
+        localStorage.setItem('events', JSON.stringify(event));
+      }, [event]);
+      const navigate = useNavigate();
+
+    const eventForDate = date => event.find(e => e.date === date);
+function addEventButton(){
+    navigate('/event');
+
+}
     const celendarMonth = (
         <React.Fragment>
             <Calendar onChange={setDate} value={date} 
@@ -28,6 +44,8 @@ export default function CalendarView() {
     const calendarCard = (
         <React.Fragment>
             <CustomWhiteCard width='360px' height='400px' marginTop='50px' content={celendarMonth} />
+            <PrimaryButton2 width='20px' content="+" onClick={addEventButton} />
+
         </React.Fragment>
     )
 
