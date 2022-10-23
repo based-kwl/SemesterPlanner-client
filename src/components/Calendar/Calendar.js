@@ -7,7 +7,7 @@ import '../Calendar/calendar.css'
 import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useNavigate} from "react-router";
-import {PrimaryButton2, SelectButton} from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import MockendEvents from "./eventsMockedData.json";
 
@@ -21,6 +21,7 @@ export default function CalendarView() {
     // ]
 
     const events = MockendEvents;
+    const [selectedDay, setSelectedDay] = React.useState(new Date());
     const [event, setEvent] = useState(events);
 
     useEffect(() => {
@@ -34,20 +35,25 @@ export default function CalendarView() {
         navigate('/event');
 
     }
+    function setDates(d) {
+        setDate(d);
+        setSelectedDay(d);
+    }
 
     const celendarMonth = (
         <React.Fragment>
-            <Calendar tileContent={({activeStartDate, date, view}) => <DayTile day={date}/>} onChange={setDate}
-                      value={date}
-                      selectRange={true}
+            <Calendar
+                tileContent={({activeStartDate, date, view}) => <DayTile day={date} view={view}/>}
+                onChange={setDates}
+                value={date}
             />
         </React.Fragment>
     )
 
     const calendarCard = (
         <React.Fragment>
-            <CustomWhiteCard width='360px' height='450px' marginTop='50px' content={celendarMonth}/>
-            <PrimaryButton2 width='20px' content="+" onClick={addEventButton}/>
+            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={celendarMonth}/>
+            <PrimaryButton2 content="+ create event" onClick={addEventButton}/>
 
         </React.Fragment>
     )
@@ -95,22 +101,29 @@ export default function CalendarView() {
         </div>
     )
 
-    function isSameDay(e, day) {
-        return e === day;
+    function isToday(e) {
+        const today = new Date()
+        return ((e.getDate() == today.getDate())
+            && e.getMonth() == today.getMonth()
+            && today.getFullYear() == e.getFullYear())
+    };
+
+    function isSelected(e) {
+        return ((e.getDate() == selectedDay.getDate())
+            && e.getMonth() == selectedDay.getMonth()
+            && e.getFullYear() == selectedDay.getFullYear())
     }
 
-    const DayTile = ({day}) => {
-        const eventsThisDay = MockendEvents.filter((e) => {
-            console.log(e.startDate + "e");
-            console.log(day + 'day');
-            if (e.startDate == day) {
-                console.log("Its a match")
-            }
-            return (e.startDate == day);
-        });
-        const tileContent = (eventsThisDay.length < 1 ? <React.Fragment><br /><> </></React.Fragment> : <CalendarDayEventIcon style={{verticalAlign: 'top'}} eventType={"test"}/>);
+
+    const DayTile = ({day, view}) => {
+        const eventsThisDay = MockendEvents.filter((e) => e.startDate == day);
+        const NoEventTile =  (<CalendarDayEventIcon eventType={isToday(day) ? "today" : "none"} />);
+        const tileContent = (eventsThisDay.length < 1
+            ? <CalendarDayEventIcon eventType={isSelected(day) ? "clicked" : isToday(day) ? "today" : "none" } />
+            : <CalendarDayEventIcon eventType={"test"}/>
+        );
         return (
-            <div>
+            <div style={{maxHeight: "70px"}}>
                 {tileContent}
             </div>
         )
@@ -119,14 +132,19 @@ export default function CalendarView() {
 
     const CalendarDayEventIcon = ({eventType}) => {
         let backgroundColor = "#0095FF"
-        if (eventType == "GYM") {
+        if (eventType == "Gym") {
             backgroundColor = "#735BF2"
-        } else if (eventType == "exam") {
+        } else if (eventType == "Exam") {
             backgroundColor = "#00B383"
-        } else if (eventType == "none")
+        } else if (eventType == "none") {
             backgroundColor = "#ffffff"
+        }else if (eventType == "clicked") {
+            backgroundColor = "#8e7bee"
+        }else if (eventType == "today") {
+            backgroundColor = "#00ADEF"
+        }
         return (
-            <React.Fragment><br /><TripOriginIcon sx={{color: backgroundColor, fontSize: "small"}}/></React.Fragment>
+            <div><br /><TripOriginIcon sx={{color: backgroundColor, transform: "scale(0.4)"}}/></div>
         );
     }
 
@@ -140,7 +158,7 @@ export default function CalendarView() {
     return (
         <React.Fragment>
             <PersistentDrawerLeft/>
-            <div style={{paddingTop: '60px'}}>
+            <div style={{paddingTop: '30px'}}>
                 <BackgroundCard width='372px' height='785px' content={calendarPageCards}/>
             </div>
         </React.Fragment>
