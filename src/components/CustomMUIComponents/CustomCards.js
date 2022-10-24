@@ -32,6 +32,26 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
+export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, content}) => {
+    return (
+        <Card style={{
+            margin: 'auto',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            borderTopLeftRadius: topLeftRadius,
+            borderTopRightRadius: topRightRadius,
+            borderBottomRightRadius: bottomRightRadius,
+            borderBottomLeftRadius: bottomLeftRadius
+        }} variant='outlined'>
+            {content}
+        </Card>
+    );
+}
+
 export const ReminderCard = ({width, height, marginTop, justifyContent, content, backgroundColor, overflow}) => {
     return (
         <Card style={{
