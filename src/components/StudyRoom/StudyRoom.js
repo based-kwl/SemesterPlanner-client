@@ -5,6 +5,7 @@ import NavDrawer from "../NavDrawer/navDrawer"
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
+import BottomDrawer from './BottomDrawer';
 
 
 export default function StudyRoom() {
@@ -26,20 +27,20 @@ export default function StudyRoom() {
                                bottomLeftRadius='0px' bottomRightRadius='0px'/>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={<button
+                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                    onClick={() => alert("documents")}><DescriptionIcon
-                    style={{color: '#912338', height: '4vh', width: '4vh'}}/></button>}/>
+                ><BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
+                               title={'course notes title'} content={'course notes content'}/></div>}/>
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<button
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                    onClick={() => alert("participants")}><GroupsIcon
-                    style={{color: '#912338', height: '6vh', width: '6vh'}}/></button>}/>
+                ><BottomDrawer icon={<GroupsIcon style={{color: '#912338', height: '6vh', width: '6vh'}}/>}
+                               title={'participants title'} content={'participants content'}/></div>}/>
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={<button
+                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                    onClick={() => alert("settings")}><SettingsIcon
-                    style={{color: '#912338', height: '4vh', width: '4vh'}}/></button>}/>
+                ><BottomDrawer icon={<SettingsIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
+                               title={'settings title'} content={'settings content'}/></div>}/>
             </div>
         </React.Fragment>
     )
