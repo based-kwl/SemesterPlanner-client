@@ -101,34 +101,20 @@ export default function CalendarView() {
         </div>
     )
 
-    function isToday(e) {
-        const today = new Date()
-        return ((e.getDate() == today.getDate())
-            && e.getMonth() == today.getMonth()
-            && today.getFullYear() == e.getFullYear())
-    };
-
-    function isSelected(e) {
-        return ((e.getDate() == selectedDay.getDate())
-            && e.getMonth() == selectedDay.getMonth()
-            && e.getFullYear() == selectedDay.getFullYear())
-    }
-
-
     const DayTile = ({day, view}) => {
         const eventsThisDay = MockendEvents.filter((e) => e.startDate == day);
-        const NoEventTile =  (<CalendarDayEventIcon eventType={isToday(day) ? "today" : "none"} />);
-        const tileContent = (eventsThisDay.length < 1
-            ? <CalendarDayEventIcon eventType={isSelected(day) ? "clicked" : isToday(day) ? "today" : "none" } />
-            : <CalendarDayEventIcon eventType={"test"}/>
-        );
-        return (
-            <div style={{maxHeight: "70px"}}>
-                {tileContent}
-            </div>
-        )
-    }
+        let tileContent;
 
+        if (eventsThisDay.length < 1){
+           tileContent =  (<CalendarDayEventIcon eventType={"none"} />);
+        } else {
+            tileContent = eventsThisDay.map((e) => (
+                <CalendarDayEventIcon eventType={e.eventHeader}/>
+            ))
+        }
+
+        return tileContent;
+    }
 
     const CalendarDayEventIcon = ({eventType}) => {
         let backgroundColor = "#0095FF"
@@ -136,16 +122,17 @@ export default function CalendarView() {
             backgroundColor = "#735BF2"
         } else if (eventType == "Exam") {
             backgroundColor = "#00B383"
-        } else if (eventType == "none") {
-            backgroundColor = "#ffffff"
-        }else if (eventType == "clicked") {
-            backgroundColor = "#8e7bee"
-        }else if (eventType == "today") {
-            backgroundColor = "#00ADEF"
+        }else if (eventType == "Volunteering") {
+            backgroundColor = "#800410"
         }
-        return (
-            <div><br /><TripOriginIcon sx={{color: backgroundColor, transform: "scale(0.4)"}}/></div>
-        );
+
+        let tileIcon = <TripOriginIcon sx={{color: backgroundColor, transform: "scale(0.25)"}}/>
+
+        if (eventType == "none") {
+            tileIcon = (<></>);
+        }
+
+        return (<div style={{ width: "40px" ,height: "40px"}}><br />{tileIcon}</div>);
     }
 
     const calendarPageCards = (

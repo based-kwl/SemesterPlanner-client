@@ -20,7 +20,7 @@
     "endDate": "10-10-2022",
     "startTime": "19:00",
     "endTime": "20:00",
-    "eventHeader": "Volunteer ",
+    "eventHeader": "Volunteering",
     "description": "Visit Elderly"
 },
 {
@@ -32,11 +32,11 @@
     "description": "Meet John"
 },
 {
-    "startDate": "11-15-2022",
+    "startDate": "Thu Oct 06 2022 00:00:00 GMT-0400 (Eastern Daylight Time)",
     "endDate": "11-20-2022",
     "startTime": "10:00",
     "endTime": "12:00",
-    "eventHeader": "School Exam",
+    "eventHeader": "Exam",
     "description": "Rm. 164"
 },
 {
