@@ -28,6 +28,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### Deployment
 
-Every push / merge to main will be deploy into production. This is the app URL [https://main.d130dq3c8sh12x.amplifyapp.com/](https://main.d130dq3c8sh12x.amplifyapp.com/) 
+Every push / merge to main will be deploy into production. This is the app URL [https://semesterplanner-server-production.up.railway.app/]
+(https://semesterplanner-server-production.up.railway.app/) 
 
 
