@@ -1,0 +1,20 @@
+[
+  {
+    "chatRoomId": "1",
+    "senderEmail": "test@gmail.com",
+    "timeSent": "Wed Oct 26 2022 23:18:20 GMT-0400 (Eastern Daylight Time)",
+    "messageContent": "Message test 1"
+  },
+  {
+    "chatRoomId": "1",
+    "senderEmail": "test2@gmail.com",
+    "timeSent": "Wed Oct 25 2022 23:18:20 GMT-0400 (Eastern Daylight Time)",
+    "messageContent": "Message test 2"
+  },
+  {
+    "chatRoomId": "1",
+    "senderEmail": "me@gmail.com",
+    "timeSent": "Wed Oct 26 2022 06:18:20 GMT-0400 (Eastern Daylight Time)",
+    "messageContent": "Message test 3"
+  }
+]

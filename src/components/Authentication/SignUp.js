@@ -16,6 +16,8 @@ import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 
+require('dotenv').config()
+
 export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
 export const programs = {
     'Art & Science' : [
@@ -77,7 +79,7 @@ export default function SignUp() {
 
     function handleRegistration() {
         console.log(userData);
-        axios.post('http://localhost:5000/users/add', userData)
+        axios.post( `${process.env.apiBaseUrl}/users/add `, userData)
             .then(()=> {
                 console.log();
                 navigate('/login');
