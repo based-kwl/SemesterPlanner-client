@@ -5,6 +5,7 @@ import SignUp from './components/Authentication/SignUp';
 import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
 import StudyRoom from './components/StudyRoom/StudyRoom';
+import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 
 export default function App() {
     return (
@@ -22,6 +23,7 @@ function AppRoutes() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/editProfile" element={<EditProfile />} />
             <Route path="/study-room" element={<StudyRoom />} />
+            <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route exact path='/' element={<SignIn />} />
         </Routes>
     );
