@@ -32,7 +32,7 @@ export default function SignIn() {
         }
 
         //API call
-        axios.post('http://localhost:5000/login/', user)
+        axios.post(`${process.env.REACT_APP_BASE_URL}/login/`, user)
             .then(res => {
                 console.log(res);
                 SetLocalStorage(res);
