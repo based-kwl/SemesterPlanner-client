@@ -1,19 +1,55 @@
 import * as React from "react";
-import {Avatar, InputLabel, Select, Stack, TextField} from "@mui/material";
+import {
+    Avatar,
+    Checkbox,
+    Chip,
+    FormControlLabel,
+    InputAdornment,
+    InputLabel,
+    Select,
+    Stack,
+    TextField
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {PrimaryButton} from "../CustomMUIComponents/CustomButtons";
 import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from '@mui/icons-material/Circle';
-
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import {CheckBox} from "@mui/icons-material";
+import {StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
+import "./customButton.css"
+import axios from "axios";
+import {SetLocalStorage} from "../Authentication/SignIn";
+import {useNavigate} from "react-router";
+import {useState} from "react";
 
 //todo create a list from the friendlist
+const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi'];
+
 export default function RoomCreation() {
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('')
+    const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
         title:'',
         colour: '',
         avatarText:'',
-        description:''
+        description:'',
+        participants:[],
     });
+
+}
+
+    const handleCheck =(e) =>{
+        let updatedList = [...checked];
+        if(e.target.checked){
+            updatedList = [...checked, e.target.value];
+        }else{
+            updatedList.splice(checked.indexOf(e.target.value), 1);
+        }
+        setChecked(updatedList);
+        setRoomData({...roomData, participants:updatedList});
+    }
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
@@ -22,7 +58,14 @@ export default function RoomCreation() {
         console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
         console.log(roomData);
-        window.location = "/study-room-home";
+        // window.location = "/study-room-home";
+
+        axios.post('http://localhost:5000/room/',roomData)
+            .then(res => {
+                console.log(res);
+                navigate("/study-room-home");
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
     }
 
     function handleTitleChange(e){
@@ -48,7 +91,6 @@ export default function RoomCreation() {
             finalText = displayText;
         return finalText;
     }
-
 
     const createRoom = (
         <React.Fragment>
@@ -128,6 +170,26 @@ export default function RoomCreation() {
                     <Typography style={{fontWeight: 'bold'}}>
                         Select group members:
                     </Typography>
+                    <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
+                        {friendList.map((item,index) => (
+                            <div key={index} className="container">
+                                {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
+                                <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
+                                <span className="checkmark">{item}</span>
+                                {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
+                                {/*/>*/}
+
+                                {/*<FormControlLabel*/}
+                                {/*    value={item}*/}
+                                {/*    control={<Checkbox />}*/}
+                                {/*    label={item}*/}
+                                {/*    labelPlacement="start"*/}
+                                {/*    onChange={handleCheck}*/}
+                                {/*    style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw', borderRadius:'15px'}}*/}
+                                {/*/>*/}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <PrimaryButton width={'90vw'} content="Create" />
@@ -137,7 +199,9 @@ export default function RoomCreation() {
     return(
         createRoom
     );
+
 }
+
 
 
 
