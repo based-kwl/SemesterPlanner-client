@@ -32,13 +32,18 @@ export default function RoomCreation() {
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
         title:'',
-        colour: '',
+        color: '',
         avatarText:'',
         description:'',
         participants:[],
     });
 
-}
+    React.useEffect(()=>{
+      let user = localStorage.getItem("username")
+        setRoomData({...roomData, owner:user});
+
+    })
+
 
     const handleCheck =(e) =>{
         let updatedList = [...checked];
@@ -69,16 +74,18 @@ export default function RoomCreation() {
     }
 
     function handleTitleChange(e){
-        setRoomData({...roomData, title: e.target.value});
+        let avatar = SetAvatarText( e.target.value)
+        setRoomData({...roomData, title: e.target.value, avatarText:avatar});
         console.log(roomData.title);
     }
     function handleColorChange(e){
-        setRoomData({...roomData, colour: e.target.value});
-        console.log(roomData.colour);
+        setRoomData({...roomData, color: e.target.value});
+        console.log(roomData.color);
     }
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
         console.log(roomData.description);
+        console.log(roomData)
     }
 
     function SetAvatarText(t){
@@ -108,12 +115,12 @@ export default function RoomCreation() {
                 />
 
                 <Stack direction='row' spacing={5} marginTop={2}>
-                    <InputLabel>Colour</InputLabel>
+                    <InputLabel>Color</InputLabel>
                     <Select style={{width: '40vw', color:'black'}}
-                            id="colour"
-                            label="Choose a colour"
+                            id="color"
+                            label="Choose a color"
                             onChange={handleColorChange}
-                            value={roomData.colour}
+                            value={roomData.color}
                     >
                         <MenuItem value={"#912338"}>
                             <CircleIcon sx={{color: '#912338'}}/> Burgundy
@@ -146,7 +153,7 @@ export default function RoomCreation() {
                             <CircleIcon sx={{color: '#CBB576'}}/> Gold
                         </MenuItem>
                     </Select>
-                    <Avatar sx={{bgcolor: roomData.colour, width: 56, height: 56}}> {SetAvatarText(roomData.title)}
+                    <Avatar sx={{bgcolor: roomData.color, width: 56, height: 56}}> {roomData.avatarText}
 
                     </Avatar>
                 </Stack>
@@ -196,11 +203,12 @@ export default function RoomCreation() {
             </form>
         </React.Fragment>
     )
+
     return(
         createRoom
     );
 
-}
+    }
 
 
 
