@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {BackgroundCard} from "../CustomMUIComponents/CustomCards";
 import * as React from "react";
 import NavDrawer from "../NavDrawer/navDrawer";
@@ -12,21 +12,33 @@ import Card from "@mui/material/Card";
 import axios from "axios";
 
 export default function StudyRoomHome() {
-    useEffect(() => {
-        if (localStorage.getItem("email")) {
-            if (localStorage.getItem("email") === "")
-                window.location = "/calendar"
-        }
-    }, [])
+    const [errorMessage, setErrorMessage] = useState('')
+    const [roomData, setRoomData] = React.useState({
+        title:'',
+        color: '',
+        description:'',
+        avatarText:'',
+        createdOn:'',
+    });
 
     //todo get room title,icon,description and creation date in the study room snippet
-
-    // axios.get('http://localhost:5000/room/',roomData)
-    //     .then(res => {
-    //         console.log(res);
-    //         navigate("/study-room-home");
-    //     })
-    //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
+    useEffect(() => {
+        let user = localStorage.getItem("username")
+        axios.get('http://localhost:5000/room/')
+            .then(res => {
+                console.log(res.data);
+                const data = res.data;
+                setRoomData({
+                    ...roomData,
+                    title: data.title,
+                    color: data.color,
+                    description: data.description,
+                    avatarText: data.avatarText,
+                    createdOn: data.createdOn
+                })
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
+    })
 
     const studyRoomsSnippet =(
         <Stack direction='row' spacing={2}
@@ -34,11 +46,11 @@ export default function StudyRoomHome() {
                justifyContent="flex-start"
                alignItems="center"
         >
-            <Avatar sx={{width: 56, height: 56}}> </Avatar>
+            <Avatar sx={{bgcolor: roomData.color, width: 56, height: 56}}>{roomData.avatarText} </Avatar>
             <div>
-                <Typography variant="body1">Title:</Typography>
-                <Typography variant="body1">Description:</Typography>
-                <Typography variant="body2">created on:</Typography>
+                <Typography variant="body1">Title:{roomData.title}</Typography>
+                <Typography variant="body1">Description:{roomData.description}</Typography>
+                <Typography variant="body2">created on:{roomData.createdOn}</Typography>
             </div>
         </Stack>
     );

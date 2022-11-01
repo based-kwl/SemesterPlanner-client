@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import * as React from "react";
 import axios from "axios";
 import {Avatar, InputLabel, Select, Stack, TextField} from "@mui/material";
@@ -19,19 +19,34 @@ export default function StudyRoomSettings() {
         participants:[],
     });
 
+    const fetchData = useCallback(() => {
+        axios.get('http://localhost:5000/room/{"username":"test"}')
+            .then(res => {
+                const data = res.data;
+                console.log(res.data);
+                setRoomData({...roomData, title: data.title});
+                setRoomData({...roomData, avatarText: data.avatarText});
+                setRoomData({...roomData, color: data.color});
+                setRoomData({...roomData, description: data.description});
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+    },[])
+
     React.useEffect(()=>{
         let user = localStorage.getItem("username")
         setRoomData({...roomData, owner:user});
-    })
+        fetchData();
+        console.log(roomData);
+    },[fetchData])
 
-    const handleRoomUpdate = (e) =>{
+    // sends updated field to db
+    function handleUpdate(e){
         e.preventDefault();
         console.log(roomData.title);
         let avatarIconText = SetAvatarText(roomData.title);
         console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
         console.log(roomData);
-
 
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
@@ -41,10 +56,9 @@ export default function StudyRoomSettings() {
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
-    function handleUpdate(e){
-
-    }
+    //deletes the room in db
     function handleDelete(e){
+
 
     }
     function handleTitleChange(e){
@@ -75,7 +89,8 @@ export default function StudyRoomSettings() {
 
     const updateRoom = (
         <React.Fragment>
-            <form style={{alignItems: 'center'}} onSubmit={handleRoomUpdate}>
+            <form style={{alignItems: 'center'}} >
+                <div style={{width: '85vw', marginTop: '10px'}}>
                 <TextField
                     fullWidth
                     id='title'
@@ -88,11 +103,10 @@ export default function StudyRoomSettings() {
                     onChange = {handleTitleChange}
                 />
 
-                <Stack direction='row' spacing={5} marginTop={2}>
-                    <InputLabel>Colour</InputLabel>
+                <Stack direction='row' spacing={5} marginTop={2} alignItems='center' justifyContent='center'>
+                    <InputLabel>Choose a color for the study room icon</InputLabel>
                     <Select style={{width: '40vw', color:'black'}}
                             id="colour"
-                            label="Choose a colour"
                             onChange={handleColorChange}
                             value={roomData.color}
                     >
@@ -131,6 +145,7 @@ export default function StudyRoomSettings() {
 
                     </Avatar>
                 </Stack>
+                </div>
                 <div style={{width: '85vw', height: '50vh', marginTop: '10px'}}>
                     <TextField
                         fullWidth
@@ -144,7 +159,6 @@ export default function StudyRoomSettings() {
                         onChange={handleDescriptionChange}
                         value={roomData.description}
                     />
-                    {/*<div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>*/}
                 </div>
                 <Stack direction='row' spacing={7} marginTop={2}>
                 <PrimaryButton3 width={'41vw'} content="Update" onClick={handleUpdate} />
