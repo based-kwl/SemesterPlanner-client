@@ -12,7 +12,6 @@ import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from '@mui/icons-material/Circle';
 import "./customButton.css"
 import axios from "axios";
-import {SetLocalStorage} from "../Authentication/SignIn";
 import {useNavigate} from "react-router";
 import {useState} from "react";
 
@@ -26,8 +25,6 @@ export default function RoomCreation() {
     const [roomData, setRoomData] = React.useState({
         title:'',
         color: '',
-        avatarText:'s',
-        color: '',
         avatarText:'',
         description:'',
         participants:[],
@@ -36,9 +33,7 @@ export default function RoomCreation() {
     React.useEffect(()=>{
       let user = localStorage.getItem("username")
         setRoomData({...roomData, owner:user});
-
     })
-
 
     const handleCheck =(e) =>{
         let updatedList = [...checked];
@@ -58,14 +53,14 @@ export default function RoomCreation() {
         console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
         console.log(roomData);
-        // window.location = "/study-room-home";
+
 
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
                 console.log(res);
                 navigate("/study-room-home");
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
     function handleTitleChange(e){
