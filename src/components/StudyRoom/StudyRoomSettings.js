@@ -1,27 +1,16 @@
-import * as React from "react";
-import {
-    Avatar,
-    InputLabel,
-    Select,
-    Stack,
-    TextField
-} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import {PrimaryButton} from "../CustomMUIComponents/CustomButtons";
-import MenuItem from "@mui/material/MenuItem";
-import CircleIcon from '@mui/icons-material/Circle';
-import "./customButton.css"
-import axios from "axios";
 import {useNavigate} from "react-router";
 import {useState} from "react";
+import * as React from "react";
+import axios from "axios";
+import {Avatar, InputLabel, Select, Stack, TextField} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import CircleIcon from "@mui/icons-material/Circle";
+import {PrimaryButton3} from "../CustomMUIComponents/CustomButtons";
+import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 
-//todo create a list from the friendlist
-const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi'];
-
-export default function RoomCreation() {
+export default function StudyRoomSettings() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('')
-    const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
         title:'',
         color: '',
@@ -31,22 +20,11 @@ export default function RoomCreation() {
     });
 
     React.useEffect(()=>{
-      let user = localStorage.getItem("username")
+        let user = localStorage.getItem("username")
         setRoomData({...roomData, owner:user});
     })
 
-    const handleCheck =(e) =>{
-        let updatedList = [...checked];
-        if(e.target.checked){
-            updatedList = [...checked, e.target.value];
-        }else{
-            updatedList.splice(checked.indexOf(e.target.value), 1);
-        }
-        setChecked(updatedList);
-        setRoomData({...roomData, participants:updatedList});
-    }
-
-    const handleRoomCreation = (e) =>{
+    const handleRoomUpdate = (e) =>{
         e.preventDefault();
         console.log(roomData.title);
         let avatarIconText = SetAvatarText(roomData.title);
@@ -63,6 +41,12 @@ export default function RoomCreation() {
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
+    function handleUpdate(e){
+
+    }
+    function handleDelete(e){
+
+    }
     function handleTitleChange(e){
         let avatar = SetAvatarText( e.target.value)
         setRoomData({...roomData, title: e.target.value, avatarText:avatar});
@@ -89,9 +73,9 @@ export default function RoomCreation() {
         return finalText;
     }
 
-    const createRoom = (
+    const updateRoom = (
         <React.Fragment>
-            <form style={{alignItems: 'center'}} onSubmit={handleRoomCreation}>
+            <form style={{alignItems: 'center'}} onSubmit={handleRoomUpdate}>
                 <TextField
                     fullWidth
                     id='title'
@@ -147,7 +131,7 @@ export default function RoomCreation() {
 
                     </Avatar>
                 </Stack>
-                <div style={{width: '90vw', height: '50vh', marginTop: '10px'}}>
+                <div style={{width: '85vw', height: '50vh', marginTop: '10px'}}>
                     <TextField
                         fullWidth
                         id='description'
@@ -161,40 +145,16 @@ export default function RoomCreation() {
                         value={roomData.description}
                     />
                     {/*<div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>*/}
-                    <div
-                        style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    </div>
-                    <Typography style={{fontWeight: 'bold'}}>
-                        Select group members:
-                    </Typography>
-                    <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
-                        {friendList.map((item,index) => (
-                            <div key={index} className="container">
-                                {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
-                                <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
-                                <span className="checkmark">{item}</span>
-                                {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
-                                {/*/>*/}
-
-                                {/*<FormControlLabel*/}
-                                {/*    value={item}*/}
-                                {/*    control={<Checkbox />}*/}
-                                {/*    label={item}*/}
-                                {/*    labelPlacement="start"*/}
-                                {/*    onChange={handleCheck}*/}
-                                {/*    style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw', borderRadius:'15px'}}*/}
-                                {/*/>*/}
-                            </div>
-                        ))}
-                    </div>
                 </div>
-
-                <PrimaryButton width={'90vw'} content="Create" />
+                <Stack direction='row' spacing={7} marginTop={2}>
+                <PrimaryButton3 width={'41vw'} content="Update" onClick={handleUpdate} />
+                <PrimaryButton2 width={'41vw'} content="Delete" onClick={handleDelete}/>
+                </Stack>
             </form>
         </React.Fragment>
     )
     return(
-        createRoom
+        updateRoom
     );
 }
 

@@ -28,6 +28,19 @@ export const PrimaryButton2 = ({content, width, onClick}) => {
         </Button>
     );
 }
+export const PrimaryButton3 = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#057D78'
+            }}>
+            {content}
+        </Button>
+    );
+}
 
 export const SelectButton = ({ content, userData, setUserData}) => {
 

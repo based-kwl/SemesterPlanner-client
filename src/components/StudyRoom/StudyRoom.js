@@ -6,6 +6,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BottomDrawer from './BottomDrawer';
+import StudyRoomSettings from "./StudyRoomSettings";
 
 
 export default function StudyRoom() {
@@ -40,7 +41,7 @@ export default function StudyRoom() {
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<SettingsIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'settings title'} content={'settings content'}/></div>}/>
+                               title={'settings page'} content={<StudyRoomSettings/>}/></div>}/>
             </div>
         </React.Fragment>
     )

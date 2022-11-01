@@ -6,6 +6,7 @@ import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
 import StudyRoom from './components/StudyRoom/StudyRoom';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
+import StudyRoomSettings from "./components/StudyRoom/StudyRoomSettings";
 
 export default function App() {
     return (
@@ -24,6 +25,7 @@ function AppRoutes() {
             <Route path="/editProfile" element={<EditProfile />} />
             <Route path="/study-room" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
+            <Route path="/study-room-settings" element={<StudyRoomSettings />} />
             <Route exact path='/' element={<SignIn />} />
         </Routes>
     );
