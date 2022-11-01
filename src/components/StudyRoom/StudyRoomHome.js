@@ -34,7 +34,7 @@ export default function StudyRoomHome() {
                justifyContent="flex-start"
                alignItems="center"
         >
-            <Avatar sx={{width: 56, height: 56}}> < /Avatar>
+            <Avatar sx={{width: 56, height: 56}}> </Avatar>
             <div>
                 <Typography variant="body1">Title:</Typography>
                 <Typography variant="body1">Description:</Typography>

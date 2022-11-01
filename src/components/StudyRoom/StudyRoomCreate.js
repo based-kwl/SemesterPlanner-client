@@ -12,9 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from '@mui/icons-material/Circle';
 import "./customButton.css"
 import axios from "axios";
+import {SetLocalStorage} from "../Authentication/SignIn";
 import {useNavigate} from "react-router";
-import {useEffect, useState} from "react";
-
+import {useState} from "react";
 
 //todo create a list from the friendlist
 const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi'];
@@ -24,21 +24,21 @@ export default function RoomCreation() {
     const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
-        owner: "yolo@b.ca",
         title:'',
         color: '',
         avatarText:'s',
+        color: '',
+        avatarText:'',
         description:'',
         participants:[],
     });
 
-    //get my credentials
-    //  useEffect(() => {
-    // //     let un = localStorage.getItem("email")
-    // //     console.log("user",un)
-    // //     console.log('username', setRoomData({...roomData, owner:un}))
-    //
-    //  }, [])
+    React.useEffect(()=>{
+      let user = localStorage.getItem("username")
+        setRoomData({...roomData, owner:user});
+
+    })
+
 
     const handleCheck =(e) =>{
         let updatedList = [...checked];
@@ -53,14 +53,13 @@ export default function RoomCreation() {
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
-        console.log(roomData.owner)
         console.log(roomData.title);
-        console.log(roomData);
         let avatarIconText = SetAvatarText(roomData.title);
         console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
+        console.log(roomData);
+        // window.location = "/study-room-home";
 
-        //API call to post Room data to create a room instance
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
                 console.log(res);
@@ -70,7 +69,8 @@ export default function RoomCreation() {
     }
 
     function handleTitleChange(e){
-        setRoomData({...roomData, title: e.target.value});
+        let avatar = SetAvatarText( e.target.value)
+        setRoomData({...roomData, title: e.target.value, avatarText:avatar});
         console.log(roomData.title);
     }
     function handleColorChange(e){
@@ -80,6 +80,7 @@ export default function RoomCreation() {
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
         console.log(roomData.description);
+        console.log(roomData)
     }
 
     function SetAvatarText(t){
@@ -173,10 +174,10 @@ export default function RoomCreation() {
                     </Typography>
                     <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {friendList.map((item,index) => (
-                            <div key={index} >
+                            <div key={index} className="container">
                                 {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
                                 <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
-                                <span>{item}</span>
+                                <span className="checkmark">{item}</span>
                                 {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
                                 {/*/>*/}
 
