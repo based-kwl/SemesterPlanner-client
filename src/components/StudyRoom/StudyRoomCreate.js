@@ -1,10 +1,6 @@
 import * as React from "react";
 import {
     Avatar,
-    Checkbox,
-    Chip,
-    FormControlLabel,
-    InputAdornment,
     InputLabel,
     Select,
     Stack,
@@ -14,14 +10,11 @@ import Typography from "@mui/material/Typography";
 import {PrimaryButton} from "../CustomMUIComponents/CustomButtons";
 import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from '@mui/icons-material/Circle';
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import {CheckBox} from "@mui/icons-material";
-import {StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
 import "./customButton.css"
 import axios from "axios";
-import {SetLocalStorage} from "../Authentication/SignIn";
 import {useNavigate} from "react-router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
 
 //todo create a list from the friendlist
 const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi'];
@@ -31,14 +24,21 @@ export default function RoomCreation() {
     const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
+        owner: "yolo@b.ca",
         title:'',
-        colour: '',
-        avatarText:'',
+        color: '',
+        avatarText:'s',
         description:'',
         participants:[],
     });
 
-}
+    //get my credentials
+    //  useEffect(() => {
+    // //     let un = localStorage.getItem("email")
+    // //     console.log("user",un)
+    // //     console.log('username', setRoomData({...roomData, owner:un}))
+    //
+    //  }, [])
 
     const handleCheck =(e) =>{
         let updatedList = [...checked];
@@ -53,13 +53,14 @@ export default function RoomCreation() {
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
+        console.log(roomData.owner)
         console.log(roomData.title);
+        console.log(roomData);
         let avatarIconText = SetAvatarText(roomData.title);
         console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
-        console.log(roomData);
-        // window.location = "/study-room-home";
 
+        //API call to post Room data to create a room instance
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
                 console.log(res);
@@ -73,8 +74,8 @@ export default function RoomCreation() {
         console.log(roomData.title);
     }
     function handleColorChange(e){
-        setRoomData({...roomData, colour: e.target.value});
-        console.log(roomData.colour);
+        setRoomData({...roomData, color: e.target.value});
+        console.log(roomData.color);
     }
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
@@ -146,7 +147,7 @@ export default function RoomCreation() {
                             <CircleIcon sx={{color: '#CBB576'}}/> Gold
                         </MenuItem>
                     </Select>
-                    <Avatar sx={{bgcolor: roomData.colour, width: 56, height: 56}}> {SetAvatarText(roomData.title)}
+                    <Avatar sx={{bgcolor: roomData.color, width: 56, height: 56}}> {SetAvatarText(roomData.title)}
 
                     </Avatar>
                 </Stack>
@@ -172,10 +173,10 @@ export default function RoomCreation() {
                     </Typography>
                     <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {friendList.map((item,index) => (
-                            <div key={index} className="container">
+                            <div key={index} >
                                 {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
                                 <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
-                                <span className="checkmark">{item}</span>
+                                <span>{item}</span>
                                 {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
                                 {/*/>*/}
 
@@ -199,7 +200,6 @@ export default function RoomCreation() {
     return(
         createRoom
     );
-
 }
 
 

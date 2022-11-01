@@ -9,6 +9,7 @@ import {Avatar, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Card from "@mui/material/Card";
+import axios from "axios";
 
 export default function StudyRoomHome() {
     useEffect(() => {
@@ -19,6 +20,14 @@ export default function StudyRoomHome() {
     }, [])
 
     //todo get room title,icon,description and creation date in the study room snippet
+
+    // axios.get('http://localhost:5000/room/',roomData)
+    //     .then(res => {
+    //         console.log(res);
+    //         navigate("/study-room-home");
+    //     })
+    //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
+
     const studyRoomsSnippet =(
         <Stack direction='row' spacing={2}
                divider={<Divider orientation="vertical" flexItem/>}

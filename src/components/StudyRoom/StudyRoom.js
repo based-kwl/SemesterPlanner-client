@@ -9,12 +9,12 @@ import BottomDrawer from './BottomDrawer';
 
 
 export default function StudyRoom() {
-    useEffect(() => {
-        if (localStorage.getItem("email")) {
-            if (localStorage.getItem("email") === "")
-                window.location = "/calendar"
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (localStorage.getItem("email")) {
+    //         if (localStorage.getItem("email") === "")
+    //             window.location = "/calendar"
+    //     }
+    // }, [])
 
     const chatRoom = (
         <React.Fragment>
