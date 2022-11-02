@@ -58,8 +58,7 @@ export const SelectButton = ({ content, userData, setUserData}) => {
                 fullWidth
                 onClick={handleButtonSelect}
                 style={{
-                    backgroundColor: buttonColor(),
-                    height: '60px'}}>
+                    backgroundColor: buttonColor(), height: '60px'}}>
                 {content}
             </Button>
         )

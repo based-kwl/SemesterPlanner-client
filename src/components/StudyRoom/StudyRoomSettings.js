@@ -36,7 +36,6 @@ export default function StudyRoomSettings() {
             createdOn: studyRoom.createdOn,
             description: studyRoom.description
         })
-        console.log(roomData);
         setLoading(false);
         //let email = JSON.parse(localStorage.getItem("email"));
         // axios.get(`http://localhost:5000/room/${email}`)

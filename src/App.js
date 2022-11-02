@@ -25,7 +25,6 @@ function AppRoutes() {
             <Route path="/editProfile" element={<EditProfile />} />
             <Route path="/study-room" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
-            <Route path="/study-room-settings" element={<StudyRoomSettings />} />
             <Route exact path='/' element={<SignIn />} />
         </Routes>
     );
