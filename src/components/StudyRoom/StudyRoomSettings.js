@@ -7,13 +7,17 @@ import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from "@mui/icons-material/Circle";
 import {PrimaryButton3} from "../CustomMUIComponents/CustomButtons";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
-import MockUser from "../Profile/Mocks/mockUser.json"
 import MockStudyRoom from "./Mocks/mockStudyRoom.json"
+
+const studyRoom = MockStudyRoom[0];
 
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('')
+    //const [errorMessage, setErrorMessage] = useState('')
+    const[loading,setLoading] = useState(true);
     const [roomData, setRoomData] = React.useState({
+        owner:'',
+        sid:'',
         title:'',
         color: '',
         avatarText:'',
@@ -21,63 +25,79 @@ export default function StudyRoomSettings() {
         participants:[],
     });
 
-    const user = MockStudyRoom[1];
-
-    const fetchData = useCallback(() => {
-        axios.get('http://localhost:5000/room/{"username":"test"}')
-            .then(res => {
-                const data = res.data;
-                console.log(JSON.stringify(res.data));
-                setRoomData({...roomData, title: user.title});
-                setRoomData({...roomData, avatarText: user.avatarText});
-                setRoomData({...roomData, color: user.color});
-                setRoomData({...roomData, description: user.description});
-            })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
-    },[])
+    const fetchData = useCallback(( ) => {
+        setRoomData({...roomData,
+            owner: studyRoom.owner,
+            sid: studyRoom.sid,
+            title: studyRoom.title,
+            color: studyRoom.color,
+            avatarText: studyRoom.avatarText,
+            participants: studyRoom.participants,
+            createdOn: studyRoom.createdOn,
+            description: studyRoom.description
+        })
+        console.log(roomData);
+        setLoading(false);
+        //let email = JSON.parse(localStorage.getItem("email"));
+        // axios.get(`http://localhost:5000/room/${email}`)
+        //     .then(res => {
+        //         const data = res.data[0];
+        //         console.log(data);
+        //         setRoomData({...roomData, title: data.title,avatarText: data.avatarText,color: data.color,description: data.description});
+        //         console.log(roomData)
+        //     })
+        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+     },[])
 
     React.useEffect(()=>{
-        let user = localStorage.getItem("username")
-        setRoomData({...roomData, owner:user});
         fetchData();
-        console.log(roomData);
-    },[fetchData])
+        let email = JSON.parse(localStorage.getItem("email"));
+        //user needs to be logged in to access
+        if(email === undefined || email === '')
+            navigate("/login");
+        // only an owner can access the settings page
+        if(roomData.owner !== email && roomData.owner != ''){
+            navigate("/study-room-home");
+        }
+
+    },[loading])
 
     // sends updated field to db
     function handleUpdate(e){
         e.preventDefault();
-        console.log(roomData.title);
         let avatarIconText = SetAvatarText(roomData.title);
-        console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
-        console.log(roomData);
+        // axios.post('http://localhost:5000/room/',roomData)
+        //     .then(res => {
+        //         console.log(res);
+        //         navigate("/study-room-home");
+        //     })
+        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+    }
 
-        axios.post('http://localhost:5000/room/',roomData)
-            .then(res => {
-                console.log(res);
-                navigate("/study-room-home");
-            })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+    //API call delete room
+    function deleteRoom(){
+        // axios.post('http://localhost:5000/room/delete',{username:roomData.owner, sID:roomData.sid})
+        //     .then(res => {
+        //         console.log(res);
+        //         navigate("/study-room-home");
+        //     })
+        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
     //deletes the room in db
     function handleDelete(e){
-
-
+        deleteRoom();
     }
     function handleTitleChange(e){
         let avatar = SetAvatarText( e.target.value)
         setRoomData({...roomData, title: e.target.value, avatarText:avatar});
-        console.log(roomData.title);
     }
     function handleColorChange(e){
         setRoomData({...roomData, color: e.target.value});
-        console.log(roomData.color);
     }
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
-        console.log(roomData.description);
-        console.log(roomData)
     }
 
     function SetAvatarText(t){
