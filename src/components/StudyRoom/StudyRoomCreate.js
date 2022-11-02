@@ -33,15 +33,19 @@ export default function RoomCreation() {
 
     React.useEffect(()=> {
         let user = localStorage.getItem("username")
-        setRoomData({...roomData, owner: user});
-        //     axios.get('http://localhost:5000/friend/',{'user':'test45'} )
-        //         .then(res => {
-        //             console.log(res);
-        //             console.log(res.body)
-        //         })
-        // })
-    })
+        setRoomData({...roomData, owner: user})
+        })
 
+    React.useEffect( ()=>{
+        fetchData();
+    },[])
+    function fetchData() {
+        axios.get('http://localhost:5000/friend/murth')
+            .then(res => {
+                console.log(res);
+                console.log(res.body)
+            })
+    }
     const handleCheck =(e) =>{
         let updatedList = [...checked];
         if(e.target.checked){

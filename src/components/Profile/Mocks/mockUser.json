@@ -4,5 +4,14 @@
     "faculty": "Art & Science",
     "program": "Anthropology",
     "privateProfile": true
+  },
+  {
+    "email": "j@h.com",
+    "faculty": "Engineering",
+    "password": "1234",
+    "privateProfile": true,
+    "program": "Software Engineering",
+    "username": "kikkii",
+    "friends": [ "k", "m","r","p@h.com"]
   }
 ]

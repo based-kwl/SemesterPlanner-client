@@ -23,22 +23,29 @@ export default function StudyRoomHome() {
 
     //todo get room title,icon,description and creation date in the study room snippet
     useEffect(() => {
-        let user = localStorage.getItem("username")
-        axios.get('http://localhost:5000/room/')
+        getData();
+    },[])
+
+    function getData(){
+        let user = localStorage.getItem("username");
+        console.log(user);
+        axios.get(`http://localhost:5000/room/${user}`)
             .then(res => {
-                console.log(res.data);
-                const data = res.data;
+                console.log(res.data[0]);
+                const data = res.data[0];
                 setRoomData({
                     ...roomData,
                     title: data.title,
                     color: data.color,
                     description: data.description,
                     avatarText: data.avatarText,
-                    createdOn: data.createdOn
+                    createdOn: data.createdAt
                 })
+                console.log(roomData)
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
-    })
+
+    }
 
     const studyRoomsSnippet =(
         <Stack direction='row' spacing={2}

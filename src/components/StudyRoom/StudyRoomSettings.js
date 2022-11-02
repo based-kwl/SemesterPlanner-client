@@ -7,6 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from "@mui/icons-material/Circle";
 import {PrimaryButton3} from "../CustomMUIComponents/CustomButtons";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
+import MockUser from "../Profile/Mocks/mockUser.json"
+import MockStudyRoom from "./Mocks/mockStudyRoom.json"
 
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
@@ -19,15 +21,17 @@ export default function StudyRoomSettings() {
         participants:[],
     });
 
+    const user = MockStudyRoom[1];
+
     const fetchData = useCallback(() => {
         axios.get('http://localhost:5000/room/{"username":"test"}')
             .then(res => {
                 const data = res.data;
-                console.log(res.data);
-                setRoomData({...roomData, title: data.title});
-                setRoomData({...roomData, avatarText: data.avatarText});
-                setRoomData({...roomData, color: data.color});
-                setRoomData({...roomData, description: data.description});
+                console.log(JSON.stringify(res.data));
+                setRoomData({...roomData, title: user.title});
+                setRoomData({...roomData, avatarText: user.avatarText});
+                setRoomData({...roomData, color: user.color});
+                setRoomData({...roomData, description: user.description});
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     },[])
