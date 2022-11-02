@@ -13,6 +13,7 @@ import {useNavigate} from "react-router";
 export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     // const [login, setLogin] = useState(false);
     const navigate = useNavigate();
 
@@ -31,13 +32,13 @@ export default function SignIn() {
         }
 
         //API call
-        axios.post('http://localhost:5000/login/', user)
+        axios.post(`${process.env.REACT_APP_BASE_URL}login/`, user)
             .then(res => {
                 console.log(res);
                 SetLocalStorage(res);
                 navigate('/calendar');
             })
-            .catch(err => console.log(`Error: ${err}`));
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'Incorrect username or password.' : `${err}`)});
     }
     
     const signInForm = (
@@ -76,6 +77,7 @@ export default function SignIn() {
                                        }}
                             />
                         </div>
+                        <div style={{color:'red'}}>{errorMessage}</div>
                         <div style={{paddingTop: '20px', paddingBottom: '20px'}}>
                             <PrimaryButton width='305px' content="Sign in" />
                         </div>
