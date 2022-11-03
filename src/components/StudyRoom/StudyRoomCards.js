@@ -9,7 +9,7 @@ export const ParticipantCard = ({width, height, content}) => {
             width: width,
             height:  height,
             backgroundColor: '#F0F0F0',
-            margin: '15px',
+            marginBottom: '15px',
             paddingLeft: '10px',
             justifyContent:'space-between',
             alignItems: 'center',
