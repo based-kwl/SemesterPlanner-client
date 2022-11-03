@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
+import {CardActionArea} from "@mui/material";
 
 export const BackgroundCard = ({width, height, content}) => {
     return (
@@ -73,3 +74,25 @@ export const ReminderCard = ({width, height, marginTop, justifyContent, content,
         </Card>
     );
 }
+
+export const SnippetCard = ({width, height, marginBottom, content, borderRadius,destination}) => {
+    return (
+        <Card style={{
+            margin: 'auto',
+            alignItems: 'left',
+            display: 'flex',
+            justifyContent: 'left',
+            width: width,
+            height: height,
+            marginBottom: marginBottom,
+            paddingLeft:'10px',
+            borderRadius: borderRadius,
+
+        }} variant='outlined'>
+            <CardActionArea onClick={destination}>{content}</CardActionArea>
+
+
+        </Card>
+    );
+}
+
