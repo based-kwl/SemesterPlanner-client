@@ -1,0 +1,32 @@
+[
+  {
+    "owner": "j@h.com",
+    "sId": "1",
+    "title": "soen 321",
+    "color":"#508212",
+    "description": "security class",
+    "avatarText": "s3",
+    "participants":["j@h.com", "p@h.com"],
+    "createdOn": "2022-10-02"
+  },
+  {
+    "owner": "p@h.com",
+    "sId": "2",
+    "title": "soen 345",
+    "color":"#0072A8",
+    "description": "security class",
+    "avatarText": "s3",
+    "participants":["p@h.com", "j@h.com"],
+    "createdOn": "2022-10-02"
+  },
+  {
+    "owner": "p@h.com",
+    "sId": "3",
+    "title": "soen 490",
+    "color":"#0072A8",
+    "description": "capstone",
+    "avatarText": "s3",
+    "participants":["p@h.com", "j@h.com"],
+    "createdOn": "2022-10-02"
+  }
+]

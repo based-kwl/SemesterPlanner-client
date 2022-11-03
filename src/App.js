@@ -6,6 +6,7 @@ import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
 import StudyRoom from './components/StudyRoom/StudyRoom';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
+import StudyRoomSettings from "./components/StudyRoom/StudyRoomSettings";
 
 export default function App() {
     return (

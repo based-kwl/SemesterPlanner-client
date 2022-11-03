@@ -20,6 +20,7 @@ const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi
 
 export default function RoomCreation() {
     const navigate = useNavigate();
+    // const [friendList, setFriendList] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
@@ -30,11 +31,21 @@ export default function RoomCreation() {
         participants:[],
     });
 
-    React.useEffect(()=>{
-      let user = localStorage.getItem("username")
-        setRoomData({...roomData, owner:user});
-    })
+    React.useEffect(()=> {
+        let user = localStorage.getItem("username")
+        setRoomData({...roomData, owner: user})
+        })
 
+    React.useEffect( ()=>{
+        fetchData();
+    },[])
+    function fetchData() {
+        axios.get('http://localhost:5000/friend/murth')
+            .then(res => {
+                console.log(res);
+                console.log(res.body)
+            })
+    }
     const handleCheck =(e) =>{
         let updatedList = [...checked];
         if(e.target.checked){
@@ -110,7 +121,7 @@ export default function RoomCreation() {
                             id="colour"
                             label="Choose a colour"
                             onChange={handleColorChange}
-                            value={roomData.colour}
+                            value={roomData.color}
                     >
                         <MenuItem value={"#912338"}>
                             <CircleIcon sx={{color: '#912338'}}/> Burgundy
@@ -169,10 +180,10 @@ export default function RoomCreation() {
                     </Typography>
                     <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {friendList.map((item,index) => (
-                            <div key={index} className="container">
+                            <div key={index}>
                                 {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
                                 <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
-                                <span className="checkmark">{item}</span>
+                                <span>{item}</span>
                                 {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
                                 {/*/>*/}
 
