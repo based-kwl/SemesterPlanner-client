@@ -32,7 +32,7 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
-export const EventCard = ({width, height, marginTop, justifyContent, content, backgroundColor, overflow}) => {
+export const EventCard = ({width, height, marginTop, justifyContent, content, backgroundColor}) => {
     return (
         <Card style={{
             borderRadius: '15px',
@@ -45,7 +45,7 @@ export const EventCard = ({width, height, marginTop, justifyContent, content, ba
             marginTop: marginTop,
             backgroundColor: backgroundColor,
             paddingTop: '8px',
-            overflow: overflow,
+            overflow: "hidden",
 
         }} variant='outlined'>
             {content}

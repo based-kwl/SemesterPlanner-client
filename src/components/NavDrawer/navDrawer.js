@@ -93,7 +93,7 @@ export default function PersistentDrawerLeft(params) {
     function handleLogout() {
         localStorage.setItem("token", JSON.stringify(""));
         localStorage.setItem("email", JSON.stringify(""));
-        window.location = "/login";
+        navigate('/login');
     }
 
     const redirect = (buttonName) => {
@@ -117,7 +117,6 @@ export default function PersistentDrawerLeft(params) {
                 break;
             case 'Logout':
                 handleLogout();
-                navigate('/login'); //TODO: ensure that user tokens are destroyed when routing (once user tokens are implemented)
                 break;
             default:
                 break;

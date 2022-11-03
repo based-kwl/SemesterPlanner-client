@@ -29,6 +29,20 @@ export const PrimaryButton2 = ({content, width, onClick}) => {
     );
 }
 
+export const SecondaryButton2 = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#C8C8C8'
+            }}>
+            {content}
+        </Button>
+    );
+}
+
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {

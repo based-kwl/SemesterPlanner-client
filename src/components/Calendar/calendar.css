@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i');
-.test {
+.events {
     height: 300px;
     overflow-y: scroll;
+}
+
+.center {
+    margin: auto;
+    padding-left: 80%;
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
 .react-calendar {
@@ -109,7 +116,7 @@
   }
   .react-calendar__tile--now {
     background: #00ADEF;
-    border-radius: 25px;
+    border-radius: 15px;
 
   }
   .react-calendar__tile--now:enabled:hover,
@@ -124,7 +131,7 @@
   .react-calendar__tile--active {
     background: #735BF2;
     color: white;
-    border-radius: 25px;
+    border-radius: 15px;
   }
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {

@@ -10,6 +10,7 @@ import axios from 'axios';
 import {useNavigate} from "react-router";
 
 
+
 export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -19,7 +20,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if(localStorage.getItem("email")){
-            if(localStorage.getItem("email") === "")
+            if(localStorage.getItem("email") !== "")
                 window.location = "/calendar"
         }
     }, [])
