@@ -52,8 +52,9 @@ export default function StudyRoomSettings() {
         fetchData();
         let email = JSON.parse(localStorage.getItem("email"));
         //user needs to be logged in to access
-        if(email === undefined || email === '')
+        if(email === undefined || email === ''){
             navigate("/login");
+        }
         // only an owner can access the settings page
         if(roomData.owner !== email && roomData.owner != ''){
             navigate("/study-room-home");
@@ -88,13 +89,16 @@ export default function StudyRoomSettings() {
     function handleDelete(e){
         deleteRoom();
     }
+
     function handleTitleChange(e){
         let avatar = SetAvatarText( e.target.value)
         setRoomData({...roomData, title: e.target.value, avatarText:avatar});
     }
+
     function handleColorChange(e){
         setRoomData({...roomData, color: e.target.value});
     }
+
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
     }
@@ -105,8 +109,9 @@ export default function StudyRoomSettings() {
 
         if(displayText.length >4){
             finalText = displayText.substring(0,4);
-        }else
+        }else{
             finalText = displayText;
+        }
         return finalText;
     }
 
@@ -190,12 +195,8 @@ export default function StudyRoomSettings() {
             </form>
         </React.Fragment>
     )
-    return(
-        updateRoom
-    );
+    return(updateRoom);
 }
-
-
 
 
 
