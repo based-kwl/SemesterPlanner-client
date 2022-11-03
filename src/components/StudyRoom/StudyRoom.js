@@ -6,6 +6,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BottomDrawer from './BottomDrawer';
+import ParticipantsList from './ParticipantsList';
 
 
 export default function StudyRoom() {
@@ -35,7 +36,7 @@ export default function StudyRoom() {
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<GroupsIcon style={{color: '#912338', height: '6vh', width: '6vh'}}/>}
-                               title={'participants title'} content={'participants content'}/></div>}/>
+                               title={'Participants'} content={<ParticipantsList/>}/></div>}/>
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
