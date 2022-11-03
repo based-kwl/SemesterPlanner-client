@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-    Avatar,
+    Avatar, Checkbox,
     InputLabel,
     Select,
     Stack,
@@ -14,13 +14,15 @@ import "./customButton.css"
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {useState} from "react";
+import mockUser from "./../Profile/Mocks/mockUser.json"
+import {ParticipantCard} from "./StudyRoomCards";
 
-//todo create a list from the friendlist
-const friendList = ['eyal','jakelop','jasmin', 'maya', 'kewen', 'mahmoud','ramzi'];
+//friend list from the user mock data
+const loggedInUser = mockUser[1].friends;
+console.log(loggedInUser);
 
 export default function RoomCreation() {
     const navigate = useNavigate();
-    // const [friendList, setFriendList] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
@@ -46,6 +48,7 @@ export default function RoomCreation() {
                 console.log(res.body)
             })
     }
+
     const handleCheck =(e) =>{
         let updatedList = [...checked];
         if(e.target.checked){
@@ -59,12 +62,8 @@ export default function RoomCreation() {
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
-        console.log(roomData.title);
         let avatarIconText = SetAvatarText(roomData.title);
-        console.log('avatar text:', avatarIconText);
         setRoomData({...roomData, avatarText: avatarIconText});
-        console.log(roomData);
-
 
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
@@ -77,16 +76,12 @@ export default function RoomCreation() {
     function handleTitleChange(e){
         let avatar = SetAvatarText( e.target.value)
         setRoomData({...roomData, title: e.target.value, avatarText:avatar});
-        console.log(roomData.title);
     }
     function handleColorChange(e){
         setRoomData({...roomData, color: e.target.value});
-        console.log(roomData.color);
     }
     function handleDescriptionChange(e){
         setRoomData({...roomData, description: e.target.value});
-        console.log(roomData.description);
-        console.log(roomData)
     }
 
     function SetAvatarText(t){
@@ -155,7 +150,6 @@ export default function RoomCreation() {
                         </MenuItem>
                     </Select>
                     <Avatar sx={{bgcolor: roomData.color, width: 56, height: 56}}> {SetAvatarText(roomData.title)}
-
                     </Avatar>
                 </Stack>
                 <div style={{width: '90vw', height: '50vh', marginTop: '10px'}}>
@@ -171,46 +165,31 @@ export default function RoomCreation() {
                         onChange={handleDescriptionChange}
                         value={roomData.description}
                     />
-                    {/*<div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>*/}
                     <div
                         style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     </div>
                     <Typography style={{fontWeight: 'bold'}}>
                         Select group members:
                     </Typography>
-                    <div style={{overflow:'scroll', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
-                        {friendList.map((item,index) => (
-                            <div key={index}>
-                                {/*style={{paddingLeft:'5px', alignItems: 'center', display:'inline-flex', backgroundColor:'#e9e3d3', borderRadius:'10px',width:'30vw', height:'40px', marginBottom:'10px'}}*/}
-                                <input value={item} type="checkbox" onChange={handleCheck} style={{ display:'inline',backgroundColor:'#e9e3d3'}}/>
-                                <span>{item}</span>
-                                {/*<Chip label={item}  icon={<CheckBox onChange={handleCheck}/>} style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw'}}*/}
-                                {/*/>*/}
-
-                                {/*<FormControlLabel*/}
-                                {/*    value={item}*/}
-                                {/*    control={<Checkbox />}*/}
-                                {/*    label={item}*/}
-                                {/*    labelPlacement="start"*/}
-                                {/*    onChange={handleCheck}*/}
-                                {/*    style={{backgroundColor:'#e9e3d3', marginBottom:'10px', width:'10vw', borderRadius:'15px'}}*/}
-                                {/*/>*/}
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
+                        {loggedInUser.map((friends,index) => (
+                            <div key={index} style={{ margin:'-5px'}}>
+                                <ParticipantCard width={'81vw'} height={'40px'}
+                                                 content={<> {friends}
+                                                     <Checkbox
+                                                         value={friends}
+                                                         onChange={handleCheck}
+                                                         inputProps={{'aria-label': 'controlled'}}
+                                                         style={{color: '#057D78'}}
+                                                     />
+                                                 </>}/>
                             </div>
                         ))}
                     </div>
                 </div>
-
                 <PrimaryButton width={'90vw'} content="Create" />
             </form>
         </React.Fragment>
     )
-    return(
-        createRoom
-    );
+    return(createRoom)
 }
-
-
-
-
-
-
