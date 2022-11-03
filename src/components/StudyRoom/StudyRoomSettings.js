@@ -75,19 +75,14 @@ export default function StudyRoomSettings() {
         //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
-    //API call delete room
-    function deleteRoom(){
+    //deletes the room in db
+    function handleDelete(e){
         // axios.post('http://localhost:5000/room/delete',{username:roomData.owner, sID:roomData.sid})
         //     .then(res => {
         //         console.log(res);
         //         navigate("/study-room-home");
         //     })
         //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
-    }
-
-    //deletes the room in db
-    function handleDelete(e){
-        deleteRoom();
     }
 
     function handleTitleChange(e){
