@@ -77,7 +77,7 @@ export default function SignUp() {
 
     function handleRegistration() {
         console.log(userData);
-        axios.post('http://localhost:5000/users/add', userData)
+        axios.post('http://localhost:5000/student/add', userData)
             .then(()=> {
                 console.log();
                 navigate('/login');

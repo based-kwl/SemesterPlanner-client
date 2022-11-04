@@ -6,16 +6,17 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BottomDrawer from './BottomDrawer';
+import StudyRoomSettings from "./StudyRoomSettings";
 import ParticipantsList from './ParticipantsList';
 
 
 export default function StudyRoom() {
-    useEffect(() => {
-        if (localStorage.getItem("email")) {
-            if (localStorage.getItem("email") === "")
-                window.location = "/calendar"
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (localStorage.getItem("email")) {
+    //         if (localStorage.getItem("email") === "")
+    //             window.location = "/calendar"
+    //     }
+    // }, [])
 
     const chatRoom = (
         <React.Fragment>
@@ -41,7 +42,7 @@ export default function StudyRoom() {
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<SettingsIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'settings title'} content={'settings content'}/></div>}/>
+                               title={'settings page'} content={<StudyRoomSettings/>}/></div>}/>
             </div>
         </React.Fragment>
     )

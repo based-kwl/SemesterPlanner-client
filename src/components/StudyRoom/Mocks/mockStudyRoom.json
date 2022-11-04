@@ -1,0 +1,46 @@
+[
+  {
+    "id": 0,
+    "owner": "j@h.com",
+    "sId": "1",
+    "title": "soen 321",
+    "color":"#508212",
+    "description": "security class",
+    "avatarText": "s3",
+    "participants":["j@h.com", "p@h.com"],
+    "createdOn": "2022-10-02"
+  },
+  {
+    "id": 1,
+    "owner": "p@h.com",
+    "sId": "2",
+    "title": "soen 345",
+    "color":"#0072A8",
+    "description": "security class",
+    "avatarText": "s3",
+    "participants":["j@h.com","p@h.com"],
+    "createdOn": "2022-10-02"
+  },
+  {
+    "id": 2,
+    "owner": "p@h.com",
+    "sId": "3",
+    "title": "soen 490",
+    "color":"#DB0272",
+    "description": "capstone",
+    "avatarText": "s4",
+    "participants":["j@h.com","p@h.com"],
+    "createdOn": "2022-10-02"
+  },
+  {
+    "id": 3,
+    "owner": "p@h.com",
+    "sId": "4",
+    "title": "soen 445",
+    "color":"#0072A8",
+    "description": "internet",
+    "avatarText": "s4",
+    "participants":["p@h.com", "e@h.com"],
+    "createdOn": "2022-10-02"
+  }
+]
