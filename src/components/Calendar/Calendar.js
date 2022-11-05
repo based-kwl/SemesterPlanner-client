@@ -31,7 +31,7 @@ export default function CalendarView() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const options = ['Delete', 'Cancel'];
+    const options = ['Edit', 'Delete', 'Cancel'];
 
     const ITEM_HEIGHT = 48;
 
