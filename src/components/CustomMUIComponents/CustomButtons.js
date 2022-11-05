@@ -43,6 +43,17 @@ export const SecondaryButton2 = ({content, width, onClick}) => {
     );
 }
 
+export const EditButton = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            style={{
+                width: width, 
+            }}>
+            {content}
+        </Button>
+    );
+}
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {

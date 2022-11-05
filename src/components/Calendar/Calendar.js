@@ -111,7 +111,7 @@ export default function CalendarView() {
     const eventHeader = (
         <React.Fragment>
             <CardContent>
-                <Typography color="#ffffff" fontWeight={500} style={{
+                <Typography color="#000000" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
                     School

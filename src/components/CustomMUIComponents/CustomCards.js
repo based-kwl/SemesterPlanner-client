@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { Menu, Typography } from "@mui/material";
 
-export const BackgroundCard = ({width, height, content}) => {
+export const BackgroundCard = ({ width, height, content }) => {
     return (
         <Card variant='outlined' style={{
             width: width,
-            height:  height,
+            height: height,
             justifyContent: 'center',
             backgroundColor: '#E9E3D3',
             margin: 'auto'
@@ -15,7 +17,7 @@ export const BackgroundCard = ({width, height, content}) => {
     )
 }
 
-export const CustomWhiteCard = ({width, height, marginTop, content}) => {
+export const CustomWhiteCard = ({ width, height, marginTop, content }) => {
     return (
         <Card style={{
             borderRadius: '15px',
@@ -32,7 +34,7 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
-export const EventCard = ({width, height, marginTop, justifyContent, content, backgroundColor}) => {
+export const EventCard = ({ width, height, marginTop, justifyContent, content, backgroundColor }) => {
     return (
         <Card style={{
             borderRadius: '15px',
@@ -49,7 +51,43 @@ export const EventCard = ({width, height, marginTop, justifyContent, content, ba
 
         }} variant='outlined'>
             {content}
-
         </Card>
     );
+}
+
+export const ColorCategoryCard = ({ width, backgroundColor, content, height }) => {
+    return (
+        <Card style={{
+            borderRadius: '15px',
+            margin: 'auto',
+            alignItems: 'center',
+            justifyContent: 'auto',
+            marginTop: '50px',
+            width: '175px',
+            backgroundColor: backgroundColor,
+            height: height,
+            paddingTop: '8px',
+            width: width,
+
+
+
+        }} variant='outlined'>
+
+            <CardContent style={{ backgroundColor: `${backgroundColor}` }}>
+                <Typography color="#ffffff" fontWeight={500} style={{
+                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
+                    backgroundColor: `${backgroundColor}`, borderRadius: '15px',
+
+                }}>
+                    Type1
+                    {content}
+  
+                </Typography>
+                {content}
+
+            </CardContent>
+            {content}
+
+        </Card>
+    )
 }
