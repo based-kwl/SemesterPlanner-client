@@ -30,7 +30,6 @@ export default function CalendarView() {
         const user = JSON.parse(localStorage.getItem('username'));
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
             .then((res) => {
-                console.log(res.data)
                 setEvent(res.data)
             }
         ).catch((err) => {
@@ -40,7 +39,6 @@ export default function CalendarView() {
 
     useEffect(() => {
         fetchData();
-
     }, [])
 
     const navigate = useNavigate();
@@ -95,7 +93,7 @@ export default function CalendarView() {
     const celendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({activeStartDate, date, view}) => <DayTile day={date} view={view}/>}
+                tileContent={({date}) => <DayTile day={date} />}
                 onChange={setDates}
                 value={date}
             />
@@ -171,8 +169,18 @@ export default function CalendarView() {
         </div>
     )
 
-    const DayTile = ({day, view}) => {
-        const eventsThisDay = MockendEvents.filter((e) => e.startDate == day);
+    const isSameDate = (date1, date2) => (
+        date1.getFullYear() === date2.getFullYear()
+        && date1.getMonth() === date2.getMonth()
+        && date1.getDate() === date2.getDate()
+    )
+
+    const DayTile = ({day}) => {
+        const eventsThisDay = event.filter((e) => {
+            const event = new Date(e.startDate);
+            return isSameDate(event, day)
+        });
+
         let tileContent;
 
         if (eventsThisDay.length < 1){
