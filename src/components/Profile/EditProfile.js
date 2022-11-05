@@ -43,9 +43,8 @@ export default function EditProfile() {
 
     const fetchData = useCallback(() => {
         console.log(userEmail)
-        axios.get("http://localhost:5000/users/email/"+userEmail)
+        axios.get("http://localhost:5000/student/email/"+userEmail)
             .then((res) => {
-                console.log("USER "+ JSON.stringify(res.data));
                 const data = res.data;
                 setUserData({
                     ...userData,

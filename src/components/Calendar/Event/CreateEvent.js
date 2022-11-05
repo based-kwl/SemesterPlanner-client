@@ -12,18 +12,20 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import axios from "axios";
 
 
 export default function CreateEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState({
+        username: JSON.parse(localStorage.getItem("username")),
         eventHeader: '',
         description: '',
         link: '',
         startDate: new Date(),
         endDate: new Date(),
-        startTime: undefined,
-        endTime: undefined,
+        startTime: '12:00',
+        endTime: '12:00',
         reccurence: 'once'
     })
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
@@ -62,19 +64,19 @@ export default function CreateEvent() {
     function handleEvent() {
         // TODO:  validate user inputs if have time
         console.log(eventData);
-                        navigate('/calendar');
-        // axios.post('http://localhost:5000/users/add', eventData)
-        //     .then(() => {
-        //         console.log();
-        //         navigate('/calendar');
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //         seteventError({ ...eventError, message: "Error connecting to database" });
-        //         seteventError({ ...eventError, hasError: true });
-        //         console.log(eventError);
-        //         console.log(`Error: ${err}`)
-        //     });
+        navigate('/calendar');
+        axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
+            .then(() => {
+                console.log();
+                navigate('/calendar');
+            })
+            .catch(err => {
+                console.log(err)
+                seteventError({ ...eventError, message: "Error connecting to database" });
+                seteventError({ ...eventError, hasError: true });
+                console.log(eventError);
+                console.log(`Error: ${err}`)
+            });
     }
 
     function handleCancel() {
@@ -108,13 +110,6 @@ export default function CreateEvent() {
         </Typography>
     ) : null;
 
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     // const user = {
-    //     //     email,
-    //     //     password,
-    //     // }
     function handleIsReccurentChange() {
         setIsRecurrent((prev) =>  !prev);
     }
@@ -131,7 +126,6 @@ export default function CreateEvent() {
     );
 
 
-    // }
     const addEventForm = (
         <React.Fragment>
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
@@ -247,6 +241,7 @@ export default function CreateEvent() {
             </form>
         </React.Fragment>
     )
+
     const addEventCard = (
         <React.Fragment>
             <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={addEventForm} />
@@ -261,5 +256,4 @@ export default function CreateEvent() {
             </div>
         </React.Fragment>
     );
-
 }

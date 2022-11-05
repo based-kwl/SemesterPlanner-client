@@ -20,7 +20,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if(localStorage.getItem("email")){
-            if(localStorage.getItem("email") !== "")
+            if(JSON.parse(localStorage.getItem("email")) !== "")
                 window.location = "/calendar"
         }
     }, [])
@@ -118,6 +118,7 @@ export default function SignIn() {
 }
 
 export function SetLocalStorage(res) {
+    localStorage.setItem("username", JSON.stringify(res.data.profile.username));
     localStorage.setItem("email", JSON.stringify(res.data.profile.email));
     localStorage.setItem("token", JSON.stringify(res.data.token));
 }
