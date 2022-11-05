@@ -73,7 +73,7 @@ export default function CalendarView() {
             <Menu
                 id="long-menu"
                 anchorEl={anchorEl}
-                getContentAnchorEl={null}
+                getContentAnchorEl={undefined}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 transformOrigin={{ vertical: "top", horizontal: "center" }}
                 open={open}
@@ -121,26 +121,27 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({startTime, endTime, header, description}) => (
-        <CardContent style={{paddingBottom: 0, paddingTop: 0}}>
-            <Grid container alignItems="flex-end">
-                <Grid item sm={10} s={10} >
+    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
+        const currentDate = new Date(startDate);
+        return (
+        <div style={{paddingBottom: 0, paddingTop: 0, width: '100%'}}>
+            <div style={{display: 'inline-block', paddingLeft: '10px'}}>
                     <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 10 ? '0' + currentDate.getMonth() : currentDate.getMonth()} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
-                    <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
-                        {header}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {description}
-                    </Typography>
-                </Grid>
-                <Grid item sm={2} s={2}>
-                    <EventOptions />
-                </Grid>
-            </Grid>
-        </CardContent>
-    )
+                <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
+                    {header}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                    {description}
+                </Typography>
+            </div>
+            <div style={{float: 'right'}}>
+                <EventOptions />
+            </div>
+        </div>
+    )}
 
     const eventsDisplay = (
         <div className="events">
@@ -155,6 +156,7 @@ export default function CalendarView() {
                         marginTop='10px' overflow='hidden'
                         content={
                         <EventDisplay
+                            startDate={e.startDate}
                             startTime={e.startTime}
                             endTime={e.endTime}
                             description={e.description}
