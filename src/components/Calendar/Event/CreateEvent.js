@@ -12,13 +12,16 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import axios from "axios";
 
 
 export default function CreateEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState({
+        username: JSON.parse(localStorage.getItem("username")),
         eventHeader: '',
         description: '',
+        link: '',
         startDate: new Date(),
         endDate: new Date(),
         startTime: '12:00',
@@ -31,7 +34,7 @@ export default function CreateEvent() {
     const reccurenceSelection = (
         <FormControl>
             <RadioGroup row onChange={handleReccurenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Daily" />
+                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
                 <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
                 <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
             </RadioGroup>
@@ -61,19 +64,19 @@ export default function CreateEvent() {
     function handleEvent() {
         // TODO:  validate user inputs if have time
         console.log(eventData);
-                        navigate('/calendar');
-        // axios.post('http://localhost:5000/users/add', eventData)
-        //     .then(() => {
-        //         console.log();
-        //         navigate('/calendar');
-        //     })
-        //     .catch(err => {
-        //         console.log(err)
-        //         seteventError({ ...eventError, message: "Error connecting to database" });
-        //         seteventError({ ...eventError, hasError: true });
-        //         console.log(eventError);
-        //         console.log(`Error: ${err}`)
-        //     });
+        navigate('/calendar');
+        axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
+            .then(() => {
+                console.log();
+                navigate('/calendar');
+            })
+            .catch(err => {
+                console.log(err)
+                seteventError({ ...eventError, message: "Error connecting to database" });
+                seteventError({ ...eventError, hasError: true });
+                console.log(eventError);
+                console.log(`Error: ${err}`)
+            });
     }
 
     function handleCancel() {
@@ -107,13 +110,6 @@ export default function CreateEvent() {
         </Typography>
     ) : null;
 
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     // const user = {
-    //     //     email,
-    //     //     password,
-    //     // }
     function handleIsReccurentChange() {
         setIsRecurrent((prev) =>  !prev);
     }
@@ -130,7 +126,6 @@ export default function CreateEvent() {
     );
 
 
-    // }
     const addEventForm = (
         <React.Fragment>
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
@@ -164,6 +159,20 @@ export default function CreateEvent() {
                             onChange={handleDescriptionChange}
                         />
                     </div>
+
+                    {/** Event link */}
+                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                        <TextField
+                            fullWidth
+                            id='eventLink'
+                            value={eventData.link}
+                            required
+                            label="Event Link"
+                            variant='outlined'
+                            onChange={(e) => setEventData({ ...eventData, link: e.target.value})}
+                        />
+                    </div>
+
 
                     {/** Event Start Date */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
@@ -232,9 +241,10 @@ export default function CreateEvent() {
             </form>
         </React.Fragment>
     )
+
     const addEventCard = (
         <React.Fragment>
-            <CustomWhiteCard width='326px' height='780px' marginTop='50px' content={addEventForm} />
+            <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={addEventForm} />
         </React.Fragment>
     )
 
@@ -242,9 +252,8 @@ export default function CreateEvent() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='885px'  content={addEventCard} />
+                <BackgroundCard width='372px' height='900px'  content={addEventCard} />
             </div>
         </React.Fragment>
     );
-
 }

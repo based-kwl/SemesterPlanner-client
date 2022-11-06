@@ -13,46 +13,48 @@ import MockendEvents from "./eventsMockedData.json";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
-import Grid from "@mui/material/Grid";
-
+import axios from "axios";
 
 export default function CalendarView() {
-    const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
-    //  use this to mark certain days and change the colour using .highlight in celendar.css
-    // const mark = [ 
-    //     '04-03-2022',
-    //     '03-03-2022',
-    //     '05-03-2022'
-    // ]
 
-    const events = MockendEvents;
-    const [selectedDay, setSelectedDay] = React.useState(new Date());
-    const [event, setEvent] = useState(events);
+    const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
+
+    const [event, setEvent] = useState([]);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const options = ['Delete', 'Cancel'];
+    const options = ['Edit', 'Delete', 'Cancel'];
 
-    const ITEM_HEIGHT = 48;
+    const fetchData = () => {
+        const user = JSON.parse(localStorage.getItem('username'));
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
+            .then((res) => {
+                setEvent(res.data)
+            }
+        ).catch((err) => {
+            // give user a error message.
+        })
+    }
 
     useEffect(() => {
-        localStorage.setItem('events', JSON.stringify(event));
-    }, [event]);
+        fetchData();
+    }, [])
 
     const navigate = useNavigate();
 
     function addEventButton() {
         navigate('/event');
-
     }
+
     function setDates(d) {
         setDate(d);
-        setSelectedDay(d);
     }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -73,7 +75,7 @@ export default function CalendarView() {
             <Menu
                 id="long-menu"
                 anchorEl={anchorEl}
-                getContentAnchorEl={null}
+                getContentAnchorEl={undefined}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 transformOrigin={{ vertical: "top", horizontal: "center" }}
                 open={open}
@@ -91,7 +93,7 @@ export default function CalendarView() {
     const celendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({activeStartDate, date, view}) => <DayTile day={date} view={view}/>}
+                tileContent={({date}) => <DayTile day={date} />}
                 onChange={setDates}
                 value={date}
             />
@@ -121,32 +123,33 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({startTime, endTime, header, description}) => (
-        <CardContent style={{paddingBottom: 0, paddingTop: 0}}>
-            <Grid container alignItems="flex-end">
-                <Grid item sm={10} s={10} >
+    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
+        const currentDate = new Date(startDate);
+        return (
+        <div style={{paddingBottom: 0, paddingTop: 0, width: '100%'}}>
+            <div style={{display: 'inline-block', paddingLeft: '10px'}}>
                     <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 10 ? '0' + currentDate.getMonth() : currentDate.getMonth()} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
-                    <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
-                        {header}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {description}
-                    </Typography>
-                </Grid>
-                <Grid item sm={2} s={2}>
-                    <EventOptions />
-                </Grid>
-            </Grid>
-        </CardContent>
-    )
+                <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
+                    {header}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                    {description}
+                </Typography>
+            </div>
+            <div style={{float: 'right'}}>
+                <EventOptions />
+            </div>
+        </div>
+    )}
 
     const eventsDisplay = (
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                        content={eventHeader} backgroundColor='#8CC63E'/>
-            {MockendEvents.map((e, index) => (
+            {event !== undefined && event.map((e, index) => (
                     <EventCard
                         key={index}
                         justifyContent="left"
@@ -155,6 +158,7 @@ export default function CalendarView() {
                         marginTop='10px' overflow='hidden'
                         content={
                         <EventDisplay
+                            startDate={e.startDate}
                             startTime={e.startTime}
                             endTime={e.endTime}
                             description={e.description}
@@ -165,8 +169,18 @@ export default function CalendarView() {
         </div>
     )
 
-    const DayTile = ({day, view}) => {
-        const eventsThisDay = MockendEvents.filter((e) => e.startDate == day);
+    const isSameDate = (date1, date2) => (
+        date1.getFullYear() === date2.getFullYear()
+        && date1.getMonth() === date2.getMonth()
+        && date1.getDate() === date2.getDate()
+    )
+
+    const DayTile = ({day}) => {
+        const eventsThisDay = event.filter((e) => {
+            const event = new Date(e.startDate);
+            return isSameDate(event, day)
+        });
+
         let tileContent;
 
         if (eventsThisDay.length < 1){

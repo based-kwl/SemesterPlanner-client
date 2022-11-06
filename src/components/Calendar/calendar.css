@@ -4,6 +4,18 @@
     overflow-y: scroll;
 }
 
+.eventCard {
+    position: relative;
+}
+
+.eventDescription {
+    float: left;
+}
+
+.moreIcon {
+    float: right;
+}
+
 .center {
     margin: auto;
     padding-left: 80%;
