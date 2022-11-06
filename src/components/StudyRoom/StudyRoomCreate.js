@@ -41,6 +41,8 @@ export default function RoomCreation() {
     React.useEffect( ()=>{
         fetchData();
     },[])
+
+    // API call to get the list of friends for the logged in user
     function fetchData() {
         axios.get('http://localhost:5000/friend/murth')
             .then(res => {
@@ -64,7 +66,7 @@ export default function RoomCreation() {
         e.preventDefault();
         let avatarIconText = SetAvatarText(roomData.title);
         setRoomData({...roomData, avatarText: avatarIconText});
-
+//API call the post study room info to create a new room
         axios.post('http://localhost:5000/room/',roomData)
             .then(res => {
                 console.log(res);
@@ -152,7 +154,7 @@ export default function RoomCreation() {
                     <Avatar sx={{bgcolor: roomData.color, width: 56, height: 56}}> {SetAvatarText(roomData.title)}
                     </Avatar>
                 </Stack>
-                <div style={{width: '90vw', height: '50vh', marginTop: '10px'}}>
+                <div style={{width: '90vw', height: '45vh', marginTop: '10px'}}>
                     <TextField
                         fullWidth
                         id='description'
@@ -161,17 +163,14 @@ export default function RoomCreation() {
                         variant='outlined'
                         margin="normal"
                         multiline
-                        maxRows={3}
+                        maxRows={1}
                         onChange={handleDescriptionChange}
                         value={roomData.description}
                     />
-                    <div
-                        style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    </div>
                     <Typography style={{fontWeight: 'bold'}}>
                         Select group members:
                     </Typography>
-                    <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'35vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'30vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {loggedInUser.map((friends,index) => (
                             <div key={index} style={{ margin:'-5px'}}>
                                 <ParticipantCard width={'81vw'} height={'40px'}

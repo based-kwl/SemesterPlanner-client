@@ -13,7 +13,7 @@ const studyRoom = MockStudyRoom[0];
 
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
-    //const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const[loading,setLoading] = useState(true);
     const [roomData, setRoomData] = React.useState({
         owner:'',
@@ -37,6 +37,7 @@ export default function StudyRoomSettings() {
             description: studyRoom.description
         })
         setLoading(false);
+        //API call to get room data to update room info
         //let email = JSON.parse(localStorage.getItem("email"));
         // axios.get(`http://localhost:5000/room/${email}`)
         //     .then(res => {
@@ -67,22 +68,22 @@ export default function StudyRoomSettings() {
         e.preventDefault();
         let avatarIconText = SetAvatarText(roomData.title);
         setRoomData({...roomData, avatarText: avatarIconText});
-        // axios.post('http://localhost:5000/room/',roomData)
-        //     .then(res => {
-        //         console.log(res);
-        //         navigate("/study-room-home");
-        //     })
-        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+        axios.post('http://localhost:5000/room/',roomData)
+            .then(res => {
+                console.log(res);
+                navigate("/study-room-home");
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
     //deletes the room in db
     function handleDelete(e){
-        // axios.post('http://localhost:5000/room/delete',{username:roomData.owner, sID:roomData.sid})
-        //     .then(res => {
-        //         console.log(res);
-        //         navigate("/study-room-home");
-        //     })
-        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+        axios.post('http://localhost:5000/room/delete',{username:roomData.owner, sID:roomData.sid})
+            .then(res => {
+                console.log(res);
+                navigate("/study-room-home");
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
     }
 
     function handleTitleChange(e){
@@ -111,6 +112,7 @@ export default function StudyRoomSettings() {
     }
 
     const updateRoom = (
+        <div style={{height:'50vh'}}>
         <React.Fragment>
             <form style={{alignItems: 'center'}} >
                 <div style={{width: '85vw', marginTop: '10px'}}>
@@ -169,7 +171,7 @@ export default function StudyRoomSettings() {
                     </Avatar>
                 </Stack>
                 </div>
-                <div style={{width: '85vw', height: '50vh', marginTop: '10px'}}>
+                <div style={{width: '85vw', height: '42vh', marginTop: '10px',border:'3px solid black'}}>
                     <TextField
                         fullWidth
                         id='description'
@@ -183,12 +185,15 @@ export default function StudyRoomSettings() {
                         value={roomData.description}
                     />
                 </div>
+                <div>
                 <Stack direction='row' spacing={7} marginTop={2}>
                 <PrimaryButton3 width={'41vw'} content="Update" onClick={handleUpdate} />
                 <PrimaryButton2 width={'41vw'} content="Delete" onClick={handleDelete}/>
                 </Stack>
+                </div>
             </form>
         </React.Fragment>
+        </div>
     )
     return(updateRoom);
 }

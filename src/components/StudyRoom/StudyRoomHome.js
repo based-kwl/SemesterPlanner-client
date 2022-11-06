@@ -20,6 +20,7 @@ export default function StudyRoomHome() {
     const [roomData, setRoomData] = React.useState({
         title: '',
         sid: '',
+        owner:'',
         color: '',
         description: '',
         avatarText: '',
@@ -35,7 +36,7 @@ export default function StudyRoomHome() {
         //getData();
     }, [])
 
-    //API call for when backend is functional
+    //API call to get all the rooms that the logged in user participates in
     // const getData = () => {
     //     let user = localStorage.getItem("email");
     //     axios.get(`http://localhost:5000/room/${user}`)
