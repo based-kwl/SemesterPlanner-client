@@ -23,10 +23,12 @@ console.log(loggedInUser);
 
 export default function RoomCreation() {
     const navigate = useNavigate();
+    const [friends, setFriends] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
         title:'',
+        owner:'',
         color: '',
         avatarText:'',
         description:'',
@@ -34,7 +36,7 @@ export default function RoomCreation() {
     });
 
     React.useEffect(()=> {
-        let user = localStorage.getItem("username")
+        let user = localStorage.getItem("email")
         setRoomData({...roomData, owner: user})
         })
 
@@ -44,9 +46,10 @@ export default function RoomCreation() {
 
     // API call to get the list of friends for the logged in user
     function fetchData() {
-        axios.get('http://localhost:5000/friend/murth')
+        axios.get('http://localhost:5000/friend/:email')
             .then(res => {
                 console.log(res);
+                //setFriends(res.body);
                 console.log(res.body)
             })
     }
@@ -59,15 +62,19 @@ export default function RoomCreation() {
             updatedList.splice(checked.indexOf(e.target.value), 1);
         }
         setChecked(updatedList);
+        console.log('list:', updatedList)
         setRoomData({...roomData, participants:updatedList});
     }
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
         let avatarIconText = SetAvatarText(roomData.title);
-        setRoomData({...roomData, avatarText: avatarIconText});
-//API call the post study room info to create a new room
-        axios.post('http://localhost:5000/room/',roomData)
+        //add the owner to the list
+        let participantsList = roomData.participants.push(roomData.owner);
+        setRoomData({...roomData, avatarText: avatarIconText, participants: participantsList});
+        console.log(roomData);
+        //API call the post study room info to create a new room
+        axios.post('http://localhost:5000/room/')
             .then(res => {
                 console.log(res);
                 navigate("/study-room-home");

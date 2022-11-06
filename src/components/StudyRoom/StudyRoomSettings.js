@@ -171,7 +171,7 @@ export default function StudyRoomSettings() {
                     </Avatar>
                 </Stack>
                 </div>
-                <div style={{width: '85vw', height: '42vh', marginTop: '10px',border:'3px solid black'}}>
+                <div style={{width: '85vw', height: '42vh', marginTop: '10px'}}>
                     <TextField
                         fullWidth
                         id='description'
