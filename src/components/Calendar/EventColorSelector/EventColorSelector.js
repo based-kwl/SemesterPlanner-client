@@ -29,13 +29,14 @@ export default function EventColorSelector() {
     React.useEffect(() => {
         let user = localStorage.getItem("username")
         setEventSettingData({ ...eventSettingData, owner: user })
-    })
-
-    React.useEffect(() => {
         fetchData();
-    }, [])
+    }, []
+    )
+
+    
+
     function fetchData() {
-        axios.get('http://localhost:5000/friend/murth')
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${username}`)
             .then(res => {
                 console.log(res);
                 console.log(res.body)
@@ -48,12 +49,12 @@ export default function EventColorSelector() {
         let avatarIconText = SetAvatarText(eventSettingData.title);
         setEventSettingData({ ...eventSettingData, avatarText: avatarIconText });
 
-        axios.post('http://localhost:5000/room/', eventSettingData)
+        axios.post(`${process.env.REACT_APP_BASE_URL}room`, eventSettingData)
             .then(res => {
                 console.log(res);
                 navigate("/study-room-home");
             })
-            .catch(err => { console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`) });
+            .catch(err => { console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });
     }
 
     function handleTitleChange(e) {

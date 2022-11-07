@@ -57,7 +57,7 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
 
 //do i need three contents ?
 
-export const ColorEventCard = ({ marginLeft, marginRight, width, backgroundColor, content, height }) => {
+export const ColorEventCard = ({  width, backgroundColor, content, height }) => {
     return (
         <Card style={{
             borderRadius: '15px',

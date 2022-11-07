@@ -33,12 +33,7 @@ export default function CalendarView() {
 
     const options = ['Delete', 'Cancel'];
 
-    const ITEM_HEIGHT = 48;
-
-    useEffect(() => {
-        localStorage.setItem('events', JSON.stringify(event));
-    }, [event]);
-
+   
     const navigate = useNavigate();
 
     function addEventButton() {

@@ -1,0 +1,2 @@
+ATLAS_URI=`mongodb+srv://jakelop:soen490@cluster0.nsqs3nv.mongodb.net/?retryWrites=true&w=majority`
+ACCESS_TOKEN_SECRET=`3eecd37e7eb837c20b2d983613a57a942062c352f4ab84c32de1276b247742702bb3381159bcccc9497f95211b7c50c6b24b2bbe6341a16b2c9be2f2358c5711`
