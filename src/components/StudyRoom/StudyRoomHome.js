@@ -15,7 +15,6 @@ let email = JSON.parse(localStorage.getItem("email"));
 
 export default function StudyRoomHome() {
     const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('')
     const [roomData, setRoomData] = React.useState([]);
 
     useEffect(() => {
@@ -33,8 +32,7 @@ export default function StudyRoomHome() {
             .then(res => {
                 setRoomData(res.data);
             })
-            .catch(err =>
-            {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'insert proper error message' : `${err}`)});
+            .catch(err => {console.log('Error',err);})
         }
 
     function handleDestination(i,sID){

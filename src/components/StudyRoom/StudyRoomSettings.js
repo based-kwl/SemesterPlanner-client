@@ -10,7 +10,6 @@ import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('')
     const[loading,setLoading] = useState(true);
     const [roomData, setRoomData] = React.useState({
         owner:'',
@@ -30,8 +29,7 @@ export default function StudyRoomSettings() {
                 const data = res.data;
                 setRoomData(data);
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
-
+            .catch(err => {console.log('Error:', err)});
         setLoading(false);
      },[])
 
@@ -54,7 +52,7 @@ export default function StudyRoomSettings() {
         let avatarIconText = SetAvatarText(roomData.title);
         setRoomData({...roomData, avatarText: avatarIconText});
         axios.put(`http://localhost:5000/room/`,roomData)
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {console.log('Error:', err)});
         navigate("/study-room-home");
     }
 
@@ -64,7 +62,7 @@ export default function StudyRoomSettings() {
             .then(() => {
                 navigate("/study-room-home");
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {console.log('Error:', err)});
     }
 
     function handleTitleChange(e){

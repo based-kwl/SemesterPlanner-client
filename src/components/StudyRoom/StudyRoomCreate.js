@@ -20,7 +20,6 @@ import {ParticipantCard} from "./StudyRoomCards";
 export default function RoomCreation() {
     const navigate = useNavigate();
     const [friends, setFriends] = useState([])
-    const [errorMessage, setErrorMessage] = useState('')
     const [checked, setChecked] = React.useState([]);
     const [roomData, setRoomData] = React.useState({
         title:'',
@@ -42,9 +41,7 @@ export default function RoomCreation() {
         const email = JSON.parse(localStorage.getItem("email"));
         axios.get(`http://localhost:5000/friend/${email}`)
             .then(res => {
-                console.log('res', res);
                 setFriends( res.data);
-                console.log('participants',friends);
             })
     }
     const handleCheck =(e) =>{
@@ -71,7 +68,7 @@ export default function RoomCreation() {
             .then(() => {
                 navigate("/study-room-home");
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {console.log('Error:', err)});
         window.location.reload();
     }
 
