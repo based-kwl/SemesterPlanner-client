@@ -66,7 +66,6 @@ export const ColorEventCard = ({  width, backgroundColor, content, height }) => 
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: '10px',
-            width: '80px',
             backgroundColor: backgroundColor,
             height: height,
             paddingTop: '8px',
