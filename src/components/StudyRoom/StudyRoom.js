@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useEffect} from 'react';
-import {BackgroundCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
+import {useEffect, useMemo} from 'react';
+import {BackgroundCard, SnippetCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import NavDrawer from "../NavDrawer/navDrawer"
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -8,6 +8,10 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import BottomDrawer from './BottomDrawer';
 import StudyRoomSettings from "./StudyRoomSettings";
 import ParticipantsList from './ParticipantsList';
+import {Avatar, Stack} from "@mui/material";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 
 export default function StudyRoom() {
@@ -17,12 +21,49 @@ export default function StudyRoom() {
     //             window.location = "/calendar"
     //     }
     // }, [])
+    const [roomData, setRoomData] = React.useState([]);
+
+    function getData() {
+        const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
+            .then(res => {
+                setRoomData(res.data);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
+    }
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const roomHeader = (
+        <div style={{margin: '15px', width:'92vw'}}>
+            <Stack direction='row' spacing={2}
+                   divider={<Divider orientation="vertical" flexItem/>}
+                   justifyContent="flex-start"
+                   alignItems="center"
+            >
+                <Avatar sx={{
+                    background: roomData.color,
+                    width: 56,
+                    height: 56
+                }}>{roomData.avatar} </Avatar>
+                <div>
+                    <Typography variant="body1">Title: {roomData.title}</Typography>
+                    <Typography variant="body1">Description: {roomData.description}</Typography>
+                    <Typography variant="body2">Created on: {roomData.createdAt ? roomData.createdAt.split("T")[0] : ''}</Typography>
+                </div>
+            </Stack>
+        </div>
+    )
 
     const chatRoom = (
         <React.Fragment>
             <NavDrawer/>
             <StudyRoomChatCard width='92vw' height='10vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
-                               bottomLeftRadius='0px' bottomRightRadius='0px'/>
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={roomHeader}/>
             <StudyRoomChatCard width='92vw' height='65vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                bottomLeftRadius='0px' bottomRightRadius='0px'/>
             <StudyRoomChatCard width='92vw' height='5vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'

@@ -9,13 +9,15 @@ import axios from "axios";
 
 
 export default function ParticipantsList() {
-    const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1]
+    const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
 
     const [participants, setParticipants] = useState([])
 
     const [errorMessage, setErrorMessage] = useState('')
 
     const [availableFriends, setAvailableFriends] = useState([])
+
+    const [owner, setOwner] = useState('');
 
     function handleDelete(index) {
         const emailToRemove = participants[index];
@@ -44,7 +46,10 @@ export default function ParticipantsList() {
     function getParticipants(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
             .then(res => {
-                setParticipants(res.data.participants)
+                const newOwner = res.data.owner;
+                setOwner(newOwner);
+                const newParticipants = [owner != '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant != owner.toString()) : []].flat();
+                setParticipants(newParticipants)
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
     }
@@ -64,16 +69,16 @@ export default function ParticipantsList() {
 
     const participantsList = (
         <>
-            <div>
+            <div style={{width:'90vw'}}>
                 <div><h4>Current Participants:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
                     {participants ? participants.map((participant, index) => <ParticipantCard id={index} key={index} width={'90vw'}
                                                                                height={'40px'}
-                                                                               content={<>{participant}<Button
+                                                                               content={<>{participant}{participant != owner ? <Button
                                                                                    variant="text"
                                                                                    sx={{borderColor: "none"}}
                                                                                    onClick={() => handleDelete(index)}><ClearIcon
-                                                                                   style={{color: '#912338'}}/></Button></>}/>) : <></>}
+                                                                                   style={{color: '#912338'}}/></Button> : <></>}</>}/>) : <></>}
                 </div>
                 <div><h4>Friends:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
