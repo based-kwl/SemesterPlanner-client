@@ -18,45 +18,26 @@ export default function ParticipantsList() {
     const [availableFriends, setAvailableFriends] = useState([])
 
     function handleDelete(index) {
-        // let newAvailableFriends = [participants[index], ...availableFriends];
-        // setAvailableFriends(newAvailableFriends);
-        //
-        // let newParticipants = participants.filter((participant) => {
-        //     return participant !== participants[index];
-        // })
-        // setParticipants(newParticipants);
-
-        // TODO: uncomment below code when delete friend route is implemented in backend
-        // axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`, {email:availableFriends[index], sID:studyRoomID})
-        //     .then(res => {
-        //         setParticipants(res.data.participants)
-        //     })
-        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
-        // getParticipants();
+        const emailToRemove = participants[index];
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email:emailToRemove, sID:studyRoomID})
+            .then(res => {
+                setParticipants(res.data.participants);
+                getParticipants();
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
     }
 
     function handleAdd(index) {
-        // let newParticipants = [...participants, availableFriends[index]];
-        // setParticipants(newParticipants);
-        //
-        // let newAvailableFriends = availableFriends.filter((availableFriend) => {
-        //     return availableFriend !== availableFriends[index];
-        // })
-        // setAvailableFriends(newAvailableFriends);
-
-        // TODO: uncomment below code when add friend route is fixed in backend
-        // axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:availableFriends[index], sID:studyRoomID})
-        //     .then(res => {
-        //         setParticipants(res.data.participants)
-        //     })
-        //     .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
-        // getParticipants();
+        const emailToAdd = availableFriends[index];
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:emailToAdd, sID:studyRoomID})
+            .then(res => {
+                setParticipants(res.data.participants);
+                getParticipants();
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
     }
 
-    // TODO: when backend is implemented, update database with participants of the study room using the respective endpoint
     function handleSave() {
-        console.log(participants); // remove this line after connecting to backend
-        console.log(availableFriends); // remove this line after connecting to backend
         document.elementFromPoint(0,0).click();
     }
 
@@ -72,9 +53,10 @@ export default function ParticipantsList() {
 
     //TODO: check if this can be run ONLY after participants get request is fully completed (currently can see participants in availableFriends for a split second)
     useMemo(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/user_3v5bi5s61v@gmail.com`) //TODO: change user email to local storage email
+        let email = JSON.parse(localStorage.getItem("email"));
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${email}`)
             .then(res => {
-                let newAvailableFriends = res.data.friends.filter((email) => !participants.includes(email));
+                let newAvailableFriends = (participants ? res.data.friends.filter((email) => !participants.includes(email)) : res.data.friends);
                 setAvailableFriends(newAvailableFriends);
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
@@ -85,24 +67,24 @@ export default function ParticipantsList() {
             <div>
                 <div><h4>Current Participants:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {participants.map((participant, index) => <ParticipantCard id={index} key={index} width={'90vw'}
+                    {participants ? participants.map((participant, index) => <ParticipantCard id={index} key={index} width={'90vw'}
                                                                                height={'40px'}
                                                                                content={<>{participant}<Button
                                                                                    variant="text"
                                                                                    sx={{borderColor: "none"}}
                                                                                    onClick={() => handleDelete(index)}><ClearIcon
-                                                                                   style={{color: '#912338'}}/></Button></>}/>)}
+                                                                                   style={{color: '#912338'}}/></Button></>}/>) : <></>}
                 </div>
                 <div><h4>Friends:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {availableFriends.map((availableFriend, index) => <ParticipantCard id={index} key={index}
+                    {availableFriends ? availableFriends.map((availableFriend, index) => <ParticipantCard id={index} key={index}
                                                                                        width={'90vw'}
                                                                                        height={'40px'}
                                                                                        content={<>{availableFriend}<Button
                                                                                            variant="text"
                                                                                            sx={{borderColor: "none"}}
                                                                                            onClick={() => handleAdd(index)}><AddIcon
-                                                                                           style={{color: '#057D78'}}/></Button></>}/>)}
+                                                                                           style={{color: '#057D78'}}/></Button></>}/>) : <></>}
                 </div>
             </div>
             <div style={{
