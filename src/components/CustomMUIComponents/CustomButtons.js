@@ -49,7 +49,9 @@ export const EditButton = ({content, width, onClick}) => {
             onClick={onClick}
             style={{
                 width: width, 
-            }}>
+                color: '#534F4F'
+            }}
+            >
             {content}
         </Button>
     );

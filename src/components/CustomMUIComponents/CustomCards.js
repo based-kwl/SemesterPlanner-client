@@ -55,15 +55,18 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
     );
 }
 
-export const ColorCategoryCard = ({ width, backgroundColor, content, height }) => {
+//do i need three contents ?
+
+export const ColorEventCard = ({ marginLeft, marginRight, width, backgroundColor, content, height }) => {
     return (
         <Card style={{
             borderRadius: '15px',
-            margin: 'auto',
+            marginLeft: '15px',
+            marginRight: '15px',
             alignItems: 'center',
-            justifyContent: 'auto',
-            marginTop: '50px',
-            width: '175px',
+            justifyContent: 'center',
+            marginTop: '10px',
+            width: '80px',
             backgroundColor: backgroundColor,
             height: height,
             paddingTop: '8px',
@@ -79,15 +82,50 @@ export const ColorCategoryCard = ({ width, backgroundColor, content, height }) =
                     backgroundColor: `${backgroundColor}`, borderRadius: '15px',
 
                 }}>
-                    Type1
                     {content}
   
                 </Typography>
-                {content}
 
             </CardContent>
-            {content}
 
+        </Card>
+    )
+}
+
+export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, content}) => {
+    return (
+        <Card style={{
+            margin: 'auto',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            borderTopLeftRadius: topLeftRadius,
+            borderTopRightRadius: topRightRadius,
+            borderBottomRightRadius: bottomRightRadius,
+            borderBottomLeftRadius: bottomLeftRadius
+        }} variant='outlined'>
+            {content}
+        </Card>
+    );
+}
+
+export const ParticipantCard = ({width, height, content}) => {
+    return (
+        <Card variant='outlined' style={{
+            display: 'flex',
+            flexDirection:'row',
+            width: width,
+            height:  height,
+            backgroundColor: '#F0F0F0',
+            marginBottom: '15px',
+            paddingLeft: '10px',
+            justifyContent:'space-between',
+            alignItems: 'center',
+        }}>
+            {content}
         </Card>
     )
 }

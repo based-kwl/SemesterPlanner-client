@@ -13,48 +13,46 @@ import MockendEvents from "./eventsMockedData.json";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
-import axios from "axios";
+import Grid from "@mui/material/Grid";
+
 
 export default function CalendarView() {
-
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
+    //  use this to mark certain days and change the colour using .highlight in celendar.css
+    // const mark = [ 
+    //     '04-03-2022',
+    //     '03-03-2022',
+    //     '05-03-2022'
+    // ]
 
-    const [event, setEvent] = useState([]);
-
+    const events = MockendEvents;
+    const [selectedDay, setSelectedDay] = React.useState(new Date());
+    const [event, setEvent] = useState(events);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const options = ['Edit', 'Delete', 'Cancel'];
+    const options = ['Delete', 'Cancel'];
 
-    const fetchData = () => {
-        const user = JSON.parse(localStorage.getItem('username'));
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
-            .then((res) => {
-                setEvent(res.data)
-            }
-        ).catch((err) => {
-            // give user a error message.
-        })
-    }
+    const ITEM_HEIGHT = 48;
 
     useEffect(() => {
-        fetchData();
-    }, [])
+        localStorage.setItem('events', JSON.stringify(event));
+    }, [event]);
 
     const navigate = useNavigate();
 
     function addEventButton() {
         navigate('/event');
-    }
 
+    }
     function setDates(d) {
         setDate(d);
+        setSelectedDay(d);
     }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -75,7 +73,7 @@ export default function CalendarView() {
             <Menu
                 id="long-menu"
                 anchorEl={anchorEl}
-                getContentAnchorEl={undefined}
+                getContentAnchorEl={null}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 transformOrigin={{ vertical: "top", horizontal: "center" }}
                 open={open}
@@ -93,7 +91,7 @@ export default function CalendarView() {
     const celendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({date}) => <DayTile day={date} />}
+                tileContent={({activeStartDate, date, view}) => <DayTile day={date} view={view}/>}
                 onChange={setDates}
                 value={date}
             />
@@ -113,7 +111,7 @@ export default function CalendarView() {
     const eventHeader = (
         <React.Fragment>
             <CardContent>
-                <Typography color="#000000" fontWeight={500} style={{
+                <Typography color="#ffffff" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
                     School
@@ -123,33 +121,32 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
-        const currentDate = new Date(startDate);
-        return (
-        <div style={{paddingBottom: 0, paddingTop: 0, width: '100%'}}>
-            <div style={{display: 'inline-block', paddingLeft: '10px'}}>
+    const EventDisplay = ({startTime, endTime, header, description}) => (
+        <CardContent style={{paddingBottom: 0, paddingTop: 0}}>
+            <Grid container alignItems="flex-end">
+                <Grid item sm={10} s={10} >
                     <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 10 ? '0' + currentDate.getMonth() : currentDate.getMonth()} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                        {startTime + "-" + endTime}
                     </Typography>
-                <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
-                    {header}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                    {description}
-                </Typography>
-            </div>
-            <div style={{float: 'right'}}>
-                <EventOptions />
-            </div>
-        </div>
-    )}
+                    <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
+                        {header}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {description}
+                    </Typography>
+                </Grid>
+                <Grid item sm={2} s={2}>
+                    <EventOptions />
+                </Grid>
+            </Grid>
+        </CardContent>
+    )
 
     const eventsDisplay = (
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                        content={eventHeader} backgroundColor='#8CC63E'/>
-            {event !== undefined && event.map((e, index) => (
+            {MockendEvents.map((e, index) => (
                     <EventCard
                         key={index}
                         justifyContent="left"
@@ -158,7 +155,6 @@ export default function CalendarView() {
                         marginTop='10px' overflow='hidden'
                         content={
                         <EventDisplay
-                            startDate={e.startDate}
                             startTime={e.startTime}
                             endTime={e.endTime}
                             description={e.description}
@@ -169,18 +165,8 @@ export default function CalendarView() {
         </div>
     )
 
-    const isSameDate = (date1, date2) => (
-        date1.getFullYear() === date2.getFullYear()
-        && date1.getMonth() === date2.getMonth()
-        && date1.getDate() === date2.getDate()
-    )
-
-    const DayTile = ({day}) => {
-        const eventsThisDay = event.filter((e) => {
-            const event = new Date(e.startDate);
-            return isSameDate(event, day)
-        });
-
+    const DayTile = ({day, view}) => {
+        const eventsThisDay = MockendEvents.filter((e) => e.startDate == day);
         let tileContent;
 
         if (eventsThisDay.length < 1){
