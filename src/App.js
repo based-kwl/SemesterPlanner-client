@@ -23,7 +23,7 @@ function AppRoutes() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/editProfile" element={<EditProfile />} />
-            <Route path="/study-room" element={<StudyRoom />} />
+            <Route path="/study-room/:sID" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route exact path='/' element={<SignIn />} />
         </Routes>
