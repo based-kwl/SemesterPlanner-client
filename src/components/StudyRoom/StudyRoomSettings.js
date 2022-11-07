@@ -123,7 +123,7 @@ export default function StudyRoomSettings() {
                         <MenuItem value={"#DA3A16"}>
                             <CircleIcon sx={{color: '#DA3A16'}}/> Orange
                         </MenuItem>
-                        <MenuItem value={"#004085"}>
+                        <MenuItem value={"#573996"}>
                             <CircleIcon sx={{color: '#573996'}}/> Mauve
                         </MenuItem>
                         <MenuItem value={"#004085"}>
