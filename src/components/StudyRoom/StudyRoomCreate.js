@@ -14,12 +14,8 @@ import "./customButton.css"
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {useState} from "react";
-import mockUser from "./../Profile/Mocks/mockUser.json"
 import {ParticipantCard} from "./StudyRoomCards";
 
-//friend list from the user mock data
-const loggedInUser = mockUser[1].friends;
-console.log(loggedInUser);
 
 export default function RoomCreation() {
     const navigate = useNavigate();
@@ -33,27 +29,24 @@ export default function RoomCreation() {
         avatarText:'',
         description:'',
         participants:[],
+        createdAt:''
     });
 
     React.useEffect(()=> {
-        let user = localStorage.getItem("email")
-        setRoomData({...roomData, owner: user})
-        })
-
-    React.useEffect( ()=>{
+        let email = JSON.parse(localStorage.getItem("email"));
+        setRoomData({...roomData, owner: email})
         fetchData();
-    },[])
-
+        },[])
     // API call to get the list of friends for the logged in user
     function fetchData() {
-        axios.get('http://localhost:5000/friend/:email')
+        const email = JSON.parse(localStorage.getItem("email"));
+        axios.get(`http://localhost:5000/friend/${email}`)
             .then(res => {
-                console.log(res);
-                //setFriends(res.body);
-                console.log(res.body)
+                console.log('res', res);
+                setFriends( res.data);
+                console.log('participants',friends);
             })
     }
-
     const handleCheck =(e) =>{
         let updatedList = [...checked];
         if(e.target.checked){
@@ -74,12 +67,12 @@ export default function RoomCreation() {
         setRoomData({...roomData, avatarText: avatarIconText, participants: participantsList});
         console.log(roomData);
         //API call the post study room info to create a new room
-        axios.post('http://localhost:5000/room/')
-            .then(res => {
-                console.log(res);
+        axios.post('http://localhost:5000/room/',roomData)
+            .then(() => {
                 navigate("/study-room-home");
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
+        window.location.reload();
     }
 
     function handleTitleChange(e){
@@ -178,12 +171,12 @@ export default function RoomCreation() {
                         Select group members:
                     </Typography>
                     <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'30vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
-                        {loggedInUser.map((friends,index) => (
+                        {friends.map((friend,index) => (
                             <div key={index} style={{ margin:'-5px'}}>
                                 <ParticipantCard width={'81vw'} height={'40px'}
-                                                 content={<> {friends}
+                                                 content={<> {friend}
                                                      <Checkbox
-                                                         value={friends}
+                                                         value={friend}
                                                          onChange={handleCheck}
                                                          inputProps={{'aria-label': 'controlled'}}
                                                          style={{color: '#057D78'}}
