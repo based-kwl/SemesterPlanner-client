@@ -79,7 +79,7 @@ export default function SignUp() {
 
     function handleRegistration() {
         console.log(userData);
-        axios.post( `${process.env.apiBaseUrl}/users/add `, userData)
+        axios.post(`${process.env.apiBaseUrl}student/add `, userData)
             .then(()=> {
                 console.log();
                 navigate('/login');

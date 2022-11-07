@@ -119,4 +119,5 @@ export default function SignIn() {
 export function SetLocalStorage(res) {
     localStorage.setItem("email", JSON.stringify(res.data.profile.email));
     localStorage.setItem("token", JSON.stringify(res.data.token));
+    localStorage.setItem("username", JSON.stringify(res.data.profile.username));
 }

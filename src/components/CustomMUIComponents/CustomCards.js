@@ -3,6 +3,7 @@ import Card from '@mui/material/Card';
 import Typography from "@mui/material/Typography";
 import {CardHeader} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import {CardActionArea} from "@mui/material";
 
 export const BackgroundCard = ({width, height, content}) => {
     return (
@@ -35,7 +36,7 @@ export const CustomWhiteCard = ({width, height, marginTop, content}) => {
     );
 }
 
-export function StudyRoomChatCard({width, height, marginTop,topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, content}) {
+export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, content}) => {
     return (
         <Card style={{
             margin: 'auto',
@@ -71,14 +72,33 @@ export const ReminderCard = ({width, height, marginTop, justifyContent, content,
             overflow: overflow,
 
         }} variant='outlined'>
-
             {content}
+        </Card>
+    );
+}
+
+export const SnippetCard = ({width, height, marginBottom, content, borderRadius,destination}) => {
+    return (
+        <Card style={{
+            margin: 'auto',
+            alignItems: 'left',
+            display: 'flex',
+            justifyContent: 'left',
+            width: width,
+            height: height,
+            marginBottom: marginBottom,
+            paddingLeft:'10px',
+            borderRadius: borderRadius,
+
+        }} variant='outlined'>
+            <CardActionArea onClick={destination}>{content}</CardActionArea>
+
 
         </Card>
     );
 }
 
-export function ChatMessagesCard ({content, userType}) {
+export const ChatMessagesCard = ({content, userType}) => {
 
     let backgroundColor;
     let textColor;
@@ -96,15 +116,15 @@ export function ChatMessagesCard ({content, userType}) {
 
 
     return (
-            <Card sx={{
-                backgroundColor: backgroundColor,
-                width: "69vw",
-                borderRadius: "10px"
-            }}>
-                <CardContent>
-                    <Typography sx={{color: textSenderColor}}>{content.props.senderEmail}</Typography>
-                    <Typography sx={{color: textColor}}>{content.props.messageContent}</Typography>
-                </CardContent>
-            </Card>
+        <Card sx={{
+            backgroundColor: backgroundColor,
+            width: "69vw",
+            borderRadius: "10px"
+        }}>
+            <CardContent>
+                <Typography sx={{color: textSenderColor}}>{content.props.senderEmail}</Typography>
+                <Typography sx={{color: textColor}}>{content.props.messageContent}</Typography>
+            </CardContent>
+        </Card>
     );
 }
