@@ -37,7 +37,7 @@ export default function EventColorSelector() {
 
     function fetchData() {
 
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend/`,username)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/`,eventSettingData)
             .then(res => {
                 console.log(res);
                 console.log(res.body)
