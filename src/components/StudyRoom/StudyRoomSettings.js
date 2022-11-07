@@ -24,7 +24,7 @@ export default function StudyRoomSettings() {
     const fetchData = useCallback(( ) => {
         const sID = window.location.href.split("/")[window.location.href.split("/").length-1];
         // populate settings page for owner of page
-        axios.get(`http://localhost:5000/room/fetch/${sID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${sID}`)
             .then(res => {
                 const data = res.data;
                 setRoomData(data);
@@ -51,14 +51,14 @@ export default function StudyRoomSettings() {
         e.preventDefault();
         let avatarIconText = SetAvatarText(roomData.title);
         setRoomData({...roomData, avatarText: avatarIconText});
-        axios.put(`http://localhost:5000/room/`,roomData)
+        axios.put(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
             .catch(err => {console.log('Error:', err)});
         navigate("/study-room-home");
     }
 
     //deletes the room in db
     function handleDelete(e){
-        axios.post('http://localhost:5000/room/delete',{email:roomData.owner, sID:roomData.sID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`,{email:roomData.owner, sID:roomData.sID})
             .then(() => {
                 navigate("/study-room-home");
             })

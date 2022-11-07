@@ -39,7 +39,7 @@ export default function RoomCreation() {
     // API call to get the list of friends for the logged in user
     function fetchData() {
         const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`http://localhost:5000/friend/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${email}`)
             .then(res => {
                 setFriends( res.data);
             })
@@ -64,7 +64,7 @@ export default function RoomCreation() {
         setRoomData({...roomData, avatarText: avatarIconText, participants: participantsList});
         console.log(roomData);
         //API call the post study room info to create a new room
-        axios.post('http://localhost:5000/room/',roomData)
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
             .then(() => {
                 navigate("/study-room-home");
             })

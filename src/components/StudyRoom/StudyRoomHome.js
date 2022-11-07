@@ -28,7 +28,7 @@ export default function StudyRoomHome() {
     //API call to get all the rooms that the logged in user participates in
     const getData = () => {
         const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`http://localhost:5000/room/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/${email}`)
             .then(res => {
                 setRoomData(res.data);
             })

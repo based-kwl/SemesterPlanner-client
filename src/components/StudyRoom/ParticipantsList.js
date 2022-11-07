@@ -27,7 +27,7 @@ export default function ParticipantsList() {
         // setParticipants(newParticipants);
 
         // TODO: uncomment below code when delete friend route is implemented in backend
-        // axios.post(`http://localhost:5000/room/delete`, {email:availableFriends[index], sID:studyRoomID})
+        // axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`, {email:availableFriends[index], sID:studyRoomID})
         //     .then(res => {
         //         setParticipants(res.data.participants)
         //     })
@@ -45,7 +45,7 @@ export default function ParticipantsList() {
         // setAvailableFriends(newAvailableFriends);
 
         // TODO: uncomment below code when add friend route is fixed in backend
-        // axios.post(`http://localhost:5000/room/add`, {email:availableFriends[index], sID:studyRoomID})
+        // axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:availableFriends[index], sID:studyRoomID})
         //     .then(res => {
         //         setParticipants(res.data.participants)
         //     })
@@ -61,7 +61,7 @@ export default function ParticipantsList() {
     }
 
     function getParticipants(){
-        axios.get(`http://localhost:5000/room/fetch/${studyRoomID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
             .then(res => {
                 setParticipants(res.data.participants)
             })
@@ -72,7 +72,7 @@ export default function ParticipantsList() {
 
     //TODO: check if this can be run ONLY after participants get request is fully completed (currently can see participants in availableFriends for a split second)
     useMemo(() => {
-        axios.get(`http://localhost:5000/student/email/user_3v5bi5s61v@gmail.com`) //TODO: change user email to local storage email
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/user_3v5bi5s61v@gmail.com`) //TODO: change user email to local storage email
             .then(res => {
                 let newAvailableFriends = res.data.friends.filter((email) => !participants.includes(email));
                 setAvailableFriends(newAvailableFriends);
