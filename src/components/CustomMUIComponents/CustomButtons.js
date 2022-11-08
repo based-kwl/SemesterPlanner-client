@@ -29,6 +29,33 @@ export const PrimaryButton2 = ({content, width, onClick}) => {
     );
 }
 
+export const SecondaryButton2 = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#C8C8C8'
+            }}>
+            {content}
+        </Button>
+    );
+}
+
+export const EditButton = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            style={{
+                width: width, 
+                color: '#534F4F'
+            }}
+            >
+            {content}
+        </Button>
+    );
+}
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {

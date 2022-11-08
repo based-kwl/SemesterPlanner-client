@@ -4,7 +4,9 @@ import SignIn from './components/Authentication/SignIn';
 import SignUp from './components/Authentication/SignUp';
 import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
-
+import CreateEvent from './components/Calendar/Event/CreateEvent';
+import ColorSettings from './components/Calendar/EventColorSelector/EventColorDisplay'
+import EventColorSelector from './components/Calendar/EventColorSelector/EventColorSelector'
 export default function App() {
     return (
         <BrowserRouter>
@@ -21,6 +23,10 @@ function AppRoutes() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/editProfile" element={<EditProfile />} />
             <Route exact path='/' element={<SignIn />} />
+            <Route path="/event" element={<CreateEvent />} />
+            <Route path="/colorsetting" element={<ColorSettings />} />
+            <Route path="/colorselector" element={<EventColorSelector />} />
+
         </Routes>
     );
 }
