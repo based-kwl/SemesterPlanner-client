@@ -12,6 +12,7 @@ import {Avatar, Stack} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { socket } from './Sockets';
 
 
 export default function StudyRoom() {
@@ -22,22 +23,33 @@ export default function StudyRoom() {
     //     }
     // }, [])
     const [roomData, setRoomData] = React.useState([]);
-
+    const [newSocket, setSocket] = React.useState(null);
     function getData() {
         const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
         axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
             .then(res => {
                 setRoomData(res.data);
+                console.log(res.data)
+                socket.emit('create', res.data.sID)
             })
             .catch(err => {
                 console.log('Error', err);
             })
     }
 
-    useEffect(() => {
-        getData();
-    }, [])
+    function listener(data) {
+        console.log(data)
+    }
 
+    useEffect(() => {
+        socket.on("message", listener)
+        getData();
+        console.log("e")
+        return () => {
+            socket.off("message", listener)
+        };
+    }, [])
+    
     const roomHeader = (
         <div style={{margin: '15px', width:'92vw'}}>
             <Stack direction='row' spacing={2}
@@ -83,7 +95,7 @@ export default function StudyRoom() {
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<SettingsIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'settings page'} content={<StudyRoomSettings/>}/></div>}/>
+                               title={'settings page'} content={<StudyRoomSettings/>}/>  asda  </div>}/>
             </div>
         </React.Fragment>
     )
