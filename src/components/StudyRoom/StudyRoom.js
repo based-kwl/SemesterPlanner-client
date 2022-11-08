@@ -13,20 +13,19 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { socket } from './Sockets';
+import { GetStudyRoomChat } from "./StudyRoomChat";
+import ChatFooter from "./ChatRoomChatFooter";
+
 
 
 export default function StudyRoom() {
-    // useEffect(() => {
-    //     if (localStorage.getItem("email")) {
-    //         if (localStorage.getItem("email") === "")
-    //             window.location = "/calendar"
-    //     }
-    // }, [])
+
     const [roomData, setRoomData] = React.useState([]);
-    const [newSocket, setSocket] = React.useState(null);
+    let studyRoomId;
+
     function getData() {
-        const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
+        studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomId}`)
             .then(res => {
                 setRoomData(res.data);
                 console.log(res.data)
@@ -37,17 +36,8 @@ export default function StudyRoom() {
             })
     }
 
-    function listener(data) {
-        console.log(data)
-    }
-
     useEffect(() => {
-        socket.on("message", listener)
         getData();
-        console.log("e")
-        return () => {
-            socket.off("message", listener)
-        };
     }, [])
     
     const roomHeader = (
@@ -71,26 +61,38 @@ export default function StudyRoom() {
         </div>
     )
 
-    const chatRoom = (
+    const chatRoom = React.useMemo(() => (
         <React.Fragment>
             <NavDrawer/>
+
+            {/* Top */}
             <StudyRoomChatCard width='92vw' height='10vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={roomHeader}/>
+
+            { /*  Chat  */ }
             <StudyRoomChatCard width='92vw' height='65vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                               bottomLeftRadius='0px' bottomRightRadius='0px'/>
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={<GetStudyRoomChat />}/>
+
+            { /* Typing area */ }
             <StudyRoomChatCard width='92vw' height='5vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                               bottomLeftRadius='0px' bottomRightRadius='0px'/>
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={<ChatFooter />}/>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
+
+                { /* Drawer left icon */ }
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
                                title={'course notes title'} content={'course notes content'}/></div>}/>
+
+                { /* Drawer middle icon */ }
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<GroupsIcon style={{color: '#912338', height: '6vh', width: '6vh'}}/>}
                                title={'Participants'} content={<ParticipantsList/>}/></div>}/>
+
+                { /* Drawer right icon */ }
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
@@ -98,14 +100,10 @@ export default function StudyRoom() {
                                title={'settings page'} content={<StudyRoomSettings/>}/>  asda  </div>}/>
             </div>
         </React.Fragment>
-    )
+    ), [roomData]);
 
     return (
         <BackgroundCard width='96vw' height='99vh' content={chatRoom}/>
     );
 }
 
-export function SetLocalStorage(res) {
-    localStorage.setItem("email", JSON.stringify(res.data.profile.email));
-    localStorage.setItem("token", JSON.stringify(res.data.token));
-}
