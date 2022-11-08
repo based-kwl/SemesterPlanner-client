@@ -129,7 +129,7 @@ export default function CalendarView() {
             <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
                 <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 10 ? '0' + currentDate.getMonth() : currentDate.getMonth()} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + currentDate.getMonth() + 1 : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
                         {header}
