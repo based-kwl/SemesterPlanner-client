@@ -12,7 +12,6 @@ import {Avatar, Stack} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { socket } from './Sockets';
 import { GetStudyRoomChat } from "./StudyRoomChat";
 import ChatFooter from "./ChatRoomChatFooter";
 
@@ -28,8 +27,6 @@ export default function StudyRoom() {
         axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomId}`)
             .then(res => {
                 setRoomData(res.data);
-                console.log(res.data)
-                socket.emit('create', res.data.sID)
             })
             .catch(err => {
                 console.log('Error', err);

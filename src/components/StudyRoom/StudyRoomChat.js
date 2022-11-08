@@ -1,32 +1,40 @@
 import React from 'react';
 import { ChatMessagesCard } from '../CustomMUIComponents/CustomCards';
-import Mocks from "./Mocks/mockStudyRoomMessages.json";
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
+import axios from "axios";
 
 export function GetStudyRoomChat(){
 
-    // const userEmail = JSON.parse(localStorage.getItem("email"));
-    const userEmail = "test@gmail.com";
-    //const [messages, setMessages] = React.useState([]);
-    const messages = Mocks;
-    let studyRoomId;
+    const userEmail = React.useRef("")
+    const [messages, setMessages] = React.useState([]);
+    const [messageCount, setMessageCount] = React.useState(0)
     React.useEffect(() => {
-        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
-        console.log(studyRoomId);
+        userEmail.current = localStorage.getItem("email");
         fetchMessages();
         socket.on("newMessage", listener)
         return () => {
             socket.off("newMessage", listener)
         };
-    }, []);
+    }, [messageCount]);
 
-    function listener(data) {
-        console.log(data)
+    function listener() {
+        setMessageCount((prev) => prev+1);
     }
 
     function fetchMessages() {
-        //setMessages(Mocks)
+        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomId}`)
+            .then(res => {
+                const messageFromRoom = res.data.messages;
+                const messageReverse = messageFromRoom.reverse();
+                setMessages(messageFromRoom);
+                setMessageCount(res.data.messages.length)
+                socket.emit('create', res.data.sID)
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
     }
 
     const OthersMessage = (data) =>
@@ -44,15 +52,13 @@ export function GetStudyRoomChat(){
         );
 
     function isMyMessage(message) {
-        const m = JSON.parse(JSON.stringify(message.senderEmail));
-        if (m) {
-            return m == "me@gmail.com"
-        }
+        const sender = JSON.parse(message.username);
+        return userEmail.current == `"${sender}"`;
     }
 
     const MessagesBubbles = () => (React.useMemo(() => {
         return(
-            <div style={{position: 'absolute', top: '10px', overflow: 'auto'}}>
+            <div style={{position: 'absolute', top: '10px', overflowY: 'scroll', height: '100%', paddingBottom: '10px'}}>
                 <Grid container>
                     {messages.map((message, index) => {
                         return  (

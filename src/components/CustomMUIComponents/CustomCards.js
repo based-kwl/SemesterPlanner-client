@@ -122,8 +122,8 @@ export const ChatMessagesCard = (props) => {
             borderRadius: "10px"
         }}>
             <CardContent>
-                <Typography sx={{color: textSenderColor}}>{props.content.props.senderEmail}</Typography>
-                <Typography sx={{color: textColor}}>{props.content.props.messageContent}</Typography>
+                <Typography sx={{color: textSenderColor}}>{props.content.props.username}</Typography>
+                <Typography sx={{color: textColor}}>{props.content.props.content}</Typography>
             </CardContent>
         </Card>
     );
