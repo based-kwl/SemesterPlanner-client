@@ -12,49 +12,34 @@ import {Buffer} from 'buffer'
 
 export default function ParticipantsList() {
     // const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1]; // TODO: uncomment after merging to sp-47
-    const studyRoomID = '92rl1sf1l1'
-
-    const [fileList, setFileList] = useState([
-        {name: "file1", uploadDate: "2022-11-04", size: 123},
-        {name: "file2", uploadDate: "2022-11-04", size: 123},
-        {name: "file3", uploadDate: "2022-11-04", size: 123},
-        {name: "file4", uploadDate: "2022-11-04", size: 123},
-        {name: "file5", uploadDate: "2022-11-04", size: 123},
-        {name: "file6", uploadDate: "2022-11-04", size: 123},
-        {name: "file7", uploadDate: "2022-11-04", size: 123},
-        {name: "file8", uploadDate: "2022-11-04", size: 123},
-        {name: "file9", uploadDate: "2022-11-04", size: 123},
-        {name: "file10", uploadDate: "2022-11-04", size: 123}
-    ])
+    const studyRoomID = '92rl1sf1l1';
+    const [fileList, setFileList] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false);
+    const fileListTop = useRef(null);
 
     function getCourseNotes(){
         // axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`) //TODO: uncomment after merging to sp-47 branch
-        axios.get(`http://localhost:5000/room/fetch/${studyRoomID}`)
+        axios.get(`http://localhost:5000/room/files/${studyRoomID}`)
             .then(res => {
-                // const newOwner = res.data.owner;
-                // setOwner(newOwner);
-                // const newParticipants = [owner != '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant != owner.toString()) : []].flat();
-                // setParticipants(newParticipants)
-                console.log(res.data);
+                setFileList(res.data.reverse());
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
     }
-    useMemo(() => {
-        getCourseNotes();
-    }, null)
-
-    const [errorMessage, setErrorMessage] = useState('')
 
     function handleDeleteCourseNotes(index) {
-        let newFileList = fileList.filter((file) => {
-            return file !== fileList[index];
-        })
-        setFileList(newFileList);
+        axios.delete(`http://localhost:5000/room/file/${fileList[index].cnID}`)
+            .then((res) => {
+                console.log(res);
+                getCourseNotes();
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+        getCourseNotes();
     }
 
-    // TODO: when backend is implemented, update database with uploaded file
     async function handleUploadCourseNotes() {
-        if (isFilePicked && selectedFile.type === "text/plain") {
+        if (isFilePicked ) {
             let bufferedFile = null;
             const reader = new FileReader();
 
@@ -62,17 +47,20 @@ export default function ParticipantsList() {
 
             reader.onloadend = (event) => {
                 bufferedFile = Buffer.from(event.target.result, "utf-8");
-                console.log(bufferedFile.toString())
 
                 axios.post('http://localhost:5000/room/file', {
                     sID: studyRoomID,
                     type: selectedFile.type,
                     email: JSON.parse(localStorage.getItem("email")),
+                    name: selectedFile.name,
+                    size: (selectedFile.size/1024).toFixed(1).toString(),
                     file: bufferedFile
                 })
-                    .then(res => {
-                        console.log(res);
+                    .then(() => {
                         setErrorMessage('');
+                        getCourseNotes();
+                        setSelectedFile(null);
+                        setIsFilePicked(false);
                     })
                     .catch(err => {
                         console.log(`Error: ${err}`);
@@ -86,11 +74,6 @@ export default function ParticipantsList() {
         }
     }
 
-    //--------------------------------------------------------
-    const [selectedFile, setSelectedFile] = useState();
-    const [isFilePicked, setIsFilePicked] = useState(false);
-    const fileListBottom = useRef(null);
-
     const handleFileSelect = (event) => {
         if (event.target.files[0]) {
             setSelectedFile(event.target.files[0]);
@@ -101,9 +84,8 @@ export default function ParticipantsList() {
         }
     };
 
-    // TODO: fetch file from database and download
     function handleFileClick(index) {
-        axios.get(`http://localhost:5000/room/file/${studyRoomID}&bz1gg`)
+        axios.get(`http://localhost:5000/room/file/${fileList[index].cnID}`)
             .then(res => {
                 const bufferedFile = Buffer.from(res.data[0].file.data.data, "base64");
 
@@ -113,10 +95,9 @@ export default function ParticipantsList() {
                 // anchor link
                 const element = document.createElement("a");
                 element.href = URL.createObjectURL(file);
-                element.download = "bz1gg" + Date.now() + ".txt";
+                element.download = fileList[index].filename;
                 document.body.appendChild(element); // Required for this to work in FireFox
                 element.click();
-
             })
             .catch(err => {
                 console.log(`Error: ${err}`);
@@ -125,14 +106,18 @@ export default function ParticipantsList() {
     }
 
     useEffect(() => {
-        fileListBottom.current?.scrollIntoView({behavior: 'smooth'})
+        fileListTop.current?.scrollIntoView({behavior: 'smooth'})
     }, [fileList])
+
+    useMemo(() => {
+        getCourseNotes();
+    }, [])
 
     const courseNotesList = (
         <>
             <div>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
-                    <div ref={fileListBottom}/>
+                    <div ref={fileListTop}/>
                     {fileList.map((file, index) => <FileCard id={index} key={index} width={'90vw'}
                                                              height={'80px'}
                                                              content={<>
@@ -149,17 +134,17 @@ export default function ParticipantsList() {
                                                                              margin: "0px",
                                                                              display: 'flex',
                                                                              alignContent: 'left'
-                                                                         }}>name: {file.name}</p>
+                                                                         }}>name: {file.filename}</p>
                                                                          <p style={{
                                                                              margin: "0px",
                                                                              display: 'flex',
                                                                              alignContent: 'left'
-                                                                         }}>size: {file.size} kB</p>
+                                                                         }}>size: {file.filesize} kB</p>
                                                                          <p style={{
                                                                              margin: "0px",
                                                                              display: 'flex',
                                                                              alignContent: 'left'
-                                                                         }}>uploaded: {file.uploadDate}</p>
+                                                                         }}>uploaded: {file.createdAt.split("T")[0]}</p>
                                                                      </div>
                                                                  </Button>
                                                                  <Button
