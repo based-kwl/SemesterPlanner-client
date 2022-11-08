@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChatMessagesCard } from '../CustomMUIComponents/CustomCards';
-import Mocks from "./mocks/mockStudyRoomMessages.json";
+import Mocks from "./Mocks/mockStudyRoomMessages.json";
 import Grid from "@mui/material/Grid";
-import socketIO from "socket.io-client";
+import { socket } from './Sockets';
 
 export function GetStudyRoomChat(){
 
@@ -11,13 +11,19 @@ export function GetStudyRoomChat(){
     //const [messages, setMessages] = React.useState([]);
     const messages = Mocks;
     let studyRoomId;
-
     React.useEffect(() => {
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         console.log(studyRoomId);
         fetchMessages();
-        // socket.on('messageResponse', (data) => setMessages([...messages, data]));
+        socket.on("newMessage", listener)
+        return () => {
+            socket.off("newMessage", listener)
+        };
     }, []);
+
+    function listener(data) {
+        console.log(data)
+    }
 
     function fetchMessages() {
         //setMessages(Mocks)
