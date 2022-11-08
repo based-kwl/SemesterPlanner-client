@@ -25,7 +25,7 @@ export default function ParticipantsList() {
             .then(res => {
                 setFileList(res.data.reverse());
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleDeleteCourseNotes(index) {
@@ -34,7 +34,7 @@ export default function ParticipantsList() {
                 console.log(res);
                 getCourseNotes();
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
         getCourseNotes();
     }
 
