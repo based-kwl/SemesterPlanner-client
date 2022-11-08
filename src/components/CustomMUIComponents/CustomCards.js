@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import {CardActionArea} from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 export const BackgroundCard = ({width, height, content}) => {
     return (
@@ -40,6 +42,7 @@ export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRi
             alignItems: 'center',
             display: 'flex',
             justifyContent: 'center',
+            position: 'relative',
             width: width,
             height: height,
             marginTop: marginTop,
@@ -92,6 +95,36 @@ export const SnippetCard = ({width, height, marginBottom, content, borderRadius,
             <CardActionArea onClick={destination}>{content}</CardActionArea>
 
 
+        </Card>
+    );
+}
+
+export const ChatMessagesCard = (props) => {
+
+    let backgroundColor;
+    let textColor;
+    let textSenderColor;
+
+    if (props.userType === "you") {
+        backgroundColor = "#F0F0F0"
+        textColor = "#000000"
+        textSenderColor = "#E5A712"
+    } else {
+        backgroundColor = "#CBB576"
+        textColor = "#FFFFFF"
+        textSenderColor = "#403531"
+    }
+
+    return (
+        <Card sx={{
+            backgroundColor: backgroundColor,
+            width: "69vw",
+            borderRadius: "10px"
+        }}>
+            <CardContent>
+                <Typography sx={{color: textSenderColor}}>{props.content.props.senderEmail}</Typography>
+                <Typography sx={{color: textColor}}>{props.content.props.messageContent}</Typography>
+            </CardContent>
         </Card>
     );
 }
