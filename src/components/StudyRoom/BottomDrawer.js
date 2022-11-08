@@ -27,10 +27,23 @@ const Puller = styled(Box)(({theme}) => ({
 function SwipeableEdgeDrawer(props) {
     const {window} = props;
     const [open, setOpen] = React.useState(false);
+    const [globalCSS, setGlobalCSS] = React.useState(false);
 
-    const toggleDrawer = (newOpen) => () => {
+    const toggleDrawer = (newOpen) => async () => {
         setOpen(newOpen);
+
+        if (globalCSS) // if global CSS is set (i.e. drawer is open), wait for 300ms until bottom drawer dismisses before removing global CSS
+            await delay(300);
+        if (globalCSS) // disabling global CSS when bottom drawer is closed and enabling it when bottom drawer is open
+            setGlobalCSS(false);
+        else
+            setGlobalCSS(true);
     };
+
+    // method to create delays in the code
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
 
     // This is used only for the example
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -38,16 +51,20 @@ function SwipeableEdgeDrawer(props) {
     return (
         <Root>
             <CssBaseline/>
-            <Global
-                styles={{
-                    '.MuiDrawer-root > .MuiPaper-root': {
-                        height: `calc(90% - ${drawerBleeding}px)`,
-                        overflow: 'visible',
-                        borderTopLeftRadius: '20px',
-                        borderTopRightRadius: '20px'
-                    },
-                }}
-            />
+            {globalCSS ?
+                <Global
+                    styles={{
+                        '.MuiDrawer-root > .MuiPaper-root': {
+                            height: `calc(90% - ${drawerBleeding}px)`,
+                            overflow: 'visible',
+                            borderTopLeftRadius: '20px',
+                            borderTopRightRadius: '20px'
+                        },
+                    }}
+                />
+                :
+                <></>
+            }
             {/*<Box sx={{ textAlign: 'center', pt: 1 }}>*/}
             <Button style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                     onClick={toggleDrawer(true)}>{props.icon}</Button>
@@ -59,9 +76,9 @@ function SwipeableEdgeDrawer(props) {
                 onClose={toggleDrawer(false)}
                 onOpen={toggleDrawer(true)}
                 swipeAreaWidth={drawerBleeding}
-                disableSwipeToOpen={false}
+                disableSwipeToOpen={true}
                 ModalProps={{
-                    keepMounted: true,
+                    keepMounted: false,
                 }}
             >
                 <Box
@@ -83,8 +100,8 @@ function SwipeableEdgeDrawer(props) {
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
-                        <h2 style={{fontFamily:'roboto'}}>{props.title}</h2>
-                        <div style={{marginTop: '0px', fontFamily:'roboto'}}>{props.content}</div>
+                        <h2 style={{fontFamily: 'roboto'}}>{props.title}</h2>
+                        <div style={{marginTop: '0px', fontFamily: 'roboto'}}>{props.content}</div>
                     </div>
                 </Box>
             </SwipeableDrawer>
