@@ -1,16 +1,19 @@
 import * as React from 'react';
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {FileCard} from "./StudyRoomCards";
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import {PrimaryButton2, FileSelectButton} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
-// import { Buffer } from 'buffer'
-//
+import {Buffer} from 'buffer'
+
 // // @ts-ignore
 // window.Buffer = Buffer;
 
 export default function ParticipantsList() {
+    // const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1]; // TODO: uncomment after merging to sp-47
+    const studyRoomID = '92rl1sf1l1'
+
     const [fileList, setFileList] = useState([
         {name: "file1", uploadDate: "2022-11-04", size: 123},
         {name: "file2", uploadDate: "2022-11-04", size: 123},
@@ -24,6 +27,24 @@ export default function ParticipantsList() {
         {name: "file10", uploadDate: "2022-11-04", size: 123}
     ])
 
+    function getCourseNotes(){
+        // axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`) //TODO: uncomment after merging to sp-47 branch
+        axios.get(`http://localhost:5000/room/fetch/${studyRoomID}`)
+            .then(res => {
+                // const newOwner = res.data.owner;
+                // setOwner(newOwner);
+                // const newParticipants = [owner != '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant != owner.toString()) : []].flat();
+                // setParticipants(newParticipants)
+                console.log(res.data);
+            })
+            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+    }
+    useMemo(() => {
+        getCourseNotes();
+    }, null)
+
+    const [errorMessage, setErrorMessage] = useState('')
+
     function handleDeleteCourseNotes(index) {
         let newFileList = fileList.filter((file) => {
             return file !== fileList[index];
@@ -32,32 +53,37 @@ export default function ParticipantsList() {
     }
 
     // TODO: when backend is implemented, update database with uploaded file
-    function handleUploadCourseNotes() {
-        console.log(fileList); // remove this line after connecting to backend
-        console.log(selectedFile); // remove this line after connecting to backend
+    async function handleUploadCourseNotes() {
+        if (isFilePicked && selectedFile.type === "text/plain") {
+            let bufferedFile = null;
+            const reader = new FileReader();
 
-        if (isFilePicked) {
-            let newFile = {
-                name: selectedFile.name,
-                uploadDate: new Date().toLocaleDateString(),
-                size: (selectedFile.size / 1024).toFixed(1)
-            }
+            reader.readAsText(selectedFile);
 
-            let bufferedFile = Buffer.from([10,20,30]);
-            axios.post('http://localhost:5000/room/file',{sID:"lcm631kddt", type:selectedFile.type, username:"user_xxp0b3k89b", file: bufferedFile})
-                .then(res => {
-                    console.log(res);
-                    // navigate("/study-room-home");
+            reader.onloadend = (event) => {
+                bufferedFile = Buffer.from(event.target.result, "utf-8");
+                console.log(bufferedFile.toString())
+
+                axios.post('http://localhost:5000/room/file', {
+                    sID: studyRoomID,
+                    type: selectedFile.type,
+                    email: JSON.parse(localStorage.getItem("email")),
+                    file: bufferedFile
                 })
-                .catch(err => {console.log(`Error: ${err}`); console.log(`${err}`.substring(44) === 401 ? 'request could not be sent' : `${err}`)});
-
-            let newFileList = [newFile, ...fileList];
-            setFileList(newFileList);
-            setSelectedFile(null);
-            setIsFilePicked(false);
+                    .then(res => {
+                        console.log(res);
+                        setErrorMessage('');
+                    })
+                    .catch(err => {
+                        console.log(`Error: ${err}`);
+                        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                    });
+            }
+        } else if (!isFilePicked) {
+            setErrorMessage("No file selected!")
+        } else if (selectedFile.type !== "text/plain") {
+            setErrorMessage("Only text files are supported!")
         }
-
-        console.log(fileList); // remove this line after connecting to backend
     }
 
     //--------------------------------------------------------
@@ -77,7 +103,25 @@ export default function ParticipantsList() {
 
     // TODO: fetch file from database and download
     function handleFileClick(index) {
-        console.log(fileList[index]);
+        axios.get(`http://localhost:5000/room/file/${studyRoomID}&bz1gg`)
+            .then(res => {
+                const bufferedFile = Buffer.from(res.data[0].file.data.data, "base64");
+
+                // file object
+                const file = new Blob([bufferedFile], {type: 'text/plain'});
+
+                // anchor link
+                const element = document.createElement("a");
+                element.href = URL.createObjectURL(file);
+                element.download = "bz1gg" + Date.now() + ".txt";
+                document.body.appendChild(element); // Required for this to work in FireFox
+                element.click();
+
+            })
+            .catch(err => {
+                console.log(`Error: ${err}`);
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
     }
 
     useEffect(() => {
@@ -146,6 +190,7 @@ export default function ParticipantsList() {
                 <div style={{marginBottom: '10px'}}>
                     <FileSelectButton width={"90vw"} onChange={handleFileSelect}/>
                 </div>
+                <div style={{color: 'red'}}>{errorMessage}</div>
                 <div id={"uploadButton"}>
                     <PrimaryButton2 content={"Upload"} width={"90vw"} onClick={handleUploadCourseNotes}/>
                 </div>
