@@ -11,8 +11,7 @@ import {Buffer} from 'buffer'
 // window.Buffer = Buffer;
 
 export default function ParticipantsList() {
-    // const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1]; // TODO: uncomment after merging to sp-47
-    const studyRoomID = '92rl1sf1l1';
+    const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
     const [fileList, setFileList] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [selectedFile, setSelectedFile] = useState();
@@ -20,16 +19,16 @@ export default function ParticipantsList() {
     const fileListTop = useRef(null);
 
     function getCourseNotes(){
-        // axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`) //TODO: uncomment after merging to sp-47 branch
-        axios.get(`http://localhost:5000/room/files/${studyRoomID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
+                console.log(res);
                 setFileList(res.data.reverse());
             })
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleDeleteCourseNotes(index) {
-        axios.delete(`http://localhost:5000/room/file/${fileList[index].cnID}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].cnID}`)
             .then((res) => {
                 console.log(res);
                 getCourseNotes();
@@ -39,16 +38,16 @@ export default function ParticipantsList() {
     }
 
     async function handleUploadCourseNotes() {
-        if (isFilePicked ) {
+        if (isFilePicked && selectedFile.type === "text/plain") {
             let bufferedFile = null;
             const reader = new FileReader();
-
+            console.log("sup")
             reader.readAsText(selectedFile);
 
             reader.onloadend = (event) => {
                 bufferedFile = Buffer.from(event.target.result, "utf-8");
 
-                axios.post('http://localhost:5000/room/file', {
+                axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, {
                     sID: studyRoomID,
                     type: selectedFile.type,
                     email: JSON.parse(localStorage.getItem("email")),
@@ -85,7 +84,7 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`http://localhost:5000/room/file/${fileList[index].cnID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].cnID}`)
             .then(res => {
                 const bufferedFile = Buffer.from(res.data[0].file.data.data, "base64");
 
@@ -115,7 +114,7 @@ export default function ParticipantsList() {
 
     const courseNotesList = (
         <>
-            <div>
+            <div style={{width:'90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
                     {fileList.map((file, index) => <FileCard id={index} key={index} width={'90vw'}

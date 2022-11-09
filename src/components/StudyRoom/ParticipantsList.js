@@ -39,7 +39,7 @@ export default function ParticipantsList() {
             .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
     }
 
-    function handleSave() {
+    function handleDone() {
         document.elementFromPoint(0,0).click();
     }
 
@@ -99,7 +99,7 @@ export default function ParticipantsList() {
                 position: "fixed",
                 bottom: "30px",
             }}>
-                <PrimaryButton2 content={"Done"} width={"90vw"} onClick={handleSave}/>
+                <PrimaryButton2 content={"Done"} width={"90vw"} onClick={handleDone}/>
             </div>
         </>
     )
