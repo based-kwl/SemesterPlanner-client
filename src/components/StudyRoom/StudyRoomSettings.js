@@ -53,7 +53,7 @@ export default function StudyRoomSettings() {
         setRoomData({...roomData, avatarText: avatarIconText});
         axios.put(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
             .catch(err => {console.log('Error:', err)});
-        navigate("/study-room-home");
+        window.location.reload();
     }
 
     //deletes the room in db

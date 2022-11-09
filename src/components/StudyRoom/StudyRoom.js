@@ -14,11 +14,10 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { GetStudyRoomChat } from "./StudyRoomChat";
 import ChatFooter from "./ChatRoomChatFooter";
-
+import CourseNotes from './CourseNotes'
 
 
 export default function StudyRoom() {
-
     const [roomData, setRoomData] = React.useState([]);
     let studyRoomId;
 
@@ -36,7 +35,7 @@ export default function StudyRoom() {
     useEffect(() => {
         getData();
     }, [])
-    
+
     const roomHeader = (
         <div style={{margin: '15px', width:'92vw'}}>
             <Stack direction='row' spacing={2}
@@ -80,7 +79,7 @@ export default function StudyRoom() {
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'course notes title'} content={'course notes content'}/></div>}/>
+                               title={'Course Notes'} content={<CourseNotes />}/></div>}/>
 
                 { /* Drawer middle icon */ }
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
