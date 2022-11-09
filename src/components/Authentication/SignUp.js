@@ -77,7 +77,7 @@ export default function SignUp() {
 
     function handleRegistration() {
         console.log(userData);
-        axios.post('http://localhost:5000/student/add', userData)
+        axios.post(`${process.env.REACT_APP_BASE_URL}student/add`, userData)
             .then(()=> {
                 console.log();
                 navigate('/login');

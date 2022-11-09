@@ -11,7 +11,7 @@ export const PrimaryButton = ({content, width}) => {
                 width: width, backgroundColor: '#912338'
             }}>
             {content}
-        </Button>
+        </Button>  
     );
 }
 
@@ -60,6 +60,33 @@ export const FileSelectButton = ({width, onChange}) => {
     );
 }
 
+export const SecondaryButton2 = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#C8C8C8'
+            }}>
+            {content}
+        </Button>
+    );
+}
+
+export const EditButton = ({content, width, onClick}) => {
+    return (
+        <Button
+            onClick={onClick}
+            style={{
+                width: width,
+                color: '#534F4F'
+            }}
+            >
+            {content}
+        </Button>
+    );
+}
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {
@@ -76,7 +103,8 @@ export const SelectButton = ({ content, userData, setUserData}) => {
                 fullWidth
                 onClick={handleButtonSelect}
                 style={{
-                    backgroundColor: buttonColor(), height: '60px'}}>
+                    backgroundColor: buttonColor(),
+                    height: '60px'}}>
                 {content}
             </Button>
         )

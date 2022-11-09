@@ -4,9 +4,11 @@ import SignIn from './components/Authentication/SignIn';
 import SignUp from './components/Authentication/SignUp';
 import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
+import CreateEvent from './components/Calendar/Event/CreateEvent';
+import ColorSettings from './components/Calendar/EventColorSelector/EventColorDisplay'
+import EventColorSelector from './components/Calendar/EventColorSelector/EventColorSelector'
 import StudyRoom from './components/StudyRoom/StudyRoom';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
-import StudyRoomSettings from "./components/StudyRoom/StudyRoomSettings";
 import React from 'react';
 
 export default function App() {
@@ -20,6 +22,11 @@ export default function App() {
 function AppRoutes() {
     return (
         <Routes>
+            <Route exact path='/' element={<SignIn />} />
+            <Route path="/event" element={<CreateEvent />} />
+            <Route path="/colorsetting" element={<ColorSettings />} />
+            <Route path="/colorselector" element={<EventColorSelector />} />
+
             <Route path="/login" element={<React.StrictMode><SignIn /></React.StrictMode>} />
             <Route path="/signup" element={<React.StrictMode><SignUp /></React.StrictMode>} />
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />

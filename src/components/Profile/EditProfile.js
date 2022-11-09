@@ -43,9 +43,9 @@ export default function EditProfile() {
 
     const fetchData = useCallback(() => {
         console.log(userEmail)
-        axios.get("http://localhost:5000/users/email/"+userEmail)
+        
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
-                console.log("USER "+ JSON.stringify(res.data));
                 const data = res.data;
                 setUserData({
                     ...userData,
@@ -78,7 +78,7 @@ export default function EditProfile() {
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
-        axios.post('http://localhost:5000/users/update/'+userEmail, userData, config)
+        axios.post(`${process.env.REACT_APP_BASE_URL}/users/update/`+userEmail, userData, config)
             .then(res => {
                 console.log(res.data);
                 navigate('/calendar');
