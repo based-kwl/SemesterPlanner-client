@@ -1,9 +1,7 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Menu, Typography } from "@mui/material";
 import {CardActionArea} from "@mui/material";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 export const BackgroundCard = ({ width, height, content }) => {
@@ -79,62 +77,6 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
     );
 }
 
-//do i need three contents ?
-
-export const ColorEventCard = ({  width, backgroundColor, content, height }) => {
-    return (
-        <Card style={{
-            borderRadius: '15px',
-            marginLeft: '15px',
-            marginRight: '15px',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '10px',
-            backgroundColor: backgroundColor,
-            height: height,
-            paddingTop: '8px',
-            width: width,
-
-
-
-        }} variant='outlined'>
-
-            <CardContent style={{ backgroundColor: `${backgroundColor}` }}>
-                <Typography color="#ffffff" fontWeight={500} style={{
-                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
-                    backgroundColor: `${backgroundColor}`, borderRadius: '15px',
-
-                }}>
-                    {content}
-
-                </Typography>
-
-            </CardContent>
-
-        </Card>
-    )
-}
-
-export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius, content}) => {
-    return (
-        <Card style={{
-            margin: 'auto',
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            width: width,
-            height: height,
-            marginTop: marginTop,
-            borderTopLeftRadius: topLeftRadius,
-            borderTopRightRadius: topRightRadius,
-            borderBottomRightRadius: bottomRightRadius,
-            borderBottomLeftRadius: bottomLeftRadius
-        }} variant='outlined'>
-            {content}
-        </Card>
-    );
-}
-
 export const ParticipantCard = ({width, height, content}) => {
     return (
         <Card variant='outlined' style={{
@@ -202,5 +144,39 @@ export const ChatMessagesCard = (props) => {
             </CardContent>
         </Card>
     );
+}
+
+export const ColorEventCard = ({  width, backgroundColor, content, height }) => {
+    return (
+        <Card style={{
+            borderRadius: '15px',
+            marginLeft: '15px',
+            marginRight: '15px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '10px',
+            backgroundColor: backgroundColor,
+            height: height,
+            paddingTop: '8px',
+            width: width,
+
+
+
+        }} variant='outlined'>
+
+            <CardContent style={{ backgroundColor: `${backgroundColor}` }}>
+                <Typography color="#ffffff" fontWeight={500} style={{
+                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
+                    backgroundColor: `${backgroundColor}`, borderRadius: '15px',
+
+                }}>
+                    {content}
+
+                </Typography>
+
+            </CardContent>
+
+        </Card>
+    )
 }
 
