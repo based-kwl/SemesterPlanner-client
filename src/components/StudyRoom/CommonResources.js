@@ -2,6 +2,7 @@ import {Avatar, InputLabel, Select, Stack, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import CircleIcon from "@mui/icons-material/Circle";
 import * as React from "react";
+import Card from "@mui/material/Card";
 
 export function RoomDataComponents({roomState, roomStateSetter}) {
     function SetAvatarText(t) {
@@ -12,8 +13,6 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
             finalText = displayText.substring(0, 4);
         } else
             finalText = displayText;
-
-        // roomStateSetter({...roomState, avatarText: finalText});
         return finalText;
     }
 
@@ -103,4 +102,22 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
     )
 
     return colourStack;
+}
+
+export const StudyRoomCard = ({width, height, content}) => {
+    return (
+        <Card variant='outlined' style={{
+            display: 'flex',
+            flexDirection:'row',
+            width: width,
+            height:  height,
+            backgroundColor: '#F0F0F0',
+            marginBottom: '15px',
+            paddingLeft: '10px',
+            justifyContent:'space-between',
+            alignItems: 'center',
+        }}>
+            {content}
+        </Card>
+    )
 }

@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {useEffect, useMemo, useRef, useState} from "react";
-import {FileCard} from "./StudyRoomCards";
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import {PrimaryButton2, FileSelectButton} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
 import {Buffer} from 'buffer'
-
-// // @ts-ignore
-// window.Buffer = Buffer;
+import {StudyRoomCard} from "./CommonResources";
 
 export default function ParticipantsList() {
     const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
@@ -117,7 +114,7 @@ export default function ParticipantsList() {
             <div style={{width:'90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
-                    {fileList.map((file, index) => <FileCard id={index} key={index} width={'90vw'}
+                    {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
                                                              height={'80px'}
                                                              content={<>
                                                                  <Button style={{

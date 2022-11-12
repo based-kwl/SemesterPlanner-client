@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect } from "react";
 import {BackgroundCard, SnippetCard} from "../CustomMUIComponents/CustomCards";
 import * as React from "react";
 import NavDrawer from "../NavDrawer/navDrawer";

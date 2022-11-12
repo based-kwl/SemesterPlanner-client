@@ -28,7 +28,7 @@ export function GetStudyRoomChat(){
             .then(res => {
                 const messageFromRoom = res.data.messages;
                 const messageReverse = messageFromRoom.reverse();
-                setMessages(messageFromRoom);
+                setMessages(messageReverse);
                 setMessageCount(res.data.messages.length)
                 socket.emit('create', res.data.sID)
             })

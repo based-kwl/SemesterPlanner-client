@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {useEffect, useMemo, useState} from "react";
-import {ParticipantCard} from "./StudyRoomCards";
+import {useMemo, useState} from "react";
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import AddIcon from '@mui/icons-material/Add';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
+import {StudyRoomCard} from "./CommonResources";
 
 
 export default function ParticipantsList() {
@@ -72,7 +72,7 @@ export default function ParticipantsList() {
             <div style={{width:'90vw'}}>
                 <div><h4>Current Participants:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {participants ? participants.map((participant, index) => <ParticipantCard id={index} key={index} width={'90vw'}
+                    {participants ? participants.map((participant, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
                                                                                height={'40px'}
                                                                                content={<>{participant}{participant != owner ? <Button
                                                                                    variant="text"
@@ -82,7 +82,7 @@ export default function ParticipantsList() {
                 </div>
                 <div><h4>Friends:</h4></div>
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {availableFriends ? availableFriends.map((availableFriend, index) => <ParticipantCard id={index} key={index}
+                    {availableFriends ? availableFriends.map((availableFriend, index) => <StudyRoomCard id={index} key={index}
                                                                                        width={'90vw'}
                                                                                        height={'40px'}
                                                                                        content={<>{availableFriend}<Button
@@ -99,6 +99,7 @@ export default function ParticipantsList() {
                 position: "fixed",
                 bottom: "30px",
             }}>
+                <div style={{color: 'red'}}>{errorMessage}</div>
                 <PrimaryButton2 content={"Done"} width={"90vw"} onClick={handleDone}/>
             </div>
         </>

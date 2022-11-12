@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useEffect, useMemo} from 'react';
-import {BackgroundCard, SnippetCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
+import {useEffect} from 'react';
+import {BackgroundCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import NavDrawer from "../NavDrawer/navDrawer"
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupsIcon from '@mui/icons-material/Groups';
