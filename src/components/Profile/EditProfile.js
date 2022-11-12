@@ -226,7 +226,7 @@ export default function EditProfile() {
                         />
                     } label={userData.privateProfile ? "Public" : "Private"}/>
                 </div>
-                <PrimaryButton2 width='305px' content="Register" onClick={handleEditProfile}/>
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Register" onClick={handleEditProfile}/>
             </form>
         </React.Fragment>
     )

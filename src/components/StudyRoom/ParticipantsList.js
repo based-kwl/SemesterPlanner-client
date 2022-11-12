@@ -56,7 +56,6 @@ export default function ParticipantsList() {
 
     useMemo(getParticipants,[])
 
-    //TODO: check if this can be run ONLY after participants get request is fully completed (currently can see participants in availableFriends for a split second)
     useMemo(() => {
         let email = JSON.parse(localStorage.getItem("email"));
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${email}`)
@@ -100,7 +99,7 @@ export default function ParticipantsList() {
                 bottom: "30px",
             }}>
                 <div style={{color: 'red'}}>{errorMessage}</div>
-                <PrimaryButton2 content={"Done"} width={"90vw"} onClick={handleDone}/>
+                <PrimaryButton2 content={"Done"} colour={'#912338'} width={"90vw"} onClick={handleDone}/>
             </div>
         </>
     )

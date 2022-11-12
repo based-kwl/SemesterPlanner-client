@@ -244,7 +244,7 @@ export default function SignUp() {
                             />
                         } label={userData.privateProfile ? "Public" : "Private"} />
                 </div>
-                <PrimaryButton2 width='305px' content="Register" onClick={handleRegistration} />
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Register" onClick={handleRegistration} />
             </form>
         </React.Fragment>
     )

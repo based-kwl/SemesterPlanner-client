@@ -173,7 +173,7 @@ This causes infinite errors on console, so removed it
                     </div>
 
                 </div>
-                <PrimaryButton2 width={'90vw'} content="save" onClick={changeColor} />
+                <PrimaryButton2 width={'90vw'} colour={'#912338'} content="save" onClick={changeColor} />
             </form>
         </React.Fragment >
     )

@@ -3,7 +3,6 @@ import {useCallback, useState} from "react";
 import * as React from "react";
 import axios from "axios";
 import {Stack} from "@mui/material";
-import {PrimaryButton3} from "../CustomMUIComponents/CustomButtons";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import {RoomDataComponents} from "./CommonResources";
 
@@ -72,8 +71,8 @@ export default function StudyRoomSettings() {
                 </div>
                 <div>
                 <Stack direction='row' spacing={7} marginTop={2}>
-                <PrimaryButton3 width={'41vw'} content="Update" onClick={handleUpdate} />
-                <PrimaryButton2 width={'41vw'} content="Delete" onClick={handleDelete}/>
+                <PrimaryButton2 width={'41vw'} colour={'#057D78'} content="Update" onClick={handleUpdate} />
+                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Delete" onClick={handleDelete}/>
                 </Stack>
                 </div>
             </form>

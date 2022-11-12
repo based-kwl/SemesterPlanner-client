@@ -117,7 +117,7 @@ export default function CreateEvent() {
     const buttons = (
         <React.Fragment>
             <div style={{ paddingTop: '20px'}}>
-                <PrimaryButton2 width='305px' content="Add" onClick={handleEvent} />
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Add" onClick={handleEvent} />
             </div>
             <div style={{ paddingTop: '20px'}}>
                 <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />

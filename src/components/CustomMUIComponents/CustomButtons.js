@@ -15,28 +15,14 @@ export const PrimaryButton = ({content, width}) => {
     );
 }
 
-export const PrimaryButton2 = ({content, width, onClick}) => {
+export const PrimaryButton2 = ({content, width, colour, onClick}) => {
     return (
         <Button
             onClick={onClick}
             variant="contained"
             style={{
                 paddingTop: '10px', paddingBottom: '10px',
-                width: width, backgroundColor: '#912338'
-            }}>
-            {content}
-        </Button>
-    );
-}
-
-export const PrimaryButton3 = ({content, width, onClick}) => {
-    return (
-        <Button
-            onClick={onClick}
-            variant="contained"
-            style={{
-                paddingTop: '10px', paddingBottom: '10px',
-                width: width, backgroundColor: '#057D78'
+                width: width, backgroundColor: colour
             }}>
             {content}
         </Button>

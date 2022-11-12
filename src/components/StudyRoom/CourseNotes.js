@@ -173,7 +173,7 @@ export default function ParticipantsList() {
                 </div>
                 <div style={{color: 'red'}}>{errorMessage}</div>
                 <div id={"uploadButton"}>
-                    <PrimaryButton2 content={"Upload"} width={"90vw"} onClick={handleUploadCourseNotes}/>
+                    <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"} onClick={handleUploadCourseNotes}/>
                 </div>
             </div>
         </>
