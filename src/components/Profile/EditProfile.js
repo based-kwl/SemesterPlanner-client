@@ -11,14 +11,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import MockUser from "./Mocks/mockUser.json";
 import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import {faculties, programs} from "../Authentication/SignUp";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useRef} from "react";
 
 
 export default function EditProfile() {
@@ -32,18 +31,18 @@ export default function EditProfile() {
         privateProfile: true
     });
 
-    const user = MockUser[0];
-    const userEmail = JSON.parse(localStorage.getItem("email"));
+    const newPassword = useRef('');
+
+    const userEmail = React.useMemo(() => JSON.parse(localStorage.getItem("email")), []);
+
     const [registrationError, setRegistrationError] = React.useState({
-        message: "Error, please try again later",
+        message: "",
         hasError: false
     });
     const [confirmPassword, setConfirmPassword] = React.useState({password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
-        console.log(userEmail)
-        
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
                 const data = res.data;
@@ -51,44 +50,33 @@ export default function EditProfile() {
                     ...userData,
                     username: data.username,
                     email: userEmail,
-                    //faculty: data.faculty, TODO: Add this property to server
+                    password: data.password,
+                    faculty: data.faculty,
                     program: data.program,
-                    // privateProfile: user.privateProfile TODO: Add this property to server
+                    privateProfile: data.privateProfile
                 })
             }
-        );
-        setUserData({
-            ...userData,
-            faculty: user.faculty,
-            privateProfile: user.privateProfile
-        })
+        ).catch((err) => setRegistrationError({...registrationError, message: err.message}));
     }, [])
 
     useEffect(() => {
-        // TODO: fetch user from server
         fetchData();
-        console.log(userData);
-    },[fetchData])
+    },[])
 
     function handleEditProfile() {
-        console.log(userData);
+        if (userData.password === '') {
 
+        }
         const token = JSON.parse(localStorage.getItem("token"));
-        console.log(token);
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
-        axios.post(`${process.env.REACT_APP_BASE_URL}/users/update/`+userEmail, userData, config)
+        axios.post(`${process.env.REACT_APP_BASE_URL}student/update/${userEmail}`, userData, config)
             .then(res => {
-                console.log(res.data);
                 navigate('/calendar');
             })
             .catch(err => {
-                console.log(err)
                 setRegistrationError({...registrationError, message: "Error connecting to database"});
-                setRegistrationError({...registrationError, hasError: true});
-                console.log(registrationError);
-                console.log(`Error: ${err}`)
             });
     }
 
@@ -101,7 +89,7 @@ export default function EditProfile() {
     }
 
     function handlePasswordChange(e) {
-        //todo: add validation to password (ie should have one number, 6 letters, etc)
+        newPassword.current = e.target.value;
         setUserData({...userData, password: e.target.value})
     }
 
@@ -112,19 +100,25 @@ export default function EditProfile() {
     function handleConfirmPasswordChange(e) {
         setConfirmPassword({...confirmPassword, password: e.target.value});
         if (e.target.value === userData.password) {
-            setConfirmPassword({...confirmPassword, isEqualToPassword: true});
-        } else {
-            setConfirmPassword({...confirmPassword, isEqualToPassword: false});
+            setConfirmPassword( { ...confirmPassword, isEqualToPassword: true});
+            if (registrationError.message === "Both passwords should match") {
+                setRegistrationError({ ...registrationError, message: "", hasError: false})
+            }
+        }
+        else {
+            setRegistrationError({ ...registrationError, message: "Both passwords should match", hasError: true})
+            setConfirmPassword( { ...confirmPassword, isEqualToPassword: false});
         }
     }
 
 
-    const PageError = registrationError.hasError ? (
+    const PageError =  React.useMemo(() => (registrationError.message !== ""
+        ? (
             <Typography align="center" color="#DA3A16">
                 {registrationError.message}
             </Typography>
-        ) :
-        (<React.Fragment/>);
+        )
+        : null), [registrationError]);
 
     const ProgramSelect = (
         <Container maxWidth="md" component="main">
@@ -164,7 +158,7 @@ export default function EditProfile() {
                                id='password'
                                type='password'
                                required
-                               value={userData.password}
+                               value={newPassword.current}
                                label="New Password"
                                variant='outlined'
                                onChange={handlePasswordChange}

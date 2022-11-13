@@ -71,23 +71,18 @@ export default function SignUp() {
         program: 'Actuarial Mathematics',
         privateProfile: true
     });
-    const [registrationError, setRegistrationError] = React.useState({message: "Error, please try again later", hasError: false});
+    const [registrationError, setRegistrationError] = React.useState({message: "", hasError: false});
     const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
     function handleRegistration() {
-        console.log(userData);
         axios.post(`${process.env.REACT_APP_BASE_URL}student/add`, userData)
             .then(()=> {
-                console.log();
                 navigate('/login');
             })
             .catch(err => {
-                console.log(err)
-                setRegistrationError({ ...registrationError, message: "Error connecting to database"});
-                setRegistrationError({ ...registrationError, hasError: true});
-                console.log(registrationError);
-                console.log(`Error: ${err}`)});
+                setRegistrationError({ ...registrationError, message: "Error connecting to database. Please try again later"});
+        });
     }
 
     function handleProgramChange(e) {
@@ -103,7 +98,6 @@ export default function SignUp() {
     }
 
     function handlePasswordChange(e) {
-        //todo: add validation to password (ie should have one number, 6 letters, etc)
         setUserData({...userData, password: e.target.value})
     }
 
@@ -115,19 +109,24 @@ export default function SignUp() {
         setConfirmPassword({...confirmPassword, password: e.target.value});
         if (e.target.value === userData.password) {
             setConfirmPassword( { ...confirmPassword, isEqualToPassword: true});
+            if (registrationError.message === "Both passwords should match") {
+                setRegistrationError({ ...registrationError, message: "", hasError: false})
+            }
         }
         else {
+            setRegistrationError({ ...registrationError, message: "Both passwords should match", hasError: true})
             setConfirmPassword( { ...confirmPassword, isEqualToPassword: false});
         }
     }
 
 
-    const PageError =  registrationError.hasError ? (
+    const PageError =  React.useMemo(() => (registrationError.message !== ""
+        ? (
         <Typography align="center" color="#DA3A16">
             {registrationError.message}
         </Typography>
-    ) :
-        (<React.Fragment/>);
+        )
+        : null), [registrationError]);
 
     const ProgramSelect = (
         <Container maxWidth="md" component="main">
@@ -146,10 +145,21 @@ export default function SignUp() {
         </Container>
     )
 
+    const disableRegisterButton = React.useMemo(() => {
+        return (
+            registrationError.hasError
+            || userData.username === ''
+            || userData.email === ''
+            || userData.password === ''
+            || !confirmPassword.isEqualToPassword
+        )}, [ registrationError, userData, confirmPassword]);
+
     const SignUpForm = (
         <React.Fragment>
             <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
-                <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
+                <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
+                    {PageError}
+                </div>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField
                         fullWidth
@@ -244,7 +254,7 @@ export default function SignUp() {
                             />
                         } label={userData.privateProfile ? "Public" : "Private"} />
                 </div>
-                <PrimaryButton2 width='305px' content="Register" onClick={handleRegistration} />
+                <PrimaryButton2 width='305px' disable={disableRegisterButton} content="Register" onClick={handleRegistration} />
             </form>
         </React.Fragment>
     )
@@ -257,7 +267,7 @@ export default function SignUp() {
             <Typography align='center' style={{fontFamily: 'Roboto', fontSize: '18px', fontWeight: 'bold'}}>
                 Create your account.
             </Typography>
-            <CustomWhiteCard width='326px' height='780px' marginTop='30px' content={SignUpForm} />
+            <CustomWhiteCard width='326px' height='800px' marginTop='30px' content={SignUpForm} />
         </React.Fragment>
 
 )

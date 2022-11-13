@@ -35,7 +35,6 @@ export default function SignIn() {
         //API call
         axios.post(`${process.env.REACT_APP_BASE_URL}login/`, user)
             .then(res => {
-                console.log(res);
                 SetLocalStorage(res);
                 navigate('/calendar');
             })

@@ -15,9 +15,10 @@ export const PrimaryButton = ({content, width}) => {
     );
 }
 
-export const PrimaryButton2 = ({content, width, onClick}) => {
+export const PrimaryButton2 = ({content, width, onClick, disable}) => {
     return (
         <Button
+            disabled={disable}
             onClick={onClick}
             variant="contained"
             style={{
