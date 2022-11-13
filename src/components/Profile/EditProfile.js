@@ -32,14 +32,11 @@ export default function EditProfile() {
     });
 
     const newPassword = useRef('');
-
     const userEmail = React.useMemo(() => JSON.parse(localStorage.getItem("email")), []);
+    const token =  React.useMemo(() => JSON.parse(localStorage.getItem("token")), []);
 
-    const [registrationError, setRegistrationError] = React.useState({
-        message: "",
-        hasError: false
-    });
-    const [confirmPassword, setConfirmPassword] = React.useState({password: '', isEqualToPassword: false});
+    const [registrationError, setRegistrationError] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState('');
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
@@ -56,7 +53,7 @@ export default function EditProfile() {
                     privateProfile: data.privateProfile
                 })
             }
-        ).catch((err) => setRegistrationError({...registrationError, message: err.message}));
+        ).catch((err) => setRegistrationError(err.message));
     }, [])
 
     useEffect(() => {
@@ -64,10 +61,7 @@ export default function EditProfile() {
     },[])
 
     function handleEditProfile() {
-        if (userData.password === '') {
 
-        }
-        const token = JSON.parse(localStorage.getItem("token"));
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
@@ -76,7 +70,7 @@ export default function EditProfile() {
                 navigate('/calendar');
             })
             .catch(err => {
-                setRegistrationError({...registrationError, message: "Error connecting to database"});
+                setRegistrationError("Error connecting to database");
             });
     }
 
@@ -98,24 +92,20 @@ export default function EditProfile() {
     }
 
     function handleConfirmPasswordChange(e) {
-        setConfirmPassword({...confirmPassword, password: e.target.value});
+        setConfirmPassword(e.target.value);
         if (e.target.value === userData.password) {
-            setConfirmPassword( { ...confirmPassword, isEqualToPassword: true});
-            if (registrationError.message === "Both passwords should match") {
-                setRegistrationError({ ...registrationError, message: "", hasError: false})
+            if (registrationError === "Both passwords should match") {
+                setRegistrationError("");
             }
-        }
-        else {
-            setRegistrationError({ ...registrationError, message: "Both passwords should match", hasError: true})
-            setConfirmPassword( { ...confirmPassword, isEqualToPassword: false});
+        } else {
+            setRegistrationError("Both passwords should match")
         }
     }
 
-
-    const PageError =  React.useMemo(() => (registrationError.message !== ""
+    const PageError =  React.useMemo(() => (registrationError !== ""
         ? (
             <Typography align="center" color="#DA3A16">
-                {registrationError.message}
+                {registrationError}
             </Typography>
         )
         : null), [registrationError]);
@@ -158,7 +148,6 @@ export default function EditProfile() {
                                id='password'
                                type='password'
                                required
-                               value={newPassword.current}
                                label="New Password"
                                variant='outlined'
                                onChange={handlePasswordChange}
@@ -173,8 +162,6 @@ export default function EditProfile() {
                                id='confirmPassword'
                                type='password'
                                required
-                               error={!confirmPassword.isEqualToPassword && !(confirmPassword.password === '')}
-                               helperText={confirmPassword.isEqualToPassword || confirmPassword.password === '' ? '' : 'Passwords must match'}
                                label="Confirm Password"
                                variant='outlined'
                                onChange={handleConfirmPasswordChange}
