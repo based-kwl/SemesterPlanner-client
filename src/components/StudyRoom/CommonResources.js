@@ -18,9 +18,7 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
 
     function handleTitleChange(e) {
         let avatar = SetAvatarText(e.target.value)
-        console.log(avatar);
         roomStateSetter({...roomState, title: e.target.value, avatarText: avatar});
-        console.log(roomState)
     }
 
     function handleColorChange(e) {

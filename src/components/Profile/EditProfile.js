@@ -42,8 +42,6 @@ export default function EditProfile() {
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
-        console.log(userEmail)
-        
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
                 const data = res.data;
@@ -67,14 +65,10 @@ export default function EditProfile() {
     useEffect(() => {
         // TODO: fetch user from server
         fetchData();
-        console.log(userData);
     },[fetchData])
 
     function handleEditProfile() {
-        console.log(userData);
-
         const token = JSON.parse(localStorage.getItem("token"));
-        console.log(token);
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
@@ -84,11 +78,8 @@ export default function EditProfile() {
                 navigate('/calendar');
             })
             .catch(err => {
-                console.log(err)
-                setRegistrationError({...registrationError, message: "Error connecting to database"});
+                setRegistrationError({...registrationError, message: "Error connecting to database. " + err});
                 setRegistrationError({...registrationError, hasError: true});
-                console.log(registrationError);
-                console.log(`Error: ${err}`)
             });
     }
 

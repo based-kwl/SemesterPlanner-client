@@ -76,18 +76,14 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     function handleRegistration() {
-        console.log(userData);
         axios.post(`${process.env.REACT_APP_BASE_URL}student/add`, userData)
             .then(()=> {
-                console.log();
                 navigate('/login');
             })
             .catch(err => {
-                console.log(err)
-                setRegistrationError({ ...registrationError, message: "Error connecting to database"});
+                setRegistrationError({ ...registrationError, message: "Error connecting to database. " + err});
                 setRegistrationError({ ...registrationError, hasError: true});
-                console.log(registrationError);
-                console.log(`Error: ${err}`)});
+                });
     }
 
     function handleProgramChange(e) {

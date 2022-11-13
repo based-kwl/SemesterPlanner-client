@@ -63,19 +63,14 @@ export default function CreateEvent() {
 
     function handleEvent() {
         // TODO:  validate user inputs if have time
-        console.log(eventData);
         navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then(() => {
-                console.log();
                 navigate('/calendar');
             })
             .catch(err => {
-                console.log(err)
-                seteventError({ ...eventError, message: "Error connecting to database" });
+                seteventError({ ...eventError, message: "Error connecting to database. " + err });
                 seteventError({ ...eventError, hasError: true });
-                console.log(eventError);
-                console.log(`Error: ${err}`)
             });
     }
 

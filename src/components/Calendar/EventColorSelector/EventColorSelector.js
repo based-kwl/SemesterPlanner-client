@@ -55,7 +55,7 @@ export default function EventColorSelector() {
                 console.log(res);
                 navigate("/study-room-home");
             })
-            .catch(err => { console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });
+            .catch(err => { setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });
     }
 
     function handleTitleChange(e) {

@@ -44,7 +44,6 @@ export default function RoomCreation() {
             updatedList.splice(checked.indexOf(e.target.value), 1);
         }
         setChecked(updatedList);
-        console.log('list:', updatedList)
         setRoomData({...roomData, participants:updatedList});
     }
 

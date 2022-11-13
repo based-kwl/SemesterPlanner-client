@@ -18,19 +18,17 @@ export default function ParticipantsList() {
     function getCourseNotes(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
-                console.log(res);
                 setFileList(res.data.reverse());
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleDeleteCourseNotes(index) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].cnID}`)
             .then((res) => {
-                console.log(res);
                 getCourseNotes();
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
         getCourseNotes();
     }
 
@@ -38,7 +36,6 @@ export default function ParticipantsList() {
         if (isFilePicked && selectedFile.type === "text/plain") {
             let bufferedFile = null;
             const reader = new FileReader();
-            console.log("sup")
             reader.readAsText(selectedFile);
 
             reader.onloadend = (event) => {
@@ -59,7 +56,6 @@ export default function ParticipantsList() {
                         setIsFilePicked(false);
                     })
                     .catch(err => {
-                        console.log(`Error: ${err}`);
                         setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
                     });
             }
@@ -96,7 +92,6 @@ export default function ParticipantsList() {
                 element.click();
             })
             .catch(err => {
-                console.log(`Error: ${err}`);
                 setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
             });
     }

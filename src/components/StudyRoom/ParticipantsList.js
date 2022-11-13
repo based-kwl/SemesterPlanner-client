@@ -26,7 +26,7 @@ export default function ParticipantsList() {
                 setParticipants(res.data.participants);
                 getParticipants();
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleAdd(index) {
@@ -36,7 +36,7 @@ export default function ParticipantsList() {
                 setParticipants(res.data.participants);
                 getParticipants();
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleDone() {
@@ -48,10 +48,10 @@ export default function ParticipantsList() {
             .then(res => {
                 const newOwner = res.data.owner;
                 setOwner(newOwner);
-                const newParticipants = [owner != '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant != owner.toString()) : []].flat();
+                const newParticipants = [owner !== '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant !== owner.toString()) : []].flat();
                 setParticipants(newParticipants)
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     useMemo(getParticipants,[])
@@ -63,7 +63,7 @@ export default function ParticipantsList() {
                 let newAvailableFriends = (participants ? res.data.friends.filter((email) => !participants.includes(email)) : res.data.friends);
                 setAvailableFriends(newAvailableFriends);
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }, [participants])
 
     const participantsList = (
@@ -73,7 +73,7 @@ export default function ParticipantsList() {
                 <div style={{overflow:"auto", maxHeight:"26vh"}}>
                     {participants ? participants.map((participant, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
                                                                                height={'40px'}
-                                                                               content={<>{participant}{participant != owner ? <Button
+                                                                               content={<>{participant}{participant !== owner ? <Button
                                                                                    variant="text"
                                                                                    sx={{borderColor: "none"}}
                                                                                    onClick={() => handleDelete(index)}><ClearIcon
