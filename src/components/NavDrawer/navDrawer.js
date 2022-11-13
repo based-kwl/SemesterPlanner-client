@@ -114,7 +114,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/'); //TODO: set the proper path to the progress report page once it is implemented
                 break;
             case 'Study Groups':
-                navigate('/'); //TODO: set the proper path to the study groups page once it is implemented
+                navigate('/study-room-home');
                 break;
             case 'Logout':
                 handleLogout();

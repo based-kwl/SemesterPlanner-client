@@ -55,7 +55,7 @@ export default function EventColorSelector() {
                 console.log(res);
                 navigate("/study-room-home");
             })
-            .catch(err => { console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });
+            .catch(err => { setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });
     }
 
     function handleTitleChange(e) {
@@ -173,7 +173,7 @@ This causes infinite errors on console, so removed it
                     </div>
 
                 </div>
-                <PrimaryButton2 width={'90vw'} content="save" onClick={changeColor} />
+                <PrimaryButton2 width={'90vw'} colour={'#912338'} content="save" onClick={changeColor} />
             </form>
         </React.Fragment >
     )
