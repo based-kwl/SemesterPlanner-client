@@ -38,7 +38,7 @@ export default function SignIn() {
                 SetLocalStorage(res);
                 navigate('/calendar');
             })
-            .catch(err => {console.log(`Error: ${err}`); setErrorMessage(`${err}`.substring(44) === 401 ? 'Incorrect username or password.' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) == (401).toString() ? 'Incorrect username or password.' : `${err}`)});
     }
     
     const signInForm = (
