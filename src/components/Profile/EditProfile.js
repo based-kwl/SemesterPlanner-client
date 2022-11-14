@@ -61,7 +61,7 @@ export default function EditProfile() {
     },[])
 
     function handleEditProfile() {
-
+        const token = JSON.parse(localStorage.getItem("token"));
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
@@ -207,7 +207,7 @@ export default function EditProfile() {
                         />
                     } label={userData.privateProfile ? "Public" : "Private"}/>
                 </div>
-                <PrimaryButton2 width='305px' content="Update" onClick={handleEditProfile}/>
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEditProfile}/>
             </form>
         </React.Fragment>
     )

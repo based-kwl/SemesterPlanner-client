@@ -15,7 +15,8 @@ export const PrimaryButton = ({content, width}) => {
     );
 }
 
-export const PrimaryButton2 = ({content, width, onClick, disable}) => {
+
+export const PrimaryButton2 = ({content, width, onClick, colour, disable}) => {
     return (
         <Button
             disabled={disable}
@@ -23,9 +24,26 @@ export const PrimaryButton2 = ({content, width, onClick, disable}) => {
             variant="contained"
             style={{
                 paddingTop: '10px', paddingBottom: '10px',
-                width: width, backgroundColor: '#912338'
+                width: width, backgroundColor: colour
             }}>
             {content}
+        </Button>
+    );
+}
+
+export const FileSelectButton = ({width, onChange}) => {
+    return (
+        <Button
+            onClick={() => {
+                document.getElementById('fileSelectButton').click()
+            }}
+            variant="contained"
+            style={{
+                paddingTop: '10px', paddingBottom: '10px',
+                width: width, backgroundColor: '#057D78'
+            }}>
+            <input type="file" id="fileSelectButton" onChange={onChange} style={{display: "none"}}/>
+            Select File
         </Button>
     );
 }
@@ -49,7 +67,7 @@ export const EditButton = ({content, width, onClick}) => {
         <Button
             onClick={onClick}
             style={{
-                width: width, 
+                width: width,
                 color: '#534F4F'
             }}
             >

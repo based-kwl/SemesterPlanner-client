@@ -104,7 +104,7 @@ export default function CalendarView() {
         <React.Fragment>
             <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
             <div className="center">
-                <PrimaryButton2 style={{ margin: 'auto' }} content="+" onClick={addEventButton} />
+                <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>
 
         </React.Fragment>
