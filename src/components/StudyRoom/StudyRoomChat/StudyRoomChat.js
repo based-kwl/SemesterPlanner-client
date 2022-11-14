@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatMessagesCard } from '../CustomMUIComponents/CustomCards';
+import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
@@ -58,18 +58,25 @@ export function GetStudyRoomChat(){
 
     const MessagesBubbles = () => (React.useMemo(() => {
         return(
-            <div style={{position: 'absolute', top: '10px', overflowY: 'scroll', height: '100%', paddingBottom: '10px'}}>
+            <div style={{
+                position: 'absolute',
+                top: '10px',
+                overflowY: 'scroll',
+                height: '100%',
+                paddingBottom: '10px',
+                display: 'flex',
+                flexDirection: 'column-reverse'}} // scroll down to last message
+            >
                 <Grid container>
                     {messages.map((message, index) => {
                         return  (
-                            <Grid key={index} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
+                            <Grid item key={index} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
                                 { isMyMessage(message) ? <MyMessage props={message}/> : <OthersMessage props={message}/> }
                             </Grid>
                         )
                     })}
                 </Grid>
             </div>
-
         )
     }, [messages]));
 

@@ -93,7 +93,7 @@ export default function CalendarView() {
     const calendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({ date }) => <DayTile day={date} />} 
+                tileContent={({ date }) => <DayTile key={date} day={date} />}
                 onChange={setDates}
                 value={date}
             />

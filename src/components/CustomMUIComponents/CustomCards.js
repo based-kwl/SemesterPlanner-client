@@ -122,7 +122,7 @@ export const ChatMessagesCard = (props) => {
     let textColor;
     let textSenderColor;
 
-    if (props.userType === "you") {
+    if (props.userType == "others") {
         backgroundColor = "#F0F0F0"
         textColor = "#000000"
         textSenderColor = "#E5A712"

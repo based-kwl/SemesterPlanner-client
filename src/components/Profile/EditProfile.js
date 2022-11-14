@@ -3,21 +3,15 @@ import * as React from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
 import {InputAdornment, Typography} from "@mui/material";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import {PrimaryButton2, SelectButton} from "../CustomMUIComponents/CustomButtons";
+import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
-import {faculties, programs} from "../Authentication/SignUp";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef, useMemo} from "react";
+import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
 
 export default function EditProfile() {
@@ -32,11 +26,10 @@ export default function EditProfile() {
     });
 
     const newPassword = useRef('');
-    const userEmail = React.useMemo(() => JSON.parse(localStorage.getItem("email")), []);
-    const token =  React.useMemo(() => JSON.parse(localStorage.getItem("token")), []);
+    const userEmail = useMemo(() => JSON.parse(localStorage.getItem("email")), []);
+    const token =  useMemo(() => JSON.parse(localStorage.getItem("token")), []);
 
     const [registrationError, setRegistrationError] = React.useState("");
-    const [confirmPassword, setConfirmPassword] = React.useState('');
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
@@ -47,13 +40,15 @@ export default function EditProfile() {
                     ...userData,
                     username: data.username,
                     email: userEmail,
-                    password: data.password,
+                    password: undefined,
                     faculty: data.faculty,
                     program: data.program,
                     privateProfile: data.privateProfile
                 })
             }
-        ).catch((err) => setRegistrationError(err.message));
+        ).catch((err) => {
+            setRegistrationError(err.message)
+        });
     }, [])
 
     useEffect(() => {
@@ -61,16 +56,16 @@ export default function EditProfile() {
     },[])
 
     function handleEditProfile() {
-        const token = JSON.parse(localStorage.getItem("token"));
         const config = {
             headers: {authorization: `Bearer ${token}`}
         }
-        axios.post(`${process.env.REACT_APP_BASE_URL}student/update/${userEmail}`, userData, config)
-            .then(res => {
+        axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData, config)
+            .then(() => {
+                localStorage.setItem("username", JSON.stringify(userData.username))
                 navigate('/calendar');
             })
             .catch(err => {
-                setRegistrationError("Error connecting to database");
+                setRegistrationError(err.message)
             });
     }
 
@@ -92,7 +87,6 @@ export default function EditProfile() {
     }
 
     function handleConfirmPasswordChange(e) {
-        setConfirmPassword(e.target.value);
         if (e.target.value === userData.password) {
             if (registrationError === "Both passwords should match") {
                 setRegistrationError("");
@@ -109,23 +103,6 @@ export default function EditProfile() {
             </Typography>
         )
         : null), [registrationError]);
-
-    const ProgramSelect = (
-        <Container maxWidth="md" component="main">
-            <Grid container spacing={2} alignItems="flex-end">
-                {faculties.map((item) => (
-                    <Grid
-                        item
-                        key={item}
-                        xs={6}
-                        md={6}
-                    >
-                        <SelectButton userData={userData} setUserData={setUserData} content={item}/>
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
-    )
 
     const SignUpForm = (
         <React.Fragment>
@@ -177,24 +154,10 @@ export default function EditProfile() {
                     </Typography>
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    {ProgramSelect}
+                    <FacultySelect userData={userData} setUserData={setUserData} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Program</InputLabel>
-                        <Select
-                            id="program"
-                            value={userData.program}
-                            label="Program"
-                            onChange={handleProgramChange}
-                        >
-                            {programs[userData.faculty].map((item) => (
-                                <MenuItem key={item} value={item}>
-                                    <em>{item}</em>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
                     <Typography>

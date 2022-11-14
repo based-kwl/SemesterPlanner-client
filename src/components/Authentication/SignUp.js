@@ -1,10 +1,6 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import {PrimaryButton2, SelectButton} from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import {useNavigate} from "react-router";
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
@@ -13,53 +9,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
-export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
-export const programs = {
-    'Art & Science' : [
-        'Actuarial Mathematics',
-        'Adult Education',
-        'Anthropology',
-        'Athletic Therapy',
-        'Behavior NeuroScience',
-        'Biochemistry',
-        'Biology',
-        'Chemistry'
-    ],
-    'Fine Arts' : [
-        'Art History',
-        'Ceramics',
-        'Computation Arts',
-        'Contemporary Dance',
-        'Design',
-        'Film Animation',
-        'Game Design',
-        'Music'
-    ],
-    'Engineering': [
-        'Aerospace Engineering',
-        'Building Engineering',
-        'Civil Engineering',
-        'Computer Engineering',
-        'Electrical Engineering',
-        'Industrial Engineering',
-        'Mechinical Engineering',
-        'Software Engineering'
-    ],
-    'Business': [
-        'Accountancy',
-        'Administration',
-        'Data Intelligence',
-        'Economics',
-        'Entrepreneurship',
-        'Finance',
-        'Management',
-        'Marketing',
-        'Real Estate'
-    ]
-};
 
 export default function SignUp() {
 
@@ -128,22 +79,6 @@ export default function SignUp() {
         )
         : null), [registrationError]);
 
-    const ProgramSelect = (
-        <Container maxWidth="md" component="main">
-            <Grid container spacing={2} alignItems="flex-end">
-                {faculties.map((item) => (
-                    <Grid
-                        item
-                        key={item}
-                        xs={6}
-                        md={6}
-                    >
-                        <SelectButton userData={userData} setUserData={setUserData} content={item}  />
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
-    )
 
     const disableRegisterButton = React.useMemo(() => {
         return (
@@ -224,24 +159,10 @@ export default function SignUp() {
                     </Typography>
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    {ProgramSelect}
+                    <FacultySelect userData={userData} setUserData={setUserData} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Program</InputLabel>
-                        <Select
-                            id="program"
-                            value={userData.program}
-                            label="Program"
-                            onChange={handleProgramChange}
-                        >
-                            {programs[userData.faculty].map((item) => (
-                                <MenuItem key={item} value={item}>
-                                    <em>{item}</em>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
                         <Typography>
