@@ -11,11 +11,12 @@ import Divider from "@mui/material/Divider";
 import {useNavigate} from "react-router";
 import axios from "axios";
 
-let email = JSON.parse(localStorage.getItem("email"));
+
 
 export default function StudyRoomHome() {
     const navigate = useNavigate();
     const [roomData, setRoomData] = React.useState([]);
+    const email = JSON.parse(localStorage.getItem("email"));
 
     useEffect(() => {
         //user needs to be logged in to access
@@ -23,7 +24,7 @@ export default function StudyRoomHome() {
             navigate("/login");
         }
         getData();
-    }, [])
+    }, [email])
 
     //API call to get all the rooms that the logged in user participates in
     const getData = () => {

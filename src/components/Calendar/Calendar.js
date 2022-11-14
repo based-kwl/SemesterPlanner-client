@@ -7,9 +7,9 @@ import '../Calendar/calendar.css'
 import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import { useNavigate } from "react-router";
+import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
-import MockendEvents from "./eventsMockedData.json";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,9 +26,8 @@ export default function CalendarView() {
 
     const options = ['Edit', 'Delete', 'Cancel'];
 
-    const fetchData = () => {
-        const user = JSON.parse(localStorage.getItem('username'));
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
+    const fetchData = (user) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvent(res.data)
             }
@@ -37,11 +36,17 @@ export default function CalendarView() {
             })
     }
 
-    useEffect(() => {
-        fetchData();
-    }, [])
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = GetAuthentication();
+        if (user != null) {
+            fetchData(user);
+        } else {
+            navigate("login");
+        }
+
+    }, [])
 
     function addEventButton() {
         navigate('/event');

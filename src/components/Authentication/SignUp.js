@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
 
 export default function SignUp() {
@@ -165,15 +165,7 @@ export default function SignUp() {
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
-                        <Typography>
-                            Hide my profile
-                        </Typography>
-                        <FormControlLabel sx={{display: 'block'}} control={
-                            <Switch
-                                checked={userData.privateProfile}
-                                onChange={handlePrivacyChange}
-                            />
-                        } label={userData.privateProfile ? "Public" : "Private"} />
+                        <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
                 <PrimaryButton2 width='305px' colour={'#912338'}  disable={disableRegisterButton} content="Register" onClick={handleRegistration} />
             </form>

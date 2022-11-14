@@ -6,12 +6,10 @@ import {InputAdornment, Typography} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useCallback, useEffect, useRef, useMemo} from "react";
-import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
 
 export default function EditProfile() {
@@ -160,15 +158,7 @@ export default function EditProfile() {
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
-                    <Typography>
-                        Hide my profile
-                    </Typography>
-                    <FormControlLabel sx={{display: 'block'}} control={
-                        <Switch
-                            checked={userData.privateProfile}
-                            onChange={handlePrivacyChange}
-                        />
-                    } label={userData.privateProfile ? "Public" : "Private"}/>
+                    <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
                 <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEditProfile}/>
             </form>
