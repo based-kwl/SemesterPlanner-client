@@ -11,13 +11,6 @@
     align-items: center;
     justify-content: space-between;
 }
-.messageBubbles{
-    position: absolute;
-    top: 10px;
-    overflow-y: scroll;
-    height: 100%;
-    padding-bottom: 10px;
-}
 
 .sendBtn {
     width: 150px;

@@ -32,7 +32,7 @@ export default function SignUp() {
                 navigate('/login');
             })
             .catch(err => {
-                setRegistrationError({ ...registrationError, message: "Error connecting to database. Please try again later"});
+                setRegistrationError({ ...registrationError, message: err.message});
         });
     }
 
