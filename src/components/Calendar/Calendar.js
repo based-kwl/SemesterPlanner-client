@@ -23,10 +23,12 @@ export default function CalendarView() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const options = ['Edit', 'Delete', 'Cancel'];
+    const user = GetAuthentication();
 
-    const fetchData = (user) => {
+    function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvent(res.data)
@@ -36,12 +38,11 @@ export default function CalendarView() {
             })
     }
 
-    let navigate;
+
 
     useEffect(() => {
-        const user = GetAuthentication();
         if (user.username != null) {
-            fetchData(user);
+            fetchData();
         } else {
             navigate("login");
         }
