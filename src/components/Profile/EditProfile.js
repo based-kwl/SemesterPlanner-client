@@ -36,7 +36,6 @@ export default function EditProfile() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
                 const data = res.data;
-                console.log('data', data);
                 setUserData({
                     ...userData,
                     username: auth.username,
@@ -48,7 +47,6 @@ export default function EditProfile() {
                 })
             }
         ).catch((err) => {
-            console.log(err);
             setRegistrationError(err.message)
         });
     }

@@ -43,7 +43,6 @@ export default function CalendarView() {
         if (user != null) {
             fetchData(user);
         } else {
-            console.log(user);
             navigate("login");
         }
 
