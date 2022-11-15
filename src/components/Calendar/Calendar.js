@@ -36,13 +36,14 @@ export default function CalendarView() {
             })
     }
 
-    const navigate = useNavigate();
+    let navigate;
 
     useEffect(() => {
         const user = GetAuthentication();
         if (user != null) {
             fetchData(user);
         } else {
+            console.log(user);
             navigate("login");
         }
 

@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import {Typography} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import {styled} from "@mui/material/styles";
 
 export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
 export const programs = {
@@ -109,7 +110,7 @@ export const ProgramSelect = ({userData, handleProgramChange}) => (
 /**
  * @Author: Jasmin Guay.
  * Reusable ProfileToggle Toggle input.
- * @param userdata.privateProfile : boolean representing if the student has a privateProfile (true) or not (false).
+ * @param userData.privateProfile : boolean representing if the student has a privateProfile (true) or not (false).
  * @param handlePrivacyChange : function handling the changes of userData.privateProfile
  * @returns {JSX.Element} : The reusable component.
  */
@@ -118,14 +119,73 @@ export const ProfileToggle = ({userData, handlePrivacyChange}) => (
         <Typography>
             Profile Privacy
         </Typography>
-        <FormControlLabel sx={{display: 'block'}} control={
-            <Switch
-                checked={userData.privateProfile}
-                onChange={handlePrivacyChange}
-            />
-        } label={userData.privateProfile ? "Public" : "Private"} />
-        <p>
-
-        </p>
+        <FormControlLabel
+            sx={{m: 1, marginY: '5px'}}
+            control={<CustomToggle checked={userData.privateProfile} onChange={handlePrivacyChange} />}
+            label={ <ProfileToggleLabel text={userData.privateProfile ? "Public" : "Private"} />} />
+        <Typography sx={{color: '#DA3A16'}}>
+            Hiding my profile will disable users from adding me to their study groups
+        </Typography>
     </React.Fragment>
 )
+
+const ProfileToggleLabel = (props) => (
+        <div style={{marginLeft: '8px'}}>
+            <Typography> {props.text}</Typography>
+        </div>
+);
+
+export const CustomToggle = styled((props) => (
+    <Switch
+        focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))
+
+(({ theme }) => ({
+    width: 40,
+    height: 26,
+    padding: 3,
+    '& .MuiSwitch-switchBase': {
+        padding: 0,
+        margin: 2,
+        transitionDuration: '300ms',
+        color: '#C8C8C8',
+        '&.Mui-checked': {
+            transform: 'translateX(16px)',
+            color: '#C8C8C8',
+            '& + .MuiSwitch-track': {
+                backgroundColor: theme.palette.mode === 'dark' ? '#8CC63E' : '#65C466',
+                opacity: 1,
+                border: 0,
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: 0.5,
+            },
+        },
+        '&.Mui-focusVisible .MuiSwitch-thumb': {
+            color: '#33cf4d',
+            border: '6px solid #fff',
+        },
+        '&.Mui-disabled .MuiSwitch-thumb': {
+            color:
+                theme.palette.mode === 'light'
+                    ? theme.palette.grey[100]
+                    : theme.palette.grey[600],
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+            opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        boxSizing: 'border-box',
+        width: 22,
+        height: 22,
+    },
+    '& .MuiSwitch-track': {
+        borderRadius: 26 / 2,
+        backgroundColor: theme.palette.mode === 'light' ? '#DA3A16' : '#39393D',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500,
+        }),
+    },
+}));

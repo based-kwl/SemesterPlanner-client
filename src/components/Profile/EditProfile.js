@@ -10,6 +10,7 @@ import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCard
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useCallback, useEffect, useRef, useMemo} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import GetAuthentication from "../Authentication/Authentification";
 
 
 export default function EditProfile() {
@@ -29,15 +30,17 @@ export default function EditProfile() {
 
     const [registrationError, setRegistrationError] = React.useState("");
     const navigate = useNavigate();
+    const auth = GetAuthentication();
 
-    const fetchData = useCallback(() => {
+    const fetchData = () => {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
                 const data = res.data;
+                console.log('data', data);
                 setUserData({
                     ...userData,
-                    username: data.username,
-                    email: userEmail,
+                    username: auth.username,
+                    email: auth.email,
                     password: undefined,
                     faculty: data.faculty,
                     program: data.program,
@@ -45,9 +48,10 @@ export default function EditProfile() {
                 })
             }
         ).catch((err) => {
+            console.log(err);
             setRegistrationError(err.message)
         });
-    }, [])
+    }
 
     useEffect(() => {
         fetchData();

@@ -1,10 +1,8 @@
-import {useNavigate} from "react-router-dom";
-
 /**
  * @author: Jasmin Guay
  * Function to authenticate user in a page.
  * @returns {{email: String, username: String, token: String}|null} : if authenticated return a minimal user object
- * else redirect to log in.
+ * else return null.
  */
 export default function GetAuthentication() {
     if ((localStorage.getItem("email") != null || localStorage.getItem("email") !== undefined)
@@ -13,12 +11,11 @@ export default function GetAuthentication() {
         ) {
         return ({
             email: JSON.parse(localStorage.getItem("email")),
-            username: JSON.parse(localStorage.getItem("email")),
+            username: JSON.parse(localStorage.getItem("username")),
             token: JSON.parse(localStorage.getItem("token"))
         });
     } else {
-        return null;
+        return null
     }
 }
-
 
