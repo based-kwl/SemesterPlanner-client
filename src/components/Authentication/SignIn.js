@@ -20,8 +20,7 @@ export default function SignIn() {
 
     useEffect(() => {
         if(localStorage.getItem("email") && localStorage.getItem("email") !== undefined){
-            if(JSON.parse(localStorage.getItem("email")) !== "")
-                window.location = "/calendar"
+            window.location = "/calendar"
         }
     }, [])
 

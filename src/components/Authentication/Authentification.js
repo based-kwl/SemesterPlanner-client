@@ -1,6 +1,6 @@
 /**
  * @author: Jasmin Guay
- * Function to authenticate user in a page.
+ * Function to get auth info for user.
  * @returns {{email: String, username: String, token: String}|null} : if authenticated return a minimal user object
  * else return null.
  */
