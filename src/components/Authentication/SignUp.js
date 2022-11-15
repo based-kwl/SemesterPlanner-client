@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import {useNavigate} from "react-router";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
 import {InputAdornment, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';

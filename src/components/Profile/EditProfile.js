@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useCallback, useEffect, useRef, useMemo} from "react";
+import {useEffect, useRef} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 import GetAuthentication from "../Authentication/Authentification";
 
