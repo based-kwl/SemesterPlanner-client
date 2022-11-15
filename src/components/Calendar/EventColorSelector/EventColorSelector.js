@@ -36,9 +36,9 @@ export default function EventColorSelector() {
     
 
     function fetchData() {
-
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/`,eventSettingData)
             .then(res => {
+                // todo set the form data
                 console.log(res);
                 console.log(res.body)
             })

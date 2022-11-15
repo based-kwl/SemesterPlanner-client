@@ -90,10 +90,10 @@ export default function CalendarView() {
         </div>
     );
 
-    const celendarMonth = (
+    const calendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({ date }) => <DayTile day={date} />} 
+                tileContent={({ date }) => <DayTile key={date} day={date} />}
                 onChange={setDates}
                 value={date}
             />
@@ -102,7 +102,7 @@ export default function CalendarView() {
 
     const calendarCard = (
         <React.Fragment>
-            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={celendarMonth} />
+            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
             <div className="center">
                 <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>

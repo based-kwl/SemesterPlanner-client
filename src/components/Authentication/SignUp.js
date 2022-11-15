@@ -1,10 +1,6 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import {PrimaryButton2, SelectButton} from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import {useNavigate} from "react-router";
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
@@ -13,53 +9,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
-export const faculties = ['Art & Science', 'Fine Arts', 'Engineering', 'Business'];
-export const programs = {
-    'Art & Science' : [
-        'Actuarial Mathematics',
-        'Adult Education',
-        'Anthropology',
-        'Athletic Therapy',
-        'Behavior NeuroScience',
-        'Biochemistry',
-        'Biology',
-        'Chemistry'
-    ],
-    'Fine Arts' : [
-        'Art History',
-        'Ceramics',
-        'Computation Arts',
-        'Contemporary Dance',
-        'Design',
-        'Film Animation',
-        'Game Design',
-        'Music'
-    ],
-    'Engineering': [
-        'Aerospace Engineering',
-        'Building Engineering',
-        'Civil Engineering',
-        'Computer Engineering',
-        'Electrical Engineering',
-        'Industrial Engineering',
-        'Mechinical Engineering',
-        'Software Engineering'
-    ],
-    'Business': [
-        'Accountancy',
-        'Administration',
-        'Data Intelligence',
-        'Economics',
-        'Entrepreneurship',
-        'Finance',
-        'Management',
-        'Marketing',
-        'Real Estate'
-    ]
-};
 
 export default function SignUp() {
 
@@ -71,7 +22,7 @@ export default function SignUp() {
         program: 'Actuarial Mathematics',
         privateProfile: true
     });
-    const [registrationError, setRegistrationError] = React.useState({message: "Error, please try again later", hasError: false});
+    const [registrationError, setRegistrationError] = React.useState({message: "", hasError: false});
     const [confirmPassword, setConfirmPassword] = React.useState({ password: '', isEqualToPassword: false});
     const navigate = useNavigate();
 
@@ -81,9 +32,8 @@ export default function SignUp() {
                 navigate('/login');
             })
             .catch(err => {
-                setRegistrationError({ ...registrationError, message: "Error connecting to database. " + err});
-                setRegistrationError({ ...registrationError, hasError: true});
-                });
+                setRegistrationError({ ...registrationError, message: err.message});
+        });
     }
 
     function handleProgramChange(e) {
@@ -99,7 +49,6 @@ export default function SignUp() {
     }
 
     function handlePasswordChange(e) {
-        //todo: add validation to password (ie should have one number, 6 letters, etc)
         setUserData({...userData, password: e.target.value})
     }
 
@@ -111,41 +60,41 @@ export default function SignUp() {
         setConfirmPassword({...confirmPassword, password: e.target.value});
         if (e.target.value === userData.password) {
             setConfirmPassword( { ...confirmPassword, isEqualToPassword: true});
+            if (registrationError.message === "Both passwords should match") {
+                setRegistrationError({ ...registrationError, message: "", hasError: false})
+            }
         }
         else {
+            setRegistrationError({ ...registrationError, message: "Both passwords should match", hasError: true})
             setConfirmPassword( { ...confirmPassword, isEqualToPassword: false});
         }
     }
 
 
-    const PageError =  registrationError.hasError ? (
+    const PageError =  React.useMemo(() => (registrationError.message !== ""
+        ? (
         <Typography align="center" color="#DA3A16">
             {registrationError.message}
         </Typography>
-    ) :
-        (<React.Fragment/>);
+        )
+        : null), [registrationError]);
 
-    const ProgramSelect = (
-        <Container maxWidth="md" component="main">
-            <Grid container spacing={2} alignItems="flex-end">
-                {faculties.map((item) => (
-                    <Grid
-                        item
-                        key={item}
-                        xs={6}
-                        md={6}
-                    >
-                        <SelectButton userData={userData} setUserData={setUserData} content={item}  />
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
-    )
+
+    const disableRegisterButton = React.useMemo(() => {
+        return (
+            registrationError.hasError
+            || userData.username === ''
+            || userData.email === ''
+            || userData.password === ''
+            || !confirmPassword.isEqualToPassword
+        )}, [ registrationError, userData, confirmPassword]);
 
     const SignUpForm = (
         <React.Fragment>
             <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
-                <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
+                <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
+                    {PageError}
+                </div>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                     <TextField
                         fullWidth
@@ -210,24 +159,10 @@ export default function SignUp() {
                     </Typography>
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    {ProgramSelect}
+                    <FacultySelect userData={userData} setUserData={setUserData} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Program</InputLabel>
-                        <Select
-                            id="program"
-                            value={userData.program}
-                            label="Program"
-                            onChange={handleProgramChange}
-                        >
-                            {programs[userData.faculty].map((item) => (
-                                <MenuItem key={item} value={item}>
-                                    <em>{item}</em>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
                         <Typography>
@@ -240,7 +175,7 @@ export default function SignUp() {
                             />
                         } label={userData.privateProfile ? "Public" : "Private"} />
                 </div>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Register" onClick={handleRegistration} />
+                <PrimaryButton2 width='305px' colour={'#912338'}  disable={disableRegisterButton} content="Register" onClick={handleRegistration} />
             </form>
         </React.Fragment>
     )
@@ -253,7 +188,7 @@ export default function SignUp() {
             <Typography align='center' style={{fontFamily: 'Roboto', fontSize: '18px', fontWeight: 'bold'}}>
                 Create your account.
             </Typography>
-            <CustomWhiteCard width='326px' height='780px' marginTop='30px' content={SignUpForm} />
+            <CustomWhiteCard width='326px' height='800px' marginTop='30px' content={SignUpForm} />
         </React.Fragment>
 
 )
