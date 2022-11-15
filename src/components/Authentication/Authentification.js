@@ -5,9 +5,9 @@
  * else return null.
  */
 export default function GetAuthentication() {
-    if ((localStorage.getItem("email") != null || localStorage.getItem("email") !== undefined)
-        || (localStorage.getItem("username") != null || localStorage.getItem("username") !== undefined)
-        || (localStorage.getItem("token") != null || localStorage.getItem("username") !== undefined)
+    if ((localStorage.getItem("email") != null)
+        || (localStorage.getItem("username") != null)
+        || (localStorage.getItem("token") != null)
         ) {
         return ({
             email: JSON.parse(localStorage.getItem("email")),

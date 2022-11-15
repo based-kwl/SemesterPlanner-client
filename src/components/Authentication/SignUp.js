@@ -52,8 +52,8 @@ export default function SignUp() {
         setUserData({...userData, password: e.target.value})
     }
 
-    function handlePrivacyChange(e) {
-        setUserData({...userData, privateProfile: !userData.privateProfile})
+    function handlePrivacyChange() {
+        setUserData((prevState) => ({...userData, privateProfile: !prevState.privateProfile}))
     }
 
     function handleConfirmPasswordChange(e) {

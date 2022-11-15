@@ -32,7 +32,7 @@ export default function EditProfile() {
     const navigate = useNavigate();
     const auth = GetAuthentication();
 
-    const fetchData = () => {
+    function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
             .then((res) => {
                 const data = res.data;
@@ -83,7 +83,7 @@ export default function EditProfile() {
     }
 
     function handlePrivacyChange() {
-        setUserData({...userData, privateProfile: !userData.privateProfile})
+        setUserData((prevState) => ({...userData, privateProfile: !prevState.privateProfile}))
     }
 
     function handleConfirmPasswordChange(e) {

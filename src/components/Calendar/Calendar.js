@@ -40,7 +40,7 @@ export default function CalendarView() {
 
     useEffect(() => {
         const user = GetAuthentication();
-        if (user != null) {
+        if (user.username != null) {
             fetchData(user);
         } else {
             navigate("login");
