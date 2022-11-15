@@ -190,10 +190,10 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={day} eventType={e.eventHeader} />
             ))
         }
         

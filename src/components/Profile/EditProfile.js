@@ -25,15 +25,13 @@ export default function EditProfile() {
     });
 
     const newPassword = useRef('');
-    const userEmail = useMemo(() => JSON.parse(localStorage.getItem("email")), []);
-    const token =  useMemo(() => JSON.parse(localStorage.getItem("token")), []);
 
     const [registrationError, setRegistrationError] = React.useState("");
     const navigate = useNavigate();
     const auth = GetAuthentication();
 
     function fetchData() {
-        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${auth.email}`)
             .then((res) => {
                 const data = res.data;
                 setUserData({
@@ -57,7 +55,7 @@ export default function EditProfile() {
 
     function handleEditProfile() {
         const config = {
-            headers: {authorization: `Bearer ${token}`}
+            headers: {authorization: `Bearer ${auth.token}`}
         }
         axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData, config)
             .then(() => {
