@@ -12,8 +12,8 @@ import {Avatar, Stack} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetStudyRoomChat } from "./StudyRoomChat";
-import ChatFooter from "./ChatRoomChatFooter";
+import { GetStudyRoomChat } from "./StudyRoomChat/StudyRoomChat";
+import ChatFooter from "./StudyRoomChat/ChatFooter";
 import CourseNotes from './CourseNotes'
 
 

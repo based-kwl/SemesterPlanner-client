@@ -38,7 +38,7 @@ export default function SignIn() {
                 SetLocalStorage(res);
                 navigate('/calendar');
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Incorrect username or password.' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) == (401).toString() ? 'Incorrect username or password.' : `${err}`)});
     }
     
     const signInForm = (
@@ -120,5 +120,4 @@ export function SetLocalStorage(res) {
     localStorage.setItem("username", JSON.stringify(res.data.profile.username));
     localStorage.setItem("email", JSON.stringify(res.data.profile.email));
     localStorage.setItem("token", JSON.stringify(res.data.token));
-    localStorage.setItem("username", JSON.stringify(res.data.profile.username));
 }
