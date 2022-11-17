@@ -11,10 +11,13 @@ import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
 import Typography from "@mui/material/Typography";
 import FriendSearch from "./FriendSearch";
+import Badge from '@mui/material/Badge';
+import FriendNotification from "./FriendsNotification";
 
 
 export default function FriendListHome(){
     const friends = ['bob', 'bub', 'beb', 'bab','bib'];
+    const [count, setCount] = React.useState(0);
 
     function handleUpdate(e){
         e.preventDefault();
@@ -22,6 +25,15 @@ export default function FriendListHome(){
     function handleDelete(e){
         e.preventDefault();
     }
+
+    function friendCount(){
+        setCount(friends.length);
+        console.log("count: ", count);
+
+    }
+    React.useEffect(()=> {
+        friendCount();
+    },[])
 
     const friendList = (
         <React.Fragment>
@@ -69,8 +81,13 @@ export default function FriendListHome(){
                 <StudyRoomChatCard width='46vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<MarkEmailUnreadIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'Requests Notification'} content={"Notifications"}/></div>}/>
+                ><BottomDrawer icon={<Badge badgeContent={count} overlap="circular" sx={{
+                    "& .MuiBadge-badge": {
+                        color: "white",
+                        backgroundColor: "#000000"
+                    }
+                }} > <MarkEmailUnreadIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/></Badge>}
+                               title={'Requests Notification'} content={<FriendNotification/>}/></div>}/>
             </div>
             </React.Fragment>
     )
