@@ -22,7 +22,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -87,8 +88,7 @@ export default function PersistentDrawerLeft(params) {
     // const handleSearchClose = () => {
     //     setOpenSearch(false);
     // };
-
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     function handleLogout() {
         localStorage.setItem("token", '');
@@ -148,7 +148,7 @@ export default function PersistentDrawerLeft(params) {
                         onClick={handleSearchOpen}
                         edge="start"
                     >
-                        <SearchIcon/>
+                        <NotificationsIcon/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
