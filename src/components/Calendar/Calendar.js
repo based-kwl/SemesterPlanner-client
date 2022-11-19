@@ -58,7 +58,17 @@ export default function CalendarView() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+//deletes event on calendar home in db
+    function handleDelete(e){
+        const user = JSON.parse(localStorage.getItem('username'));
 
+        axios.post(`${process.env.REACT_APP_BASE_URL}events/${user}`,)
+        .then(() => {
+            navigate("/calendar");
+        })
+        .catch(err => {console.log('Error:', err)});
+
+    }
     const EventOptions = () => (
         <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
             <IconButton
@@ -81,11 +91,20 @@ export default function CalendarView() {
                 open={open}
                 onClose={handleClose}
             >
-                {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
+                <MenuItem onClick={handleDelete}>
+                    Delete
+                </MenuItem>
+                <MenuItem onClick={fetchData}>
+                    Edit
+                </MenuItem>
+                <MenuItem onClick={handleDelete}>
+                    Cancel
+                </MenuItem>
+                {/* {options.map((option) => (
+                    <MenuItem key={option} onClick={handleDelete}>
                         {option}
                     </MenuItem>
-                ))}
+                ))} */}
             </Menu>
         </div>
     );

@@ -10,7 +10,7 @@ import EventColorSelector from './components/Calendar/EventColorSelector/EventCo
 import StudyRoom from './components/StudyRoom/StudyRoom';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
-
+import EditEvent from  './components/Calendar/Event/EditEvent';
 export default function App() {
     return (
         <BrowserRouter>
@@ -30,11 +30,13 @@ function AppRoutes() {
             <Route path="/login" element={<React.StrictMode><SignIn /></React.StrictMode>} />
             <Route path="/signup" element={<React.StrictMode><SignUp /></React.StrictMode>} />
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />
+            <Route path="/editevent" element={<React.StrictMode><EditEvent /></React.StrictMode>} />
             <Route path="/editProfile" element={<React.StrictMode><EditProfile /></React.StrictMode>} />
             <Route path="/study-room/:sID" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route exact path='/' element={<React.StrictMode><SignIn /></React.StrictMode>} />
-        </Routes>
+            <Route></Route>
+       </Routes>
     );
 }
 
