@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { Menu, Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
@@ -19,7 +19,7 @@ export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
 
-    const [event, setEvent] = useState([]);
+    const [events, setEvents] = useState([]);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -28,17 +28,44 @@ export default function CalendarView() {
     const options = ['Edit', 'Delete', 'Cancel'];
     const user = GetAuthentication();
 
+    console.log(events);
+
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                setEvent(res.data)
+                setEvents(res.data)
             }
             ).catch((err) => {
                 // give user a error message.
             })
     }
 
+    function setAllEvents(events) {
+        events.reduce((allEvents, event) => {
+            const today = new Date();
+            const firstDay = new Date(today.getDay() + 1);
+            function addEventsForEachDay() {
 
+            }
+
+            function addEventsForEachWeek() {
+
+            }
+
+            function addEventsForEachMonth() {
+
+            }
+
+            if (event.reccurence === 'daily') {
+                addEventsForEachDay()
+            }else if (event.reccurence === 'weekly') {
+                addEventsForEachWeek()
+            }
+            else if (event.reccurence === 'monthly') {
+                addEventsForEachMonth()
+            }
+        })
+    }
 
     useEffect(() => {
         if (user.username != null) {
@@ -155,7 +182,7 @@ export default function CalendarView() {
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                 content={eventHeader} backgroundColor='#8CC63E' />
-            {event !== undefined && event.map((e, index) => (
+            {events !== undefined && events.map((e, index) => (
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -182,10 +209,12 @@ export default function CalendarView() {
     )
 
     const DayTile = ({ day }) => {
-        const eventsThisDay = event.filter((e) => {
+        const eventsThisDay = events.filter((e) => {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
+
+
 
         let tileContent;
 
@@ -193,7 +222,7 @@ export default function CalendarView() {
             tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={day} eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
         
@@ -220,12 +249,12 @@ export default function CalendarView() {
         return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
-    const calendarPageCards = (
+    const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
             {eventsDisplay}
         </React.Fragment>
-    )
+    ), [calendarCard, calendarMonth]);
 
     return (
         <React.Fragment>
