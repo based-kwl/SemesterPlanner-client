@@ -1,15 +1,18 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
-import {Checkbox, InputLabel, Stack} from "@mui/material";
+import {Stack} from "@mui/material";
 import Button from "@mui/material/Button";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from '@mui/icons-material/Check';
+import axios from "axios";
 
 export default function FriendNotification() {
-    const requestSent = ['bob', 'bub', 'beb', 'bab','bib','fed', 'fad','fuc'];
-    const requestReceived = ['blob', 'blub', 'bleb', 'blab','blib', 'bob', 'bub', 'beb', 'bab'];
-
+    // const requestSent = ['bob', 'bub', 'beb', 'bab','bib','fed', 'fad','fuc'];
+    // const requestReceived = ['blob', 'blub', 'bleb', 'blab','blib', 'bob', 'bub', 'beb', 'bab'];
+    const [requestSent, setRequestSent] = React.useState([]);
+    const [requestReceived, setRequestReceived] = React.useState([]);
+    const ownerEmail = JSON.parse(localStorage.getItem("email"));
 
     function handleCancel(){
 
@@ -19,9 +22,26 @@ export default function FriendNotification() {
     function handleAccept(){}
 
 
+    React.useEffect( ()=>{
+        //friend request received
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${ownerEmail}`)
+            .then(res => {
+                console.log(res.data);
+                setRequestReceived( res.data);
+            })
+        //friend request sent
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/outgoing-requests/${ownerEmail}`)
+            .then(res => {
+                console.log(res.data);
+                setRequestSent( res.data);
+            })
+
+    },[])
+
+
     const friendNotification = (
         <React.Fragment>
-            <Typography variant="h5" marginBottom="10px"> Friend Request Sent</Typography>
+            <Typography variant="body1" marginBottom="10px"> Friend Request Sent</Typography>
             <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px'}}>
                 {requestSent.map((sent, index) => (
                     <div key={index}>
@@ -37,7 +57,7 @@ export default function FriendNotification() {
                 ))}
             </div>
 
-            <Typography variant="h5" marginBottom="10px"> Friend Request Received</Typography>
+            <Typography variant="body1" marginBottom="10px"> Friend Request Received</Typography>
 
             <div style={{overflow: 'auto', height: '30vh'}}>
                 {requestReceived.map((received, index) => (

@@ -73,7 +73,7 @@ export default function FriendSearch() {
                             setText("already a friend");
                             console.log('is already a friend:', isInFriends);
                         } else {
-                            setFriend(res.data.username);
+                            setFriend(res.data.email);
                             setFound(true);
                         }
                     }
@@ -93,7 +93,7 @@ export default function FriendSearch() {
                                 setText("already a friend");
                                 console.log('is already a friend:', isInFriends);
                             } else {
-                                setFriend(res.data.username);
+                                setFriend(res.data.email);
                                 setFound(true);
                             }
                         }
@@ -109,9 +109,9 @@ export default function FriendSearch() {
 
     const friendSearch = (
         <React.Fragment>
-            <Typography variant="h5" style={{marginTop: '20px', marginBottom: '10px'}}> Find other students by
+            <Typography variant="body1" style={{marginTop: '20px', marginBottom: '10px'}}> Find other students by
                 username or email</Typography>
-            <form onSubmit={handleSearch}>
+            <form style={{alignItems:'center'}} onSubmit={handleSearch}>
                 <TextField
                     fullWidth
                     id='search'
@@ -129,8 +129,8 @@ export default function FriendSearch() {
                 />
             </form>
             {found ?
-                <div style={{width: '90vw', height: '60vh'}}>
-                    <Typography variant="h5" style={{marginTop: '40px', marginBottom: '40px'}}>A student was found.
+                <div style={{width: '90vw', height: '45vh'}}>
+                    <Typography variant="body1" style={{marginTop: '40px', marginBottom: '20px'}}>A student was found.
                         Do you
                         want to add them?</Typography>
                     {added ?
