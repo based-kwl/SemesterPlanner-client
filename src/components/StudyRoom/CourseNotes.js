@@ -24,7 +24,7 @@ export default function ParticipantsList() {
     }
 
     function handleDeleteCourseNotes(index) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].cnID}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
             .then((res) => {
                 getCourseNotes();
             })
@@ -42,7 +42,7 @@ export default function ParticipantsList() {
                 bufferedFile = Buffer.from(event.target.result, "utf-8");
 
                 axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, {
-                    sID: studyRoomID,
+                    studyRoomID: studyRoomID,
                     type: selectedFile.type,
                     email: JSON.parse(localStorage.getItem("email")),
                     name: selectedFile.name,
@@ -77,7 +77,7 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].cnID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
             .then(res => {
                 const bufferedFile = Buffer.from(res.data[0].file.data.data, "base64");
 

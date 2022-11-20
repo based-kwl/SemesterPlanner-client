@@ -30,7 +30,7 @@ export function GetStudyRoomChat(){
                 const messageReverse = messageFromRoom.reverse();
                 setMessages(messageReverse);
                 setMessageCount(res.data.messages.length)
-                socket.emit('create', res.data.sID)
+                socket.emit('create', res.data.studyRoomID)
             })
             .catch(err => {
                 console.log('Error', err);
