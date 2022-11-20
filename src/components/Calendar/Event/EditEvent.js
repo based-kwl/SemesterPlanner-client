@@ -106,6 +106,16 @@ export default function EditEvent(){
     function handleCancel() {
         navigate('/calendar')
     }
+
+   
+    // sends updated field to db
+    function handleUpdate(e) {
+        e.preventDefault();
+        axios.put(`${process.env.REACT_APP_BASE_URL}events/`,eventData)
+            .catch(err => {console.log('Error:', err)});
+        window.location.reload();
+    }
+
  function handleEventHeaderChange(e) {
         setEventData( {...eventData, eventHeader: e.target.value })
     }
@@ -140,7 +150,7 @@ export default function EditEvent(){
     const buttons = (
         <React.Fragment>
             <div style={{ paddingTop: '20px'}}>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Add" onClick={handleEvent} />
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEvent} />
             </div>
             <div style={{ paddingTop: '20px'}}>
                 <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />

@@ -14,7 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
 import axios from "axios";
-
+import { isSameDay } from 'date-fns';
+import dayjs from 'dayjs';
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
@@ -58,17 +59,22 @@ export default function CalendarView() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-//deletes event on calendar home in db
-    function handleDelete(e){
+    //deletes event on calendar home in db
+    function handleDelete(e) {
         const user = JSON.parse(localStorage.getItem('username'));
 
-        axios.post(`${process.env.REACT_APP_BASE_URL}events/${user}`,)
-        .then(() => {
-            navigate("/calendar");
-        })
-        .catch(err => {console.log('Error:', err)});
+        axios.post(`${process.env.REACT_APP_BASE_URL}events/${user}`)
+            .then(() => {
+                navigate("/calendar");
+            })
+            .catch(err => { console.log('Error:', err) });
 
     }
+
+    function handleEdit() {
+        navigate('/editevent')
+
+    }    
     const EventOptions = () => (
         <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
             <IconButton
@@ -94,7 +100,7 @@ export default function CalendarView() {
                 <MenuItem onClick={handleDelete}>
                     Delete
                 </MenuItem>
-                <MenuItem onClick={fetchData}>
+                <MenuItem onClick={handleEdit}>
                     Edit
                 </MenuItem>
                 <MenuItem onClick={handleDelete}>
@@ -108,18 +114,28 @@ export default function CalendarView() {
             </Menu>
         </div>
     );
-    const mark = [
-        '04-11-2022',
-        '03-11-2022',
-        '05-11-2022'
+    const datesToAddClassTo = [
+        'Fri Nov 04 2022 00:00:00 GMT-0400 (Eastern Daylight Saving Time)',
+        '2022-11-16',
+        '05,11,2022'
     ]
-  
+
+
+    function tileClassName({ date, view }) {
+
+        if (datesToAddClassTo.find(dDate => isSameDay(dDate, date)))
+            return 'highlight';
+
+    }
     const calendarMonth = (
         <React.Fragment>
             <Calendar
                 tileContent={({ date }) => <DayTile key={date} day={date} />}
-                onChange={setDates}
+                onChange={setDates }
+                {...(console.log(date.toLocaleDateString())
+    )}
                 value={date}
+                tileClassName={tileClassName}
             />
         </React.Fragment>
     )
@@ -167,7 +183,8 @@ export default function CalendarView() {
                     <EventOptions />
                 </div>
             </div>
-        )}
+        )
+    }
 
     const eventsDisplay = (
         <div className="events">
@@ -214,7 +231,7 @@ export default function CalendarView() {
                 <CalendarDayEventIcon eventType={e.eventHeader} />
             ))
         }
-        
+
         return tileContent;
     }
 
