@@ -24,13 +24,14 @@ export function GetStudyRoomChat(){
 
     function fetchMessages() {
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomId}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}message/bulk/${studyRoomId}/30`)
             .then(res => {
-                const messageFromRoom = res.data.messages;
+                console.log(res.data)
+                const messageFromRoom = res.data;
                 const messageReverse = messageFromRoom.reverse();
                 setMessages(messageReverse);
-                setMessageCount(res.data.messages.length)
-                socket.emit('create', res.data.studyRoomID)
+                setMessageCount(res.data.length)
+                socket.emit('create', studyRoomId)
             })
             .catch(err => {
                 console.log('Error', err);
@@ -52,7 +53,7 @@ export function GetStudyRoomChat(){
         );
 
     function isMyMessage(message) {
-        const sender = JSON.parse(message.username);
+        const sender = JSON.parse(message.email);
         return userEmail.current == `"${sender}"`;
     }
 
