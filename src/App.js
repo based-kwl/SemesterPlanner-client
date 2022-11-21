@@ -32,7 +32,7 @@ function AppRoutes() {
             <Route path="/signup" element={<React.StrictMode><SignUp /></React.StrictMode>} />
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />
             <Route path="/editProfile" element={<React.StrictMode><EditProfile /></React.StrictMode>} />
-            <Route path="/study-room/:sID" element={<StudyRoom />} />
+            <Route path="/study-room/:studyRoomID" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route path="/friend-list-home" element={<FriendListHome />}/>
             <Route exact path='/' element={<React.StrictMode><SignIn /></React.StrictMode>} />
