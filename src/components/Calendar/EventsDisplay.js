@@ -27,7 +27,7 @@ function EventsDisplay(props) {
                 <Typography color="#000000" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
-                    School
+                    play
                 </Typography>
             </CardContent>
         </React.Fragment>

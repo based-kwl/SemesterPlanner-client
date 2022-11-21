@@ -89,6 +89,8 @@ export default function CalendarView() {
     };
 
     const handleClose = () => {
+        
+        console.log("heeeeeeeeeeeeeeeeeeeeeyyyyyyyyyyyyy")
         setAnchorEl(null);
     };
 
@@ -171,9 +173,10 @@ export default function CalendarView() {
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
+                   
                 </div>
                 <div style={{ float: 'right' }}>
-                    <EventOptions />
+                <EventOptions />
                 </div>
             </div>
         )}
