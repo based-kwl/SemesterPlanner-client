@@ -6,12 +6,11 @@ import {InputAdornment, Typography} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useCallback, useEffect, useRef, useMemo} from "react";
-import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import {useEffect, useRef} from "react";
+import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import GetAuthentication from "../Authentication/Authentification";
 
 
 export default function EditProfile() {
@@ -26,20 +25,19 @@ export default function EditProfile() {
     });
 
     const newPassword = useRef('');
-    const userEmail = useMemo(() => JSON.parse(localStorage.getItem("email")), []);
-    const token =  useMemo(() => JSON.parse(localStorage.getItem("token")), []);
 
     const [registrationError, setRegistrationError] = React.useState("");
     const navigate = useNavigate();
+    const auth = GetAuthentication();
 
-    const fetchData = useCallback(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${userEmail}`)
+    function fetchData() {
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${auth.email}`)
             .then((res) => {
                 const data = res.data;
                 setUserData({
                     ...userData,
-                    username: data.username,
-                    email: userEmail,
+                    username: auth.username,
+                    email: auth.email,
                     password: undefined,
                     faculty: data.faculty,
                     program: data.program,
@@ -49,7 +47,7 @@ export default function EditProfile() {
         ).catch((err) => {
             setRegistrationError(err.message)
         });
-    }, [])
+    }
 
     useEffect(() => {
         fetchData();
@@ -57,7 +55,7 @@ export default function EditProfile() {
 
     function handleEditProfile() {
         const config = {
-            headers: {authorization: `Bearer ${token}`}
+            headers: {authorization: `Bearer ${auth.token}`}
         }
         axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData, config)
             .then(() => {
@@ -83,7 +81,7 @@ export default function EditProfile() {
     }
 
     function handlePrivacyChange() {
-        setUserData({...userData, privateProfile: !userData.privateProfile})
+        setUserData((prevState) => ({...userData, privateProfile: !prevState.privateProfile}))
     }
 
     function handleConfirmPasswordChange(e) {
@@ -160,15 +158,7 @@ export default function EditProfile() {
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
-                    <Typography>
-                        Hide my profile
-                    </Typography>
-                    <FormControlLabel sx={{display: 'block'}} control={
-                        <Switch
-                            checked={userData.privateProfile}
-                            onChange={handlePrivacyChange}
-                        />
-                    } label={userData.privateProfile ? "Public" : "Private"}/>
+                    <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
                 <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEditProfile}/>
             </form>

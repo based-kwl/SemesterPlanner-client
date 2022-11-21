@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { Menu, Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
@@ -7,9 +7,9 @@ import '../Calendar/calendar.css'
 import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import { useNavigate } from "react-router";
+import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
-import MockendEvents from "./eventsMockedData.json";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,29 +20,62 @@ export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
 
-    const [event, setEvent] = useState([]);
+    const [events, setEvents] = useState([]);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const options = ['Edit', 'Delete', 'Cancel'];
+    const user = GetAuthentication();
 
-    const fetchData = () => {
-        const user = JSON.parse(localStorage.getItem('username'));
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
+    console.log(events);
+
+    function fetchData() {
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                setEvent(res.data)
+                setEvents(res.data)
             }
             ).catch((err) => {
                 // give user a error message.
             })
     }
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    function setAllEvents(events) {
+        events.reduce((allEvents, event) => {
+            const today = new Date();
+            const firstDay = new Date(today.getDay() + 1);
+            function addEventsForEachDay() {
 
-    const navigate = useNavigate();
+            }
+
+            function addEventsForEachWeek() {
+
+            }
+
+            function addEventsForEachMonth() {
+
+            }
+
+            if (event.reccurence === 'daily') {
+                addEventsForEachDay()
+            }else if (event.reccurence === 'weekly') {
+                addEventsForEachWeek()
+            }
+            else if (event.reccurence === 'monthly') {
+                addEventsForEachMonth()
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (user.username != null) {
+            fetchData();
+        } else {
+            navigate("login");
+        }
+
+    }, [])
 
     function addEventButton() {
         navigate('/event');
@@ -57,6 +90,8 @@ export default function CalendarView() {
     };
 
     const handleClose = () => {
+        
+        console.log("heeeeeeeeeeeeeeeeeeeeeyyyyyyyyyyyyy")
         setAnchorEl(null);
     };
     //deletes event on calendar home in db
@@ -178,9 +213,10 @@ export default function CalendarView() {
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
+                   
                 </div>
                 <div style={{ float: 'right' }}>
-                    <EventOptions />
+                <EventOptions />
                 </div>
             </div>
         )
@@ -190,7 +226,7 @@ export default function CalendarView() {
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                 content={eventHeader} backgroundColor='#8CC63E' />
-            {event !== undefined && event.map((e, index) => (
+            {events !== undefined && events.map((e, index) => (
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -217,18 +253,20 @@ export default function CalendarView() {
     )
 
     const DayTile = ({ day }) => {
-        const eventsThisDay = event.filter((e) => {
+        const eventsThisDay = events.filter((e) => {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
 
+
+
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
 
@@ -256,12 +294,12 @@ export default function CalendarView() {
         return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
-    const calendarPageCards = (
+    const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
             {eventsDisplay}
         </React.Fragment>
-    )
+    ), [calendarCard, calendarMonth]);
 
     return (
         <React.Fragment>

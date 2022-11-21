@@ -19,9 +19,8 @@ export default function SignIn() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(localStorage.getItem("email")){
-            if(JSON.parse(localStorage.getItem("email")) !== "")
-                window.location = "/calendar"
+        if(localStorage.getItem("email") && localStorage.getItem("email") !== undefined){
+            window.location = "/calendar"
         }
     }, [])
 

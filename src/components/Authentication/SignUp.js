@@ -1,15 +1,13 @@
 import * as React from 'react';
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import {useNavigate} from "react-router";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import {BackgroundCard, CustomWhiteCard} from '../CustomMUIComponents/CustomCards';
 import {InputAdornment, Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import {FacultySelect, ProgramSelect} from "../CustomMUIComponents/CommonForms";
+import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
 
 
 export default function SignUp() {
@@ -52,8 +50,8 @@ export default function SignUp() {
         setUserData({...userData, password: e.target.value})
     }
 
-    function handlePrivacyChange(e) {
-        setUserData({...userData, privateProfile: !userData.privateProfile})
+    function handlePrivacyChange() {
+        setUserData((prevState) => ({...userData, privateProfile: !prevState.privateProfile}))
     }
 
     function handleConfirmPasswordChange(e) {
@@ -165,15 +163,7 @@ export default function SignUp() {
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
-                        <Typography>
-                            Hide my profile
-                        </Typography>
-                        <FormControlLabel sx={{display: 'block'}} control={
-                            <Switch
-                                checked={userData.privateProfile}
-                                onChange={handlePrivacyChange}
-                            />
-                        } label={userData.privateProfile ? "Public" : "Private"} />
+                        <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
                 <PrimaryButton2 width='305px' colour={'#912338'}  disable={disableRegisterButton} content="Register" onClick={handleRegistration} />
             </form>

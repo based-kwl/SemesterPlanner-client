@@ -13,12 +13,13 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
+import GetAuthentication from "../../Authentication/Authentification";
 
 
 export default function CreateEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState({
-        username: JSON.parse(localStorage.getItem("username")),
+        username: GetAuthentication().username,
         eventHeader: '',
         description: '',
         link: '',
@@ -28,10 +29,10 @@ export default function CreateEvent() {
         endTime: '12:00',
         reccurence: 'once'
     })
-    const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
+    const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
     const navigate = useNavigate();
 
-    const reccurenceSelection = (
+    const recurrenceSelection = (
         <FormControl>
             <RadioGroup row onChange={handleReccurenceChange}>
                 <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
@@ -69,8 +70,8 @@ export default function CreateEvent() {
                 navigate('/calendar');
             })
             .catch(err => {
-                seteventError({ ...eventError, message: "Error connecting to database. " + err });
-                seteventError({ ...eventError, hasError: true });
+                setEventError({ ...eventError, message: "Error connecting to database. " + err });
+                setEventError({ ...eventError, hasError: true });
             });
     }
 
@@ -231,7 +232,7 @@ export default function CreateEvent() {
                         onChange={handleIsReccurentChange}
                     />
                 }/>
-                <div>{ isRecurrent && reccurenceSelection }</div>
+                <div>{ isRecurrent && recurrenceSelection }</div>
                 <div>{ buttons }</div>
             </form>
         </React.Fragment>
