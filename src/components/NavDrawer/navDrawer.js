@@ -21,9 +21,10 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SearchIcon from '@mui/icons-material/Search';
 import {useNavigate} from "react-router";
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import axios from "axios";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -70,6 +71,7 @@ export default function PersistentDrawerLeft(params) {
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
+    const [count, setCount] = React.useState(0);
 
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
@@ -82,12 +84,24 @@ export default function PersistentDrawerLeft(params) {
     // TODO: below method will be used when coding the search view open
     const handleSearchOpen = () => {
         setOpenSearch(true);
+        navigate('/friend-list-home');
     };
 
     // TODO: below method will be used when coding the search view close; commented out to suppress warnings, as method is not currently in use
     // const handleSearchClose = () => {
     //     setOpenSearch(false);
     // };
+    React.useEffect(()=> {
+        const email = JSON.parse(localStorage.getItem("email"));
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests/${email}`)
+            .then(res => {
+                console.log(res.data);
+                setCount(res.data.length);
+            })
+            .catch(err => {console.log('Error',err);})
+    },[])
+
+
     const navigate = useNavigate();
 
     function handleLogout() {
@@ -147,8 +161,13 @@ export default function PersistentDrawerLeft(params) {
                         aria-label="open search"
                         onClick={handleSearchOpen}
                         edge="start"
-                    >
+                    >   <Badge badgeContent={count}  showZero   overlap="circular" sx={{
+                        "& .MuiBadge-badge": {
+                                color: "white",
+                                backgroundColor: "#000000"
+                            }}}>
                         <NotificationsIcon/>
+                    </Badge>
                     </IconButton>
                 </Toolbar>
             </AppBar>
