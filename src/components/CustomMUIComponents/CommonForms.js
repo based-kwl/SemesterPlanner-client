@@ -153,7 +153,7 @@ export const CustomToggle = styled((props) => (
             transform: 'translateX(16px)',
             color: '#C8C8C8',
             '& + .MuiSwitch-track': {
-                backgroundColor: theme.palette.mode === 'dark' ? '#8CC63E' : '#8CC63E',
+                backgroundColor: '#8CC63E',
                 opacity: 1,
                 border: 0,
             },
