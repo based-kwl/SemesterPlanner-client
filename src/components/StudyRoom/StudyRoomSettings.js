@@ -11,7 +11,7 @@ export default function StudyRoomSettings() {
     const[loading,setLoading] = useState(true);
     const [roomData, setRoomData] = React.useState({
         owner:'',
-        sid:'',
+        studyRoomID:'',
         title:'',
         color: '',
         avatarText:'',
@@ -20,9 +20,9 @@ export default function StudyRoomSettings() {
     });
 
     const fetchData = useCallback(( ) => {
-        const sID = window.location.href.split("/")[window.location.href.split("/").length-1];
+        const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length-1];
         // populate settings page for owner of page
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${sID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
             .then(res => {
                 const data = res.data;
                 setRoomData(data);
@@ -55,7 +55,7 @@ export default function StudyRoomSettings() {
 
     //deletes the room in db
     function handleDelete(e){
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`,{email:roomData.owner, sID:roomData.sID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`,{email:roomData.owner, studyRoomID:roomData.studyRoomID})
             .then(() => {
                 navigate("/study-room-home");
             })

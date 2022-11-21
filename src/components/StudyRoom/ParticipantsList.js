@@ -21,7 +21,7 @@ export default function ParticipantsList() {
 
     function handleDelete(index) {
         const emailToRemove = participants[index];
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email:emailToRemove, sID:studyRoomID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email:emailToRemove, studyRoomID:studyRoomID})
             .then(res => {
                 setParticipants(res.data.participants);
                 getParticipants();
@@ -31,7 +31,7 @@ export default function ParticipantsList() {
 
     function handleAdd(index) {
         const emailToAdd = availableFriends[index];
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:emailToAdd, sID:studyRoomID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:emailToAdd, studyRoomID:studyRoomID})
             .then(res => {
                 setParticipants(res.data.participants);
                 getParticipants();

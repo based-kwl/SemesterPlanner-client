@@ -36,8 +36,8 @@ export default function StudyRoomHome() {
             .catch(err => {console.log('Error',err);})
         }
 
-    function handleDestination(sID){
-        navigate(`/study-room/${sID}`)
+    function handleDestination(studyRoomID){
+        navigate(`/study-room/${studyRoomID}`)
     }
 
         const studyGroups = (
@@ -46,7 +46,7 @@ export default function StudyRoomHome() {
                 <div style={{overflow: 'scroll', height: '80vh', marginTop: '70px'}}>
 
                     {roomData.map((item, index) => (
-                        <div  onClick={ () => handleDestination( item.sID)}>
+                        <div  onClick={ () => handleDestination( item.studyRoomID)}>
                             <SnippetCard
                                 value={item}
                                 key={index}
