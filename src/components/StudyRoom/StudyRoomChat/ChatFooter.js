@@ -8,7 +8,7 @@ export const ChatFooter = () => {
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         e.preventDefault();
         const email = localStorage.getItem('email')
-        axios.post(`${process.env.REACT_APP_BASE_URL}message/send`, {sID: studyRoomId, username: email, content: message})
+        axios.post(`${process.env.REACT_APP_BASE_URL}message/send`, {studyRoomID: studyRoomId, email    : email, content: message})
             .then((res) => {console.log(res)})
         setMessage('');
     };
