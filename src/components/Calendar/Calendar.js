@@ -203,17 +203,17 @@ export default function CalendarView() {
 
     const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
-        if (eventType == "Gym") {
+        if (eventType === "Gym") {
             backgroundColor = "#735BF2"
-        } else if (eventType == "Exam") {
+        } else if (eventType === "Exam") {
             backgroundColor = "#00B383"
-        } else if (eventType == "Volunteering") {
+        } else if (eventType === "Volunteering") {
             backgroundColor = "#800410"
         }
 
         let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
 
-        if (eventType == "none") {
+        if (eventType === "none") {
             tileIcon = (<></>);
         }
 

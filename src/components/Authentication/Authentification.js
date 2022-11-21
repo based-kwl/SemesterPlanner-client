@@ -5,15 +5,16 @@
  * else return null.
  */
 export default function GetAuthentication() {
-    return ((localStorage.getItem("email") != null)
-        || (localStorage.getItem("username") != null)
-        || (localStorage.getItem("token") != null))
-        ?
-        {
+    if ((localStorage.getItem("email") != null)
+        && (localStorage.getItem("username") != null)
+        && (localStorage.getItem("token") != null)) {
+        return {
             email: JSON.parse(localStorage.getItem("email")),
             username: JSON.parse(localStorage.getItem("username")),
             token: JSON.parse(localStorage.getItem("token"))
         }
-        : null
+    }
+    window.location='/login';
+
 }
 
