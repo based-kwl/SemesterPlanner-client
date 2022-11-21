@@ -24,7 +24,7 @@ export function GetStudyRoomChat(){
 
     function fetchMessages() {
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
-        axios.get(`${process.env.REACT_APP_BASE_URL}message/bulk/${studyRoomId}/30`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}message/bulk/${studyRoomId}/100`)
             .then(res => {
                 console.log(res.data)
                 const messageFromRoom = res.data;
