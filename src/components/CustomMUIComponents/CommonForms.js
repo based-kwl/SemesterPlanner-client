@@ -153,7 +153,7 @@ export const CustomToggle = styled((props) => (
             transform: 'translateX(16px)',
             color: '#C8C8C8',
             '& + .MuiSwitch-track': {
-                backgroundColor: theme.palette.mode === 'dark' ? '#8CC63E' : '#65C466',
+                backgroundColor: theme.palette.mode === 'dark' ? '#8CC63E' : '#8CC63E',
                 opacity: 1,
                 border: 0,
             },
@@ -162,7 +162,7 @@ export const CustomToggle = styled((props) => (
             },
         },
         '&.Mui-focusVisible .MuiSwitch-thumb': {
-            color: '#33cf4d',
+            color: '#8CC63E',
             border: '6px solid #fff',
         },
         '&.Mui-disabled .MuiSwitch-thumb': {
@@ -182,7 +182,7 @@ export const CustomToggle = styled((props) => (
     },
     '& .MuiSwitch-track': {
         borderRadius: 26 / 2,
-        backgroundColor: theme.palette.mode === 'light' ? '#DA3A16' : '#39393D',
+        backgroundColor: theme.palette.mode === 'light' ? '#912338' : '#39393D',
         opacity: 1,
         transition: theme.transitions.create(['background-color'], {
             duration: 500,
