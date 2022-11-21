@@ -16,6 +16,8 @@ import FriendNotification from "./FriendsNotification";
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {useCallback, useState} from "react";
+import notifications from "./FriendsNotification";
+
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const email = JSON.parse(localStorage.getItem("email"));
@@ -23,11 +25,9 @@ const email = JSON.parse(localStorage.getItem("email"));
 export default function FriendListHome(){
     const navigate = useNavigate();
     const[loading,setLoading] = useState(true);
-    const [count, setCount] = React.useState(0);
     const [friends, setFriends] = React.useState([]);
     const [deletedFriends, setDeletedFriends] = React.useState([]);
     const [removed, setRemoved] = React.useState(false);
-
 
     // sends the updated friend list to database
     function handleUpdate(){
@@ -55,11 +55,11 @@ export default function FriendListHome(){
         setFriends(updatedList);
         console.log('friend array', friends);
     }
-
-    function friendCount(){
-        setCount(friends.length);
-        console.log("count: ", count);
-    }
+    //
+    // function friendCount(){
+    //     setCount(friends.length);
+    //     console.log("count: ", count);
+    // }
 
     React.useEffect(()=> {
         //user needs to be logged in to access
@@ -67,8 +67,8 @@ export default function FriendListHome(){
             navigate("/login");
         }
             getFriends();
-            friendCount();
-            console.log("count:", count);
+            // friendCount();
+            // console.log("count:", count);
             console.log('deleted array initial:', deletedFriends);
 
         // console.log('in use effect: initial state deleted:', deletedFriends);

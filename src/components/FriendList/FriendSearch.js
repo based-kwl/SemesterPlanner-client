@@ -10,10 +10,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
 import {useNavigate} from "react-router";
 
-
-const ownerUsername = JSON.parse(localStorage.getItem("username"));
 const ownerEmail = JSON.parse(localStorage.getItem("email"));
-
+const ownerUsername = JSON.parse(localStorage.getItem("username"));
 
 export default function FriendSearch() {
     const [added, setAdded] = React.useState(false);
@@ -43,7 +41,7 @@ export default function FriendSearch() {
     function handleAdd(e) {
         e.preventDefault();
         setAdded(true);
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {username: ownerUsername, friendUsername: friend})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {senderEmail: ownerEmail, receiverEmail: friend})
             .then(() => {
                 console.log('sent');
             })
