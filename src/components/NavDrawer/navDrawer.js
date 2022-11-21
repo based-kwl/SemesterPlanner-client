@@ -25,6 +25,8 @@ import {useNavigate} from "react-router";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import axios from "axios";
+import BottomDrawer from "../StudyRoom/BottomDrawer";
+// import FriendNotification from "../FriendsNotification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -70,7 +72,6 @@ PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
 export default function PersistentDrawerLeft(params) {
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
-    const [openSearch, setOpenSearch] = React.useState(false);
     const [count, setCount] = React.useState(0);
 
     const handleDrawerOpen = () => {
@@ -81,16 +82,6 @@ export default function PersistentDrawerLeft(params) {
         setOpenDrawer(false);
     };
 
-    // TODO: below method will be used when coding the search view open
-    const handleSearchOpen = () => {
-        setOpenSearch(true);
-        navigate('/friend-list-home');
-    };
-
-    // TODO: below method will be used when coding the search view close; commented out to suppress warnings, as method is not currently in use
-    // const handleSearchClose = () => {
-    //     setOpenSearch(false);
-    // };
     React.useEffect(()=> {
         const email = JSON.parse(localStorage.getItem("email"));
         axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests/${email}`)
@@ -112,11 +103,6 @@ export default function PersistentDrawerLeft(params) {
     }
 
     const redirect = (buttonName) => {
-        //TODO: remove below line; line exists to suppress warning due to currently unused 'openSearch' state
-        if (openSearch === true) {
-            console.log()
-        }
-
         switch (buttonName) {
             case 'Home':
                 navigate('/calendar');
@@ -156,19 +142,13 @@ export default function PersistentDrawerLeft(params) {
                                 style={{font: 'Roboto', margin: 'auto', alignSelf: 'center'}}>
                         {params.navbarTitle}
                     </Typography>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open search"
-                        onClick={handleSearchOpen}
-                        edge="start"
-                    >   <Badge badgeContent={count}  showZero   overlap="circular" sx={{
-                        "& .MuiBadge-badge": {
+                        <BottomDrawer icon={<Badge badgeContent={count}  showZero   overlap="circular" sx={{
+                            "& .MuiBadge-badge": {
                                 color: "white",
                                 backgroundColor: "#000000"
                             }}}>
-                        <NotificationsIcon/>
-                    </Badge>
-                    </IconButton>
+                            <NotificationsIcon style={{color: 'white', height: '4vh', width: '4vh'}}/></Badge>}
+                                      title={'Notifications'} content={'</friendNotification>'}/>
                 </Toolbar>
             </AppBar>
             <Drawer
