@@ -53,55 +53,26 @@ export default function FriendSearch() {
 
     function handleSearch(e) {
         e.preventDefault();
-        let data = null;
         // can't search the owner
         if (searchName === ownerEmail || searchName === ownerUsername) {
             setText("this is the owner");
         } else {
-            console.log('data', data);
-            //check to see if the searchNAme is a username
-            axios.get(`${process.env.REACT_APP_BASE_URL}student/username/${searchName}`)
+            console.log(searchName);
+            axios.post(`${process.env.REACT_APP_BASE_URL}friend/search`, {searchInput: searchName})
                 .then(res => {
-                    data = res.data;
-                    if (data != null) {
-                        console.log("username");
-                        //make sure they are not friends
-                        const isInFriends = list.indexOf(res.data.email) > -1;
-                        if (isInFriends) {
-                            setText("already a friend");
-                            console.log('is already a friend:', isInFriends);
-                        } else {
-                            setFriend(res.data.email);
-                            setFound(true);
-                        }
-                    }
+                    const isInFriends = list.indexOf(res.data.email) > -1;
+                                    //make sure they are not friends
+                                    if (isInFriends) {
+                                        setText("already a friend");
+                                        console.log('is already a friend:', isInFriends);
+                                    } else {
+                                        setFriend(res.data.email);
+                                        setFound(true);}
                 })
                 .catch(err => {
                     console.log('Error', err);
+                    setText(err);
                 })
-            if (data == null) {
-                //check to see if the searchNAme is an email
-                axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${searchName}`)
-                    .then(res => {
-                        let data = res.data;
-                        if (data != null) {
-                            const isInFriends = list.indexOf(res.data.email) > -1;
-                            //make sure they are not friends
-                            if (isInFriends) {
-                                setText("already a friend");
-                                console.log('is already a friend:', isInFriends);
-                            } else {
-                                setFriend(res.data.email);
-                                setFound(true);
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.log('Error', err);
-                    })
-            }
-                setText("no one found");
-
         }
     }
 

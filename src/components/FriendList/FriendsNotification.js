@@ -7,32 +7,28 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
 
+
 export default function FriendNotification() {
     const [requestSent, setRequestSent] = React.useState([]);
     const [requestReceived, setRequestReceived] = React.useState([]);
-    const [count, setCount] = React.useState(0);
     const ownerEmail = JSON.parse(localStorage.getItem("email"));
 
-    //todo:cancel request doesnt cancel. The data is still in the db
     function handleCancel(index){
         const id = requestSent[index]._id;
-        axios.delete(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
             .then(() => {
-                console.log('info sent');
             })
             .catch(err => {console.log('Error:', err)});
          window.location.reload();
-
     }
+
     function handleReject(index){
         const id = requestReceived[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", requestId:id})
             .then(() => {
-                console.log('info sent');
             })
             .catch(err => {console.log('Error:', err)});
         window.location.reload();
-
     }
 
     function handleAccept(index){
@@ -45,23 +41,18 @@ export default function FriendNotification() {
         window.location.reload();
     }
 
-
     React.useEffect( ()=>{
         //friend request received
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${ownerEmail}`)
             .then(res => {
-                console.log("received", res.data);
                 setRequestReceived(res.data);
-                setCount(requestReceived.length);
             })
         // //friend request sent
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/outgoing-requests/${ownerEmail}`)
             .then(res => {
                 setRequestSent(res.data);
             })
-
     },[])
-
 
     const friendNotification = (
         <React.Fragment>
@@ -104,10 +95,7 @@ export default function FriendNotification() {
                     </div>
                 ))}
             </div>
-
         </React.Fragment>
-
-
     )
     return(friendNotification)
 }

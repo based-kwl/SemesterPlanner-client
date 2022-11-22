@@ -12,13 +12,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Typography from "@mui/material/Typography";
 import FriendSearch from "./FriendSearch";
 import Badge from '@mui/material/Badge';
-import FriendNotification from "./FriendsNotification";
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {useCallback, useState} from "react";
-import notifications from "./FriendsNotification";
+import FriendNotification from "./FriendsNotification";
 
-import RemoveIcon from '@mui/icons-material/Remove';
 
 const email = JSON.parse(localStorage.getItem("email"));
 
@@ -26,40 +24,24 @@ export default function FriendListHome(){
     const navigate = useNavigate();
     const[loading,setLoading] = useState(true);
     const [friends, setFriends] = React.useState([]);
-    const [deletedFriends, setDeletedFriends] = React.useState([]);
-    const [removed, setRemoved] = React.useState(false);
 
     // sends the updated friend list to database
     function handleUpdate(){
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`,{email:email, friends: friends})
             .then(() => {
-                console.log(friends);
-                console.log('info sent');
             })
             .catch(err => {console.log('Error:', err)});
         window.location.reload();
     }
 
     function handleCancel(){
-        console.log("in cancel");
-        setRemoved(false);
-        console.log(removed);
          getFriends();
     }
 
     function handleDelete(index){
-        console.log("in delete");
-        console.log('initial state friend:', friends);
         const updatedList = friends.filter((_, i) => i !== index);
-        console.log(updatedList);
         setFriends(updatedList);
-        console.log('friend array', friends);
     }
-    //
-    // function friendCount(){
-    //     setCount(friends.length);
-    //     console.log("count: ", count);
-    // }
 
     React.useEffect(()=> {
         //user needs to be logged in to access
@@ -67,22 +49,13 @@ export default function FriendListHome(){
             navigate("/login");
         }
             getFriends();
-            // friendCount();
-            // console.log("count:", count);
-            console.log('deleted array initial:', deletedFriends);
-
-        // console.log('in use effect: initial state deleted:', deletedFriends);
-
     },[loading])
 
     //API call to get Friend list
-    //todo:takes a while before the data populates
     const getFriends = useCallback( ( ) => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/${email}`)
             .then(res => {
-                console.log(res.data);
                 setFriends(res.data);
-                console.log('friends:', friends);
             })
             .catch(err => {console.log('Error',err);})
         setLoading(false);
@@ -108,26 +81,7 @@ export default function FriendListHome(){
                                                </>}/>
                             </div>
                         ))}
-                        {/*{deletedFriends.map((friend, index) => (*/}
-                        {/*    <div key={index}>*/}
-                        {/*{removed ?*/}
-                        {/*    <StudyRoomCard width={'81vw'} height={'40px'} backgroundColor={'#E9D3D7'}*/}
-                        {/*                   content={<> <p*/}
-                        {/*                       style={{color: '#912338', fontStyle: 'italic'}}> {friend} </p>*/}
-                        {/*                       <Button*/}
-                        {/*                           disabled={true}*/}
-                        {/*                           variant="text"*/}
-                        {/*                       ><RemoveIcon*/}
-                        {/*                           style={{color: '#912338'}}/>*/}
-                        {/*                       </Button>*/}
-                        {/*                   </>}/>*/}
-                        {/*    : <></>*/}
-
-                        {/*}*/}
-                        {/*    </div>*/}
-                        {/*))}*/}
                     </div>
-                // </div>
             }/>
 
             {/*confirmation buttons*/}
@@ -138,8 +92,8 @@ export default function FriendListHome(){
                                                                                                 spacing={2}
                                                                                                 width='100%'>
 
-                <PrimaryButton2 width={'36vw'} colour={'#057D78'} content="Confirm" onClick={handleUpdate} />
-                <PrimaryButton2 width={'36vw'} colour={'#912338'} content="Cancel" onClick={handleCancel}/>
+                <PrimaryButton2 width={'36vw'} colour={'#057D78'} content="Confirm changes" onClick={handleUpdate} />
+                <PrimaryButton2 width={'36vw'} colour={'#912338'} content="Cancel changes" onClick={handleCancel}/>
             </Stack>}/>
             {/*bottom drawer components*/}
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
@@ -159,6 +113,7 @@ export default function FriendListHome(){
                 }} > <MarkEmailUnreadIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/></Badge>}
                                title={'Requests Notification'} content={<FriendNotification/>}/></div>}/>
             </div>
+
             </React.Fragment>
     )
     return(<BackgroundCard width='96vw' height='99vh' content={friendList}/>)
