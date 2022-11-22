@@ -64,7 +64,8 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 const ListIconsA = [<CalendarViewMonthIcon style={{color: '#912338'}}/>,
     <PersonOutlineIcon style={{color: '#057D78'}}/>, <BarChartIcon style={{color: '#0072A8'}}/>,
-    <ForumIcon style={{color: '#573996'}}/>]
+    <ForumIcon style={{color: '#573996'}}/>,
+    <GroupIcon style={{color:'E5A712'}}/>]
 const ListIconsB = [<LogoutIcon style={{color: '#6e6e6e'}}/>]
 
 PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
@@ -115,6 +116,9 @@ export default function PersistentDrawerLeft(params) {
                 break;
             case 'Study Groups':
                 navigate('/study-room-home');
+                break;
+            case 'Friends List':
+                navigate('/friend-list-home');
                 break;
             case 'Logout':
                 handleLogout();
@@ -171,7 +175,7 @@ export default function PersistentDrawerLeft(params) {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {['Home', 'Profile', 'Progress Report', 'Study Groups'].map((text, index) => (
+                    {['Home', 'Profile', 'Progress Report', 'Study Groups', 'Friends List'].map((text, index) => (
                         <ListItem key={text} disablePadding onClick={() => redirect(text)}>
                             <ListItemButton>
                                 <ListItemIcon>
