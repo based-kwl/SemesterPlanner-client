@@ -115,23 +115,18 @@ export default function CalendarView() {
     }
 //I want this to use the eventId for the specific event I clicked on
     function handleEdit(index) {
-       // console.log(index)
-       // console.log(events[index])
-
-        fetchData(events[index])
+        console.log(events[index])
         // const user = JSON.parse(localStorage.getItem('username'));
         // axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)//should it be eventId now?
         // .then(() => {
-        navigate(`/editevent/${index.EventID}`);
+        navigate(`/editevent/${events[index]._id}`, {event: events[index]});
         // })
         // .catch(err => { console.log('Error:', err) });
-        console.log("123453647867")
 
     }    
-    const EventOptions = ({eventID}) => (
-        
+    const EventOptions = ({index}) => (
         <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
-            <IconButton
+            {/* <IconButton
                 sx={{ float: 'right' }}
                 aria-label="more"
                 id="long-button"
@@ -151,21 +146,46 @@ export default function CalendarView() {
                 open={open}
                 onClose={handleClose}
             >
-                {options.map((option) => (
-                    <MenuItem  value={eventID} key={option} onClick={()=> handleClose()}>
+                <MenuItem onClick={()=>{handleDelete(index)}}>
+                    Delete
+                </MenuItem>
+                <MenuItem onClick={handleEdit}>
+                    Edit
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    Cancel
+                </MenuItem> */}
+                {/* {options.map((option) => (
+                    <MenuItem key={option} onClick={handleDelete}>
                         {option}
                     </MenuItem>
-                ))}
-            </Menu>
+                ))} */}
+            {/* </Menu> */}
+            <button onClick={()=>{handleEdit(index)}}>Edit</button>
         </div>
     );
+    const datesToAddClassTo = [
+        'Fri Nov 04 2022 00:00:00 GMT-0400 (Eastern Daylight Saving Time)',
+        '2022-11-16',
+        '05,11,2022'
+    ]
 
+    //caused some ish
+    function tileClassName({ date, view }) {
+
+        // if (datesToAddClassTo.find(dDate => isSameDay(dDate, date)))
+        //     return 'highlight';
+
+    }
     const calendarMonth = (
         <React.Fragment>
             <Calendar
                 tileContent={({ date }) => <DayTile key={date} day={date} />}
-                onChange={setDates}
+                onChange={setDates }
+                {...(console.log(date.toLocaleDateString())
+    )}
                 value={date}
+                tileClassName={tileClassName}
             />
         </React.Fragment>
     )
@@ -193,7 +213,7 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate,EventID }) => {
+    const EventDisplay = ({ index, startTime, endTime, header, description, startDate }) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
@@ -208,30 +228,20 @@ export default function CalendarView() {
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
-                  
-                    <Typography variant="body2" color="text.secondary">
-                    
-                    </Typography>
+                   
                 </div>
-             
-               
                 <div style={{ float: 'right' }}>
-                
-                <button class= "button_updates" onClick={()=>handleEdit({EventID})
-            
-            }>update</button>
-                <br></br>
-                <button class= "button_updates" onClick={()=>handleDelete({EventID})}>delete</button>
+                <EventOptions index={index}/>
                 </div>
             </div>
-        )}
+        )
+    }
 
     const eventsDisplay = (
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                 content={eventHeader} backgroundColor='#8CC63E' />
             {events !== undefined && events.map((e, index) => (
-                
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -240,12 +250,12 @@ export default function CalendarView() {
                     marginTop='10px' overflow='hidden'
                     content={
                         <EventDisplay
+                            index={index}
                             startDate={e.startDate}
                             startTime={e.startTime}
                             endTime={e.endTime}
                             description={e.description}
                             header={e.eventHeader}
-                            EventID={e.eventID}
                         />}
                 />
             ))}
@@ -275,9 +285,10 @@ export default function CalendarView() {
                 <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
-        
+
         return tileContent;
     }
+
 
 
     const CalendarDayEventIcon = ({ eventType }) => {

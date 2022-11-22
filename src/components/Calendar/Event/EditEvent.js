@@ -36,13 +36,13 @@ export default function EditEvent(){
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const fetchData = useCallback(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
         .then((res) => {
-                const data = res.data;
+                const data = res.data.eve;
                 setEventData({
                     ...eventData,
-                    username: data.username,
-                    eventHeader: data.eventHeader,
+                    username: eventId.username,
+                    eventHeader: eventId.eventHeader,
                     description: data.description,
                     link: data.link,
                     startDate: data.startDate,
@@ -62,6 +62,9 @@ export default function EditEvent(){
 
     useEffect(() => {
         fetchData();
+        console.log(eventData);
+        console.log("HEEeeeeeeeeeey");
+
     }, [])
 
     const reccurenceSelection = (
@@ -120,6 +123,30 @@ export default function EditEvent(){
 
     }
 
+    function fetchEvent(EventID){
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${EventID}`)
+
+        .then((res) => {
+            const data = res.data;
+            setEventData({
+                ...eventData,
+                username: data.username,
+                eventHeader: data.eventHeader,
+                description: data.description,
+                link: data.link,
+                startDate: data.startDate,
+                endDate: data.endDate,
+                startTime: data.startTime,
+                endTime: data.endTime,
+                reccurence: data.reccurence,
+                eventID: data.eventID,
+            })
+            console.log(res.data) // TODO: remove this line 
+        }
+        ).catch((err) => {
+            // give user a error message.
+        })
+    }
  function handleEventHeaderChange(e) {
         setEventData( {...eventData, eventHeader: e.target.value })
     }
