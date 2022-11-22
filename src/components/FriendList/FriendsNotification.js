@@ -16,8 +16,9 @@ export default function FriendNotification() {
     //todo:cancel request doesnt cancel. The data is still in the db
     function handleCancel(index){
         const id = requestSent[index]._id;
-        axios.delete(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
-            .then(() => {
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
+            .then((res) => {
+                console.log("Result", res);
                 console.log('info sent');
             })
             .catch(err => {console.log('Error:', err)});
