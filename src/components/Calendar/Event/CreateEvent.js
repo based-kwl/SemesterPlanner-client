@@ -27,7 +27,9 @@ export default function CreateEvent() {
         endDate: new Date(),
         startTime: '12:00',
         endTime: '12:00',
-        reccurence: 'once'
+        reccurence: 'once',
+        eventID: '',
+
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
     const navigate = useNavigate();

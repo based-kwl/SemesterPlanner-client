@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import axios from "axios";
 import { isSameDay } from 'date-fns';
 import dayjs from 'dayjs';
+
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
@@ -28,13 +29,25 @@ export default function CalendarView() {
 
     const options = ['Edit', 'Delete', 'Cancel'];
     const user = GetAuthentication();
+    console.log("hi!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    //console.log(events);
 
-    console.log(events);
+    function deleteEvent(eventId){
+        const user = JSON.parse(localStorage.getItem('username'));
 
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
+            .then(() => {
+                navigate("/calendar");
+            })
+            .catch(err => { console.log('Error:', err) });
+            console.log("heeeeeeeeeeeeeeeeeeeeeyyyyyyyyyyyyy")
+
+    }
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
+                console.log(res.data) // TODO: remove this line 
             }
             ).catch((err) => {
                 // give user a error message.
@@ -96,23 +109,24 @@ export default function CalendarView() {
     };
     //deletes event on calendar home in db
     function handleDelete(e) {
-        const user = JSON.parse(localStorage.getItem('username'));
-
-        axios.post(`${process.env.REACT_APP_BASE_URL}events/${user}`)
-            .then(() => {
-                navigate("/calendar");
-            })
-            .catch(err => { console.log('Error:', err) });
+       deleteEvent(e)
+    // console.log(e)
 
     }
-
-    function handleEdit() {
-        navigate('/editevent')
+//I want this to use the eventId for the specific event I clicked on
+    function handleEdit(index) {
+        console.log(events)
+        // const user = JSON.parse(localStorage.getItem('username'));
+        // axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)//should it be eventId now?
+        // .then(() => {
+        navigate(`/editevent/${index.eventId}`);
+        // })
+        // .catch(err => { console.log('Error:', err) });
 
     }    
-    const EventOptions = () => (
+    const EventOptions = ({eventId}) => (
         <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
-            <IconButton
+            {/* <IconButton
                 sx={{ float: 'right' }}
                 aria-label="more"
                 id="long-button"
@@ -132,21 +146,22 @@ export default function CalendarView() {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={()=>{handleDelete(index)}}>
                     Delete
                 </MenuItem>
                 <MenuItem onClick={handleEdit}>
                     Edit
                 </MenuItem>
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={handleClose}>
                     Cancel
-                </MenuItem>
+                </MenuItem> */}
                 {/* {options.map((option) => (
                     <MenuItem key={option} onClick={handleDelete}>
                         {option}
                     </MenuItem>
                 ))} */}
-            </Menu>
+            {/* </Menu> */}
+            <button onClick={()=>{handleEdit({eventId})}}>Edit</button>
         </div>
     );
     const datesToAddClassTo = [
@@ -155,11 +170,11 @@ export default function CalendarView() {
         '05,11,2022'
     ]
 
-
+    //caused some ish
     function tileClassName({ date, view }) {
 
-        if (datesToAddClassTo.find(dDate => isSameDay(dDate, date)))
-            return 'highlight';
+        // if (datesToAddClassTo.find(dDate => isSameDay(dDate, date)))
+        //     return 'highlight';
 
     }
     const calendarMonth = (
@@ -198,7 +213,7 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate }) => {
+    const EventDisplay = ({ eventId, startTime, endTime, header, description, startDate }) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
@@ -216,7 +231,7 @@ export default function CalendarView() {
                    
                 </div>
                 <div style={{ float: 'right' }}>
-                <EventOptions />
+                <EventOptions eventId={eventId}/>
                 </div>
             </div>
         )
@@ -235,6 +250,7 @@ export default function CalendarView() {
                     marginTop='10px' overflow='hidden'
                     content={
                         <EventDisplay
+                            eventId={e.eventId}
                             startDate={e.startDate}
                             startTime={e.startTime}
                             endTime={e.endTime}

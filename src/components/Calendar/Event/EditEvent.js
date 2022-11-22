@@ -18,6 +18,8 @@ import {useCallback, useEffect, useRef, useMemo} from "react";
 
 export default function EditEvent(){
     const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
+    console.log(eventId);
     const [eventData, setEventData] = React.useState({
         username: JSON.parse(localStorage.getItem("username")),
         eventHeader: '',
@@ -27,16 +29,15 @@ export default function EditEvent(){
         endDate: new Date(),
         startTime: '12:00',
         endTime: '12:00',
-        reccurence: 'once'
+        reccurence: 'once',
+        eventID: JSON.parse(localStorage.getItem("eventID")),
     })
     const navigate = useNavigate();
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const fetchData = useCallback(() => {
-        const username = JSON.parse(localStorage.getItem('username'));
-
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${username}`)
-            .then((res) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
+        .then((res) => {
                 const data = res.data;
                 setEventData({
                     ...eventData,
@@ -49,6 +50,7 @@ export default function EditEvent(){
                     startTime: data.startTime,
                     endTime: data.endTime,
                     reccurence: data.reccurence,
+                    eventID: data.eventID,
                 })
                 console.log(data);
                 //console.log event data
@@ -113,7 +115,9 @@ export default function EditEvent(){
         e.preventDefault();
         axios.put(`${process.env.REACT_APP_BASE_URL}events/`,eventData)
             .catch(err => {console.log('Error:', err)});
-        window.location.reload();
+        //window.location.reload();
+        navigate('/calendar')
+
     }
 
  function handleEventHeaderChange(e) {
@@ -150,7 +154,7 @@ export default function EditEvent(){
     const buttons = (
         <React.Fragment>
             <div style={{ paddingTop: '20px'}}>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEvent} />
+                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleUpdate} />
             </div>
             <div style={{ paddingTop: '20px'}}>
                 <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />
@@ -163,11 +167,13 @@ export default function EditEvent(){
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
                 <Typography align='center' style={{ fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Add New Event
+                    Edit Event
                 </Typography>
                 <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
 
-                    {/** Event name */}
+                    {/** Event name 9ffc10ba-0149-4468-939a-836fa63d8aa6 
+                     * e090b0c8-91d4-4cd6-9ed5-858f25048aa1
+                    */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <TextField
                             fullWidth
