@@ -20,13 +20,14 @@ import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
+import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from "react-router";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import axios from "axios";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
-// import FriendNotification from "../FriendsNotification";
+import FriendNotification from "../FriendList/FriendsNotification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -85,10 +86,9 @@ export default function PersistentDrawerLeft(params) {
 
     React.useEffect(()=> {
         const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests-count/${email}`)
             .then(res => {
-                console.log(res.data);
-                setCount(res.data.length);
+                setCount(res.data);
             })
             .catch(err => {console.log('Error',err);})
     },[])
@@ -151,8 +151,8 @@ export default function PersistentDrawerLeft(params) {
                                 color: "white",
                                 backgroundColor: "#000000"
                             }}}>
-                            <NotificationsIcon style={{color: 'white', height: '4vh', width: '4vh'}}/></Badge>}
-                                      title={'Notifications'} content={'</friendNotification>'}/>
+                            <NotificationsIcon style={{color: 'white', height: '3vh', width: '3vh'}}/></Badge>}
+                                      title={'Notifications'} content={<FriendNotification/>}/>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -201,5 +201,5 @@ export default function PersistentDrawerLeft(params) {
                 </List>
             </Drawer>
         </Box>
-    );
+    )
 }
