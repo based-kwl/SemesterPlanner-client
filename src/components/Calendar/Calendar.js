@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
 import axios from "axios";
+import { borderRadius } from '@mui/system';
 
 export default function CalendarView() {
 
@@ -27,8 +28,20 @@ export default function CalendarView() {
 
     const options = ['Edit', 'Delete', 'Cancel'];
     const user = GetAuthentication();
-
+    console.log()
     console.log(events);
+
+     function deleteData(eventID){
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventID}`)
+        .then((res) => {
+           
+        }
+        ).catch((err) => {
+            // give user a error message.
+        })
+
+     }
+
 
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
@@ -88,13 +101,20 @@ export default function CalendarView() {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    function handleDelete(e){
+            console.log(e)
+            deleteData(e.EventID);
+            window.location.reload();
+    }
+
+    const handleClose = (e) => {
         
-        console.log("heeeeeeeeeeeeeeeeeeeeeyyyyyyyyyyyyy")
+        console.log(e.key)
         setAnchorEl(null);
     };
 
-    const EventOptions = () => (
+    const EventOptions = ({eventID}) => (
+        
         <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
             <IconButton
                 sx={{ float: 'right' }}
@@ -117,7 +137,7 @@ export default function CalendarView() {
                 onClose={handleClose}
             >
                 {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
+                    <MenuItem  value={eventID} key={option} onClick={()=> handleClose()}>
                         {option}
                     </MenuItem>
                 ))}
@@ -158,7 +178,7 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate }) => {
+    const EventDisplay = ({ startTime, endTime, header, description, startDate,EventID }) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
@@ -173,10 +193,18 @@ export default function CalendarView() {
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
-                   
+                  
+                    <Typography variant="body2" color="text.secondary">
+                    
+                    </Typography>
                 </div>
+             
+               
                 <div style={{ float: 'right' }}>
-                <EventOptions />
+                
+                <button class= "button_updates" onClick={()=>handleDelete({EventID})}>update</button>
+                <br></br>
+                <button class= "button_updates" onClick={()=>handleDelete({EventID})}>delete</button>
                 </div>
             </div>
         )}
@@ -186,6 +214,7 @@ export default function CalendarView() {
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                 content={eventHeader} backgroundColor='#8CC63E' />
             {events !== undefined && events.map((e, index) => (
+                
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -199,6 +228,7 @@ export default function CalendarView() {
                             endTime={e.endTime}
                             description={e.description}
                             header={e.eventHeader}
+                            EventID={e.eventID}
                         />}
                 />
             ))}
