@@ -100,7 +100,14 @@ export default function CalendarView() {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+    const handleEdit = (e) => {
+        
+        console.log(e.EventID)
+        navigate(`/editevent/${e.EventID}`)
+      
+    };
 
+    
     function handleDelete(e){
             console.log(e)
             deleteData(e.EventID);
@@ -202,7 +209,7 @@ export default function CalendarView() {
                
                 <div style={{ float: 'right' }}>
                 
-                <button class= "button_updates" onClick={()=>handleDelete({EventID})}>update</button>
+                <button class= "button_updates" onClick={()=>handleEdit({EventID})}>update</button>
                 <br></br>
                 <button class= "button_updates" onClick={()=>handleDelete({EventID})}>delete</button>
                 </div>

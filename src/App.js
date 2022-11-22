@@ -8,6 +8,7 @@ import CreateEvent from './components/Calendar/Event/CreateEvent';
 import ColorSettings from './components/Calendar/EventColorSelector/EventColorDisplay'
 import EventColorSelector from './components/Calendar/EventColorSelector/EventColorSelector'
 import StudyRoom from './components/StudyRoom/StudyRoom';
+import EditEvent from './components/Calendar/Event/EditEvent';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
 
@@ -26,7 +27,7 @@ function AppRoutes() {
             <Route path="/event" element={<CreateEvent />} />
             <Route path="/colorsetting" element={<ColorSettings />} />
             <Route path="/colorselector" element={<EventColorSelector />} />
-
+            <Route path="/editevent/:eventId" element={<React.StrictMode><EditEvent /></React.StrictMode>} />
             <Route path="/login" element={<React.StrictMode><SignIn /></React.StrictMode>} />
             <Route path="/signup" element={<React.StrictMode><SignUp /></React.StrictMode>} />
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />
