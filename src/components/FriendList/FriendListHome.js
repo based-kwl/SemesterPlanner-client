@@ -43,7 +43,7 @@ export default function FriendListHome(){
 
     React.useEffect(()=> {
         const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests-count/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
             .then(res => {
                 let count = res.data;
                 if (count > 0){

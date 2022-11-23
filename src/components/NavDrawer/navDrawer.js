@@ -86,7 +86,7 @@ export default function PersistentDrawerLeft(params) {
 
     React.useEffect(()=> {
         const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend//incoming-requests-count/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
             .then(res => {
                 setCount(res.data);
             })
