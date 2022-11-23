@@ -7,9 +7,9 @@ import '../Calendar/calendar.css'
 import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import { useNavigate } from "react-router";
+import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
-import MockendEvents from "./eventsMockedData.json";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,12 +23,13 @@ export default function CalendarView() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const options = ['Edit', 'Delete', 'Cancel'];
+    const user = GetAuthentication();
 
-    const fetchData = () => {
-        const user = JSON.parse(localStorage.getItem('username'));
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user}`)
+    function fetchData() {
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvent(res.data)
             }
@@ -37,11 +38,16 @@ export default function CalendarView() {
             })
     }
 
-    useEffect(() => {
-        fetchData();
-    }, [])
 
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user.username != null) {
+            fetchData();
+        } else {
+            navigate("login");
+        }
+
+    }, [])
 
     function addEventButton() {
         navigate('/event');
@@ -184,10 +190,10 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={day} eventType={e.eventHeader} />
             ))
         }
         
@@ -197,17 +203,17 @@ export default function CalendarView() {
 
     const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
-        if (eventType == "Gym") {
+        if (eventType === "Gym") {
             backgroundColor = "#735BF2"
-        } else if (eventType == "Exam") {
+        } else if (eventType === "Exam") {
             backgroundColor = "#00B383"
-        } else if (eventType == "Volunteering") {
+        } else if (eventType === "Volunteering") {
             backgroundColor = "#800410"
         }
 
         let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
 
-        if (eventType == "none") {
+        if (eventType === "none") {
             tileIcon = (<></>);
         }
 

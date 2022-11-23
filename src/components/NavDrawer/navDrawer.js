@@ -97,9 +97,9 @@ export default function PersistentDrawerLeft(params) {
     const navigate = useNavigate();
 
     function handleLogout() {
-        localStorage.setItem("token", '');
-        localStorage.setItem("email", '');
-        localStorage.setItem("username", '');
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+        localStorage.removeItem("username");
         navigate('/login');
     }
 

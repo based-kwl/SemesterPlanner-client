@@ -19,9 +19,8 @@ export default function SignIn() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(localStorage.getItem("email")){
-            if(JSON.parse(localStorage.getItem("email")) !== "")
-                window.location = "/calendar"
+        if(localStorage.getItem("email") && localStorage.getItem("email") !== undefined){
+            window.location = "/calendar"
         }
     }, [])
 
@@ -38,7 +37,7 @@ export default function SignIn() {
                 SetLocalStorage(res);
                 navigate('/calendar');
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) == (401).toString() ? 'Incorrect username or password.' : `${err}`)});
+            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Incorrect username or password.' : `${err}`)});
     }
     
     const signInForm = (
