@@ -20,10 +20,14 @@ import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
-import LogoutIcon from '@mui/icons-material/Logout';
-import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
-import { useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import {useNavigate} from "react-router";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import axios from "axios";
+import BottomDrawer from "../StudyRoom/BottomDrawer";
+import FriendNotification from "../FriendList/FriendsNotification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -70,7 +74,7 @@ PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
 export default function PersistentDrawerLeft(params) {
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
-    const [openSearch, setOpenSearch] = React.useState(false);
+    const [count, setCount] = React.useState(0);
 
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
@@ -80,17 +84,17 @@ export default function PersistentDrawerLeft(params) {
         setOpenDrawer(false);
     };
 
-    // TODO: below method will be used when coding the search view open
-    const handleSearchOpen = () => {
-        setOpenSearch(true);
-    };
+    React.useEffect(()=> {
+        const email = JSON.parse(localStorage.getItem("email"));
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
+            .then(res => {
+                setCount(res.data);
+            })
+            .catch(err => {console.log('Error',err);})
+    },[])
 
-    // TODO: below method will be used when coding the search view close; commented out to suppress warnings, as method is not currently in use
-    // const handleSearchClose = () => {
-    //     setOpenSearch(false);
-    // };
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     function handleLogout() {
         localStorage.setItem("token", '');
@@ -100,11 +104,6 @@ export default function PersistentDrawerLeft(params) {
     }
 
     const redirect = (buttonName) => {
-        //TODO: remove below line; line exists to suppress warning due to currently unused 'openSearch' state
-        if (openSearch === true) {
-            console.log()
-        }
-
         switch (buttonName) {
             case 'Home':
                 navigate('/calendar');
@@ -147,14 +146,13 @@ export default function PersistentDrawerLeft(params) {
                                 style={{font: 'Roboto', margin: 'auto', alignSelf: 'center'}}>
                         {params.navbarTitle}
                     </Typography>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open search"
-                        onClick={handleSearchOpen}
-                        edge="start"
-                    >
-                        <SearchIcon/>
-                    </IconButton>
+                        <BottomDrawer icon={<Badge badgeContent={count}  showZero   overlap="circular" sx={{
+                            "& .MuiBadge-badge": {
+                                color: "white",
+                                backgroundColor: "#000000"
+                            }}}>
+                            <NotificationsIcon style={{color: 'white', height: '3vh', width: '3vh'}}/></Badge>}
+                                      title={'Notifications'} content={<FriendNotification/>}/>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -203,5 +201,5 @@ export default function PersistentDrawerLeft(params) {
                 </List>
             </Drawer>
         </Box>
-    );
+    )
 }

@@ -5,7 +5,6 @@ import {Stack} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -13,17 +12,16 @@ import Typography from "@mui/material/Typography";
 import FriendSearch from "./FriendSearch";
 import Badge from '@mui/material/Badge';
 import axios from "axios";
-import {useNavigate} from "react-router";
 import {useCallback, useState} from "react";
 import FriendNotification from "./FriendsNotification";
+import GroupIcon from '@mui/icons-material/Group';
 
-
-const email = JSON.parse(localStorage.getItem("email"));
 
 export default function FriendListHome(){
-    const navigate = useNavigate();
-    const[loading,setLoading] = useState(true);
+    const [loading,setLoading] = useState(true);
     const [friends, setFriends] = React.useState([]);
+    const [visible, setVisible] = React.useState(false);
+    const email = JSON.parse(localStorage.getItem("email"));
 
     // sends the updated friend list to database
     function handleUpdate(){
@@ -44,12 +42,17 @@ export default function FriendListHome(){
     }
 
     React.useEffect(()=> {
-        //user needs to be logged in to access
-        if (email === undefined || email === '') {
-            navigate("/login");
-        }
+        const email = JSON.parse(localStorage.getItem("email"));
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
+            .then(res => {
+                let count = res.data;
+                if (count > 0){
+                    setVisible(true);
+                }
+            })
+            .catch(err => {console.log('Error',err);})
             getFriends();
-    },[loading])
+    },[loading, visible])
 
     //API call to get Friend list
     const getFriends = useCallback( ( ) => {
@@ -105,12 +108,22 @@ export default function FriendListHome(){
                 <StudyRoomChatCard width='46vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<Badge badgeContent={0}  showZero   overlap="circular" sx={{
+                ><BottomDrawer icon={<Badge variant="dot" overlap="circular" invisible={!visible} sx={{
                     "& .MuiBadge-badge": {
+                        border: `3px solid black`,
                         color: "white",
                         backgroundColor: "#000000"
+                    },
+                    ".MuiBadge-dot":{
+                        height: 15,
+                        minWidth: 15,
+                        borderRadius: 10
+
                     }
-                }} > <MarkEmailUnreadIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/></Badge>}
+                }} >
+                    <GroupIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>
+                </Badge>
+                }
                                title={'Requests Notification'} content={<FriendNotification/>}/></div>}/>
             </div>
 
