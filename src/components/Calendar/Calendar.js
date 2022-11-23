@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState, useEffect, useMemo} from 'react';
-import { Menu, Typography } from "@mui/material";
+import {Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
@@ -10,11 +10,8 @@ import { useNavigate } from "react-router";
 import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import MenuItem from '@mui/material/MenuItem';
 import axios from "axios";
-import { borderRadius } from '@mui/system';
+
 
 export default function CalendarView() {
 
@@ -22,11 +19,10 @@ export default function CalendarView() {
 
     const [events, setEvents] = useState([]);
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+
     const navigate = useNavigate();
 
-    const options = ['Edit', 'Delete', 'Cancel'];
+    
     const user = GetAuthentication();
     console.log()
     console.log(events);
@@ -53,33 +49,7 @@ export default function CalendarView() {
             })
     }
 
-    function setAllEvents(events) {
-        events.reduce((allEvents, event) => {
-            const today = new Date();
-            const firstDay = new Date(today.getDay() + 1);
-            function addEventsForEachDay() {
-
-            }
-
-            function addEventsForEachWeek() {
-
-            }
-
-            function addEventsForEachMonth() {
-
-            }
-
-            if (event.reccurence === 'daily') {
-                addEventsForEachDay()
-            }else if (event.reccurence === 'weekly') {
-                addEventsForEachWeek()
-            }
-            else if (event.reccurence === 'monthly') {
-                addEventsForEachMonth()
-            }
-        })
-    }
-
+    
     useEffect(() => {
         if (user.username != null) {
             fetchData();
@@ -97,9 +67,7 @@ export default function CalendarView() {
         setDate(d);
     }
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+   
     const handleEdit = (e) => {
         
         console.log(e.EventID)
@@ -113,44 +81,6 @@ export default function CalendarView() {
             deleteData(e.EventID);
             window.location.reload();
     }
-
-    const handleClose = (e) => {
-        
-        console.log(e.key)
-        setAnchorEl(null);
-    };
-
-    const EventOptions = ({eventID}) => (
-        
-        <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
-            <IconButton
-                sx={{ float: 'right' }}
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertIcon />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                getContentAnchorEl={undefined}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-                open={open}
-                onClose={handleClose}
-            >
-                {options.map((option) => (
-                    <MenuItem  value={eventID} key={option} onClick={()=> handleClose()}>
-                        {option}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
-    );
 
     const calendarMonth = (
         <React.Fragment>
@@ -272,17 +202,17 @@ export default function CalendarView() {
 
     const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
-        if (eventType == "Gym") {
+        if (eventType === "Gym") {
             backgroundColor = "#735BF2"
-        } else if (eventType == "Exam") {
+        } else if (eventType === "Exam") {
             backgroundColor = "#00B383"
-        } else if (eventType == "Volunteering") {
+        } else if (eventType === "Volunteering") {
             backgroundColor = "#800410"
         }
 
         let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
 
-        if (eventType == "none") {
+        if (eventType === "none") {
             tileIcon = (<></>);
         }
 

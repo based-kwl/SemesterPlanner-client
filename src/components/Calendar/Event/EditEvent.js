@@ -13,7 +13,7 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import {useCallback, useEffect, useRef, useMemo} from "react";
+import {useCallback, useEffect} from "react";
 
 
 export default function EditEvent(){
@@ -104,40 +104,7 @@ export default function EditEvent(){
     }
 
    
-    // sends updated field to db
-    function handleUpdate(e) {
-        e.preventDefault();
-        axios.put(`${process.env.REACT_APP_BASE_URL}events/`,eventData)
-            .catch(err => {console.log('Error:', err)});
-        //window.location.reload();
-        navigate('/calendar')
 
-    }
-
-    function fetchEvent(EventID){
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${EventID}`)
-
-        .then((res) => {
-            const data = res.data;
-            setEventData({
-                ...eventData,
-                username: data.username,
-                eventHeader: data.eventHeader,
-                description: data.description,
-                link: data.link,
-                startDate: data.startDate,
-                endDate: data.endDate,
-                startTime: data.startTime,
-                endTime: data.endTime,
-                reccurence: data.reccurence,
-                eventID: data.eventID,
-            })
-            console.log(res.data) // TODO: remove this line 
-        }
-        ).catch((err) => {
-            // give user a error message.
-        })
-    }
  function handleEventHeaderChange(e) {
         setEventData( {...eventData, eventHeader: e.target.value })
         console.log(eventData)
@@ -154,11 +121,11 @@ export default function EditEvent(){
     }
 
     function handleStartTimeChange(e) {
-        setEventData({ ...eventData, startTime: e.target.value.toString() })
+        setEventData({ ...eventData, startTime: e.target.value})
     }
 
     function handleEndTimeChange(e) {
-        setEventData({ ...eventData, endTime: e.target.value.toString() })
+        setEventData({ ...eventData, endTime: e.target.value})
     }
 
     const PageError = eventError.hasError ? (
@@ -200,6 +167,7 @@ export default function EditEvent(){
                             id='eventHeader'
                             value={eventData.eventHeader}
                             required
+                            InputLabelProps={{ shrink:"Event Name" }}  
                             label="Event Name"
                             variant='outlined'
                             onChange={handleEventHeaderChange}
@@ -211,6 +179,7 @@ export default function EditEvent(){
                         <TextField
                             fullWidth
                             id='description'
+                            InputLabelProps={{ shrink:"Description" }}  
                             value={eventData.description}
                             label="Description"
                             variant='outlined'
