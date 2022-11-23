@@ -35,7 +35,6 @@ export default function FriendNotification() {
         const id = requestReceived[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted", requestId:id})
             .then(() => {
-                console.log('info sent');
             })
             .catch(err => {console.log('Error:', err)});
         window.location.reload();
