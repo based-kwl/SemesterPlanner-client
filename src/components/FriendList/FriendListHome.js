@@ -15,13 +15,15 @@ import axios from "axios";
 import {useCallback, useState} from "react";
 import FriendNotification from "./FriendsNotification";
 import GroupIcon from '@mui/icons-material/Group';
+import GetAuthentication from "../Authentication/Authentification";
 
 
 export default function FriendListHome(){
     const [loading,setLoading] = useState(true);
     const [friends, setFriends] = React.useState([]);
     const [visible, setVisible] = React.useState(false);
-    const email = JSON.parse(localStorage.getItem("email"));
+    const email = GetAuthentication().email;
+
 
     // sends the updated friend list to database
     function handleUpdate(){
@@ -42,7 +44,6 @@ export default function FriendListHome(){
     }
 
     React.useEffect(()=> {
-        const email = JSON.parse(localStorage.getItem("email"));
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
             .then(res => {
                 let count = res.data;

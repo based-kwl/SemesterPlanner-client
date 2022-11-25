@@ -6,12 +6,17 @@ import Button from "@mui/material/Button";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
+import GetAuthentication from "../Authentication/Authentification";
+import {useState} from "react";
 
 
 export default function FriendNotification() {
     const [requestSent, setRequestSent] = React.useState([]);
     const [requestReceived, setRequestReceived] = React.useState([]);
-    const ownerEmail = JSON.parse(localStorage.getItem("email"));
+    const [loadingCancel,setLoadingCancel] = useState(false);
+    const [loadingReject,setLoadingReject] = useState(false);
+    const [loadingAccept,setLoadingAccept] = useState(false);
+    const ownerEmail = GetAuthentication().email;
 
     function handleCancel(index){
         const id = requestSent[index]._id;
@@ -19,7 +24,8 @@ export default function FriendNotification() {
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
-         window.location.reload();
+        setLoadingCancel(true);
+
     }
 
     function handleReject(index){
@@ -28,7 +34,7 @@ export default function FriendNotification() {
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
-        window.location.reload();
+        setLoadingReject(true);
     }
 
     function handleAccept(index){
@@ -37,7 +43,7 @@ export default function FriendNotification() {
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
-        window.location.reload();
+        setLoadingAccept(true);
     }
 
     React.useEffect( ()=>{
@@ -51,7 +57,7 @@ export default function FriendNotification() {
             .then(res => {
                 setRequestSent(res.data);
             })
-    },[])
+    },[loadingCancel, loadingAccept, loadingReject])
 
     const friendNotification = (
         <React.Fragment>

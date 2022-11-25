@@ -8,10 +8,8 @@ import AddIcon from "@mui/icons-material/Add";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
-import {useNavigate} from "react-router";
+import GetAuthentication from "../Authentication/Authentification";
 
-const ownerEmail = JSON.parse(localStorage.getItem("email"));
-const ownerUsername = JSON.parse(localStorage.getItem("username"));
 
 export default function FriendSearch() {
     const [added, setAdded] = React.useState(false);
@@ -19,14 +17,11 @@ export default function FriendSearch() {
     const [searchName, setSearchName] = React.useState(null);
     const [friend, setFriend] = React.useState('');
     const [list, setList] = React.useState('');
-    const [text, setText] = React.useState('no one found');
-    const navigate = useNavigate();
+    const [text, setText] = React.useState('');
+    const ownerEmail = GetAuthentication().email;
+    const ownerUsername = GetAuthentication().username;
 
     React.useEffect(() => {
-        //user needs to be logged in to access
-        if (ownerEmail === undefined || ownerEmail === '') {
-            navigate("/login");
-        }
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/${ownerEmail}`)
             .then(res => {
                 setList(res.data);
@@ -37,18 +32,23 @@ export default function FriendSearch() {
 
     }, [text])
 
+    function resetState() {
+        setText('')
+        setFound(false);
+        setAdded(false);
+    }
+
     //send a friend request
     function handleAdd(e) {
         e.preventDefault();
         setAdded(true);
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {senderEmail: ownerEmail, receiverEmail: friend})
             .then(() => {
-                console.log('sent');
             })
             .catch(err => {
                 console.log('Error:', err)
             });
-        window.location.reload();
+        setSearchName("");
     }
 
     function handleSearch(e) {
@@ -64,13 +64,11 @@ export default function FriendSearch() {
                                     //make sure they are not friends
                                     if (isInFriends) {
                                         setText("already a friend");
-                                        console.log('is already a friend:', isInFriends);
                                     } else {
                                         setFriend(res.data.email);
                                         setFound(true);}
                 })
                 .catch(err => {
-                    console.log('Error', err);
                     setText(err);
                 })
         }
@@ -88,7 +86,7 @@ export default function FriendSearch() {
                     variant='outlined'
                     onChange={(e) => {
                         setSearchName(e.target.value);
-                        setText('')
+                        resetState();
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment

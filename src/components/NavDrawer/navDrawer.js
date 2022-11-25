@@ -28,6 +28,7 @@ import Badge from '@mui/material/Badge';
 import axios from "axios";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import FriendNotification from "../FriendList/FriendsNotification";
+import GetAuthentication from "../Authentication/Authentification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -75,6 +76,7 @@ export default function PersistentDrawerLeft(params) {
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
     const [count, setCount] = React.useState(0);
+    const email = GetAuthentication().email;
 
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
@@ -85,7 +87,6 @@ export default function PersistentDrawerLeft(params) {
     };
 
     React.useEffect(()=> {
-        const email = JSON.parse(localStorage.getItem("email"));
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
             .then(res => {
                 setCount(res.data);
