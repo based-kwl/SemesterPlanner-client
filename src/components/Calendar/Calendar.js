@@ -11,13 +11,13 @@ import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
-import { addDays } from 'date-fns'
 
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
 
     const [events, setEvents] = useState([]);
+    const [acadEvents, setAcedemicEvents] = useState([]);
 
 
     const navigate = useNavigate();
@@ -43,17 +43,33 @@ export default function CalendarView() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
+                console.log(res.data)
             }
             ).catch((err) => {
                 // give user a error message.
             })
     }
-
+    // need confirmation on how to call 
+    function fetchAcadData(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}openData/${user.schedule}/${user.courseId}/${user.subject}/${user.catalog}`)
+        .then((res) => {
+            setAcedemicEvents(res.data)
+            console.log(res.data)
+        }
+        ).catch((err) => {
+            // give user a error message.
+        })
+    }
 
     useEffect(() => {
         if (user.username != null) {
             fetchData();
-        } else {
+        } 
+        else if(user.schedule != null){
+            fetchAcadData();
+        }
+        
+        else {
             navigate("login");
         }
 
@@ -81,16 +97,20 @@ export default function CalendarView() {
         deleteData(e.EventID);
         window.location.reload();
     }
-    const arrDates = [
-        new Date(2022, 10, 20),
-        new Date(2022, 10, 28),
-        new Date(2022, 10, 30),
-    ]
-
     const AcademicEventsTile = ({ date }) => {
-        if (arrDates.find((dDate) => isSameDate(dDate, date))) {
-            return "highlight"
+        const academicEvents = events.filter((e)=>{
+            const event = new Date(e.startDate);
+            return isSameDate(event, date)
+        }) ;
+
+        let AcademicTileContent;
+        if(academicEvents.length < 1){
+            AcademicTileContent = (<></>);
         }
+        else {
+            AcademicTileContent = "academicHighlight"
+        }
+        return AcademicTileContent
     }
     const calendarMonth = (
         <React.Fragment>
