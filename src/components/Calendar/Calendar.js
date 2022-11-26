@@ -185,7 +185,7 @@ export default function CalendarView() {
 
     const eventsDisplay = (
      <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-        content={<EventHeader content={"School"}/>} backgroundColor='#0095FFs' />
+        content={<EventHeader content={"School"}/>} backgroundColor='#0095FF' />
         <div className="events">
          
             {events !== undefined && events.map((e, index) => (
