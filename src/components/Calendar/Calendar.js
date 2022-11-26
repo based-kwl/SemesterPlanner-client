@@ -51,7 +51,7 @@ export default function CalendarView() {
     }
     // need confirmation on how to call 
     function fetchAcadData(){
-        axios.get(`${process.env.REACT_APP_BASE_URL}openData/${user.schedule}/${user.courseId}/${user.subject}/${user.catalog}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
         .then((res) => {
             setAcedemicEvents(res.data)
             console.log(res.data)
@@ -64,10 +64,10 @@ export default function CalendarView() {
     useEffect(() => {
         if (user.username != null) {
             fetchData();
-        } 
-        else if(user.schedule != null){
             fetchAcadData();
-        }
+
+        } 
+     
         
         else {
             navigate("login");
@@ -98,8 +98,8 @@ export default function CalendarView() {
         window.location.reload();
     }
     const AcademicEventsTile = ({ date }) => {
-        const academicEvents = events.filter((e)=>{
-            const event = new Date(e.startDate);
+        const academicEvents = acadEvents.filter((e)=>{
+            const event = new Date(e.date);
             return isSameDate(event, date)
         }) ;
 
@@ -112,6 +112,7 @@ export default function CalendarView() {
         }
         return AcademicTileContent
     }
+    
     const calendarMonth = (
         <React.Fragment>
             <Calendar
@@ -135,32 +136,34 @@ export default function CalendarView() {
         </React.Fragment>
     )
 
-    const eventHeader = (
+    const EventHeader = ({content})=>{
+        return(
         <React.Fragment>
+        
             <CardContent>
                 <Typography color="#000000" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
-                    School
+                    {content}
                 </Typography>
             </CardContent>
         </React.Fragment>
-    )
+   ) }
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID }) => {
+    const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID, modifiable }) => {
         const currentDate = new Date(startDate);
         return (
-            <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
+            <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display:'flow'}}>
                 <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + currentDate.getMonth() + 1 : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
                         {header}
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
 
@@ -172,18 +175,19 @@ export default function CalendarView() {
 
                 <div style={{ float: 'right' }}>
 
-                    <button class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
+                    {modifiable?<><button class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
                     <br></br>
-                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button>
+                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button></>: <></>}
                 </div>
             </div>
         )
     }
 
     const eventsDisplay = (
+     <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
+        content={<EventHeader content={"School"}/>} backgroundColor='#0095FFs' />
         <div className="events">
-            <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-                content={eventHeader} backgroundColor='#8CC63E' />
+         
             {events !== undefined && events.map((e, index) => (
 
                 <EventCard
@@ -200,12 +204,43 @@ export default function CalendarView() {
                             description={e.description}
                             header={e.eventHeader}
                             EventID={e.eventID}
+                            modifiable={true}
+
                         />}
                 />
             ))}
         </div>
+        </>  
     )
 
+    const academicEventsDisplay = (
+      <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial' 
+        content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
+       <div className="events">
+          
+            {acadEvents !== undefined && acadEvents.map((e, index) => (
+
+                <EventCard
+                    key={index}
+                    justifyContent="left"
+                    width="360px"
+                    height='130px'
+                    marginTop='10px' overflow='hidden'
+                    content={
+                        <EventDisplay
+                            startDate={e.date}
+                            startTime={"00:00"}
+                            endTime={"23:59"}
+                            header={e.description}
+                            EventID={e._id}
+                            modifiable={false}
+
+                        />}
+                />
+            ))}
+        </div>
+        </> 
+    )
     const isSameDate = (date1, date2) => (
         date1.getFullYear() === date2.getFullYear()
         && date1.getMonth() === date2.getMonth()
@@ -217,7 +252,7 @@ export default function CalendarView() {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
-        console.log(date)
+       // console.log(date)
 
 
 
@@ -258,6 +293,7 @@ export default function CalendarView() {
         <React.Fragment>
             {calendarCard}
             {eventsDisplay}
+            {academicEventsDisplay}
         </React.Fragment>
     ), [calendarCard, calendarMonth]);
 
