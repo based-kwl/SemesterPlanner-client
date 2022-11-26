@@ -110,9 +110,10 @@
   .react-calendar__century-view .react-calendar__tile {
   }
 
-  .highlight {
-    color:red;
- }
+  .react-calendar .highlight {
+    background: #E5A712;
+    border-radius: 15px;
+  }
   .react-calendar__tile {
     max-width: 100%;
     padding: 6px;
@@ -136,9 +137,13 @@
     background: #4cbfec;
   }
   .react-calendar__tile--hasActive {
+    background: #ef00e3;
+    border-radius: 15px;
   }
   .react-calendar__tile--hasActive:enabled:hover,
   .react-calendar__tile--hasActive:enabled:focus {
+    background: #ef00e3;
+    border-radius: 15px;
   }
   .react-calendar__tile--active {
     background: #735BF2;

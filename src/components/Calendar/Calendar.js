@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useState, useEffect, useMemo} from 'react';
-import {Typography } from "@mui/material";
+import { useState, useEffect, useMemo } from 'react';
+import { Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
@@ -11,7 +11,7 @@ import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
-
+import { addDays } from 'date-fns'
 
 export default function CalendarView() {
 
@@ -22,21 +22,21 @@ export default function CalendarView() {
 
     const navigate = useNavigate();
 
-    
+
     const user = GetAuthentication();
     console.log()
     console.log(events);
 
-     function deleteData(eventID){
+    function deleteData(eventID) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventID}`)
-        .then((res) => {
-           
-        }
-        ).catch((err) => {
-            // give user a error message.
-        })
+            .then((res) => {
 
-     }
+            }
+            ).catch((err) => {
+                // give user a error message.
+            })
+
+    }
 
 
     function fetchData() {
@@ -49,7 +49,7 @@ export default function CalendarView() {
             })
     }
 
-    
+
     useEffect(() => {
         if (user.username != null) {
             fetchData();
@@ -67,30 +67,43 @@ export default function CalendarView() {
         setDate(d);
     }
 
-   
+
     const handleEdit = (e) => {
-        
+
         console.log(e.EventID)
         navigate(`/editevent/${e.EventID}`)
-      
+
     };
 
-    
-    function handleDelete(e){
-            console.log(e)
-            deleteData(e.EventID);
-            window.location.reload();
-    }
 
+    function handleDelete(e) {
+        console.log(e)
+        deleteData(e.EventID);
+        window.location.reload();
+    }
+    const arrDates = [
+        new Date(2022, 10, 20),
+        new Date(2022, 10, 28),
+        new Date(2022, 10, 30),
+    ]
+
+    const AcademicEventsTile = ({ date }) => {
+        if (arrDates.find((dDate) => isSameDate(dDate, date))) {
+            return "highlight"
+        }
+    }
     const calendarMonth = (
         <React.Fragment>
             <Calendar
                 tileContent={({ date }) => <DayTile key={date} day={date} />}
+                tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}
             />
         </React.Fragment>
     )
+
+
 
     const calendarCard = (
         <React.Fragment>
@@ -115,7 +128,7 @@ export default function CalendarView() {
     )
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate,EventID }) => {
+    const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID }) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
@@ -130,28 +143,29 @@ export default function CalendarView() {
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
-                  
+
                     <Typography variant="body2" color="text.secondary">
-                    
+
                     </Typography>
                 </div>
-             
-               
+
+
                 <div style={{ float: 'right' }}>
-                
-                <button class= "button_updates" onClick={()=>handleEdit({EventID})}>update</button>
-                <br></br>
-                <button class= "button_updates" onClick={()=>handleDelete({EventID})}>delete</button>
+
+                    <button class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
+                    <br></br>
+                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button>
                 </div>
             </div>
-        )}
+        )
+    }
 
     const eventsDisplay = (
         <div className="events">
             <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
                 content={eventHeader} backgroundColor='#8CC63E' />
             {events !== undefined && events.map((e, index) => (
-                
+
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -183,6 +197,7 @@ export default function CalendarView() {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
+        console.log(date)
 
 
 
@@ -195,7 +210,7 @@ export default function CalendarView() {
                 <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
-        
+
         return tileContent;
     }
 
