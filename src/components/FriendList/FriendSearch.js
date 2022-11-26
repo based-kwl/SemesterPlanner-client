@@ -57,7 +57,6 @@ export default function FriendSearch() {
         if (searchName === ownerEmail || searchName === ownerUsername) {
             setText("this is the owner");
         } else {
-            console.log(searchName);
             axios.post(`${process.env.REACT_APP_BASE_URL}friend/search`, {searchInput: searchName})
                 .then(res => {
                     const isInFriends = list.indexOf(res.data.email) > -1;
