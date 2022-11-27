@@ -14,7 +14,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import {useCallback, useEffect} from "react";
-
+import { reccurenceSelection } from '../CommonCalendarComponents/CommonCalForms';
 
 export default function EditEvent(){
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -28,59 +28,7 @@ export default function EditEvent(){
     const navigate = useNavigate();
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
-    const fetchData = useCallback(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
-        .then((res) => {
-                const data = res.data;
-                setEventData({
-                    ...eventData,
-                    username: data.username,
-                    eventHeader: data.eventHeader,
-                    description: data.description,
-                    link: data.link,
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    startTime: data.startTime,
-                    endTime: data.endTime,
-                    reccurence: data.reccurence,
-                    eventID: data.eventID,
-                })
-                console.log(data);
-                //console.log event data
-            }
-        ).catch((err) => {
-            seteventError(err.message)
-        });
-    }, [])
 
-    useEffect(() => {
-        fetchData();
-        console.log(eventData);
-    }, [])
-
-    const reccurenceSelection = (
-        <FormControl>
-            <RadioGroup row onChange={handleReccurenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
-                <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
-                <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
-            </RadioGroup>
-
-            {/** Event End Date */}
-            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        key={"endDate"}
-                        label="Ending date"
-                        inputFormat="MM/DD/YYYY"
-                        value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                    />
-                </LocalizationProvider>
-            </div>
-        </FormControl>
-    );
 
     function handleReccurenceChange(e) {
         setEventData({ ...eventData, reccurence: e.target.value})
@@ -263,7 +211,7 @@ export default function EditEvent(){
                         onChange={handleIsReccurentChange}
                     />
                 }/>
-                <div>{ isRecurrent && reccurenceSelection }</div>
+                <div>{ isRecurrent &&   <reccurenceSelection  handleReccurenceChange={handleReccurenceChange} /> }</div>
                 <div>{ buttons }</div>
             </form>
         </React.Fragment>
