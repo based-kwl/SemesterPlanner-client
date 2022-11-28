@@ -4,7 +4,6 @@ import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/Custo
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router";
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
 import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -14,7 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { useCallback, useEffect } from "react";
-import { CalendarDatePicker, CalendarTextField, CalendarTimePicker } from '../Custom/CustomCalendarForms';
+import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent, EditButton, CancelButton } from '../Custom/CustomCalendarForms';
 
 export default function EditEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -32,7 +31,8 @@ export default function EditEvent() {
                 )
             }
             ).catch((err) => {
-                seteventError({ ...eventError, message: err.message});            });
+                seteventError({ ...eventError, message: err.message });
+            });
     }, [])
 
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function EditEvent() {
             .catch(err => {
                 seteventError({ ...eventError, message: "Error connecting to database. " + err });
                 seteventError({ ...eventError, hasError: true });
-                
+
             });
     }
 
@@ -118,12 +118,11 @@ export default function EditEvent() {
 
     const buttons = (
         <React.Fragment>
-            <div style={{ paddingTop: '20px' }}>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={() => { handleEvent() }} />
-            </div>
-            <div style={{ paddingTop: '20px' }}>
-                <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />
-            </div>
+          
+    
+            <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
+            <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Cancel" onClick={() => { handleEvent() }} />
+
         </React.Fragment>
     );
 
@@ -152,7 +151,7 @@ export default function EditEvent() {
 
                     {/** Event description */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-              
+
                         <CalendarTextField
                             id='description'
                             InputLabelProps={{ shrink: "Description" }}
@@ -167,13 +166,13 @@ export default function EditEvent() {
 
                     {/** Event link */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                   
+
                         <CalendarTextField
-                          id='eventLink'
-                          value={eventData.link}
-                          label="Event Link"
-                          variant='outlined'
-                          onChange={(e) => setEventData({ ...eventData, link: e.target.value })}
+                            id='eventLink'
+                            value={eventData.link}
+                            label="Event Link"
+                            variant='outlined'
+                            onChange={(e) => setEventData({ ...eventData, link: e.target.value })}
                         />
                     </div>
 
@@ -181,7 +180,7 @@ export default function EditEvent() {
                     {/** Event Start Date */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                       
+
                             <CalendarDatePicker
                                 key={"startDate"}
                                 label="Starting date"
@@ -194,40 +193,21 @@ export default function EditEvent() {
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <Grid container spacing={2} alignItems="flex-end">
                             {/** Event Start Time */}
-                            <Grid item sm={6} xs={6} md={6} key={1}>
-                                <TextField
+                                <CalendarTimePicker
                                     id="startTime"
                                     label="Start Time"
-                                    type="time"
-                                    defaultValue="12:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
                                     onChange={handleStartTimeChange}
-                                    sx={{ width: '100%' }}
+
                                 />
-                            </Grid>
-                               
+
                             {/** Event End Time */}
-                            <Grid item sm={6} xs={6} md={6} key={2}>
-                                <TextField
+                    
+                                <CalendarTimePicker
                                     id="endTime"
                                     label="EndTime Time"
-                                    type="time"
-                                    defaultValue="12:00"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
                                     onChange={handleEndTimeChange}
-                                    sx={{ width: '100%' }}
+
                                 />
-                            </Grid>
                         </Grid>
                     </div>
                 </div>
@@ -253,10 +233,10 @@ export default function EditEvent() {
 
     return (
         <React.Fragment>
-            <PersistentDrawerLeft />
-            <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px' content={addEventCard} />
-            </div>
+           
+            <CompleteEditEvent
+                content={addEventCard}
+            />
         </React.Fragment>
     );
 }
