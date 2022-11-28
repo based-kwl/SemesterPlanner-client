@@ -22,6 +22,7 @@ export default function FriendNotification() {
         const id = requestSent[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
             .then(() => {
+                setRequestSent((prevState) => prevState.filter(request => request !== requestSent[index]))
             })
             .catch(err => {console.log('Error:', err)});
         setLoadingCancel(true);
@@ -30,7 +31,7 @@ export default function FriendNotification() {
 
     function handleReject(index){
         const id = requestReceived[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", email: ownerEmail, requestId:id})
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
@@ -39,7 +40,7 @@ export default function FriendNotification() {
 
     function handleAccept(index){
         const id = requestReceived[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted", requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted",email: ownerEmail, requestId:id})
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
