@@ -103,3 +103,9 @@ export const UpdateCancelButton = ({content, disable, onClick,backgroundColor}) 
 
     );
 }
+
+ export function HandleChange(e,eventData, setEventData, content) {
+    return(    setEventData({ ...eventData, content:{content} })
+    )
+
+ }

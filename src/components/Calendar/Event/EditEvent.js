@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { Radio, RadioGroup, Typography } from "@mui/material";
-import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
-import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
-import TextField from '@mui/material/TextField';
+import {  CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
 import { useNavigate } from "react-router";
-import { PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
 import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -79,9 +76,6 @@ export default function EditEvent() {
             });
     }
 
-    function handleCancel() {
-        navigate('/calendar')
-    }
 
 
 
