@@ -10,7 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { useCallback, useEffect } from "react";
-import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent, EditButton, CancelButton } from '../Custom/CustomCalendarForms';
+import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
 
 export default function EditEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -79,7 +79,7 @@ export default function EditEvent() {
 
 
 
-    function handleEventHeaderChange(e) {
+    function handleEditEventHeaderChange(e) {
         setEventData({ ...eventData, eventHeader: e.target.value })
     }
 
@@ -138,7 +138,7 @@ export default function EditEvent() {
                             InputLabelProps={{ shrink: "Event Name" }}
                             label="Event Name"
                             variant='outlined'
-                            onChange={handleEventHeaderChange}
+                            onChange={handleEditEventHeaderChange}
 
                         />
                     </div>
