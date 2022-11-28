@@ -12,4 +12,4 @@ coverage/
 /.idea
 
 #testing env variables
-cypress.env.json
+./cypress.env.json
