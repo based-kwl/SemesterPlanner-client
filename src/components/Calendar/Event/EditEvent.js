@@ -84,19 +84,19 @@ export default function EditEvent() {
     }
 
 
-    function handleDescriptionChange(e) {
+    function handleEditDescriptionChange(e) {
         setEventData({ ...eventData, description: e.target.value })
     }
 
-    function handleStartDateChange(e) {
+    function handleEditStartDateChange(e) {
         setEventData({ ...eventData, startDate: e.$d })
     }
 
-    function handleStartTimeChange(e) {
+    function handleEditStartTimeChange(e) {
         setEventData({ ...eventData, startTime: e.target.value })
     }
 
-    function handleEndTimeChange(e) {
+    function handleEditEndTimeChange(e) {
         setEventData({ ...eventData, endTime: e.target.value })
     }
 
@@ -152,7 +152,7 @@ export default function EditEvent() {
                             value={eventData.description}
                             label="Description"
                             variant='outlined'
-                            onChange={handleDescriptionChange}
+                            onChange={handleEditDescriptionChange}
 
                         />
 
@@ -179,7 +179,7 @@ export default function EditEvent() {
                                 key={"startDate"}
                                 label="Starting date"
                                 value={eventData.startDate}
-                                onChange={handleStartDateChange}
+                                onChange={handleEditStartDateChange}
                             />
                         </LocalizationProvider>
                     </div>
@@ -190,7 +190,7 @@ export default function EditEvent() {
                                 <CalendarTimePicker
                                     id="startTime"
                                     label="Start Time"
-                                    onChange={handleStartTimeChange}
+                                    onChange={handleEditStartTimeChange}
 
                                 />
 
@@ -199,7 +199,7 @@ export default function EditEvent() {
                                 <CalendarTimePicker
                                     id="endTime"
                                     label="EndTime Time"
-                                    onChange={handleEndTimeChange}
+                                    onChange={handleEditEndTimeChange}
 
                                 />
                         </Grid>
