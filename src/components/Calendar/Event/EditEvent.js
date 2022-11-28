@@ -31,9 +31,9 @@ export default function EditEvent() {
                 seteventError({ ...eventError, message: err.message });
             });
     }, [])
-
     useEffect(() => {
         fetchData();
+
     }, [])
 
     const reccurenceSelection = (
@@ -110,7 +110,7 @@ export default function EditEvent() {
         setIsRecurrent((prev) => !prev);
     }
 
-    const buttons = (
+    const editUpdateButtons = (
         <React.Fragment>
           
     
@@ -214,7 +214,7 @@ export default function EditEvent() {
                     />
                 } />
                 <div>{isRecurrent && reccurenceSelection}</div>
-                <div>{buttons}</div>
+                <div>{editUpdateButtons}</div>
             </form>
         </React.Fragment>
     )

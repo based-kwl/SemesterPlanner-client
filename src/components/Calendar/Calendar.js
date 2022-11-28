@@ -14,7 +14,7 @@ import axios from "axios";
 
 export default function CalendarView() {
 
-    const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
+    const [date, setDate] = useState(new Date()) 
 
     const [events, setEvents] = useState([]);
     const [acadEvents, setAcedemicEvents] = useState([]);
@@ -46,7 +46,6 @@ export default function CalendarView() {
             ).catch((err) => {
                 seteventError({ ...eventError, message: err.message});            });
     }
-    // need confirmation on how to call 
     function fetchAcadData(){
         axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
         .then((res) => {
@@ -61,7 +60,6 @@ export default function CalendarView() {
             fetchData();
             fetchAcadData();
 
-     
 
     }, [])
 

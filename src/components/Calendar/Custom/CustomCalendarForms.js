@@ -2,19 +2,9 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { Radio, RadioGroup, Typography } from "@mui/material";
-import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
+import { BackgroundCard } from '../../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
-import { useNavigate } from "react-router";
-import { PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
 import Grid from "@mui/material/Grid";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import axios from "axios";
-import { useCallback, useEffect } from "react";
 import { Button } from "@mui/material";
 
 
@@ -88,7 +78,6 @@ export const UpdateCancelButton = ({content, disable, onClick,backgroundColor}) 
         <div style={{ paddingTop: '20px' }}>
 
         <Button
-   
 
             disabled={disable}
             onClick={onClick}
