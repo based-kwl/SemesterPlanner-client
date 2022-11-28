@@ -19,11 +19,7 @@ import { CalendarDatePicker, CalendarTextField, CalendarTimePicker } from '../Cu
 export default function EditEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
-    console.log(eventId);
     const [eventData, setEventData] = React.useState({
-
-
-
     })
     const navigate = useNavigate();
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
@@ -31,31 +27,16 @@ export default function EditEvent() {
     const fetchData = useCallback(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
-                const data = res.data;
-                setEventData({
-                    ...eventData,
-                    username: data.username,
-                    eventHeader: data.eventHeader,
-                    description: data.description,
-                    link: data.link,
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    startTime: data.startTime,
-                    endTime: data.endTime,
-                    reccurence: data.reccurence,
-                    eventID: data.eventID,
-                })
-                console.log(data);
-                //console.log event data
+                setEventData(
+                    res.data
+                )
             }
             ).catch((err) => {
-                seteventError(err.message)
-            });
+                seteventError({ ...eventError, message: err.message});            });
     }, [])
 
     useEffect(() => {
         fetchData();
-        console.log(eventData);
     }, [])
 
     const reccurenceSelection = (
@@ -73,7 +54,6 @@ export default function EditEvent() {
                     <CalendarDatePicker
                         key={"endDate"}
                         label="Ending date"
-                        inputFormat="MM/DD/YYYY"
                         value={eventData.endDate}
                         onChange={(e) => setEventData({ ...eventData, endDate: e.$d })}
                     />
@@ -88,7 +68,6 @@ export default function EditEvent() {
 
     function handleEvent() {
         // TODO:  validate user inputs if have time
-        navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
                 navigate('/calendar');
@@ -96,6 +75,7 @@ export default function EditEvent() {
             .catch(err => {
                 seteventError({ ...eventError, message: "Error connecting to database. " + err });
                 seteventError({ ...eventError, hasError: true });
+                
             });
     }
 
@@ -107,13 +87,11 @@ export default function EditEvent() {
 
     function handleEventHeaderChange(e) {
         setEventData({ ...eventData, eventHeader: e.target.value })
-        console.log(eventData)
     }
 
 
     function handleDescriptionChange(e) {
         setEventData({ ...eventData, description: e.target.value })
-        console.log(eventData)
     }
 
     function handleStartDateChange(e) {

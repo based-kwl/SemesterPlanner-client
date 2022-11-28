@@ -1,19 +1,20 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography} from "@mui/material";
+import { Radio, RadioGroup, Typography } from "@mui/material";
 import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import {PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
+import { PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
 import Grid from "@mui/material/Grid";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
+import { CalendarDatePicker, CalendarTextField, CalendarTimePicker } from '../Custom/CustomCalendarForms';
 
 
 export default function CreateEvent() {
@@ -42,14 +43,13 @@ export default function CreateEvent() {
 
             {/** Event End Date */}
             <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                    <CalendarDatePicker
                         key={"endDate"}
                         label="Ending date"
-                        inputFormat="MM/DD/YYYY"
                         value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
+                        onChange={(e) => setEventData({ ...eventData, endDate: e.$d })}
                     />
                 </LocalizationProvider>
             </div>
@@ -59,7 +59,7 @@ export default function CreateEvent() {
 
 
     function handleReccurenceChange(e) {
-        setEventData({ ...eventData, reccurence: e.target.value})
+        setEventData({ ...eventData, reccurence: e.target.value })
     }
 
     function handleEvent() {
@@ -80,7 +80,7 @@ export default function CreateEvent() {
     }
 
     function handleEventHeaderChange(e) {
-        setEventData( {...eventData, eventHeader: e.target.value })
+        setEventData({ ...eventData, eventHeader: e.target.value })
     }
 
     function handleDescriptionChange(e) {
@@ -107,15 +107,15 @@ export default function CreateEvent() {
     ) : null;
 
     function handleIsReccurentChange() {
-        setIsRecurrent((prev) =>  !prev);
+        setIsRecurrent((prev) => !prev);
     }
 
     const buttons = (
         <React.Fragment>
-            <div style={{ paddingTop: '20px'}}>
+            <div style={{ paddingTop: '20px' }}>
                 <PrimaryButton2 width='305px' colour={'#912338'} content="Add" onClick={handleEvent} />
             </div>
-            <div style={{ paddingTop: '20px'}}>
+            <div style={{ paddingTop: '20px' }}>
                 <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />
             </div>
         </React.Fragment>
@@ -133,21 +133,22 @@ export default function CreateEvent() {
 
                     {/** Event name */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
+
+                        <CalendarTextField
                             id='eventHeader'
                             value={eventData.eventHeader}
-                            required
                             label="Event Name"
                             variant='outlined'
                             onChange={handleEventHeaderChange}
+
                         />
+
                     </div>
 
                     {/** Event description */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
+
+                        <CalendarTextField
                             id='description'
                             value={eventData.description}
                             label="Description"
@@ -158,82 +159,81 @@ export default function CreateEvent() {
 
                     {/** Event link */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
+                 
+                        <CalendarTextField
                             id='eventLink'
                             value={eventData.link}
-                            required
                             label="Event Link"
                             variant='outlined'
-                            onChange={(e) => setEventData({ ...eventData, link: e.target.value})}
+                            onChange={(e) => setEventData({ ...eventData, link: e.target.value })}
+
                         />
                     </div>
 
 
                     {/** Event Start Date */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                            <MobileDatePicker
-                                key={"startDate"}
-                                label="Starting date"
-                                inputFormat="MM/DD/YYYY"
-                                value={eventData.startDate}
-                                onChange={handleStartDateChange}
-                                renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                       
+                            <CalendarDatePicker
+                            key={"startDate"}
+                            label="Starting date"
+                            value={eventData.startDate}
+                            onChange={handleStartDateChange}
                             />
                         </LocalizationProvider>
                     </div>
 
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
+                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <Grid container spacing={2} alignItems="flex-end">
                             {/** Event Start Time */}
                             <Grid item sm={6} xs={6} md={6} key={1}>
-                                    <TextField
-                                        id="startTime"
-                                        label="Start Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleStartTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
+                                <TextField
+                                    id="startTime"
+                                    label="Start Time"
+                                    type="time"
+                                    defaultValue="12:00"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                    onChange={handleStartTimeChange}
+                                    sx={{ width: '100%' }}
+                                />
+                            </Grid>
 
                             {/** Event End Time */}
                             <Grid item sm={6} xs={6} md={6} key={2}>
-                                    <TextField
-                                        id="endTime"
-                                        label="EndTime Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleEndTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
+                                <TextField
+                                    id="endTime"
+                                    label="EndTime Time"
+                                    type="time"
+                                    defaultValue="12:00"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                    onChange={handleEndTimeChange}
+                                    sx={{ width: '100%' }}
+                                />
+                            </Grid>
                         </Grid>
                     </div>
                 </div>
 
-                <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
+                <FormControlLabel sx={{ display: 'block' }} label="Recurrent" control={
                     <Switch
-                        sx={{color: '#912338'}}
+                        sx={{ color: '#912338' }}
                         checked={isRecurrent}
                         onChange={handleIsReccurentChange}
                     />
-                }/>
-                <div>{ isRecurrent && recurrenceSelection }</div>
-                <div>{ buttons }</div>
+                } />
+                <div>{isRecurrent && recurrenceSelection}</div>
+                <div>{buttons}</div>
             </form>
         </React.Fragment>
     )
@@ -248,7 +248,7 @@ export default function CreateEvent() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px'  content={addEventCard} />
+                <BackgroundCard width='372px' height='900px' content={addEventCard} />
             </div>
         </React.Fragment>
     );

@@ -19,13 +19,13 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [acadEvents, setAcedemicEvents] = useState([]);
 
+    const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const navigate = useNavigate();
 
 
     const user = GetAuthentication();
-    console.log()
-    console.log(events);
+   
 
     function deleteData(eventID) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventID}`)
@@ -33,8 +33,7 @@ export default function CalendarView() {
 
             }
             ).catch((err) => {
-                // give user a error message.
-            })
+                seteventError({ ...eventError, message: err.message});            });
 
     }
 
@@ -43,35 +42,26 @@ export default function CalendarView() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
-                console.log(res.data)
             }
             ).catch((err) => {
-                // give user a error message.
-            })
+                seteventError({ ...eventError, message: err.message});            });
     }
     // need confirmation on how to call 
     function fetchAcadData(){
         axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
         .then((res) => {
             setAcedemicEvents(res.data)
-            console.log(res.data)
         }
         ).catch((err) => {
-            // give user a error message.
-        })
+            seteventError({ ...eventError, message: err.message});            });
+
     }
 
     useEffect(() => {
-        if (user.username != null) {
             fetchData();
             fetchAcadData();
 
-        } 
      
-        
-        else {
-            navigate("login");
-        }
 
     }, [])
 
@@ -86,14 +76,12 @@ export default function CalendarView() {
 
     const handleEdit = (e) => {
 
-        console.log(e.EventID)
         navigate(`/editevent/${e.EventID}`)
 
     };
 
 
     function handleDelete(e) {
-        console.log(e)
         deleteData(e.EventID);
         window.location.reload();
     }
@@ -252,7 +240,6 @@ export default function CalendarView() {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
-       // console.log(date)
 
 
 
