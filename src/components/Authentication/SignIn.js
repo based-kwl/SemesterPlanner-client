@@ -50,6 +50,7 @@ export default function SignIn() {
                         <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
                             <TextField
                                 fullWidth
+                                data-test="email"
                                 id='email'
                                 type='email'
                                 required
@@ -64,6 +65,7 @@ export default function SignIn() {
                         </div>
                         <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                             <TextField fullWidth
+                                       data-test="password"
                                        id='password'
                                        type='password'
                                        required
@@ -78,7 +80,7 @@ export default function SignIn() {
                         </div>
                         <div style={{color:'red'}}>{errorMessage}</div>
                         <div style={{paddingTop: '20px', paddingBottom: '20px'}}>
-                            <PrimaryButton width='305px' content="Sign in" />
+                            <PrimaryButton width='305px' content="Sign in" data_test="login" />
                         </div>
                         <Typography style={{paddingTop: '16px', paddingBottom: '20px'}}>
                             Don't have an account?&nbsp;

@@ -70,6 +70,7 @@ export default function FriendNotification() {
                                            <Button
                                                variant="text"
                                                onClick={() => handleCancel(index)}><p style={{color:"#6E6E6E"}}>Cancel Request</p><ClearIcon
+                                               data-test={`cancel-request-${sent.receiverEmail}`}
                                                style={{color: '#912338'}}/>
                                            </Button>
                                        </>}/>
@@ -80,17 +81,19 @@ export default function FriendNotification() {
             <Typography variant="body1" marginBottom="10px"> Friend Request Received</Typography>
 
             <div style={{overflow: 'auto', height: '30vh'}}>
-                {requestReceived.map((received, index) => (
+                {requestReceived && requestReceived.map((received, index) => (
                     <div key={index}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {received.senderEmail}
                                        <Stack direction="row" >
                                            <Button
+                                               data-test={`accept-request-${received.senderEmail}`}
                                                variant="text"
                                                onClick={() => handleAccept(index)}><CheckIcon
                                                style={{color: '#057D78'}}/>
                                            </Button>
                                            <Button
+                                               data-test={`decline-request-${received.senderEmail}`}
                                                variant="text"
                                                onClick={() => handleReject(index)}><ClearIcon
                                                style={{color: '#912338'}}/>
