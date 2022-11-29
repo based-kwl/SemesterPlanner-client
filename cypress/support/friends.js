@@ -30,3 +30,16 @@ Cypress.Commands.add('addUser', function(email, isValid) {
     }
 
 })
+
+/**
+ * Cancel a friend request
+ * @param {string} email : email of the user to be cancelled
+ */
+Cypress.Commands.add('cancelRequest', function(email){
+    cy.get('[data-test="friendRequestsLink"]').click();
+    cy.get(`[data-test="cancel-request-${email}"]`).click();
+    cy.get(`[data-test="cancel-request-${email}"]`).click();
+    cy.get(`[data-test="cancel-request-${email}"]`).should('not.exist');
+})
+
+
