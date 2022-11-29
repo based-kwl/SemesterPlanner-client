@@ -1,7 +1,4 @@
 describe('Modifing Events', function() {
-    const header = "test";
-    const description = "new descrption";
-    const eventLink ="333";
 
     beforeEach(() => {
         cy.viewport("iphone-x")
@@ -11,12 +8,20 @@ describe('Modifing Events', function() {
 
     it('Student can modify event', function() {
         cy.pressUpdateButtonCalendar('test')
-        cy.editCalendarHeader(header)
-        cy.editCalendarDescription(description)
-        cy.editEventLink(eventLink)
+        cy.editCalendarHeader("test")
+        cy.editCalendarDescription('new description')
+        cy.editEventLink('333')
         cy.get(':nth-child(6) > :nth-child(1) > .MuiButtonBase-root').click()
-
     })
+
+    it('Modify event back to 490', function() {
+        cy.pressUpdateButtonCalendar('test')
+        cy.editCalendarHeader('test')
+        cy.editCalendarDescription('Soen 490')
+        cy.editEventLink('490')
+        cy.get(':nth-child(6) > :nth-child(1) > .MuiButtonBase-root').click()
+    })
+
 
 
 
