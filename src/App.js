@@ -11,6 +11,7 @@ import StudyRoom from './components/StudyRoom/StudyRoom';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
 import FriendListHome from "./components/FriendList/FriendListHome";
+import ProgressReportHome from "./components/ProgressReports/ProgressReportHome";
 
 export default function App() {
     return (
@@ -35,6 +36,7 @@ function AppRoutes() {
             <Route path="/study-room/:studyRoomID" element={<StudyRoom />} />
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route path="/friend-list-home" element={<FriendListHome />}/>
+            <Route path="/progress-report-home" element={<ProgressReportHome />}/>
             <Route exact path='/' element={<React.StrictMode><SignIn /></React.StrictMode>} />
         </Routes>
     );
