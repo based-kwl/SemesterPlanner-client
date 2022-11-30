@@ -32,7 +32,8 @@
     "start": "react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "npx cypress run --browser chrome"
   },
   "eslintConfig": {
     "extends": [

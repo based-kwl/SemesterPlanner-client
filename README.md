@@ -22,7 +22,7 @@ Usage :
 5) Make sure you have the ```cypress.env.json``` file in the root directory of the project.
 
 Then run:
-### `npx cypress open`
+### `npm run e2e`
 
 
 ### Deployment
