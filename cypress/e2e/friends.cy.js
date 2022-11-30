@@ -31,10 +31,7 @@ describe('Tests for the friend list functionality', function() {
     })
 
     it('User can cancel a friend request', function() {
-        cy.get('[data-test="friendRequestsLink"]').click();
-        cy.get(`[data-test="cancel-request-${Cypress.env('email1')}"]`).click();
-        cy.get(`[data-test="cancel-request-${Cypress.env('email1')}"]`).click();
-        cy.get(`[data-test="cancel-request-${Cypress.env('email1')}"]`).should('not.exist');
+        cy.cancelRequest(Cypress.env('email1'));
     })
 
     it('User can accept a friend request', function() {

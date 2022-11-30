@@ -1,7 +1,7 @@
 describe('Modifing Events', function() {
-    const header = "test";
+   /* const header = "test";
     const description = "new descrption";
-    const eventLink ="333";
+    const eventLink ="333";*/
 
     beforeEach(() => {
        // 2DO
@@ -18,7 +18,5 @@ describe('Modifing Events', function() {
         */
 
     })
-
-
 
 })
