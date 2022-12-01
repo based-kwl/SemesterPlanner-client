@@ -1,5 +1,5 @@
 // custom methods are implemented in support/
-describe('Tests for the friend list functionality', function() {
+describe('Tests for the friend list functionality', function () {
 
     const randomEmail = 'thisuserdoesnotexists_789454564342@mail.ca'
 
@@ -8,7 +8,7 @@ describe('Tests for the friend list functionality', function() {
         cy.goToFriendList();
     })
 
-    it('User search an existing user with a public profile and tries to add him', function() {
+    it('User search an existing user with a public profile and tries to add him', function () {
         cy.addUser(
             Cypress.env('email1'),
             true
@@ -16,25 +16,25 @@ describe('Tests for the friend list functionality', function() {
     })
 
 
-    it('User search an existing user with a private profile and tries to add him', function() {
+    it('User search an existing user with a private profile and tries to add him', function () {
         cy.addUser(
             Cypress.env('email3'),
             false
         );
     })
 
-    it('User search for a non existing user and tries to add him', function() {
+    it('User search for a non existing user and tries to add him', function () {
         cy.addUser(
             randomEmail,
             false
         );
     })
 
-    it('User can cancel a friend request', function() {
+    it('User can cancel a friend request', function () {
         cy.cancelRequest(Cypress.env('email1'));
     })
 
-    it('User can accept a friend request', function() {
+    it('User can accept a friend request', function () {
         cy.addUser(
             Cypress.env('email1'),
             true
