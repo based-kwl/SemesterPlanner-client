@@ -33,6 +33,7 @@ export default function FriendNotification() {
         const id = requestReceived[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", email: ownerEmail, requestId:id})
             .then(() => {
+                setRequestReceived((prevState) => prevState.filter((request) => request._id !== requestReceived[index]._id))
             })
             .catch(err => {console.log('Error:', err)});
         setLoadingReject(true);
@@ -58,7 +59,7 @@ export default function FriendNotification() {
             .then(res => {
                 setRequestSent(res.data);
             })
-    },[loadingCancel, loadingAccept, loadingReject])
+    },[])
 
     const friendNotification = (
         <React.Fragment>

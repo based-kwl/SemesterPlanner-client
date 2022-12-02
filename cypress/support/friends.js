@@ -38,7 +38,7 @@ Cypress.Commands.add('addUser', function(email, isValid) {
 Cypress.Commands.add('cancelRequest', function(email){
     cy.get('[data-test="friendRequestsLink"]').click();
     cy.get(`[data-test="cancel-request-${email}"]`).click();
-    cy.get(`[data-test="cancel-request-${email}"]`).click();
+    cy.wait(150);
     cy.get(`[data-test="cancel-request-${email}"]`).should('not.exist');
 })
 

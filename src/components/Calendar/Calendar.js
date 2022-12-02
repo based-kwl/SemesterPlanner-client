@@ -17,7 +17,7 @@ export default function CalendarView() {
     const [date, setDate] = useState(new Date()) 
 
     const [events, setEvents] = useState([]);
-    const [acadEvents, setAcedemicEvents] = useState([]);
+    const [academicEvents, setAcedemicEvents] = useState([]);
 
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
@@ -46,7 +46,7 @@ export default function CalendarView() {
             ).catch((err) => {
                 seteventError({ ...eventError, message: err.message});            });
     }
-    function fetchAcadData(){
+    function fetchAcademicData(){
         axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
         .then((res) => {
             setAcedemicEvents(res.data)
@@ -58,9 +58,7 @@ export default function CalendarView() {
 
     useEffect(() => {
             fetchData();
-            fetchAcadData();
-
-
+            fetchAcademicData();
     }, [])
 
     function addEventButton() {
@@ -71,33 +69,22 @@ export default function CalendarView() {
         setDate(d);
     }
 
-
     const handleEdit = (e) => {
     console.log(e)
         navigate(`/editevent/${e.EventID}`)
 
     };
 
-
     function handleDelete(e) {
         deleteData(e.EventID);
         window.location.reload();
     }
-    const AcademicEventsTile = ({ date }) => {
-        const academicEvents = acadEvents.filter((e)=>{
-            const event = new Date(e.date);
-            return isSameDate(event, date)
-        }) ;
 
-        let AcademicTileContent;
-        if(academicEvents.length < 1){
-            AcademicTileContent = (<></>);
-        }
-        else {
-            AcademicTileContent = "academicHighlight"
-        }
-        return AcademicTileContent
-    }
+    const AcademicEventsTile = ({ date }) => (
+        academicEvents.some((e) => isSameDate(new Date(e.date), date))
+            ? "academicHighlight"
+            : ""
+    );
     
     const calendarMonth = (
         <React.Fragment>
@@ -118,14 +105,12 @@ export default function CalendarView() {
             <div className="center">
                 <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>
-
         </React.Fragment>
     )
 
     const EventHeader = ({content})=>{
         return(
         <React.Fragment>
-        
             <CardContent>
                 <Typography color="#000000" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
@@ -170,12 +155,18 @@ export default function CalendarView() {
     }
 
     const eventsDisplay = (
-     <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-        content={<EventHeader content={"School"}/>} backgroundColor='#0095FFs' />
-        <div className="events">
+     <>
+         <EventCard
+             justifyContent='auto'
+             width='360px'
+             height='30px'
+             marginTop='15px'
+             overflow='initial'
+             content={<EventHeader content={"School"}/>}
+             backgroundColor='#0095FFs' />
+         <div className="events">
          
-            {events !== undefined && events.map((e, index) => (
-
+            {events && events.map((e, index) => (
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -202,9 +193,8 @@ export default function CalendarView() {
       <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial' 
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
-          
-            {acadEvents !== undefined && acadEvents.map((e, index) => (
 
+            {academicEvents && academicEvents.map((e, index) => (
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -220,12 +210,13 @@ export default function CalendarView() {
                             EventID={e._id}
                             modifiable={false}
 
-                        />}
-                />
+                        />
+                }/>
             ))}
         </div>
         </> 
     )
+
     const isSameDate = (date1, date2) => (
         date1.getFullYear() === date2.getFullYear()
         && date1.getMonth() === date2.getMonth()

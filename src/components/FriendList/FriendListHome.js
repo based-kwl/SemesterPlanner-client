@@ -28,8 +28,7 @@ export default function FriendListHome(){
     // sends the updated friend list to database
     function handleUpdate(){
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`,{email:email, friends: friends})
-            .catch(err => {console.log('Error:', err)});
-        window.location.reload();
+            .then(() => setFriends(friends))
     }
 
     function handleCancel(){

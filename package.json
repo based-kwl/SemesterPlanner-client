@@ -33,7 +33,7 @@
     "build": "CI=false && react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "e2e": "npx cypress run --browser chrome"
+    "e2e": "npx cypress run --browser chrome --headed"
   },
   "eslintConfig": {
     "extends": [

@@ -15,33 +15,27 @@ import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancel
 export default function EditEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
-    const [eventData, setEventData] = React.useState({
-    })
+    const [eventData, setEventData] = React.useState();
     const navigate = useNavigate();
-    const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
+    const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const fetchData = useCallback(() => {
-        console.log("calling .get inside fetchData()")
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
-                console.log(res)
-                setEventData(
-                    res.data
-                )
+                setEventData(res.data)
             }
             ).catch((err) => {
-                seteventError({ ...eventError, message: err.message });
-                console.log(err)
+                setEventError({ ...eventError, message: err.message });
             });
     }, [])
+
     useEffect(() => {
-        console.log("Calling fetchData()")
         fetchData();
     }, [])
 
-    const reccurenceSelection = (
+    const recurrenceSelection = (
         <FormControl>
-            <RadioGroup row onChange={handleReccurenceChange}>
+            <RadioGroup row onChange={handleRecurrenceChange}>
                 <FormControlLabel defaultChecked={true} value="daily" control={<Radio data-test="everyDay" />} label="Every Day" />
                 <FormControlLabel value="weekly" control={<Radio data-test="everyWeek" />} label="Every Week" />
                 <FormControlLabel value="monthly" control={<Radio data-test="everyMonth"  />} label="Every Month" />
@@ -50,7 +44,6 @@ export default function EditEvent() {
             {/** Event End Date */}
             <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-
                     <CalendarDatePicker
                         data-test="eventEndDate"
                         key={"endDate"}
@@ -63,31 +56,24 @@ export default function EditEvent() {
         </FormControl>
     );
 
-    function handleReccurenceChange(e) {
+    function handleRecurrenceChange(e) {
         setEventData({ ...eventData, reccurence: e.target.value })
     }
 
     function handleEvent() {
-        // TODO:  validate user inputs if have time
-        console.log(eventData)
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
                 navigate('/calendar');
             })
             .catch(err => {
-                seteventError({ ...eventError, message: "Error connecting to database. " + err });
-                seteventError({ ...eventError, hasError: true });
-
+                setEventError({ ...eventError, message: "Error connecting to database. " + err });
+                setEventError({ ...eventError, hasError: true });
             });
     }
-
-
-
 
     function handleEditEventHeaderChange(e) {
         setEventData({ ...eventData, eventHeader: e.target.value })
     }
-
 
     function handleEditDescriptionChange(e) {
         setEventData({ ...eventData, description: e.target.value })
@@ -117,11 +103,8 @@ export default function EditEvent() {
 
     const editUpdateButtons = (
         <React.Fragment>
-          
-    
             <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
             <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Cancel" onClick={() => { handleEvent() }} />
-
         </React.Fragment>
     );
 
@@ -133,10 +116,7 @@ export default function EditEvent() {
                     Edit Event
                 </Typography>
                 <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
-
-
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-
                         <CalendarTextField
                             data_test="eventHeader"
                             id='eventHeader'
@@ -151,7 +131,6 @@ export default function EditEvent() {
 
                     {/** Event description */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-
                         <CalendarTextField
                             data_test="eventDescription"
                             id='description'
@@ -160,14 +139,11 @@ export default function EditEvent() {
                             label="Description"
                             variant='outlined'
                             onChange={handleEditDescriptionChange}
-
                         />
-
                     </div>
 
                     {/** Event link */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-
                         <CalendarTextField
                             data_test="eventLink"
                             id='eventLink'
@@ -182,7 +158,6 @@ export default function EditEvent() {
                     {/** Event Start Date */}
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-
                             <CalendarDatePicker
                                 data-test="eventStartDate"
                                 id='eventStartDate'
@@ -228,7 +203,7 @@ export default function EditEvent() {
                         onChange={handleIsReccurentChange}
                     />
                 } />
-                <div>{isRecurrent && reccurenceSelection}</div>
+                <div>{isRecurrent && recurrenceSelection}</div>
                 <div>{editUpdateButtons}</div>
             </form>
         </React.Fragment>
@@ -242,7 +217,6 @@ export default function EditEvent() {
 
     return (
         <React.Fragment>
-           
             <CompleteEditEvent
                 content={addEventCard}
             />

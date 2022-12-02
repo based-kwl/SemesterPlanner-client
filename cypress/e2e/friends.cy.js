@@ -46,13 +46,18 @@ describe('Tests for the friend list functionality', function() {
     })
 
     it('User can delete a friend', function () {
+        cy.wait(50);
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
-        cy.get(`[data-test="${Cypress.env('email1')}"]`).should('not.exist');
+        cy.wait(50);
+        cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).should('not.exist');
+        cy.wait(50);
         cy.get('[data-test="apply-changes"]').click();
+        cy.wait(50);
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).should('not.exist');
         cy.changeUser('email1', 'password1');
         cy.goToFriendList();
+        cy.wait(250);
         cy.get(`[data-test="delete-friend-${Cypress.env('email2')}"]`).should('not.exist');
     })
 
