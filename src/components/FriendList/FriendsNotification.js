@@ -20,7 +20,7 @@ export default function FriendNotification() {
 
     function handleCancel(index){
         const id = requestSent[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{ requestId: id, email: ownerEmail })
             .then(() => {
                 setRequestSent((prevState) => prevState.filter(request => request !== requestSent[index]))
             })
