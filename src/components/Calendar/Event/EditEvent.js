@@ -49,7 +49,7 @@ export default function EditEvent() {
                         data-test="eventEndDate"
                         key={"endDate"}
                         label="Ending date"
-                        value={eventData.endDate? eventData.endDate : new Date()}
+                        value={eventData.endDate}
                         onChange={(e) => setEventData({ ...eventData, endDate: e.$d })}
                     />
                 </LocalizationProvider>
