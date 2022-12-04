@@ -121,8 +121,8 @@ export const ProfileToggle = ({userData, handlePrivacyChange}) => (
         </Typography>
         <FormControlLabel
             sx={{m: 1, marginY: '5px'}}
-            control={<CustomToggle checked={userData.privateProfile} onChange={handlePrivacyChange} />}
-            label={ <ProfileToggleLabel text={userData.privateProfile ? "Public" : "Private"} />} />
+            control={<CustomToggle checked={!userData.privateProfile} onChange={handlePrivacyChange} />}
+            label={ <ProfileToggleLabel text={userData.privateProfile ? "Private" : "Public"} />} />
         <Typography sx={{color: '#DA3A16'}}>
             Hiding my profile will disable users from adding me to their study groups
         </Typography>

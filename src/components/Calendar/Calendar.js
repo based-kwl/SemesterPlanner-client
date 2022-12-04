@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Menu, Typography } from "@mui/material";
+import { useState, useEffect, useMemo } from 'react';
+import { Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
@@ -10,43 +10,55 @@ import { useNavigate } from "react-router";
 import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import MenuItem from '@mui/material/MenuItem';
 import axios from "axios";
 
 export default function CalendarView() {
 
-    const [date, setDate] = useState(new Date()) // stores date, sets date using Date obj
+    const [date, setDate] = useState(new Date()) 
 
-    const [event, setEvent] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [academicEvents, setAcedemicEvents] = useState([]);
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+    const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
+
     const navigate = useNavigate();
 
-    const options = ['Edit', 'Delete', 'Cancel'];
+
     const user = GetAuthentication();
+   
+
+    function deleteData(eventID) {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventID}`)
+            .then((res) => {
+
+            }
+            ).catch((err) => {
+                seteventError({ ...eventError, message: err.message});            });
+
+    }
+
 
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                setEvent(res.data)
+                setEvents(res.data)
             }
             ).catch((err) => {
-                // give user a error message.
-            })
+                seteventError({ ...eventError, message: err.message});            });
+    }
+    function fetchAcademicData(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
+        .then((res) => {
+            setAcedemicEvents(res.data)
+        }
+        ).catch((err) => {
+            seteventError({ ...eventError, message: err.message});            });
+
     }
 
-
-
     useEffect(() => {
-        if (user.username != null) {
             fetchData();
-        } else {
-            navigate("login");
-        }
-
+            fetchAcademicData();
     }, [])
 
     function addEventButton() {
@@ -57,54 +69,35 @@ export default function CalendarView() {
         setDate(d);
     }
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleEdit = (e) => {
+    console.log(e)
+        navigate(`/editevent/${e.EventID}`)
+
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    function handleDelete(e) {
+        deleteData(e.EventID);
+        window.location.reload();
+    }
 
-    const EventOptions = () => (
-        <div style={{ float: 'right', display: 'flex', paddingLeft: "30px" }}>
-            <IconButton
-                sx={{ float: 'right' }}
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertIcon />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                getContentAnchorEl={undefined}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-                open={open}
-                onClose={handleClose}
-            >
-                {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
-                        {option}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
+    const AcademicEventsTile = ({ date }) => (
+        academicEvents.some((e) => isSameDate(new Date(e.date), date))
+            ? "academicHighlight"
+            : ""
     );
-
+    
     const calendarMonth = (
         <React.Fragment>
             <Calendar
                 tileContent={({ date }) => <DayTile key={date} day={date} />}
+                tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}
             />
         </React.Fragment>
     )
+
+
 
     const calendarCard = (
         <React.Fragment>
@@ -112,50 +105,68 @@ export default function CalendarView() {
             <div className="center">
                 <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>
-
         </React.Fragment>
     )
 
-    const eventHeader = (
+    const EventHeader = ({content})=>{
+        return(
         <React.Fragment>
             <CardContent>
                 <Typography color="#000000" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
-                    School
+                    {content}
                 </Typography>
             </CardContent>
         </React.Fragment>
-    )
+   ) }
 
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate }) => {
+    const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID, modifiable }) => {
         const currentDate = new Date(startDate);
         return (
-            <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%' }}>
+            <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display:'flow'}}>
                 <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + currentDate.getMonth() + 1 : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
                         {header}
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+
+                    </Typography>
                 </div>
+
+
                 <div style={{ float: 'right' }}>
-                    <EventOptions />
+
+                    {modifiable?<><button data-test={`updateButton-${header}`} class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
+                    <br></br>
+                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button></>: <></>}
                 </div>
             </div>
-        )}
+        )
+    }
 
     const eventsDisplay = (
-        <div className="events">
-            <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-                content={eventHeader} backgroundColor='#8CC63E' />
-            {event !== undefined && event.map((e, index) => (
+     <>
+         <EventCard
+             justifyContent='auto'
+             width='360px'
+             height='30px'
+             marginTop='15px'
+             overflow='initial'
+             content={<EventHeader content={"School"}/>}
+             backgroundColor='#0095FFs' />
+         <div className="events">
+         
+            {events && events.map((e, index) => (
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -169,10 +180,41 @@ export default function CalendarView() {
                             endTime={e.endTime}
                             description={e.description}
                             header={e.eventHeader}
+                            EventID={e._id}
+                            modifiable={true}
                         />}
                 />
             ))}
         </div>
+        </>  
+    )
+
+    const academicEventsDisplay = (
+      <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial' 
+        content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
+       <div className="events">
+
+            {academicEvents && academicEvents.map((e, index) => (
+                <EventCard
+                    key={index}
+                    justifyContent="left"
+                    width="360px"
+                    height='130px'
+                    marginTop='10px' overflow='hidden'
+                    content={
+                        <EventDisplay
+                            startDate={e.date}
+                            startTime={"00:00"}
+                            endTime={"23:59"}
+                            header={e.description}
+                            EventID={e._id}
+                            modifiable={false}
+
+                        />
+                }/>
+            ))}
+        </div>
+        </> 
     )
 
     const isSameDate = (date1, date2) => (
@@ -182,7 +224,7 @@ export default function CalendarView() {
     )
 
     const DayTile = ({ day }) => {
-        const eventsThisDay = event.filter((e) => {
+        const eventsThisDay = events.filter((e) => {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
         });
@@ -193,10 +235,10 @@ export default function CalendarView() {
             tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={day} eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
-        
+
         return tileContent;
     }
 
@@ -220,12 +262,13 @@ export default function CalendarView() {
         return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
-    const calendarPageCards = (
+    const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
             {eventsDisplay}
+            {academicEventsDisplay}
         </React.Fragment>
-    )
+    ), [calendarCard, calendarMonth]);
 
     return (
         <React.Fragment>

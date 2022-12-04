@@ -32,7 +32,8 @@
     "start": "react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "npx cypress run --browser chrome --headed"
   },
   "eslintConfig": {
     "extends": [
@@ -54,7 +55,7 @@
   },
   "devDependencies": {
     "@mui/material": "^5.10.8",
-    "cypress": "^10.10.0",
+    "cypress": "^10.11.0",
     "jest": "^27.5.1",
     "react-router-dom": "^6.4.2",
     "react-test-renderer": "^18.2.0"

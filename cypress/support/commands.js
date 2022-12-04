@@ -1,25 +1,25 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+/**
+ * Login a user
+ * @param {string} email : email (key) of the user to be logged in. Choose from users in the cypress.env.json file.
+ * @param {string} password : password (key) of the user to be logged in. Choose the one associated with the email selected.
+ */
+Cypress.Commands.add('login', (email, password) => {
+    cy.visit(Cypress.env('baseUrl'));
+    cy.get('[data-test="email"]').type(Cypress.env(email));
+    cy.get('[data-test="password"]').type(Cypress.env(password));
+    cy.get('[data-test="login"]').click();
+})
+
+/**
+ * logout a user
+ */
+Cypress.Commands.add('logout', () => {
+    cy.get('[data-test="navbar"]').click();
+    cy.get('[data-test="logout"]').click();
+})
+
+Cypress.Commands.add('changeUser', (newEmail, newPassword) => {
+    cy.visit(Cypress.env('baseUrl'));
+    cy.logout();
+    cy.login(newEmail, newPassword);
+})
