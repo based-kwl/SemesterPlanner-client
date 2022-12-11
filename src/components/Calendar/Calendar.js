@@ -17,6 +17,7 @@ export default function CalendarView() {
     const [date, setDate] = useState(new Date()) 
 
     const [events, setEvents] = useState([]);
+    const [myCourses, setMyCourses] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
 
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
@@ -55,10 +56,44 @@ export default function CalendarView() {
             seteventError({ ...eventError, message: err.message});            });
 
     }
+    function getHoursDiff(startDate, endDate) {
+        const msInHour = 1000 * 60 * 60;
+
+        return Math.round(Math.abs(endDate - startDate) / msInHour);
+    }
+    function fetchWeeklyStudyEventData() {
+        // Get list of student's courses with studyHours per course
+        axios.get(`${process.env.REACT_APP_BASE_URL}/student/email/${user.email}`)
+            .then((courses) => {
+                for (let course of courses) {
+                  course.actualStudyHours = 0
+                }
+                setMyCourses(courses)
+            })
+            .catch((err) => {seteventError({ ...eventError, message: err.message})})
+
+        // Get list of study event the student made this week, map over student's courses and add actual study time
+        axios.get(`${process.env.REACT_APP_BASE_URL}study-events/${user.username}`)
+            .then((studyEventsThisWeek) => {
+                for (let event of studyEventsThisWeek) {
+                    for (let course of myCourses) {
+                        if (course.subject === event.subject && course.catalog === event.catalog) {
+                            const actualStudyHours = getHoursDiff(event.startDate, event.endDate)
+                            course.actualStudyHours += actualStudyHours
+                            setMyCourses(myCourses)
+                        }
+                    }
+                }
+            })
+            .catch((err) => {
+                seteventError({ ...eventError, message: err.message});
+            });
+    }
 
     useEffect(() => {
             fetchData();
             fetchAcademicData();
+            fetchWeeklyStudyEventData();
     }, [])
 
     function addEventButton() {
