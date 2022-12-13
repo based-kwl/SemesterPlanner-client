@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Typography } from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
@@ -11,10 +11,17 @@ import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
+import BottomDrawer from "../StudyRoom/BottomDrawer"
+import EditEvent from './Event/EditEvent';
+
+import DescriptionIcon from '@mui/icons-material/Description';
+
+
 
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date()) 
+    const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
 
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
@@ -22,6 +29,7 @@ export default function CalendarView() {
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const navigate = useNavigate();
+    const[loading,setLoading] = useState(true);
 
 
     const user = GetAuthentication();
@@ -36,12 +44,25 @@ export default function CalendarView() {
                 seteventError({ ...eventError, message: err.message});            });
 
     }
+ 
+    const fetchData2 = useCallback(() => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
+            .then((res) => {
+                console.log(res.date);
+                setEvents(res.data)
+            }
+            ).catch((err) => {
+                seteventError({ ...eventError, message: err.message });
+                setLoading(false);
 
-
+            });
+    }, [])
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
+                console.log(res.data)
+
             }
             ).catch((err) => {
                 seteventError({ ...eventError, message: err.message});            });
@@ -56,10 +77,11 @@ export default function CalendarView() {
 
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
             fetchData();
+            fetchData2();
             fetchAcademicData();
-    }, [])
+    }, [loading])
 
     function addEventButton() {
         navigate('/event');
@@ -145,7 +167,7 @@ export default function CalendarView() {
 
 
                 <div style={{ float: 'right' }}>
-
+               
                     {modifiable?<><button data-test={`updateButton-${header}`} class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
                     <br></br>
                     <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button></>: <></>}
@@ -159,14 +181,16 @@ export default function CalendarView() {
          <EventCard
              justifyContent='auto'
              width='360px'
-             height='30px'
+             height='30px'j
              marginTop='15px'
              overflow='initial'
              content={<EventHeader content={"School"}/>}
-             backgroundColor='#0095FFs' />
+             backgroundColor='#0095FF' />
          <div className="events">
          
             {events && events.map((e, index) => (
+       // <div  onClick={ () => handleEdit(e.eventID)}>
+
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -184,7 +208,8 @@ export default function CalendarView() {
                             modifiable={true}
                         />}
                 />
-            ))}
+           //     </div>
+                ))}
         </div>
         </>  
     )
@@ -195,6 +220,7 @@ export default function CalendarView() {
        <div className="events">
 
             {academicEvents && academicEvents.map((e, index) => (
+
                 <EventCard
                     key={index}
                     justifyContent="left"
@@ -212,8 +238,10 @@ export default function CalendarView() {
 
                         />
                 }/>
-            ))}
+           ))}
         </div>
+             
+
         </> 
     )
 

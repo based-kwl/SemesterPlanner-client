@@ -9,7 +9,11 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import { useCallback, useEffect } from "react";
+import DescriptionIcon from '@mui/icons-material/Description';
+import BottomDrawer from "../../StudyRoom/BottomDrawer"
+
+
+import { useCallback, useEffect , useState} from "react";
 import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
 
 export default function EditEvent() {
@@ -18,21 +22,26 @@ export default function EditEvent() {
     const [eventData, setEventData] = React.useState({});
     const navigate = useNavigate();
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
+    const[loading,setLoading] = useState(true);
 
     const fetchData = useCallback(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
-                console.log(res.date);
                 setEventData(res.data)
+                console.log(res.data);
+
             }
             ).catch((err) => {
                 setEventError({ ...eventError, message: err.message });
+                setLoading(false);
+
             });
     }, [])
 
-    useEffect(() => {
-        fetchData();
-    }, [])
+    React.useEffect(() => {
+         fetchData();
+     }, [loading])
+ 
 
     const recurrenceSelection = (
         <FormControl>
@@ -70,6 +79,7 @@ export default function EditEvent() {
                 setEventError({ ...eventError, message: "Error connecting to database. " + err });
                 setEventError({ ...eventError, hasError: true });
             });
+
     }
 
     function handleEditEventHeaderChange(e) {
@@ -104,18 +114,19 @@ export default function EditEvent() {
 
     const editUpdateButtons = (
         <React.Fragment>
+              <BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
+                               title={'Edit Event'} content={<EditEvent />}/>
+               
             <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
             <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Cancel" onClick={() => { navigate('/calendar') }} />
         </React.Fragment>
     );
 
-    const addEventForm = (
+    const editEventForm = (
         <React.Fragment>
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
-                <Typography align='center' style={{ fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Edit Event
-                </Typography>
+                <div style={{ paddingTop: '0px', paddingBottom: '10px' }}>{PageError}</div>
+ 
                 <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
                     <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                         <CalendarTextField
@@ -179,7 +190,7 @@ export default function EditEvent() {
                                     id="startTime"
                                     label="Start Time"
                                     value={eventData.startTime}
-                                    onChange={handleEditStartTimeChange}
+                                   onChange={handleEditStartTimeChange}
 
                                 />
 
@@ -210,17 +221,7 @@ export default function EditEvent() {
         </React.Fragment>
     )
 
-    const addEventCard = (
-        <React.Fragment>
-            <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={addEventForm} />
-        </React.Fragment>
-    )
+ 
 
-    return (
-        <React.Fragment>
-            <CompleteEditEvent
-                content={addEventCard}
-            />
-        </React.Fragment>
-    );
+    return (editEventForm );
 }
