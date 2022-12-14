@@ -12,7 +12,7 @@ import axios from "axios";
 import DescriptionIcon from '@mui/icons-material/Description';
 import BottomDrawer from "../../StudyRoom/BottomDrawer"
 
-import EditEvent from './EditEvent';
+import EventDetails from './EditEvent';
 import { useCallback, useEffect , useState} from "react";
 import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
 
@@ -130,10 +130,10 @@ export default function EventInfoDisplay(){
        // function deleteData(eventId) {
     const editUpdateButtons = (
         <React.Fragment>
-                               <button class="button_updates" onClick={() => handleDelete({ eventId })}>delete</button>
+                               {/* <button class="button_updates" onClick={() => handleDelete({ eventId })}>delete</button> */}
 
             <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
-            <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Cancel" onClick={() => { navigate('/calendar') }} />
+            <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Delete" onClick={() => handleDelete({ eventId })} />
         </React.Fragment>
     );
     const editEventForm = (
@@ -143,6 +143,7 @@ export default function EventInfoDisplay(){
 
             <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+  
                     <CalendarTextField
                         data_test="eventHeader"
                         id='eventHeader'
@@ -215,7 +216,7 @@ export default function EventInfoDisplay(){
                                 label="EndTime Time"
                                 value={eventData.endTime}
                                 onChange={handleEditEndTimeChange}
-
+                            
                             />
                                  
                     </Grid>
