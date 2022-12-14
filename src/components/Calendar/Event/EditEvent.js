@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Radio, RadioGroup, Typography } from "@mui/material";
-import {  CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
+import {  BackgroundCard,CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
 import { useNavigate } from "react-router";
 import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -11,10 +11,11 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import DescriptionIcon from '@mui/icons-material/Description';
 import BottomDrawer from "../../StudyRoom/BottomDrawer"
-
+import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 
 import { useCallback, useEffect , useState} from "react";
 import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
+import EventInfoDisplay from './EventInfo';
 
 export default function EditEvent() {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -107,7 +108,15 @@ export default function EditEvent() {
             {eventError.message}
         </Typography>
     ) : null;
+    function deleteData(eventId) {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
+            .then((res) => {
 
+            }
+            ).catch((err) => {
+                setEventError({ ...eventError, message: err.message});            });
+
+    }
     function handleIsReccurentChange() {
         setIsRecurrent((prev) => !prev);
     }
@@ -115,8 +124,7 @@ export default function EditEvent() {
     const editUpdateButtons = (
         <React.Fragment>
               <BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'Edit Event'} content={<EditEvent />}/>
-               
+                               title={'Edit Event'} content={<EventInfoDisplay />}/>
             <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
             <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Cancel" onClick={() => { navigate('/calendar') }} />
         </React.Fragment>
@@ -137,7 +145,8 @@ export default function EditEvent() {
                             label="Event Name"
                             variant='outlined'
                             onChange={handleEditEventHeaderChange}
-
+                            inputProps={{readOnly: true}}
+                            
                         />
                     </div>
 
@@ -151,6 +160,8 @@ export default function EditEvent() {
                             label="Description"
                             variant='outlined'
                             onChange={handleEditDescriptionChange}
+                            inputProps={{readOnly: true}}
+
                         />
                     </div>
 
@@ -163,7 +174,9 @@ export default function EditEvent() {
                             label="Event Link"
                             variant='outlined'
                             onChange={(e) => setEventData({ ...eventData, link: e.target.value })}
-                        />
+                            inputProps={{readOnly: true}}
+
+                   />
                     </div>
 
 
@@ -177,6 +190,8 @@ export default function EditEvent() {
                                 label="Starting date"
                                 value={eventData.startDate}
                                 onChange={handleEditStartDateChange}
+                                inputProps={{readOnly: true}}
+
                             />
                         </LocalizationProvider>
                     </div>
@@ -221,7 +236,18 @@ export default function EditEvent() {
         </React.Fragment>
     )
 
- 
+    const editEventCard = (
+        <React.Fragment>
+            <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={editEventForm} />
+        </React.Fragment>
+    )
 
-    return (editEventForm );
-}
+    return (
+        <React.Fragment>
+            <PersistentDrawerLeft />
+            <div style={{ paddingTop: '60px' }}>
+                <BackgroundCard width='372px' height='900px'  content={editEventCard} />
+            </div>
+        </React.Fragment>
+    );
+    }

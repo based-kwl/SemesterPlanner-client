@@ -12,7 +12,27 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
-export const CalendarTextField = ({ id, value, label, variant, onChange, data_test}) => {
+export const CalendarTextField = ({ inputProps,id, value, label, variant, onChange, data_test}) => {
+    return (
+        <TextField
+            data-test={data_test}
+            fullWidth
+            id={id}
+            value={value || ''}
+           // required
+            label={label}
+            variant={variant}
+            onChange={onChange}
+            inputProps={inputProps}
+            
+             />
+
+    )
+}
+// {
+//     readOnly: true,
+//   }
+export const TextFieldDisplay = ({inputProps, id, value, label, variant, onChange, data_test}) => {
     return (
         <TextField
             data-test={data_test}
@@ -22,11 +42,13 @@ export const CalendarTextField = ({ id, value, label, variant, onChange, data_te
             required
             label={label}
             variant={variant}
-            onChange={onChange} />
+            onChange={onChange}
+            inputProps={inputProps} />
+             
 
     )
 }
-export const CalendarDatePicker = ({ key, value, label, onChange }) => {
+export const CalendarDatePicker = ({ inputProps,key, value, label, onChange }) => {
     return (
         <MobileDatePicker
             key={key}
@@ -35,7 +57,11 @@ export const CalendarDatePicker = ({ key, value, label, onChange }) => {
             value={value}
             onChange={onChange}
             renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
-        />
+            inputProps={inputProps} 
+            disabled/>
+            
+
+        
     )
 }
 

@@ -12,6 +12,7 @@ import EditEvent from './components/Calendar/Event/EditEvent';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
 import FriendListHome from "./components/FriendList/FriendListHome";
+import EventInfoDisplay from './components/Calendar/Event/EventInfo';
 
 export default function App() {
     return (
@@ -37,6 +38,10 @@ function AppRoutes() {
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route path="/friend-list-home" element={<FriendListHome />}/>
             <Route exact path='/' element={<React.StrictMode><SignIn /></React.StrictMode>} />
+       
+       
+            <Route exact path='/display' element={<EventInfoDisplay />} />
+
         </Routes>
     );
 }

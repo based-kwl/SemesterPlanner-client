@@ -35,8 +35,8 @@ export default function CalendarView() {
     const user = GetAuthentication();
    
 
-    function deleteData(eventID) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventID}`)
+    function deleteData(eventId) {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
             .then((res) => {
 
             }
@@ -45,23 +45,13 @@ export default function CalendarView() {
 
     }
  
-    const fetchData2 = useCallback(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
-            .then((res) => {
-                console.log(res.date);
-                setEvents(res.data)
-            }
-            ).catch((err) => {
-                seteventError({ ...eventError, message: err.message });
-                setLoading(false);
-
-            });
-    }, [])
+ 
+    //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
-                console.log(res.data)
+              //  console.log(res.data)
 
             }
             ).catch((err) => {
@@ -79,7 +69,6 @@ export default function CalendarView() {
 
     React.useEffect(() => {
             fetchData();
-            fetchData2();
             fetchAcademicData();
     }, [loading])
 
@@ -147,30 +136,36 @@ export default function CalendarView() {
     const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID, modifiable }) => {
         const currentDate = new Date(startDate);
         return (
-            <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display:'flow'}}>
-                <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
-                        {header}
-                    </Typography>
+ 
+            
+            <div onClick={ () =>modifiable? handleEdit({ EventID }): <></>} style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display:'flow'}}>
+                <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display:'flow'}}>
+              
+              <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
+                      {header}
+                  </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                      {description}
+                  </Typography>
 
                   <Typography variant="body2" color="text.secondary">
-                        {description}
-                    </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
+                  </Typography>
+              </div>
 
-                    </Typography>
-                </div>
-
+            </div>
+           
 
                 <div style={{ float: 'right' }}>
                
-                    {modifiable?<><button data-test={`updateButton-${header}`} class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
+                {/* {modifiable?<><button class="button_updates" onClick={() => handleEdit({ EventID })}>update</button>
                     <br></br>
-                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button></>: <></>}
+                    <button class="button_updates" onClick={() => handleDelete({ EventID })}>delete</button></>: <></>} */}
                 </div>
             </div>
         )
