@@ -1,24 +1,18 @@
 import * as React from 'react';
-import { Radio, RadioGroup, Typography } from "@mui/material";
-import { BackgroundCard, CustomWhiteCard, StudyRoomChatCard } from '../../CustomMUIComponents/CustomCards';
-import { useNavigate } from "react-router";
+import { Typography } from "@mui/material";
+import { BackgroundCard, StudyRoomChatCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import DescriptionIcon from '@mui/icons-material/Description';
 import BottomDrawer from "../../StudyRoom/BottomDrawer"
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import EditIcon from '@mui/icons-material/Edit';
-import { useCallback, useEffect, useState } from "react";
-import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
-import EventInfoDisplay from './EventInfo';
+import { useCallback, useState } from "react";
+import { CalendarTextField } from '../Custom/CustomCalendarForms';
+import EditEvent from './EditEventDrawer';
 
 export default function EventDetails() {
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
     const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
     const [eventData, setEventData] = React.useState({});
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
@@ -48,9 +42,9 @@ export default function EventDetails() {
             {eventError.message}
         </Typography>
     ) : null;
- 
 
-    const eventInfoForm = (
+
+    const eventDetailsForm = (
         <React.Fragment>
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '0px', paddingBottom: '10px' }}>{PageError}</div>
@@ -59,6 +53,8 @@ export default function EventDetails() {
                 </Typography>
                 <div align='center' style={{ paddingLeft: '10px', paddingRight: '10px', paddingTop: '16px', paddingBottom: '20px' }}>
                     <Grid justifyContent="center" container spacing={1} alignItems="flex-end">
+                        {/** Event header */}
+
                         <Grid item xs={12} md={12}>
                             <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                 <CalendarTextField
@@ -130,7 +126,6 @@ export default function EventDetails() {
 
                             <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
 
-
                                 {/** Event Start Time */}
                                 <CalendarTextField
                                     data-test="eventStartTime"
@@ -162,17 +157,17 @@ export default function EventDetails() {
         </React.Fragment>
     )
 
-    const editEventCard = (
+    const eventDetailsCard = (
         <React.Fragment>
-            {/*Card containing uneditable form with event details */}
-            <StudyRoomChatCard bottomRightRadius='0px' width='330px' height='740px' marginTop='50px' content={eventInfoForm} />
+            {/*Card containing static form with event details */}
+            <StudyRoomChatCard bottomRightRadius='0px' width='330px' height='740px' marginTop='50px' content={eventDetailsForm} />
             <div style={{ display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw' }}>
                 {/*Drawer settings icon */}
                 <StudyRoomChatCard width='342px' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                     bottomLeftRadius='10px' bottomRightRadius='10px' content={<div
                         style={{ width: '100%', height: '100%', background: 'none', border: 'none' }}
                     ><BottomDrawer icon={<EditIcon style={{ color: '#912338', height: '4vh', width: '4vh' }} />}
-                        title={'Edit Event'} content={<EventInfoDisplay />} /></div>} />
+                        title={'Edit Event'} content={<EditEvent />} /></div>} />
             </div>
         </React.Fragment>
     )
@@ -181,7 +176,7 @@ export default function EventDetails() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px' content={editEventCard} />
+                <BackgroundCard width='372px' height='900px' content={eventDetailsCard} />
             </div>
         </React.Fragment>
     );

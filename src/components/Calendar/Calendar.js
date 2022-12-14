@@ -12,7 +12,7 @@ import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
 import BottomDrawer from "../StudyRoom/BottomDrawer"
-import EventDetails from './Event/EditEvent';
+import EventDetails from './Event/EventDetails';
 
 import DescriptionIcon from '@mui/icons-material/Description';
 

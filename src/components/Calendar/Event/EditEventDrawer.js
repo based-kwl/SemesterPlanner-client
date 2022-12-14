@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Card, Radio, RadioGroup, Typography } from "@mui/material";
-import {  CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
+import {  Radio, RadioGroup, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -9,14 +8,10 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import DescriptionIcon from '@mui/icons-material/Description';
-import BottomDrawer from "../../StudyRoom/BottomDrawer"
-
-import EventDetails from './EditEvent';
-import { useCallback, useEffect , useState} from "react";
+import { useCallback , useState} from "react";
 import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
 
-export default function EventInfoDisplay(){
+export default function EditEvent(){
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
     const [eventData, setEventData] = React.useState({});
@@ -123,10 +118,10 @@ export default function EventInfoDisplay(){
 
             }
             ).catch((err) => {
-                setEventError({ ...eventError, message: err.message});            });
+                setEventError({ ...eventError, message: err.message});  });
 
     }
-     
+    
        // function deleteData(eventId) {
     const editUpdateButtons = (
         <React.Fragment>

@@ -6,11 +6,6 @@ import { BackgroundCard } from '../../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 
 export const CalendarTextField = ({width, inputProps,id, value, label, variant, onChange, data_test}) => {
     return (
@@ -29,9 +24,7 @@ export const CalendarTextField = ({width, inputProps,id, value, label, variant, 
 
     )
 }
-// {
-//     readOnly: true,
-//   }
+
 export const TextFieldDisplay = ({inputProps, id, value, label, variant, onChange, data_test}) => {
     return (
         <TextField
