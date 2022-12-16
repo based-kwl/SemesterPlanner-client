@@ -7,8 +7,25 @@ import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 
+export const CalendarTextField = ({width, inputProps,id, value, label, variant, onChange, data_test}) => {
+    return (
+        <TextField
+            data-test={data_test}
+            fullWidth
+            id={id}
+            value={value || ''}
+           // required
+            label={label}
+            variant={variant}
+            onChange={onChange}
+            inputProps={inputProps}
+            width = {width}
+             />
 
-export const CalendarTextField = ({ id, value, label, variant, onChange, data_test}) => {
+    )
+}
+
+export const TextFieldDisplay = ({inputProps, id, value, label, variant, onChange, data_test}) => {
     return (
         <TextField
             data-test={data_test}
@@ -18,11 +35,13 @@ export const CalendarTextField = ({ id, value, label, variant, onChange, data_te
             required
             label={label}
             variant={variant}
-            onChange={onChange} />
+            onChange={onChange}
+            inputProps={inputProps} />
+             
 
     )
 }
-export const CalendarDatePicker = ({ key, value, label, onChange }) => {
+export const CalendarDatePicker = ({ inputProps,key, value, label, onChange }) => {
     return (
         <MobileDatePicker
             key={key}
@@ -31,7 +50,11 @@ export const CalendarDatePicker = ({ key, value, label, onChange }) => {
             value={value}
             onChange={onChange}
             renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
-        />
+            inputProps={inputProps} 
+            />
+            
+
+        
     )
 }
 
@@ -66,7 +89,7 @@ export const CompleteEditEvent = ({ content }) => {
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
 
-                <BackgroundCard width='372px' height='900px' content={content} />
+                <BackgroundCard width='96vw' height='900px' content={content} />
 
             </div>
         </>

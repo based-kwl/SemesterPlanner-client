@@ -8,10 +8,11 @@ import CreateEvent from './components/Calendar/Event/CreateEvent';
 import ColorSettings from './components/Calendar/EventColorSelector/EventColorDisplay'
 import EventColorSelector from './components/Calendar/EventColorSelector/EventColorSelector'
 import StudyRoom from './components/StudyRoom/StudyRoom';
-import EditEvent from './components/Calendar/Event/EditEvent';
+import EventDetails from './components/Calendar/Event/EventDetails';
 import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
 import FriendListHome from "./components/FriendList/FriendListHome";
+import EditEvent from './components/Calendar/Event/EditEventDrawer';
 
 export default function App() {
     return (
@@ -28,7 +29,7 @@ function AppRoutes() {
             <Route path="/event" element={<CreateEvent />} />
             <Route path="/colorsetting" element={<ColorSettings />} />
             <Route path="/colorselector" element={<EventColorSelector />} />
-            <Route path="/editevent/:eventId" element={<React.StrictMode><EditEvent /></React.StrictMode>} />
+            <Route path="/editevent/:eventId" element={<React.StrictMode><EventDetails /></React.StrictMode>} />
             <Route path="/login" element={<React.StrictMode><SignIn /></React.StrictMode>} />
             <Route path="/signup" element={<React.StrictMode><SignUp /></React.StrictMode>} />
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />
@@ -37,6 +38,10 @@ function AppRoutes() {
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route path="/friend-list-home" element={<FriendListHome />}/>
             <Route exact path='/' element={<React.StrictMode><SignIn /></React.StrictMode>} />
+       
+       
+            <Route exact path='/display' element={<EditEvent />} />
+
         </Routes>
     );
 }
