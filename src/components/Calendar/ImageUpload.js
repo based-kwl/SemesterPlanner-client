@@ -25,7 +25,8 @@ export default function ImageUpload(){
         }
     }
 
-    const handleFilePreview = (e) =>{
+    function handleFilePreview(e){
+        e.preventDefault();
         if (e.target.files[0]) {
             setImage(e.target.files[0]);
             setIsFilePicked(true);
