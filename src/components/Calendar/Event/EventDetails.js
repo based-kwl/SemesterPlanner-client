@@ -22,8 +22,6 @@ export default function EventDetails() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
                 setEventData(res.data)
-                console.log(res.data);
-
             }
             ).catch((err) => {
                 setEventError({ ...eventError, message: err.message });

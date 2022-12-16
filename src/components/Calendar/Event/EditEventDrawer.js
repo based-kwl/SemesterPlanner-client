@@ -9,7 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { useCallback , useState} from "react";
-import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton, CompleteEditEvent } from '../Custom/CustomCalendarForms';
+import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton } from '../Custom/CustomCalendarForms';
 
 export default function EditEvent(){
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -24,7 +24,6 @@ export default function EditEvent(){
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
                 setEventData(res.data)
-                console.log(res.data);
 
             }
             ).catch((err) => {
@@ -113,7 +112,6 @@ export default function EditEvent(){
     function deleteData(eventId) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
             .then((res) => {
-                console.log(res.data);
                 navigate('/calendar');
 
             }
@@ -122,11 +120,8 @@ export default function EditEvent(){
 
     }
     
-       // function deleteData(eventId) {
     const editUpdateButtons = (
         <React.Fragment>
-                               {/* <button class="button_updates" onClick={() => handleDelete({ eventId })}>delete</button> */}
-
             <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
             <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Delete" onClick={() => handleDelete({ eventId })} />
         </React.Fragment>
