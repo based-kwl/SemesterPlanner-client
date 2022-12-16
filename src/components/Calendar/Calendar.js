@@ -8,10 +8,12 @@ import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponen
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import { useNavigate } from "react-router";
 import GetAuthentication from "../Authentication/Authentification";
-import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import BottomDrawer from "../StudyRoom/BottomDrawer";
+import ImageUpload from "./ImageUpload";
 
 export default function CalendarView() {
 
@@ -19,7 +21,6 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
-    // const [image, setImage] = useState('');
     const navigate = useNavigate();
     const user = GetAuthentication();
    
@@ -76,10 +77,6 @@ export default function CalendarView() {
         deleteData(e.EventID);
         window.location.reload();
     }
-    function handleFile(e){
-        // setImage(e.target.files[0])
-    }
-
 
     const AcademicEventsTile = ({ date }) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
@@ -104,15 +101,8 @@ export default function CalendarView() {
         <React.Fragment>
             <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
             <div style={{marginTop:"10px", margin: 'auto', width:'360px',display:"flex", justifyContent:"space-between"}}>
-                <PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<>
-                    <input
-                    id="imageSelectButton"
-                    type="file"
-                    style={{ display: 'none' }}
-                    onChange={handleFile}
-                /> <AddAPhotoIcon/></>} onClick={() => {
-                    document.getElementById('imageSelectButton').click()
-                }}/>
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
+                              title={'Upload an Image'} content={<ImageUpload/>}/>
                 <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>
         </React.Fragment>
