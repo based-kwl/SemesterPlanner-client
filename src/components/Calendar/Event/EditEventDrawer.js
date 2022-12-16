@@ -20,7 +20,7 @@ export default function EditEvent(){
     const[loading,setLoading] = useState(true);
 
     //  Get specific event by event id
-    const fetchData = useCallback(() => {
+    const fetchEventData = useCallback(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
             .then((res) => {
                 setEventData(res.data)
@@ -35,7 +35,7 @@ export default function EditEvent(){
 
     
     React.useEffect(() => {
-        fetchData();
+        fetchEventData();
     }, [loading])
     function handleEditEventHeaderChange(e) {
         setEventData({ ...eventData, eventHeader: e.target.value })
