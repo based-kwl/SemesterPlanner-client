@@ -33,7 +33,7 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_t
     );
 }
 
-export const FileSelectButton = ({width, onChange}) => {
+export const FileSelectButton = ({width, onChange, name}) => {
     return (
         <Button
             onClick={() => {
@@ -45,7 +45,7 @@ export const FileSelectButton = ({width, onChange}) => {
                 width: width, backgroundColor: '#057D78'
             }}>
             <input type="file" id="fileSelectButton" onChange={onChange} style={{display: "none"}}/>
-            Select File
+            {name}
         </Button>
     );
 }
