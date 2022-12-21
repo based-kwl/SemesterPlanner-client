@@ -34,7 +34,7 @@ export default function CalendarView() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
-
+console.log(res.data);
             }
             ).catch((err) => {
                 seteventError({ ...eventError, message: err.message });

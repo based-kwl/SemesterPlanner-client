@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {  Radio, RadioGroup, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
-import Grid from "@mui/material/Grid";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -9,7 +8,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { useCallback , useState} from "react";
-import { CalendarDatePicker, CalendarTextField, CalendarTimePicker, UpdateCancelButton } from '../Custom/CustomCalendarForms';
+import { CalendarDatePicker} from '../Custom/CommonInputEventForm';
+import { EventForm } from '../Custom/CommonInputEventForm';
+import { PrimaryButton2 } from '../../CustomMUIComponents/CustomButtons';
+import { Stack } from '@mui/system';
 
 export default function EditEvent(){
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -37,25 +39,7 @@ export default function EditEvent(){
     React.useEffect(() => {
         fetchEventData();
     }, [loading])
-    function handleEditEventHeaderChange(e) {
-        setEventData({ ...eventData, eventHeader: e.target.value })
-    }
-
-    function handleEditDescriptionChange(e) {
-        setEventData({ ...eventData, description: e.target.value })
-    }
-
-    function handleEditStartDateChange(e) {
-        setEventData({ ...eventData, startDate: e.$d })
-    }
-
-    function handleEditStartTimeChange(e) {
-        setEventData({ ...eventData, startTime: e.target.value })
-    }
-
-    function handleEditEndTimeChange(e) {
-        setEventData({ ...eventData, endTime: e.target.value })
-    }
+    
     const recurrenceSelection = (
         <FormControl>
             <RadioGroup row onChange={handleRecurrenceChange}>
@@ -122,97 +106,21 @@ export default function EditEvent(){
     
     const editUpdateButtons = (
         <React.Fragment>
-            <UpdateCancelButton backgroundColor={'#912338'} content="Update" onClick={() => { handleEvent() }} />
-            <UpdateCancelButton backgroundColor={'#C8C8C8'} content="Delete" onClick={() => handleDelete({ eventId })} />
+                       <Stack direction='row' spacing={7} marginTop={2}>
+
+             <PrimaryButton2  width={'41vw'} colour={'#912338'} content="Update" onClick={() => { handleEvent() }} />
+            <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Delete" onClick={() => handleDelete({ eventId })} />
+            </Stack>
+
         </React.Fragment>
     );
     const editEventForm = (
         <React.Fragment>
         <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
-            <div style={{ paddingTop: '0px', paddingBottom: '10px' }}>{PageError}</div>
+        <div style={{ paddingTop: '0px', paddingBottom: '10px' }}>{PageError}</div>
+        <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
 
-            <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-  
-                    <CalendarTextField
-                        data_test="eventHeader"
-                        id='eventHeader'
-                        value={eventData.eventHeader}
-                        InputLabelProps={{ shrink: "Event Name" }}
-                        label="Event Name"
-                        variant='outlined'
-                        onChange={handleEditEventHeaderChange}
-                    
-                    />
-                </div>
-
-                {/** Event description */}
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                    <CalendarTextField
-                        data_test="eventDescription"
-                        id='description'
-                        InputLabelProps={{ shrink: "Description" }}
-                        value={eventData.description}
-                        label="Description"
-                        variant='outlined'
-                        onChange={handleEditDescriptionChange}
-                    />
-                </div>
-
-                {/** Event link */}
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                    <CalendarTextField
-                        data_test="eventLink"
-                        id='eventLink'
-                        value={eventData.link}
-                        label="Event Link"
-                        variant='outlined'
-                        onChange={(e) => setEventData({ ...eventData, link: e.target.value })}
-                    />
-                </div>
-
-
-                {/** Event Start Date */}
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <CalendarDatePicker
-                            data-test="eventStartDate"
-                            id='eventStartDate'
-                            key={"startDate"}
-                            label="Starting date"
-                            value={eventData.startDate}
-                            onChange={handleEditStartDateChange}
-                        />
-                    </LocalizationProvider>
-                </div>
-
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                    <Grid container spacing={2} alignItems="flex-end">
-
-                        {/** Event Start Time */}
-                            <CalendarTimePicker
-                                data-test="eventStartTime"
-                                id="startTime"
-                                label="Start Time"
-                                value={eventData.startTime}
-                               onChange={handleEditStartTimeChange}
-
-                            />
-
-                        {/** Event End Time */}
-                            <CalendarTimePicker
-                                data-test="eventEndTime"
-                                id="endTime"
-                                label="EndTime Time"
-                                value={eventData.endTime}
-                                onChange={handleEditEndTimeChange}
-                            
-                            />
-                                 
-                    </Grid>
-                </div>
-            </div>
-
+            <EventForm  eventState={eventData} eventStateSetter={setEventData}/>
             <FormControlLabel sx={{ display: 'block' }} label="Recurrent" control={
                 <Switch
                     data-test="eventSwitch"
@@ -222,13 +130,15 @@ export default function EditEvent(){
                 />
             } />
             <div>{isRecurrent && recurrenceSelection}</div>
+            
             <div>{editUpdateButtons}</div>
-           
+            </div>
+
         </form>
     </React.Fragment>
     )
 
  
 
-    return (editEventForm );
+    return (editEventForm  );
 }

@@ -9,7 +9,7 @@ import BottomDrawer from "../../StudyRoom/BottomDrawer"
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import EditIcon from '@mui/icons-material/Edit';
 import { useCallback, useState } from "react";
-import { CalendarTextField } from '../Custom/CustomCalendarForms';
+import { CalendarTextField } from '../Custom/CommonInputEventForm';
 import EditEvent from './EditEventDrawer';
 
 export default function EventDetails() {
@@ -54,7 +54,6 @@ export default function EventDetails() {
                         {/** Event header */}
 
                         <Grid item xs={12} md={12}>
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                 <CalendarTextField
                                     data_test="eventHeader"
                                     id='eventHeader'
@@ -65,13 +64,11 @@ export default function EventDetails() {
                                     inputProps={{ readOnly: true }}
 
                                 />
-                            </div>
                         </Grid>
 
                         {/** Event description */}
                         <Grid item xs={12} md={12}>
 
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                 <CalendarTextField
                                     data_test="eventDescription"
                                     id='description'
@@ -82,14 +79,12 @@ export default function EventDetails() {
                                     inputProps={{ readOnly: true }}
 
                                 />
-                            </div>
                         </Grid>
 
                         {/** Event link */}
 
                         <Grid item xs={12} md={12}>
 
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                 <CalendarTextField
                                     data_test="eventLink"
                                     id='eventLink'
@@ -99,13 +94,11 @@ export default function EventDetails() {
                                     inputProps={{ readOnly: true }}
 
                                 />
-                            </div>
                         </Grid>
 
                         {/** Event Start Date */}
                         <Grid item xs={12} md={12}>
 
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <CalendarTextField
                                         data-test="eventStartDate"
@@ -117,13 +110,9 @@ export default function EventDetails() {
 
                                     />
                                 </LocalizationProvider>
-                            </div>
                         </Grid>
 
                         <Grid item xs={12} md={12}>
-
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-
                                 {/** Event Start Time */}
                                 <CalendarTextField
                                     data-test="eventStartTime"
@@ -132,12 +121,10 @@ export default function EventDetails() {
                                     value={eventData.startTime}
                                     inputProps={{ readOnly: true }}
                                 />
-                            </div>
 
                         </Grid>
                         <Grid item xs={12} md={12}>
 
-                            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
 
                                 {/** Event End Time */}
                                 <CalendarTextField
@@ -147,7 +134,6 @@ export default function EventDetails() {
                                     value={eventData.endTime}
                                     inputProps={{ readOnly: true }}
                                 />
-                            </div>
                         </Grid>
                     </Grid>
                 </div>
@@ -158,10 +144,10 @@ export default function EventDetails() {
     const eventDetailsCard = (
         <React.Fragment>
             {/*Card containing static form with event details */}
-            <StudyRoomChatCard bottomRightRadius='0px' width='330px' height='740px' marginTop='50px' content={eventDetailsForm} />
+            <StudyRoomChatCard bottomRightRadius='0px' width='96%'  height='740px' marginTop='50px' content={eventDetailsForm} />
             <div style={{ display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw' }}>
                 {/*Drawer settings icon */}
-                <StudyRoomChatCard width='342px' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                <StudyRoomChatCard width='100%' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                     bottomLeftRadius='10px' bottomRightRadius='10px' content={<div
                         style={{ width: '100%', height: '100%', background: 'none', border: 'none' }}
                     ><BottomDrawer icon={<EditIcon style={{ color: '#912338', height: '4vh', width: '4vh' }} />}
@@ -174,7 +160,7 @@ export default function EventDetails() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px' content={eventDetailsCard} />
+                <BackgroundCard width='96vw' height='900px' content={eventDetailsCard} />
             </div>
         </React.Fragment>
     );
