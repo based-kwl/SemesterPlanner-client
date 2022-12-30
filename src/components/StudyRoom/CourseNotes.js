@@ -15,55 +15,46 @@ export default function ParticipantsList() {
     const [isFilePicked, setIsFilePicked] = useState(false);
     const fileListTop = useRef(null);
 
-    function getCourseNotes(){
+    function getCourseNotes() {
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
                 setFileList(res.data.reverse());
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
     }
 
     function handleDeleteCourseNotes(index) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
-            .then((res) => {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
+            .then(() => {
                 getCourseNotes();
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
         getCourseNotes();
     }
 
     async function handleUploadCourseNotes() {
-        // if (isFilePicked && selectedFile.type === "text/plain") {
-            let bufferedFile = null;
-            const reader = new FileReader();
-            reader.readAsText(selectedFile);
+        if (isFilePicked) {
+            let formData = new FormData();
+            formData.append('studyRoomID', studyRoomID);
+            formData.append('email', JSON.parse(localStorage.getItem("email")));
+            formData.append('file', selectedFile);
 
-            reader.onloadend = (event) => {
-                bufferedFile = Buffer.from(event.target.result, "utf-8");
-
-                axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, {
-                    studyRoomID: studyRoomID,
-                    type: selectedFile.type,
-                    email: JSON.parse(localStorage.getItem("email")),
-                    name: selectedFile.name,
-                    size: (selectedFile.size/1024).toFixed(1).toString(),
-                    file: bufferedFile
+            axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, formData)
+                .then(() => {
+                    setErrorMessage('');
+                    getCourseNotes();
+                    setSelectedFile(null);
+                    setIsFilePicked(false);
                 })
-                    .then(() => {
-                        setErrorMessage('');
-                        getCourseNotes();
-                        setSelectedFile(null);
-                        setIsFilePicked(false);
-                    })
-                    .catch(err => {
-                        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
-                    });
-            }
-        // } else if (!isFilePicked) {
-        //     setErrorMessage("No file selected!")
-        // } else if (selectedFile.type !== "text/plain") {
-        //     setErrorMessage("Only text files are supported!")
-        // }
+                .catch(err => {
+                    setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`);
+                });
+        } else if (!isFilePicked)
+            setErrorMessage("No file selected!");
     }
 
     const handleFileSelect = (event) => {
@@ -77,12 +68,12 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
             .then(res => {
                 const bufferedFile = Buffer.from(res.data.file.data.data, "base64");
 
                 // file object
-                const file = new Blob([bufferedFile], {type: 'text/plain'});
+                const file = new Blob([bufferedFile], {type: res.data.filetype});
 
                 // anchor link
                 const element = document.createElement("a");
@@ -106,42 +97,42 @@ export default function ParticipantsList() {
 
     const courseNotesList = (
         <>
-            <div style={{width:'90vw'}}>
+            <div style={{width: '90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
                     {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
-                                                             height={'80px'}
-                                                             content={<>
-                                                                 <Button style={{
-                                                                     display: 'flex',
-                                                                     justifyContent: 'left',
-                                                                     width: '100%',
-                                                                     color: 'black'
-                                                                 }} onClick={() => {
-                                                                     handleFileClick(index)
-                                                                 }}>
-                                                                     <div>
-                                                                         <p style={{
-                                                                             margin: "0px",
-                                                                             display: 'flex',
-                                                                             alignContent: 'left'
-                                                                         }}>name: {file.filename}</p>
-                                                                         <p style={{
-                                                                             margin: "0px",
-                                                                             display: 'flex',
-                                                                             alignContent: 'left'
-                                                                         }}>size: {file.filesize} kB</p>
-                                                                         <p style={{
-                                                                             margin: "0px",
-                                                                             display: 'flex',
-                                                                             alignContent: 'left'
-                                                                         }}>uploaded: {file.createdAt.split("T")[0]}</p>
-                                                                     </div>
-                                                                 </Button>
-                                                                 <Button
-                                                                     style={{color: "black", height: '100%'}}
-                                                                     onClick={() => handleDeleteCourseNotes(index)}><ClearIcon
-                                                                     style={{color: '#912338'}}/></Button></>}/>)}
+                                                                  height={'80px'}
+                                                                  content={<>
+                                                                      <Button style={{
+                                                                          display: 'flex',
+                                                                          justifyContent: 'left',
+                                                                          width: '100%',
+                                                                          color: 'black'
+                                                                      }} onClick={() => {
+                                                                          handleFileClick(index)
+                                                                      }}>
+                                                                          <div>
+                                                                              <p style={{
+                                                                                  margin: "0px",
+                                                                                  display: 'flex',
+                                                                                  alignContent: 'left'
+                                                                              }}>name: {file.filename}</p>
+                                                                              <p style={{
+                                                                                  margin: "0px",
+                                                                                  display: 'flex',
+                                                                                  alignContent: 'left'
+                                                                              }}>size: {parseFloat(file.filesize).toFixed(1).toString()} KB</p>
+                                                                              <p style={{
+                                                                                  margin: "0px",
+                                                                                  display: 'flex',
+                                                                                  alignContent: 'left'
+                                                                              }}>uploaded: {file.createdAt.split("T")[0]}</p>
+                                                                          </div>
+                                                                      </Button>
+                                                                      <Button
+                                                                          style={{color: "black", height: '100%'}}
+                                                                          onClick={() => handleDeleteCourseNotes(index)}><ClearIcon
+                                                                          style={{color: '#912338'}}/></Button></>}/>)}
                 </div>
             </div>
             <div style={{
@@ -156,10 +147,9 @@ export default function ParticipantsList() {
                     <div>
                         <p>Filename: {selectedFile.name}</p>
                         <p>Filetype: {selectedFile.type}</p>
-                        <p>Size in bytes: {selectedFile.size}</p>
+                        <p>Size: {(selectedFile.size / 1024).toFixed(1).toString()} KB</p>
                         <p>
-                            lastModifiedDate:{' '}
-                            {selectedFile.lastModifiedDate.toLocaleDateString()}
+                            Last Modified: {selectedFile.lastModifiedDate.toLocaleDateString()}
                         </p>
                     </div>
                 ) : null}
@@ -168,7 +158,8 @@ export default function ParticipantsList() {
                 </div>
                 <div style={{color: 'red'}}>{errorMessage}</div>
                 <div id={"uploadButton"}>
-                    <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"} onClick={handleUploadCourseNotes}/>
+                    <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"}
+                                    onClick={handleUploadCourseNotes}/>
                 </div>
             </div>
         </>
