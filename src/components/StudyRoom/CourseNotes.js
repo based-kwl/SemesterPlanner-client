@@ -33,7 +33,7 @@ export default function ParticipantsList() {
     }
 
     async function handleUploadCourseNotes() {
-        if (isFilePicked && selectedFile.type === "text/plain") {
+        // if (isFilePicked && selectedFile.type === "text/plain") {
             let bufferedFile = null;
             const reader = new FileReader();
             reader.readAsText(selectedFile);
@@ -59,11 +59,11 @@ export default function ParticipantsList() {
                         setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
                     });
             }
-        } else if (!isFilePicked) {
-            setErrorMessage("No file selected!")
-        } else if (selectedFile.type !== "text/plain") {
-            setErrorMessage("Only text files are supported!")
-        }
+        // } else if (!isFilePicked) {
+        //     setErrorMessage("No file selected!")
+        // } else if (selectedFile.type !== "text/plain") {
+        //     setErrorMessage("Only text files are supported!")
+        // }
     }
 
     const handleFileSelect = (event) => {
