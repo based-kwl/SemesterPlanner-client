@@ -70,7 +70,9 @@ export default function ParticipantsList() {
     function handleFileClick(index) {
         axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
             .then(res => {
-                const bufferedFile = Buffer.from(res.data.file.data.data, "base64");
+                console.log(res.data)
+
+                const bufferedFile = Buffer.from(res.data.bufferedFile.data, "base64");
 
                 // file object
                 const file = new Blob([bufferedFile], {type: res.data.filetype});
