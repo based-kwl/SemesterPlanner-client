@@ -5,7 +5,7 @@ import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import {PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
  import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -26,16 +26,14 @@ export default function CreateEvent() {
         link: '',
         startDate: new Date(),
         endDate: new Date(),
-        startTime: '12:00',
-        endTime: '12:00',
-        reccurence: 'once'
+        recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
     const navigate = useNavigate();
 
     const recurrenceSelection = (
         <FormControl>
-            <RadioGroup row onChange={handleReccurenceChange}>
+            <RadioGroup row onChange={handleRecurrenceChange}>
                 <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
                 <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
                 <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
@@ -59,13 +57,13 @@ export default function CreateEvent() {
 
 
 
-    function handleReccurenceChange(e) {
-        setEventData({ ...eventData, reccurence: e.target.value})
+    function handleRecurrenceChange(e) {
+        setEventData({ ...eventData, recurrence: e.target.value})
     }
 
     function handleEvent() {
         // TODO:  validate user inputs if have time
-        navigate('/calendar');
+        // navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then(() => {
                 navigate('/calendar');
@@ -88,7 +86,7 @@ export default function CreateEvent() {
         </Typography>
     ) : null;
 
-    function handleIsReccurentChange() {
+    function handleIsRecurrentChange() {
         setIsRecurrent((prev) =>  !prev);
     }
 
@@ -118,7 +116,7 @@ export default function CreateEvent() {
                     <Switch
                         sx={{color: '#912338'}}
                         checked={isRecurrent}
-                        onChange={handleIsReccurentChange}
+                        onChange={handleIsRecurrentChange}
                     />
                 }/>
                 <div>{ isRecurrent && recurrenceSelection }</div>

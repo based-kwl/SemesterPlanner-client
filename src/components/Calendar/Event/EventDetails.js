@@ -105,7 +105,7 @@ export default function EventDetails() {
                                         id='eventStartDate'
                                         key={"startDate"}
                                         label="Starting date"
-                                        value={eventData.startDate}
+                                        value={new Date(eventData.startDate).toLocaleDateString()}
                                         inputProps={{ readOnly: true }}
 
                                     />
@@ -118,7 +118,7 @@ export default function EventDetails() {
                                     data-test="eventStartTime"
                                     id="startTime"
                                     label="Start Time"
-                                    value={eventData.startTime}
+                                    value={new Date(eventData.startTime).toTimeString()}
                                     inputProps={{ readOnly: true }}
                                 />
 
@@ -130,8 +130,8 @@ export default function EventDetails() {
                                 <CalendarTextField
                                     data-test="eventEndTime"
                                     id="endTime"
-                                    label="EndTime Time"
-                                    value={eventData.endTime}
+                                    label="End Time"
+                                    value={new Date(eventData.endTime).toTimeString()}
                                     inputProps={{ readOnly: true }}
                                 />
                         </Grid>

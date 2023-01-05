@@ -16,7 +16,6 @@ import axios from "axios";
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date())
-    const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
 
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
@@ -24,8 +23,6 @@ export default function CalendarView() {
     const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
-
 
     const user = GetAuthentication();
 
@@ -54,7 +51,7 @@ console.log(res.data);
     React.useEffect(() => {
         fetchData();
         fetchAcademicData();
-    }, [loading])
+    }, [])
 
     function addEventButton() {
         navigate('/event');
@@ -69,6 +66,10 @@ console.log(res.data);
 
     };
 
+    const getTime = (e) => {
+        let date = new Date(e);
+        return date.getHours() + ':' + date.getMinutes();
+    }
 
     const AcademicEventsTile = ({ date }) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
@@ -166,8 +167,8 @@ console.log(res.data);
                         content={
                             <EventDisplay
                                 startDate={e.startDate}
-                                startTime={e.startTime}
-                                endTime={e.endTime}
+                                startTime={getTime(e.startTime)}
+                                endTime={getTime(e.endTime)}
                                 description={e.description}
                                 header={e.eventHeader}
                                 EventID={e._id}
