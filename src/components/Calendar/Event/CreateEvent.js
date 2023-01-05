@@ -26,6 +26,8 @@ export default function CreateEvent() {
         link: '',
         startDate: new Date(),
         endDate: new Date(),
+        startTime: new Date(),
+        endTime: new Date(),
         recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
@@ -63,7 +65,6 @@ export default function CreateEvent() {
 
     function handleEvent() {
         // TODO:  validate user inputs if have time
-        // navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then(() => {
                 navigate('/calendar');

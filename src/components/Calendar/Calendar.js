@@ -11,6 +11,7 @@ import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
+import {getTime} from "./CommonFunctions";
 
 
 export default function CalendarView() {
@@ -31,7 +32,6 @@ export default function CalendarView() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                 setEvents(res.data)
-console.log(res.data);
             }
             ).catch((err) => {
                 seteventError({ ...eventError, message: err.message });
@@ -65,11 +65,6 @@ console.log(res.data);
         navigate(`/editevent/${e.EventID}`)
 
     };
-
-    const getTime = (e) => {
-        let date = new Date(e);
-        return date.getHours() + ':' + date.getMinutes();
-    }
 
     const AcademicEventsTile = ({ date }) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))

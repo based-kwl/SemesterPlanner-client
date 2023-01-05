@@ -9,6 +9,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import {getTime} from "../CommonFunctions";
 
 
 export const CalendarTextField = ({width, inputProps, id, value, label, variant, onChange, data_test}) => {
@@ -67,28 +68,6 @@ export function EventForm({eventState, eventStateSetter}) {
         endTime.setHours(e.target.value.split(':')[0], e.target.value.split(':')[1]);
         eventStateSetter({...eventState, endTime: endTime.toISOString()});
     }
-
-    const getStartTime = () => {
-        let date;
-        if (eventState.startTime)
-            date = new Date(eventState.startTime).toTimeString();
-        else
-            date = new Date().toTimeString();
-        date = (date.split(':')[0] + ':' + date.split(':')[1]);
-        return date.toString();
-    }
-
-    const getEndTime = () => {
-        let date;
-        if (eventState.endTime)
-            date = new Date(eventState.endTime).toTimeString();
-        else
-            date = new Date().toTimeString();
-        date = (date.split(':')[0] + ':' + date.split(':')[1]);
-        return date.toString();
-    }
-
-    console.log(eventState)
 
     const eventForm = (
         <div style={{paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px'}}>
@@ -156,7 +135,7 @@ export function EventForm({eventState, eventStateSetter}) {
                     id="startTime"
                     label="Start Time"
                     type="time"
-                    value={getStartTime()}
+                    value={getTime(eventState.startTime)}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -173,7 +152,7 @@ export function EventForm({eventState, eventStateSetter}) {
                     id="endTime"
                     label="End Time"
                     type="time"
-                    value={getEndTime()}
+                    value={getTime(eventState.endTime)}
                     InputLabelProps={{
                         shrink: true,
                     }}

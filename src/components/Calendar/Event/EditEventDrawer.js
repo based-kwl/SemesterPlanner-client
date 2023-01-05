@@ -85,18 +85,12 @@ export default function EditEvent() {
         </Typography>
     ) : null;
 
-    function handleIsReccurentChange() {
+    function handleIsRecurrentChange() {
         setIsRecurrent((prev) => !prev);
     }
 
     function handleDelete(e) {
-        deleteData(e.eventId);
-        navigate('/calendar');
-        // window.location.reload();
-    }
-
-    function deleteData(eventId) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventId}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${e.eventId}`)
             .then(() => {
                     navigate('/calendar');
                 }
@@ -131,7 +125,7 @@ export default function EditEvent() {
                             data-test="eventSwitch"
                             sx={{color: '#912338'}}
                             checked={isRecurrent}
-                            onChange={handleIsReccurentChange}
+                            onChange={handleIsRecurrentChange}
                         />
                     }/>
                     <div>{isRecurrent && recurrenceSelection}</div>
