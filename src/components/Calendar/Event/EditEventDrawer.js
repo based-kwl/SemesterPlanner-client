@@ -68,7 +68,6 @@ export default function EditEvent() {
     }
 
     function handleEvent() {
-        console.log(eventData)
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
                 navigate('/calendar');
