@@ -65,10 +65,6 @@ export default function CalendarView() {
         setDate(d);
     }
 
-    const handleEdit = (e) => {
-        // navigate(`/editevent/${e.EventID}`)
-    };
-
     const AcademicEventsTile = ({date}) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
             ? "academicHighlight"
@@ -110,11 +106,9 @@ export default function CalendarView() {
         )
     }
 
-    const EventDisplay = ({startTime, endTime, header, description, startDate, EventID, modifiable}) => {
+    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
         const currentDate = new Date(startDate);
         return (
-            <div onClick={() => modifiable ? handleEdit({EventID}) : <></>}
-                 style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
                 <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
 
                     <div style={{display: 'inline-block', paddingLeft: '10px'}}>
@@ -135,11 +129,6 @@ export default function CalendarView() {
                     </div>
 
                 </div>
-
-                <div style={{float: 'right'}}>
-
-                </div>
-            </div>
         )
     }
 
@@ -171,10 +160,9 @@ export default function CalendarView() {
                                     description={e.description}
                                     header={e.eventHeader}
                                     EventID={e._id}
-                                    modifiable={true}
                                 />
                                 <BottomDrawer icon={<EditIcon style={{ color: '#912338', height: '2vh', width: '2vh' }} />}
-                                              title={'Edit Event'} content={<EditEvent eventId={e._id}/>} />
+                                              title={'Edit Event'} content={<EditEvent eventId={e._id} onDrawerClose={fetchData} />} />
                             </>
                         }
                     />
@@ -203,8 +191,6 @@ export default function CalendarView() {
                                 endTime={"23:59"}
                                 header={e.description}
                                 EventID={e._id}
-                                modifiable={false}
-
                             />
                         }/>
                 ))}

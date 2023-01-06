@@ -68,7 +68,9 @@ export default function EditEvent(props) {
     function handleEvent() {
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
-                window.location.reload();
+                if (props.onDrawerClose)
+                    props.onDrawerClose();
+                document.elementFromPoint(0, 0).click();
             })
             .catch(err => {
                 setEventError({...eventError, message: "Error connecting to database. " + err});
@@ -90,7 +92,9 @@ export default function EditEvent(props) {
     function handleDelete(e) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${e.eventId}`)
             .then(() => {
-                    window.location.reload();
+                    if (props.onDrawerClose)
+                        props.onDrawerClose();
+                    document.elementFromPoint(0, 0).click();
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
