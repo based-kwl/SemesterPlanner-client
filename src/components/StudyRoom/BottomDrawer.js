@@ -10,7 +10,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 const drawerBleeding = 0;
 
-const Root = styled('div')(({}) => ({
+const Root = styled('div')(() => ({
     height: '100%'
 }));
 
