@@ -1,17 +1,20 @@
 import * as React from 'react';
-import { useState, useMemo } from 'react';
-import { Typography } from "@mui/material";
+import {useState, useMemo} from 'react';
+import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 import GetAuthentication from "../Authentication/Authentification";
-import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
+import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
 import {getTime} from "./CommonFunctions";
+import EditIcon from "@mui/icons-material/Edit";
+import EditEvent from "./Event/EditEvent";
+import BottomDrawer from "../StudyRoom/BottomDrawer";
 
 
 export default function CalendarView() {
@@ -21,7 +24,7 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
 
-    const [eventError, seteventError] = React.useState({ message: "Error, please try again later", hasError: false });
+    const [eventError, seteventError] = React.useState({message: "Error, please try again later", hasError: false});
 
     const navigate = useNavigate();
 
@@ -31,20 +34,21 @@ export default function CalendarView() {
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                setEvents(res.data)
-            }
+                    setEvents(res.data)
+                }
             ).catch((err) => {
-                seteventError({ ...eventError, message: err.message });
-            });
+            seteventError({...eventError, message: err.message});
+        });
     }
+
     function fetchAcademicData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
             .then((res) => {
-                setAcedemicEvents(res.data)
-            }
+                    setAcedemicEvents(res.data)
+                }
             ).catch((err) => {
-                seteventError({ ...eventError, message: err.message });
-            });
+            seteventError({...eventError, message: err.message});
+        });
 
     }
 
@@ -62,11 +66,10 @@ export default function CalendarView() {
     }
 
     const handleEdit = (e) => {
-        navigate(`/editevent/${e.EventID}`)
-
+        // navigate(`/editevent/${e.EventID}`)
     };
 
-    const AcademicEventsTile = ({ date }) => (
+    const AcademicEventsTile = ({date}) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
             ? "academicHighlight"
             : ""
@@ -75,7 +78,7 @@ export default function CalendarView() {
     const calendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({ date }) => <DayTile key={date} day={date} />}
+                tileContent={({date}) => <DayTile key={date} day={date}/>}
                 tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}
@@ -84,17 +87,16 @@ export default function CalendarView() {
     )
 
 
-
     const calendarCard = (
         <React.Fragment>
-            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
+            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth}/>
             <div className="center">
-                <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
+                <PrimaryButton2 style={{margin: 'auto'}} colour={'#912338'} content="+" onClick={addEventButton}/>
             </div>
         </React.Fragment>
     )
 
-    const EventHeader = ({ content }) => {
+    const EventHeader = ({content}) => {
         return (
             <React.Fragment>
                 <CardContent>
@@ -108,17 +110,18 @@ export default function CalendarView() {
         )
     }
 
-    const EventDisplay = ({ startTime, endTime, header, description, startDate, EventID, modifiable }) => {
+    const EventDisplay = ({startTime, endTime, header, description, startDate, EventID, modifiable}) => {
         const currentDate = new Date(startDate);
         return (
-            <div onClick={() => modifiable ? handleEdit({ EventID }) : <></>} style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow' }}>
-                <div style={{ paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow' }}>
+            <div onClick={() => modifiable ? handleEdit({EventID}) : <></>}
+                 style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
+                <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
 
-                    <div style={{ display: 'inline-block', paddingLeft: '10px' }}>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    <div style={{display: 'inline-block', paddingLeft: '10px'}}>
+                        <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                             {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                         </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="#000000" fontWeight={500} style={{ fontFamily: 'Roboto' }}>
+                        <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
                             {header}
                         </Typography>
 
@@ -133,7 +136,7 @@ export default function CalendarView() {
 
                 </div>
 
-                <div style={{ float: 'right' }}>
+                <div style={{float: 'right'}}>
 
                 </div>
             </div>
@@ -148,8 +151,8 @@ export default function CalendarView() {
                 height='30px' j
                 marginTop='15px'
                 overflow='initial'
-                content={<EventHeader content={"School"} />}
-                backgroundColor='#0095FF' />
+                content={<EventHeader content={"School"}/>}
+                backgroundColor='#0095FF'/>
             <div className="events">
 
                 {events && events.map((e, index) => (
@@ -160,15 +163,20 @@ export default function CalendarView() {
                         height='90px'
                         marginTop='10px' overflow='hidden'
                         content={
-                            <EventDisplay
-                                startDate={e.startDate}
-                                startTime={getTime(e.startTime)}
-                                endTime={getTime(e.endTime)}
-                                description={e.description}
-                                header={e.eventHeader}
-                                EventID={e._id}
-                                modifiable={true}
-                            />}
+                            <>
+                                <EventDisplay
+                                    startDate={e.startDate}
+                                    startTime={getTime(e.startTime)}
+                                    endTime={getTime(e.endTime)}
+                                    description={e.description}
+                                    header={e.eventHeader}
+                                    EventID={e._id}
+                                    modifiable={true}
+                                />
+                                <BottomDrawer icon={<EditIcon style={{ color: '#912338', height: '2vh', width: '2vh' }} />}
+                                              title={'Edit Event'} content={<EditEvent eventId={e._id}/>} />
+                            </>
+                        }
                     />
                 ))}
             </div>
@@ -177,7 +185,7 @@ export default function CalendarView() {
 
     const academicEventsDisplay = (
         <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-            content={<EventHeader content={"Important Academic Events"} />} backgroundColor='#E5A712' />
+                      content={<EventHeader content={"Important Academic Events"}/>} backgroundColor='#E5A712'/>
             <div className="events">
 
                 {academicEvents && academicEvents.map((e, index) => (
@@ -198,7 +206,7 @@ export default function CalendarView() {
                                 modifiable={false}
 
                             />
-                        } />
+                        }/>
                 ))}
             </div>
         </>
@@ -210,7 +218,7 @@ export default function CalendarView() {
         && date1.getDate() === date2.getDate()
     )
 
-    const DayTile = ({ day }) => {
+    const DayTile = ({day}) => {
         const eventsThisDay = events.filter((e) => {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
@@ -219,10 +227,10 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"}/>);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader}/>
             ))
         }
 
@@ -230,7 +238,7 @@ export default function CalendarView() {
     }
 
 
-    const CalendarDayEventIcon = ({ eventType }) => {
+    const CalendarDayEventIcon = ({eventType}) => {
         let backgroundColor = "#0095FF"
         if (eventType === "Gym") {
             backgroundColor = "#735BF2"
@@ -240,13 +248,13 @@ export default function CalendarView() {
             backgroundColor = "#800410"
         }
 
-        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
+        let tileIcon = <TripOriginIcon sx={{color: backgroundColor, transform: "scale(0.25)"}}/>
 
         if (eventType === "none") {
             tileIcon = (<></>);
         }
 
-        return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
+        return (<div style={{width: "40px", height: "40px"}}><br/>{tileIcon}</div>);
     }
 
     const calendarPageCards = useMemo(() => (
@@ -259,9 +267,9 @@ export default function CalendarView() {
 
     return (
         <React.Fragment>
-            <PersistentDrawerLeft />
-            <div style={{ paddingTop: '30px' }}>
-                <BackgroundCard width='372px' height='100%' content={calendarPageCards} />
+            <PersistentDrawerLeft/>
+            <div style={{paddingTop: '30px'}}>
+                <BackgroundCard width='372px' height='100%' content={calendarPageCards}/>
             </div>
         </React.Fragment>
     );

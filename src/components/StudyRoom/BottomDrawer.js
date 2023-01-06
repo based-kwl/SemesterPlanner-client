@@ -10,7 +10,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 const drawerBleeding = 0;
 
-const Root = styled('div')(({theme}) => ({
+const Root = styled('div')(({}) => ({
     height: '100%'
 }));
 
@@ -32,11 +32,10 @@ function SwipeableEdgeDrawer(props) {
     const toggleDrawer = (newOpen) => async () => {
         setOpen(newOpen);
 
-        if (globalCSS) // if global CSS is set (i.e. drawer is open), wait for 300ms until bottom drawer dismisses before removing global CSS
+        if (globalCSS) { // if global CSS is set (i.e. drawer is open), wait for 300ms until bottom drawer dismisses before removing global CSS
             await delay(300);
-        if (globalCSS) // disabling global CSS when bottom drawer is closed and enabling it when bottom drawer is open
-            setGlobalCSS(false);
-        else
+            setGlobalCSS(false); // disabling global CSS when bottom drawer is closed and enabling it when bottom drawer is open
+        } else
             setGlobalCSS(true);
     };
 

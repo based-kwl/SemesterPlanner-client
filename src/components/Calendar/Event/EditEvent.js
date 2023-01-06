@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Radio, RadioGroup, Typography} from "@mui/material";
-import {useNavigate} from "react-router";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -13,11 +12,10 @@ import {EventForm} from '../Custom/CommonInputEventForm';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
 import {Stack} from '@mui/system';
 
-export default function EditEvent() {
+export default function EditEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
-    const eventId = window.location.href.split("/")[window.location.href.split("/").length - 1];
+    const eventId = props.eventId;
     const [eventData, setEventData] = React.useState({});
-    const navigate = useNavigate();
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
     const [loading, setLoading] = useState(true);
 
@@ -70,7 +68,7 @@ export default function EditEvent() {
     function handleEvent() {
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
-                navigate('/calendar');
+                window.location.reload();
             })
             .catch(err => {
                 setEventError({...eventError, message: "Error connecting to database. " + err});
@@ -92,7 +90,7 @@ export default function EditEvent() {
     function handleDelete(e) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${e.eventId}`)
             .then(() => {
-                    navigate('/calendar');
+                    window.location.reload();
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
