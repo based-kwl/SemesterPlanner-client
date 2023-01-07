@@ -7,6 +7,7 @@ import {grey} from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
 const drawerBleeding = 0;
 
@@ -38,11 +39,6 @@ function SwipeableEdgeDrawer(props) {
         } else
             setGlobalCSS(true);
     };
-
-    // method to create delays in the code
-    const delay = ms => new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
 
     // This is used only for the example
     const container = window !== undefined ? () => window().document.body : undefined;
