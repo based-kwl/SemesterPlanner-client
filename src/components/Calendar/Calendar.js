@@ -65,6 +65,22 @@ export default function CalendarView() {
         setDate(d);
     }
 
+    /**
+     * Method that updates the events state after an events has been updated or deleted
+     * @param {event} eventData, event data array containing all updated event params
+     * @param {int} type, type of update required; 0 = update, 1 = delete
+     */
+    async function updateEventList(eventData, type = 0) {
+        const tempEvents = [...events];
+
+        if (type === 0)
+            tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
+        else if (type === 1)
+            tempEvents.splice(tempEvents.findIndex((e) => e._id === eventData._id), 1);
+
+        setEvents(tempEvents);
+    }
+
     const AcademicEventsTile = ({date}) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
             ? "academicHighlight"
@@ -109,26 +125,26 @@ export default function CalendarView() {
     const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
         const currentDate = new Date(startDate);
         return (
-                <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
+            <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
 
-                    <div style={{display: 'inline-block', paddingLeft: '10px'}}>
-                        <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                            {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
-                        </Typography>
-                        <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
-                            {header}
-                        </Typography>
+                <div style={{display: 'inline-block', paddingLeft: '10px'}}>
+                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
+                    </Typography>
+                    <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
+                        {header}
+                    </Typography>
 
-                        <Typography variant="body2" color="text.secondary">
-                            {description}
-                        </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {description}
+                    </Typography>
 
-                        <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary">
 
-                        </Typography>
-                    </div>
-
+                    </Typography>
                 </div>
+
+            </div>
         )
     }
 
@@ -161,8 +177,10 @@ export default function CalendarView() {
                                     header={e.eventHeader}
                                     EventID={e._id}
                                 />
-                                <BottomDrawer icon={<EditIcon style={{ color: '#912338', height: '2vh', width: '2vh' }} />}
-                                              title={'Edit Event'} content={<EditEvent eventId={e._id} onDrawerClose={fetchData} />} />
+                                <BottomDrawer icon={<EditIcon style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
+                                              title={'Edit Event'}
+                                              content={<EditEvent eventId={e._id} onDrawerClose={updateEventList}
+                                                                  eventData={e}/>}/>
                             </>
                         }
                     />

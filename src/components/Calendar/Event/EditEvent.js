@@ -6,7 +6,6 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import {useCallback, useState} from "react";
 import {CalendarDatePicker} from '../Custom/CommonInputEventForm';
 import {EventForm} from '../Custom/CommonInputEventForm';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
@@ -14,28 +13,8 @@ import {Stack} from '@mui/system';
 
 export default function EditEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
-    const eventId = props.eventId;
-    const [eventData, setEventData] = React.useState({});
+    const [eventData, setEventData] = React.useState(props.eventData);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const [loading, setLoading] = useState(true);
-
-    //  Get specific event by event id
-    const fetchEventData = useCallback(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}events/event/${eventId}`)
-            .then((res) => {
-                    setEventData(res.data)
-                }
-            ).catch((err) => {
-            setEventError({...eventError, message: err.message});
-            setLoading(false);
-
-        });
-    }, [])
-
-
-    React.useEffect(() => {
-        fetchEventData();
-    }, [loading])
 
     const recurrenceSelection = (
         <FormControl>
@@ -65,12 +44,13 @@ export default function EditEvent(props) {
         setEventData({...eventData, recurrence: e.target.value})
     }
 
-    function handleEvent() {
+    function handleEventUpdate() {
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, eventData)
             .then(() => {
-                if (props.onDrawerClose)
-                    props.onDrawerClose();
                 document.elementFromPoint(0, 0).click();
+
+                if (props.onDrawerClose)
+                    props.onDrawerClose(eventData, 0);
             })
             .catch(err => {
                 setEventError({...eventError, message: "Error connecting to database. " + err});
@@ -89,12 +69,13 @@ export default function EditEvent(props) {
         setIsRecurrent((prev) => !prev);
     }
 
-    function handleDelete(e) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${e.eventId}`)
+    function handleEventDelete() {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventData._id}`)
             .then(() => {
-                    if (props.onDrawerClose)
-                        props.onDrawerClose();
-                    document.elementFromPoint(0, 0).click();
+                document.elementFromPoint(0, 0).click();
+
+                if (props.onDrawerClose)
+                        props.onDrawerClose(eventData, 1);
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
@@ -106,15 +87,14 @@ export default function EditEvent(props) {
         <React.Fragment>
             <Stack direction='row' spacing={7} marginTop={2}>
 
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Update" onClick={() => {
-                    handleEvent()
-                }}/>
+                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Update" onClick={handleEventUpdate}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Delete"
-                                onClick={() => handleDelete({eventId})}/>
+                                onClick={handleEventDelete}/>
             </Stack>
 
         </React.Fragment>
     );
+
     const editEventForm = (
         <React.Fragment>
             <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
