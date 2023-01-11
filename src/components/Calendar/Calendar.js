@@ -16,7 +16,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import BottomDrawer from "../StudyRoom/BottomDrawer";
 import ImageUpload from "./ImageUpload";
 
 export default function CalendarView() {
