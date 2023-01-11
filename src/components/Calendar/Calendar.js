@@ -16,7 +16,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 
-
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date())
