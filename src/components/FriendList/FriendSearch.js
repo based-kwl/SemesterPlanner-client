@@ -40,15 +40,18 @@ export default function FriendSearch() {
 
     //send a friend request
     function handleAdd(e) {
-        e.preventDefault();
-        setAdded(true);
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {senderEmail: ownerEmail, receiverEmail: friend})
-            .then(() => {
-            })
-            .catch(err => {
-                console.log('Error:', err)
-            });
-        setSearchName("");
+        if (friend !== '') {
+            e.preventDefault();
+            setAdded(true);
+            axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {senderEmail: ownerEmail, receiverEmail: friend})
+                .then(() => {
+                })
+                .catch(err => {
+                    console.log('Error:', err)
+                });
+            setSearchName("");
+        }
+
     }
 
     function handleSearch(e) {
@@ -64,8 +67,15 @@ export default function FriendSearch() {
                                     if (isInFriends) {
                                         setText("already a friend");
                                     } else {
-                                        setFriend(res.data.email);
-                                        setFound(true);}
+                                        if (res.data.email) {
+                                            console.log(res.data.email);
+                                            setFriend(res.data.email);
+                                            setFound(true);
+                                        } else {
+                                            setFound(false);
+                                        }
+
+                                    }
                 })
                 .catch(err => {
                     setText(err);
@@ -80,6 +90,7 @@ export default function FriendSearch() {
             <form style={{alignItems:'center'}} onSubmit={handleSearch}>
                 <TextField
                     fullWidth
+                    data-test="seachInput"
                     id='search'
                     label='Search...'
                     variant='outlined'
@@ -89,7 +100,7 @@ export default function FriendSearch() {
                     }}
                     InputProps={{
                         endAdornment: <InputAdornment
-                            position='end'><Button type="submit"
+                            position='end'><Button data-test="searchFromInput" type="submit"
                                                    style={{color: '#912338'}}><SearchIcon/></Button></InputAdornment>
                     }}
                 />
@@ -115,6 +126,7 @@ export default function FriendSearch() {
                             width={'90vw'}
                             height={'40px'}
                             content={<>{searchName}<Button onClick={handleAdd}
+                                                           data-test="addFriend"
                                                            variant="text"
                                                            sx={{borderColor: "none"}}
                             ><AddIcon

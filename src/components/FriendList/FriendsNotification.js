@@ -20,8 +20,9 @@ export default function FriendNotification() {
 
     function handleCancel(index){
         const id = requestSent[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{ requestId: id, email: ownerEmail })
             .then(() => {
+                setRequestSent((prevState) => prevState.filter(request => request !== requestSent[index]))
             })
             .catch(err => {console.log('Error:', err)});
         setLoadingCancel(true);
@@ -30,8 +31,9 @@ export default function FriendNotification() {
 
     function handleReject(index){
         const id = requestReceived[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"declined", email: ownerEmail, requestId:id})
             .then(() => {
+                setRequestReceived((prevState) => prevState.filter((request) => request._id !== requestReceived[index]._id))
             })
             .catch(err => {console.log('Error:', err)});
         setLoadingReject(true);
@@ -39,7 +41,7 @@ export default function FriendNotification() {
 
     function handleAccept(index){
         const id = requestReceived[index]._id;
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted", requestId:id})
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted",email: ownerEmail, requestId:id})
             .then(() => {
             })
             .catch(err => {console.log('Error:', err)});
@@ -57,7 +59,7 @@ export default function FriendNotification() {
             .then(res => {
                 setRequestSent(res.data);
             })
-    },[loadingCancel, loadingAccept, loadingReject])
+    },[])
 
     const friendNotification = (
         <React.Fragment>
@@ -70,6 +72,7 @@ export default function FriendNotification() {
                                            <Button
                                                variant="text"
                                                onClick={() => handleCancel(index)}><p style={{color:"#6E6E6E"}}>Cancel Request</p><ClearIcon
+                                               data-test={`cancel-request-${sent.receiverEmail}`}
                                                style={{color: '#912338'}}/>
                                            </Button>
                                        </>}/>
@@ -80,17 +83,19 @@ export default function FriendNotification() {
             <Typography variant="body1" marginBottom="10px"> Friend Request Received</Typography>
 
             <div style={{overflow: 'auto', height: '30vh'}}>
-                {requestReceived.map((received, index) => (
+                {requestReceived && requestReceived.map((received, index) => (
                     <div key={index}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {received.senderEmail}
                                        <Stack direction="row" >
                                            <Button
+                                               data-test={`accept-request-${received.senderEmail}`}
                                                variant="text"
                                                onClick={() => handleAccept(index)}><CheckIcon
                                                style={{color: '#057D78'}}/>
                                            </Button>
                                            <Button
+                                               data-test={`decline-request-${received.senderEmail}`}
                                                variant="text"
                                                onClick={() => handleReject(index)}><ClearIcon
                                                style={{color: '#912338'}}/>

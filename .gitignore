@@ -3,12 +3,16 @@
 node_modules/
 
 # testing
-/coverage
+coverage/
 
 # production
 /build
 
+/cypress/screenshots/
+/cypress/video/
+
 #ide
 /.idea
 
-
+#testing env variables
+/cypress.env.json

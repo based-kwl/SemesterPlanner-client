@@ -10,25 +10,24 @@ Then :
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Open [http://localhost:3000](http://localhost:3000) 
 
 
-To run e2e tests, you can run:
-### `npx cypress open`
-this will open the cypress app and show all your tests. 
-*Note : you need to start both client and server in order to run these tests.
+## E2E tests:
+Usage : 
+1) Checkout from the client repository with the branch you want to include in your test
+2) Start the client development server (localhost)
+3) Checkout from the server repository with the branch you want to include in your test
+4) Start the server development server (localhost)
+5) Make sure you have the ```cypress.env.json``` file in the root directory of the project.
 
-### `npm test`
+Then run:
+### `npm run e2e`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### Deployment
 
-Every push / merge to main will be deploy into production. 
+Every push / merge to main will be deployed into production. 
 This is the app URL [https://main.d130dq3c8sh12x.amplifyapp.com/](https://main.d130dq3c8sh12x.amplifyapp.com/) 
 
 

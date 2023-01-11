@@ -1,9 +1,10 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-export const PrimaryButton = ({content, width}) => {
+export const PrimaryButton = ({content, width, data_test}) => {
     return (
         <Button
+            data-test={data_test}
             type='submit'
             variant="contained"
             style={{
@@ -16,9 +17,10 @@ export const PrimaryButton = ({content, width}) => {
 }
 
 
-export const PrimaryButton2 = ({content, width, onClick, colour, disable}) => {
+export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_test}) => {
     return (
         <Button
+            data-test={data_test}
             disabled={disable}
             onClick={onClick}
             variant="contained"
@@ -31,7 +33,7 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable}) => {
     );
 }
 
-export const FileSelectButton = ({width, onChange}) => {
+export const FileSelectButton = ({width, onChange, name}) => {
     return (
         <Button
             onClick={() => {
@@ -43,7 +45,7 @@ export const FileSelectButton = ({width, onChange}) => {
                 width: width, backgroundColor: '#057D78'
             }}>
             <input type="file" id="fileSelectButton" onChange={onChange} style={{display: "none"}}/>
-            Select File
+            {name}
         </Button>
     );
 }

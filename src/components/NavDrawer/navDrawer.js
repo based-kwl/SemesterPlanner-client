@@ -87,9 +87,9 @@ export default function PersistentDrawerLeft(params) {
     };
 
     React.useEffect(()=> {
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests-count/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${email}`)
             .then(res => {
-                setCount(res.data);
+                setCount(res.data.length);
             })
             .catch(err => {console.log('Error',err);})
     },[])
@@ -136,6 +136,7 @@ export default function PersistentDrawerLeft(params) {
                 <Toolbar>
                     <IconButton
                         color="inherit"
+                        data-test="navbar"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
@@ -178,7 +179,7 @@ export default function PersistentDrawerLeft(params) {
                 <List>
                     {['Home', 'Profile', 'Progress Report', 'Study Groups', 'Friends List'].map((text, index) => (
                         <ListItem key={text} disablePadding onClick={() => redirect(text)}>
-                            <ListItemButton>
+                            <ListItemButton data-test={text}>
                                 <ListItemIcon>
                                     {ListIconsA[index]}
                                 </ListItemIcon>
@@ -191,7 +192,7 @@ export default function PersistentDrawerLeft(params) {
                 <List>
                     {['Logout'].map((text, index) => (
                         <ListItem key={text} disablePadding onClick={() => redirect(text)}>
-                            <ListItemButton>
+                            <ListItemButton data-test="logout">
                                 <ListItemIcon>
                                     {ListIconsB[index]}
                                 </ListItemIcon>
