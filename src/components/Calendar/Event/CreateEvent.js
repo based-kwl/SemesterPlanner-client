@@ -5,15 +5,16 @@ import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import {PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
-import Grid from "@mui/material/Grid";
-import {LocalizationProvider} from "@mui/x-date-pickers";
+import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
+ import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
+import {  EventForm } from '../Custom/CommonInputEventForm';
+import { Stack } from '@mui/system';
 
 
 export default function CreateEvent() {
@@ -25,16 +26,16 @@ export default function CreateEvent() {
         link: '',
         startDate: new Date(),
         endDate: new Date(),
-        startTime: '12:00',
-        endTime: '12:00',
-        reccurence: 'once'
+        startTime: new Date(),
+        endTime: new Date(),
+        recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
     const navigate = useNavigate();
 
     const recurrenceSelection = (
         <FormControl>
-            <RadioGroup row onChange={handleReccurenceChange}>
+            <RadioGroup row onChange={handleRecurrenceChange}>
                 <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
                 <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
                 <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
@@ -58,13 +59,12 @@ export default function CreateEvent() {
 
 
 
-    function handleReccurenceChange(e) {
-        setEventData({ ...eventData, reccurence: e.target.value})
+    function handleRecurrenceChange(e) {
+        setEventData({ ...eventData, recurrence: e.target.value})
     }
 
     function handleEvent() {
         // TODO:  validate user inputs if have time
-        navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then(() => {
                 navigate('/calendar');
@@ -79,26 +79,7 @@ export default function CreateEvent() {
         navigate('/calendar')
     }
 
-    function handleEventHeaderChange(e) {
-        setEventData( {...eventData, eventHeader: e.target.value })
-    }
-
-    function handleDescriptionChange(e) {
-        setEventData({ ...eventData, description: e.target.value })
-    }
-
-    function handleStartDateChange(e) {
-        setEventData({ ...eventData, startDate: e.$d })
-    }
-
-    function handleStartTimeChange(e) {
-        setEventData({ ...eventData, startTime: e.target.value })
-    }
-
-    function handleEndTimeChange(e) {
-        setEventData({ ...eventData, endTime: e.target.value })
-    }
-
+  
 
     const PageError = eventError.hasError ? (
         <Typography align="center" color="#DA3A16">
@@ -106,19 +87,18 @@ export default function CreateEvent() {
         </Typography>
     ) : null;
 
-    function handleIsReccurentChange() {
+    function handleIsRecurrentChange() {
         setIsRecurrent((prev) =>  !prev);
     }
 
     const buttons = (
         <React.Fragment>
-            <div style={{ paddingTop: '20px'}}>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Add" onClick={handleEvent} />
-            </div>
-            <div style={{ paddingTop: '20px'}}>
-                <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />
-            </div>
-        </React.Fragment>
+                                   <Stack direction='row' spacing={7} marginTop={2}>
+
+                 <PrimaryButton2  width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent} />
+                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel} />
+                 </Stack>
+          </React.Fragment>
     );
 
 
@@ -131,116 +111,26 @@ export default function CreateEvent() {
                 </Typography>
                 <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
 
-                    {/** Event name */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='eventHeader'
-                            value={eventData.eventHeader}
-                            required
-                            label="Event Name"
-                            variant='outlined'
-                            onChange={handleEventHeaderChange}
-                        />
-                    </div>
-
-                    {/** Event description */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='description'
-                            value={eventData.description}
-                            label="Description"
-                            variant='outlined'
-                            onChange={handleDescriptionChange}
-                        />
-                    </div>
-
-                    {/** Event link */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='eventLink'
-                            value={eventData.link}
-                            required
-                            label="Event Link"
-                            variant='outlined'
-                            onChange={(e) => setEventData({ ...eventData, link: e.target.value})}
-                        />
-                    </div>
-
-
-                    {/** Event Start Date */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                            <MobileDatePicker
-                                key={"startDate"}
-                                label="Starting date"
-                                inputFormat="MM/DD/YYYY"
-                                value={eventData.startDate}
-                                onChange={handleStartDateChange}
-                                renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                            />
-                        </LocalizationProvider>
-                    </div>
-
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
-                        <Grid container spacing={2} alignItems="flex-end">
-                            {/** Event Start Time */}
-                            <Grid item sm={6} xs={6} md={6} key={1}>
-                                    <TextField
-                                        id="startTime"
-                                        label="Start Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleStartTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
-
-                            {/** Event End Time */}
-                            <Grid item sm={6} xs={6} md={6} key={2}>
-                                    <TextField
-                                        id="endTime"
-                                        label="EndTime Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleEndTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
-                        </Grid>
-                    </div>
-                </div>
-
-                <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
+                <EventForm  eventState={eventData} eventStateSetter={setEventData}/>
+                   
+                 <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
                     <Switch
                         sx={{color: '#912338'}}
                         checked={isRecurrent}
-                        onChange={handleIsReccurentChange}
+                        onChange={handleIsRecurrentChange}
                     />
                 }/>
                 <div>{ isRecurrent && recurrenceSelection }</div>
                 <div>{ buttons }</div>
+                </div>
+
             </form>
         </React.Fragment>
     )
 
     const addEventCard = (
         <React.Fragment>
-            <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={addEventForm} />
+            <CustomWhiteCard width='90vw' height='99vh' marginTop='50px' content={addEventForm} />
         </React.Fragment>
     )
 
@@ -248,7 +138,7 @@ export default function CreateEvent() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px'  content={addEventCard} />
+                <BackgroundCard width='96vw' height='99vh'  content={addEventCard} />
             </div>
         </React.Fragment>
     );
