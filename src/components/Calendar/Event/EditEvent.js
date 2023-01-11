@@ -1,47 +1,17 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography} from "@mui/material";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import {Typography} from "@mui/material";
 import axios from "axios";
-import {CalendarDatePicker} from '../Custom/CommonInputEventForm';
+import {RecurrenceSelection} from '../Custom/CommonInputEventForm';
 import {EventForm} from '../Custom/CommonInputEventForm';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
 import {Stack} from '@mui/system';
 
 export default function EditEvent(props) {
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState(props.eventData);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
-    const recurrenceSelection = (
-        <FormControl>
-            <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio data-test="everyDay"/>}
-                                  label="Every Day"/>
-                <FormControlLabel value="weekly" control={<Radio data-test="everyWeek"/>} label="Every Week"/>
-                <FormControlLabel value="monthly" control={<Radio data-test="everyMonth"/>} label="Every Month"/>
-            </RadioGroup>
-
-            {/** Event End Date */}
-            <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <CalendarDatePicker
-                        data-test="eventEndDate"
-                        key={"endDate"}
-                        label="Ending date"
-                        value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                    />
-                </LocalizationProvider>
-            </div>
-        </FormControl>
-    );
-
-    function handleRecurrenceChange(e) {
-        setEventData({...eventData, recurrence: e.target.value})
+    const recurrenceSelection = () => {
+        return RecurrenceSelection(eventData, setEventData);
     }
 
     function handleEventUpdate() {
@@ -65,16 +35,12 @@ export default function EditEvent(props) {
         </Typography>
     ) : null;
 
-    function handleIsRecurrentChange() {
-        setIsRecurrent((prev) => !prev);
-    }
-
     function handleEventDelete() {
         axios.delete(`${process.env.REACT_APP_BASE_URL}events/${eventData._id}`)
             .then(() => {
-                document.elementFromPoint(0, 0).click();
+                    document.elementFromPoint(0, 0).click();
 
-                if (props.onDrawerClose)
+                    if (props.onDrawerClose)
                         props.onDrawerClose(eventData, 1);
                 }
             ).catch((err) => {
@@ -102,15 +68,7 @@ export default function EditEvent(props) {
                 <div align='center' style={{paddingTop: '16px', paddingBottom: '20px'}}>
 
                     <EventForm eventState={eventData} eventStateSetter={setEventData}/>
-                    <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
-                        <Switch
-                            data-test="eventSwitch"
-                            sx={{color: '#912338'}}
-                            checked={isRecurrent}
-                            onChange={handleIsRecurrentChange}
-                        />
-                    }/>
-                    <div>{isRecurrent && recurrenceSelection}</div>
+                    <div>{recurrenceSelection()}</div>
 
                     <div>{editUpdateButtons}</div>
                 </div>
