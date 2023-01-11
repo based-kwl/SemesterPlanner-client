@@ -15,19 +15,17 @@ import {getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
-
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import BottomDrawer from "../StudyRoom/BottomDrawer";
+import ImageUpload from "./ImageUpload";
 
 export default function CalendarView() {
 
     const [date, setDate] = useState(new Date())
-
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
-
     const [eventError, seteventError] = React.useState({message: "Error, please try again later", hasError: false});
-
     const navigate = useNavigate();
-
     const user = GetAuthentication();
 
     //  Get all Events by student username
@@ -81,16 +79,16 @@ export default function CalendarView() {
         setEvents(tempEvents);
     }
 
-    const AcademicEventsTile = ({date}) => (
+    const AcademicEventsTile = ({ date }) => (
         academicEvents.some((e) => isSameDate(new Date(e.date), date))
             ? "academicHighlight"
             : ""
     );
-
+    
     const calendarMonth = (
         <React.Fragment>
             <Calendar
-                tileContent={({date}) => <DayTile key={date} day={date}/>}
+                tileContent={({ date }) => <DayTile key={date} day={date} />}
                 tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}
@@ -101,26 +99,27 @@ export default function CalendarView() {
 
     const calendarCard = (
         <React.Fragment>
-            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth}/>
-            <div className="center">
-                <PrimaryButton2 style={{margin: 'auto'}} colour={'#912338'} content="+" onClick={addEventButton}/>
+            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
+            <div style={{marginTop:"10px", margin: 'auto', width:'360px',display:"flex", justifyContent:"space-between"}}>
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
+                              title={'Upload an Image'} content={<ImageUpload/>}/>
+                <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
             </div>
         </React.Fragment>
     )
 
-    const EventHeader = ({content}) => {
-        return (
-            <React.Fragment>
-                <CardContent>
-                    <Typography color="#000000" fontWeight={500} style={{
-                        fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
-                    }}>
-                        {content}
-                    </Typography>
-                </CardContent>
-            </React.Fragment>
-        )
-    }
+    const EventHeader = ({content})=>{
+        return(
+        <React.Fragment>
+            <CardContent>
+                <Typography color="#000000" fontWeight={500} style={{
+                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
+                }}>
+                    {content}
+                </Typography>
+            </CardContent>
+        </React.Fragment>
+   ) }
 
     const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
         const currentDate = new Date(startDate);
@@ -153,7 +152,7 @@ export default function CalendarView() {
             <EventCard
                 justifyContent='auto'
                 width='360px'
-                height='30px' j
+                height='30px'
                 marginTop='15px'
                 overflow='initial'
                 content={<EventHeader content={"School"}/>}
@@ -190,9 +189,9 @@ export default function CalendarView() {
     )
 
     const academicEventsDisplay = (
-        <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial'
-                      content={<EventHeader content={"Important Academic Events"}/>} backgroundColor='#E5A712'/>
-            <div className="events">
+      <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial' 
+        content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
+       <div className="events">
 
                 {academicEvents && academicEvents.map((e, index) => (
 
@@ -222,7 +221,7 @@ export default function CalendarView() {
         && date1.getDate() === date2.getDate()
     )
 
-    const DayTile = ({day}) => {
+    const DayTile = ({ day }) => {
         const eventsThisDay = events.filter((e) => {
             const event = new Date(e.startDate);
             return isSameDate(event, day)
@@ -231,10 +230,10 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"}/>);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader}/>
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
             ))
         }
 
@@ -242,7 +241,7 @@ export default function CalendarView() {
     }
 
 
-    const CalendarDayEventIcon = ({eventType}) => {
+    const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
         if (eventType === "Gym") {
             backgroundColor = "#735BF2"
@@ -252,13 +251,13 @@ export default function CalendarView() {
             backgroundColor = "#800410"
         }
 
-        let tileIcon = <TripOriginIcon sx={{color: backgroundColor, transform: "scale(0.25)"}}/>
+        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
 
         if (eventType === "none") {
             tileIcon = (<></>);
         }
 
-        return (<div style={{width: "40px", height: "40px"}}><br/>{tileIcon}</div>);
+        return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
     const calendarPageCards = useMemo(() => (
@@ -271,9 +270,9 @@ export default function CalendarView() {
 
     return (
         <React.Fragment>
-            <PersistentDrawerLeft/>
-            <div style={{paddingTop: '30px'}}>
-                <BackgroundCard width='372px' height='100%' content={calendarPageCards}/>
+            <PersistentDrawerLeft />
+            <div style={{ paddingTop: '30px' }}>
+                <BackgroundCard width='372px' height='100%' content={calendarPageCards} />
             </div>
         </React.Fragment>
     );

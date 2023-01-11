@@ -164,7 +164,7 @@ export default function ParticipantsList() {
                     </div>
                 ) : null}
                 <div style={{marginBottom: '10px'}}>
-                    <FileSelectButton width={"90vw"} onChange={handleFileSelect}/>
+                    <FileSelectButton width={"90vw"} onChange={handleFileSelect} name={'Select File'}/>
                 </div>
                 <div style={{color: 'red'}}>{errorMessage}</div>
                 <div id={"uploadButton"}>
