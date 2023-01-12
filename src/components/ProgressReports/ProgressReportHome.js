@@ -19,12 +19,13 @@ export default function ProgressReportHome(){
     React.useEffect(()=>{
         handleCourseList()
         handleTotalStudyTime()
-    })
+    },[])
 
     function handleCourseList(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
             .then(res => {
                 setCourse(res.data.courses);
+                console.log(res.data.courses)
             })
             .catch(err => {
                 console.log('Error', err);
@@ -59,21 +60,26 @@ export default function ProgressReportHome(){
                                                                justifyContent="space-between"
                                                                spacing={20}>
                                                    <div style={{
-                                                       width:"70vw",
+                                                       width:"60vw",
                                                        margin: "0px",
                                                        display: 'flex',
                                                        justifyItems: 'left'}}>{course.subject} {course.catalog} {course.title} </div>
                                                    <div style={{
+                                                       width:"10vw",
+                                                       margin: "0px",
+                                                       display: 'flex',
+                                                       justifyItems: 'right'}}>credits: {course.classUnit}</div>
+                                                   <div style={{
                                                        width:"11vw",
                                                        margin: "0px",
                                                        display: 'flex',
-                                                       justifyItems: 'right'}}>time:{course.studyHours}</div>
+                                                       justifyItems: 'right'}}> study time: {course.studyHours} hrs</div>
                                                </Stack>}/>
                             </div>
                         ))}
                     </div>
                     <StudyRoomCard data-test={`${time}`} width={'81vw'} height={'40px'}
-                                   content={<> Total time: {time}
+                                   content={<> Total recommended study time: {time} hrs
                                    </>}/>
 
                 </div>
