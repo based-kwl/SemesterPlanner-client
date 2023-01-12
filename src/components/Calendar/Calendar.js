@@ -60,7 +60,7 @@ export default function CalendarView() {
     /**
      * Method that updates the events state after an events has been updated or deleted
      * @param {event} eventData, event data array containing all updated event params
-     * @param {int} type, type of update required; 0 = update, 1 = delete
+     * @param {int} type, type of update required; 0 = update, 1 = delete, 2 = add
      */
     async function updateEventList(eventData, type) {
         const tempEvents = [...events];
