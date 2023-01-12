@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Radio, RadioGroup, Typography} from "@mui/material";
-import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
-import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import TextField from '@mui/material/TextField';
-import { useNavigate } from "react-router";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
  import {LocalizationProvider} from "@mui/x-date-pickers";
@@ -17,7 +14,7 @@ import {  EventForm } from '../Custom/CommonInputEventForm';
 import { Stack } from '@mui/system';
 
 
-export default function CreateEvent() {
+export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
@@ -31,7 +28,6 @@ export default function CreateEvent() {
         recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
-    const navigate = useNavigate();
 
     const recurrenceSelection = (
         <FormControl>
@@ -66,8 +62,11 @@ export default function CreateEvent() {
     function handleEvent() {
         // TODO:  validate user inputs if have time
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
-            .then(() => {
-                navigate('/calendar');
+            .then((res) => {
+                document.elementFromPoint(0, 0).click();
+
+                if (props.onDrawerClose)
+                    props.onDrawerClose(res.data, 2);
             })
             .catch(err => {
                 setEventError({ ...eventError, message: "Error connecting to database. " + err });
@@ -76,7 +75,7 @@ export default function CreateEvent() {
     }
 
     function handleCancel() {
-        navigate('/calendar')
+        document.elementFromPoint(0, 0).click();
     }
 
   
@@ -102,13 +101,11 @@ export default function CreateEvent() {
     );
 
 
-    const addEventForm = (
+    return (
         <React.Fragment>
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
-                <Typography align='center' style={{ fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Add New Event
-                </Typography>
+
                 <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
 
                 <EventForm  eventState={eventData} eventStateSetter={setEventData}/>
@@ -127,19 +124,4 @@ export default function CreateEvent() {
             </form>
         </React.Fragment>
     )
-
-    const addEventCard = (
-        <React.Fragment>
-            <CustomWhiteCard width='90vw' height='99vh' marginTop='50px' content={addEventForm} />
-        </React.Fragment>
-    )
-
-    return (
-        <React.Fragment>
-            <PersistentDrawerLeft />
-            <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='96vw' height='99vh'  content={addEventCard} />
-            </div>
-        </React.Fragment>
-    );
 }

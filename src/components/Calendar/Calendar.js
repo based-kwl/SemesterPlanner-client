@@ -6,7 +6,6 @@ import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import {useNavigate} from "react-router";
 import GetAuthentication from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
@@ -17,6 +16,7 @@ import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
+import CreateEvent from "./Event/CreateEvent";
 
 export default function CalendarView() {
 
@@ -24,7 +24,6 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcedemicEvents] = useState([]);
     const [eventError, seteventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const navigate = useNavigate();
     const user = GetAuthentication();
 
     //  Get all Events by student username
@@ -54,10 +53,6 @@ export default function CalendarView() {
         fetchAcademicData();
     }, [])
 
-    function addEventButton() {
-        navigate('/event');
-    }
-
     function setDates(d) {
         setDate(d);
     }
@@ -67,13 +62,17 @@ export default function CalendarView() {
      * @param {event} eventData, event data array containing all updated event params
      * @param {int} type, type of update required; 0 = update, 1 = delete
      */
-    async function updateEventList(eventData, type = 0) {
+    async function updateEventList(eventData, type) {
         const tempEvents = [...events];
+
+        console.log(type)
 
         if (type === 0)
             tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
         else if (type === 1)
             tempEvents.splice(tempEvents.findIndex((e) => e._id === eventData._id), 1);
+        else if (type === 2)
+            tempEvents.push(eventData);
 
         setEvents(tempEvents);
     }
@@ -102,7 +101,8 @@ export default function CalendarView() {
             <div style={{marginTop:"10px", margin: 'auto', width:'360px',display:"flex", justifyContent:"space-between"}}>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload/>}/>
-                <PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+" onClick={addEventButton} />
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
+                              title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} />}/>
             </div>
         </React.Fragment>
     )
@@ -177,8 +177,7 @@ export default function CalendarView() {
                                 />
                                 <BottomDrawer icon={<EditIcon style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
                                               title={'Edit Event'}
-                                              content={<EditEvent eventId={e._id} onDrawerClose={updateEventList}
-                                                                  eventData={e}/>}/>
+                                              content={<EditEvent onDrawerClose={updateEventList} eventData={e}/>}/>
                             </>
                         }
                     />
