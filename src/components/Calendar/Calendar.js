@@ -65,8 +65,6 @@ export default function CalendarView() {
     async function updateEventList(eventData, type) {
         const tempEvents = [...events];
 
-        console.log(type)
-
         if (type === 0)
             tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
         else if (type === 1)
