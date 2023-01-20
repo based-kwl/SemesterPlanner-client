@@ -12,6 +12,7 @@ import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
 import {  EventForm } from '../Custom/CommonInputEventForm';
 import { Stack } from '@mui/system';
+import Grid from "@mui/material/Grid";
 
 
 export default function CreateEvent(props) {
@@ -25,7 +26,8 @@ export default function CreateEvent(props) {
         endDate: new Date(),
         startTime: new Date(),
         endTime: new Date(),
-        recurrence: 'once'
+        recurrence: 'once',
+        type: ''
     })
     const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
 
@@ -60,6 +62,7 @@ export default function CreateEvent(props) {
     }
 
     function handleEvent() {
+        console.log(eventData)
         // TODO:  validate user inputs if have time
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then((res) => {
@@ -78,7 +81,10 @@ export default function CreateEvent(props) {
         document.elementFromPoint(0, 0).click();
     }
 
-  
+    function handleTypeUpdate(e){
+        setEventData({...eventData, type: e.target.value})
+        console.log('type', eventData.type)
+    }
 
     const PageError = eventError.hasError ? (
         <Typography align="center" color="#DA3A16">
@@ -99,6 +105,24 @@ export default function CreateEvent(props) {
                  </Stack>
           </React.Fragment>
     );
+     const categories = (
+         <React.Fragment>
+             <Grid container spacing={{ xs: 2 }} style={{border:'1px solid black'}} >
+                 <Grid item xs={4}>
+                     <PrimaryButton2 width={'33%'} colour={'#CCE3E4'} content="Course" value="course" onClick={handleTypeUpdate}>Course</PrimaryButton2>
+                 </Grid>
+                 <Grid item xs={8}>
+                     <PrimaryButton2 width={'66%'} colour={'#E9E3D3'} content="Study" value="study" onClick={handleTypeUpdate}>Course</PrimaryButton2>
+                 </Grid>
+                 <Grid item xs={4}>
+                     <PrimaryButton2 width={'15vw'} colour={'#F9CDC3'} content="Gym" value="gym" onClick={handleTypeUpdate}>Course</PrimaryButton2>
+                 </Grid>
+                 <Grid item xs={4}>
+                     <PrimaryButton2 width={'15vw'} colour={'#FACDE3'} content="Appointment" value="appointment" onClick={handleTypeUpdate}>Course</PrimaryButton2>
+                 </Grid>
+             </Grid>
+         </React.Fragment>
+     )
 
 
     return (
@@ -106,7 +130,7 @@ export default function CreateEvent(props) {
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
 
-                <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
+                <div align='center' style={{ paddingTop: '10px', paddingBottom: '20px', border:'1px solid black' }}>
 
                 <EventForm  eventState={eventData} eventStateSetter={setEventData}/>
                    
@@ -118,7 +142,9 @@ export default function CreateEvent(props) {
                     />
                 }/>
                 <div>{ isRecurrent && recurrenceSelection }</div>
+                    <div style={{border:'1px solid black'}}>{categories}</div>
                 <div>{ buttons }</div>
+
                 </div>
 
             </form>
