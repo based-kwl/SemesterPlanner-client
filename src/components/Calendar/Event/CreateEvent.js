@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography} from "@mui/material";
+import {Radio, RadioGroup, Typography, Stack} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
@@ -11,7 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
 import {EventForm} from '../Custom/CommonInputEventForm';
-import {Stack} from "@mui/material";
+
 
 export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
@@ -62,7 +62,6 @@ export default function CreateEvent(props) {
     }
 
     function handleEvent() {
-        console.log(eventData)
         // TODO:  validate user inputs if have time
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then((res) => {
@@ -86,12 +85,9 @@ export default function CreateEvent(props) {
         setEventData({...eventData, type: e.target.value});
         if (type === 'course'){
             setIsVisible(true);
-            console.log('visible',isVisible);
         }else{
             setIsVisible(false);
         }
-        console.log('visible',isVisible);
-        console.log('type: ', eventData.type)
     }
 
     const PageError = eventError.hasError ? (
