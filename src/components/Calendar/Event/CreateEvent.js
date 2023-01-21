@@ -15,6 +15,7 @@ import {Stack} from "@mui/material";
 
 export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [isVisible,setIsVisible] = React.useState(false);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
         eventHeader: '',
@@ -25,7 +26,9 @@ export default function CreateEvent(props) {
         startTime: new Date(),
         endTime: new Date(),
         recurrence: 'once',
-        type: ''
+        type: '',
+        subject:'',
+        catalog:''
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
@@ -79,7 +82,15 @@ export default function CreateEvent(props) {
     }
 
     function handleTypeUpdate(e) {
-        setEventData({...eventData, type: e.target.value})
+        let type = e.target.value;
+        setEventData({...eventData, type: e.target.value});
+        if (type === 'course'){
+            setIsVisible(true);
+            console.log('visible',isVisible);
+        }else{
+            setIsVisible(false);
+        }
+        console.log('visible',isVisible);
         console.log('type: ', eventData.type)
     }
 
@@ -108,7 +119,7 @@ export default function CreateEvent(props) {
     const categories = (
         <React.Fragment>
             <Typography style={{fontWeight: 'bold'}}>
-                Select the event category:
+                Select the event category: {eventData.type}
             </Typography>
             <Stack direction="row" spacing={2} justifyContent="center">
                 <PrimaryButton2 width={'20vw'} colour={'#0072A8'} content="Course" value="course"
@@ -120,6 +131,31 @@ export default function CreateEvent(props) {
                 <PrimaryButton2 width={'20vw'} colour={'#DB0272'} content="Appointment" value="appointment"
                                 onClick={handleTypeUpdate}/>
             </Stack>
+        </React.Fragment>
+    )
+
+    const course = (
+        <React.Fragment>
+            <div style={{paddingTop: '10px'}}>
+                <TextField required
+                    id="outlined-required"
+                           label="subject"
+                           defaultValue="EX: SOEN"
+                           size="small"
+                           onChange={(e) => {
+                               setEventData({...eventData, subject: e.target.value})}}
+                />
+                <TextField required
+                           id="outlined-required"
+                           label="catalog"
+                           defaultValue="EX: 385"
+                           size="small"
+                           onChange={(e) => {
+                               setEventData({...eventData, catalog: e.target.value})}}
+                />
+
+            </div>
+
         </React.Fragment>
     )
 
@@ -135,6 +171,8 @@ export default function CreateEvent(props) {
                     width: '90vw',
                     height: '70vh'
                 }}>
+                    <div style={{paddingBottom: '10px'}}>{categories}</div>
+                    {isVisible && course}
 
                     <EventForm eventState={eventData} eventStateSetter={setEventData}/>
 
@@ -146,7 +184,7 @@ export default function CreateEvent(props) {
                         />
                     }/>
                     {isRecurrent && recurrenceSelection}
-                    <div style={{paddingBottom: '10px'}}>{categories}</div>
+
                     <div style={{ paddingTop: '20px'}}>{buttons}</div>
 
                 </div>
