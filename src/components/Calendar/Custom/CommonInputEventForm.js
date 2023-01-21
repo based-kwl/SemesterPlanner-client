@@ -112,7 +112,7 @@ export function EventForm({eventState, eventStateSetter}) {
             />
 
             {/* * Event Start Date */}
-            <div style={{width: '100%', paddingTop: '15px', paddingBottom: '10px'}}>
+            <div style={{width: '100%', paddingTop: '15px', paddingBottom: '10px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                         key={"startDate"}
@@ -129,7 +129,7 @@ export function EventForm({eventState, eventStateSetter}) {
                 </LocalizationProvider>
             </div>
             <Grid direction={"column"} item spacing={1}
-                  style={{paddingRight: '10px', paddingTop: '15px', paddingBottom: '23px'}}>
+                  style={{paddingRight: '10px', paddingTop: '15px', paddingBottom: '5px'}}>
                 {/** Event Start Time */}
                 <TextField
                     id="startTime"
