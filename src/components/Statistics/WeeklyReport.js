@@ -24,7 +24,7 @@ const [courses, setCourses] = useState([])
    username = username.substring(1);
    username= username.slice(0, -1)
    
-     await axios.get(`${process.env.REACT_APP_BASE_URL}events/study-events/${username}`)
+     await axios.get(`${process.env.REACT_APP_BASE_URL}events/study-events-weekly/${username}`)
    .then((response) =>{
  
      console.log(response.data)
@@ -37,7 +37,8 @@ const [courses, setCourses] = useState([])
        if (courseList.some(e => e.name === courseName)) {
          for(let i = 0; i < courseList.length; i++){
            if(courseList[i].name==courseName){
-             courseList[i].expectedTime = courseList[i].expectedTime + diff_minutes(event.endTime, event.startTime)
+            courseList[i].expectedTime = courseList[i].expectedTime + diff_minutes(event.endTime, event.startTime)
+            courseList[i].actualTime = courseList[i].actualTime +diff_minutes(event.actualEndTime, event.actualStartTime)
            }
    
          }
@@ -47,7 +48,7 @@ const [courses, setCourses] = useState([])
          courseList.push({
           name:courseName,
           expectedTime: diff_minutes(event.endTime, event.startTime),
-          actualTime:0
+          actualTime:diff_minutes(event.actualEndTime, event.actualStartTime)
            })
        }
    
