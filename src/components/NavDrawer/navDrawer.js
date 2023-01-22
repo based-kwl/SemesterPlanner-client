@@ -121,6 +121,9 @@ export default function PersistentDrawerLeft(params) {
             case 'Friends List':
                 navigate('/friend-list-home');
                 break;
+            case 'Statistics':
+                navigate('/statistic');
+                break;
             case 'Logout':
                 handleLogout();
                 break;
@@ -177,7 +180,7 @@ export default function PersistentDrawerLeft(params) {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {['Home', 'Profile', 'Progress Report', 'Study Groups', 'Friends List'].map((text, index) => (
+                    {['Home', 'Profile', 'Progress Report', 'Study Groups', 'Friends List','Statistics'].map((text, index) => (
                         <ListItem key={text} disablePadding onClick={() => redirect(text)}>
                             <ListItemButton data-test={text}>
                                 <ListItemIcon>

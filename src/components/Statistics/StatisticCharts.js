@@ -13,13 +13,13 @@ export default function StatisticCharts(){
          
         <div>
       {
-        !show &&(<MonthlyStatistic/>)
+        <MonthlyStatistic/>
     }  
         </div>
 
         <div>
             {
-         show&&( <WeeklyStatistic/>)
+         <WeeklyStatistic/>
         }
         </div>
         <button onClick={()=>{setShow(true)}}>weekly</button>
