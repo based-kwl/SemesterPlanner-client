@@ -6,7 +6,7 @@ import CreateEvent from "./Event/CreateEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
-export default function ImageUpload() {
+export default function ImageUpload(props) {
     const [image, setImage] = useState();
     const [errorMessage, setErrorMessage] = useState('');
     const [isFilePicked, setIsFilePicked] = useState(false);
@@ -61,7 +61,7 @@ export default function ImageUpload() {
             </div>
             <div style={{visibility: 'hidden'}}>
                 <BottomDrawer icon={<button id={'addEventDrawer'}></button>} title={'Add Event'}
-                              content={<CreateEvent event={event}/>}/>
+                              content={<CreateEvent event={event} onDrawerClose={props.onDrawerClose}/>}/>
             </div>
         </>
 
