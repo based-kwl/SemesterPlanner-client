@@ -24,8 +24,8 @@ export default function CreateEvent(props) {
         link: '',
         startDate: props.event ? (props.event.date ? moment(props.event.date, "DD/MM/YYYY").toDate() : new Date()) : new Date(),
         endDate: new Date(),
-        startTime: new Date(),
-        endTime: new Date(),
+        startTime: props.event ? (props.event.startTime ? props.event.startTime : '') : new Date(),
+        endTime: props.event ? (props.event.endTime ? props.event.endTime : '') : new Date(),
         recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
