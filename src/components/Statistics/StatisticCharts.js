@@ -11,13 +11,13 @@ export default function StatisticCharts(){
         <React.Fragment style="height: 900px"> 
          
          
-        <div>
+        <div style={{display: show? 'none':''}}>
       {
         <MonthlyStatistic/>
     }  
         </div>
 
-        <div>
+        <div style={{display: !show? 'none':''}}>
             {
          <WeeklyStatistic/>
         }
