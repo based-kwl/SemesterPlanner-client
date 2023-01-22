@@ -20,7 +20,7 @@ export default function ImageUpload(props) {
                 .then((res) => {
                     setEvent(res.data);
                     setErrorMessage("Image uploaded!");
-                    delay(0).then(() => { // TODO: find out why delay is needed for add event drawer to populate data properly
+                    delay(0).then(() => { // delay call is needed for add event drawer to populate data properly
                         document.getElementById('addEventDrawer').click();
                     })
                 })
