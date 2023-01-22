@@ -20,7 +20,11 @@ const [courses, setCourses] = useState([])
   useEffect(async()=>{
     
    async function fetchData(){
-    const stuff = await axios.get(`${process.env.REACT_APP_BASE_URL}events/study-events/paama`)
+   var username = localStorage.getItem("username")
+   username = username.substring(1);
+   username= username.slice(0, -1)
+   
+     await axios.get(`${process.env.REACT_APP_BASE_URL}events/study-events/${username}`)
    .then((response) =>{
  
      console.log(response.data)
