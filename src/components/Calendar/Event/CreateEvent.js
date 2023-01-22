@@ -87,6 +87,7 @@ export default function CreateEvent(props) {
             setIsVisible(true);
         }else{
             setIsVisible(false);
+            setEventData({...eventData, subject: '', catalog:''});
         }
     }
 
