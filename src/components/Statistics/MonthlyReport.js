@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import {Bar} from 'react-chartjs-2';
 import { useNavigate } from "react-router";
-//import {courses} from "./data"
 import  {Chart as ChartJS} from 'chart.js/auto'
 import axios from 'axios';
 
