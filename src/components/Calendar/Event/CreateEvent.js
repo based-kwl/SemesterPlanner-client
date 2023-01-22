@@ -65,9 +65,6 @@ export default function CreateEvent(props) {
             .then((res) => {
                 document.elementFromPoint(0, 0).click();
 
-                if (props.event)
-                    document.elementFromPoint(0, 0).click();
-
                 if (props.onDrawerClose)
                     props.onDrawerClose(res.data, 2);
             })
