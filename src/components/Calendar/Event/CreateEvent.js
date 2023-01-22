@@ -19,13 +19,13 @@ export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
-        eventHeader: props.event ? (props.event.name ? props.event.name : '') : '',
-        description: props.event ? (props.event.description ? props.event.description : '') : '',
+        eventHeader: props.event ? props.event.name : '',
+        description: props.event ? props.event.description : '',
         link: '',
-        startDate: props.event ? (props.event.date ? moment(props.event.date, "DD/MM/YYYY").toDate() : new Date()) : new Date(),
+        startDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : new Date(),
         endDate: new Date(),
-        startTime: props.event ? (props.event.startTime ? props.event.startTime : '') : new Date(),
-        endTime: props.event ? (props.event.endTime ? props.event.endTime : '') : new Date(),
+        startTime: props.event ? props.event.startTime : new Date(),
+        endTime: props.event ? props.event.endTime : new Date(),
         recurrence: 'once'
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
