@@ -22,6 +22,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import {useNavigate} from "react-router";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
@@ -67,7 +68,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 const ListIconsA = [<CalendarViewMonthIcon style={{color: '#912338'}}/>,
     <PersonOutlineIcon style={{color: '#057D78'}}/>, <BarChartIcon style={{color: '#0072A8'}}/>,
     <ForumIcon style={{color: '#573996'}}/>,
-    <GroupIcon style={{color:'E5A712'}}/>]
+    <GroupIcon style={{color:'E5A712'}}/>,<ShowChartIcon style={{color:'#912338'}}/>]
 const ListIconsB = [<LogoutIcon style={{color: '#6e6e6e'}}/>]
 
 PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
