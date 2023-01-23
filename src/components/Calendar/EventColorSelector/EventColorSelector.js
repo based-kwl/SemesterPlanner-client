@@ -39,8 +39,6 @@ export default function EventColorSelector() {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/`,eventSettingData)
             .then(res => {
                 // todo set the form data
-                console.log(res);
-                console.log(res.body)
             })
     }
 
@@ -52,7 +50,6 @@ export default function EventColorSelector() {
 
         axios.post(`${process.env.REACT_APP_BASE_URL}room`, eventSettingData)
             .then(res => {
-                console.log(res);
                 navigate("/study-room-home");
             })
             .catch(err => { setErrorMessage(`${err}`.substring(44) == 401 ? 'request could not be sent' : `${err}`) });

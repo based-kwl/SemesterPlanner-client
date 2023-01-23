@@ -30,12 +30,11 @@ export default function SignIn() {
             email,
             password,
         }
-        console.log(user)
+    
         //API call
-        console.log(process.env.REACT_APP_BASE_URL)
+      
         axios.post(`${process.env.REACT_APP_BASE_URL}login/`, user)
             .then(res => {
-                console.log(res)
                 SetLocalStorage(res);
                 navigate('/calendar');
             })

@@ -9,7 +9,6 @@ export default function ImageUpload(){
     const [isFilePicked, setIsFilePicked] = useState(false);
 
     function handleFile() {
-        console.log("handle file");
         if(isFilePicked) {
             let data = new FormData();
             data.append('img', image);
@@ -18,7 +17,6 @@ export default function ImageUpload(){
                     setErrorMessage("Image uploaded!");
                 })
                 .catch(err => {
-                    console.log('Error:', err)
                 });
         }else{
             setErrorMessage("No image selected!");
