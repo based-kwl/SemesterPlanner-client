@@ -15,7 +15,6 @@ import {EventForm} from '../Custom/CommonInputEventForm';
 
 export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
-    const [isVisible,setIsVisible] = React.useState(false);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
         eventHeader: '',
@@ -80,17 +79,6 @@ export default function CreateEvent(props) {
         document.elementFromPoint(0, 0).click();
     }
 
-    function handleTypeUpdate(e) {
-        let type = e.target.value;
-        setEventData({...eventData, type: e.target.value});
-        if (type === 'course'){
-            setIsVisible(true);
-        }else{
-            setIsVisible(false);
-            setEventData({...eventData, subject: '', catalog:''});
-        }
-    }
-
     const PageError = eventError.hasError ? (
         <Typography align="center" color="#DA3A16">
             {eventError.message}
@@ -113,49 +101,6 @@ export default function CreateEvent(props) {
             </Stack>
         </React.Fragment>
     );
-    const categories = (
-        <React.Fragment>
-            <Typography style={{fontWeight: 'bold'}}>
-                Select the event category: {eventData.type}
-            </Typography>
-            <Stack direction="row" spacing={2} justifyContent="center">
-                <PrimaryButton2 width={'20vw'} colour={'#0072A8'} content="Course" value="course"
-                                onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#8CC63E'} content="Study" value="study"
-                                onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DA3A16'} content="Workout" value="workout"
-                                onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DB0272'} content="Appointment" value="appointment"
-                                onClick={handleTypeUpdate}/>
-            </Stack>
-        </React.Fragment>
-    )
-
-    const course = (
-        <React.Fragment>
-            <div style={{paddingTop: '10px'}}>
-                <TextField required
-                    id="outlined-required"
-                           label="subject"
-                           defaultValue="EX: SOEN"
-                           size="small"
-                           onChange={(e) => {
-                               setEventData({...eventData, subject: e.target.value})}}
-                />
-                <TextField required
-                           id="outlined-required"
-                           label="catalog"
-                           defaultValue="EX: 385"
-                           size="small"
-                           onChange={(e) => {
-                               setEventData({...eventData, catalog: e.target.value})}}
-                />
-
-            </div>
-
-        </React.Fragment>
-    )
-
 
     return (
         <React.Fragment>
@@ -168,11 +113,8 @@ export default function CreateEvent(props) {
                     width: '90vw',
                     height: '70vh'
                 }}>
-                    <div style={{paddingBottom: '10px'}}>{categories}</div>
-                    {isVisible && course}
 
                     <EventForm eventState={eventData} eventStateSetter={setEventData}/>
-
                     <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
                         <Switch
                             sx={{color: '#912338'}}
