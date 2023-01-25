@@ -11,9 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
 import {EventForm} from '../Custom/CommonInputEventForm';
-import {Stack} from '@mui/system';
 import moment from "moment";
-
 
 export default function CreateEvent(props) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
