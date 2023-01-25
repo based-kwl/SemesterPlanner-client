@@ -17,17 +17,31 @@ export async function fetchData(api_link,setCourses) {
           if (courseList.some(e => e.name === courseName)) {
             for (let i = 0; i < courseList.length; i++) {
               if (courseList[i].name == courseName) {
-                courseList[i].expectedTime = courseList[i].expectedTime + diff_minutes(event.endTime, event.startTime)
+                courseList[i].expectedTime = courseList[i].expectedTime + diff_minutes(event.endTime, event.startTime) 
+                if(event.actualEndTime&& event.actualStartTime){
                 courseList[i].actualTime = courseList[i].actualTime + diff_minutes(event.actualEndTime, event.actualStartTime)
+                }
               }
             }
           }
           else {
-            courseList.push({
+            
+            if(event.actualEndTime&&event.actualEndTime){ courseList.push({
               name: courseName,
               expectedTime: diff_minutes(event.endTime, event.startTime),
               actualTime: diff_minutes(event.actualEndTime, event.actualStartTime)
-            })
+            })}
+           
+            else{
+            
+              courseList.push({
+                name: courseName,
+                expectedTime: diff_minutes(event.endTime, event.startTime),
+                actualTime: 0
+              })
+
+            }
+
           }
         })
         setCourses(courseList)

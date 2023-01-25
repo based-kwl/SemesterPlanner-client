@@ -26,10 +26,12 @@ export function WeeklyStatistic() {
   }
 
   return (
+    <React.Fragment>
     <div>
       <Bar data={data} height={"600%"}
         options={{ maintainAspectRatio: false, indexAxis: 'y' }}></Bar>
     </div>
+    </React.Fragment>
   )
 
 }

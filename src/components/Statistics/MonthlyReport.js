@@ -4,7 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto'
 import { fetchData } from './fetchingDataFactory'
 
-export function MonthlyStatistic() {
+export default function MonthlyStatistic() {
 
   const [courses, setCourses] = useState([])
 
@@ -26,10 +26,12 @@ export function MonthlyStatistic() {
   }
 
   return (
+    <React.Fragment>
     <div>
       <Bar data={data} height={"600%"}
         options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
     </div>
+    </React.Fragment>
   )
 
 }
