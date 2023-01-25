@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import '../Calendar/calendar.css'
-import { BackgroundCard, CustomWhiteCard, EventCard } from '../CustomMUIComponents/CustomCards';
+import { BackgroundCard } from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import GetAuthentication from "../Authentication/Authentification";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import BottomDrawer from "../StudyRoom/BottomDrawer";
-import { useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto'
 import { fetchData } from './fetchingCategoryDataFactory'
@@ -32,7 +30,7 @@ export default function CalendarView() {
         }, {
             label: "Actual",
             backgroundColor: '#E9E3D3',
-            data: courses?.map((course) => course.actualTime),
+            data: courses?.map((course) => course.Actual),
         }]
     }
 
