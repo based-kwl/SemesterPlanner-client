@@ -17,10 +17,11 @@ export const PrimaryButton = ({content, width, data_test}) => {
 }
 
 
-export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_test}) => {
+export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_test, value}) => {
     return (
         <Button
             data-test={data_test}
+            value={value}
             disabled={disable}
             onClick={onClick}
             variant="contained"
