@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import Grid from "@mui/material/Grid";
-import {Button} from "@mui/material";
+import {Button, Stack, Typography} from "@mui/material";
 import {Radio, RadioGroup} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,6 +10,7 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import {getTime} from "../CommonFunctions";
+import {PrimaryButton2} from "../../CustomMUIComponents/CustomButtons";
 
 
 export const CalendarTextField = ({width, inputProps, id, value, label, variant, onChange, data_test}) => {
@@ -45,6 +46,7 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
 }
 
 export function EventForm({eventState, eventStateSetter}) {
+    const [isVisible, setIsVisible] = React.useState(false);
     function handleEditEventHeaderChange(e) {
         eventStateSetter({...eventState, eventHeader: e.target.value})
     }
@@ -68,9 +70,59 @@ export function EventForm({eventState, eventStateSetter}) {
         endTime.setHours(e.target.value.split(':')[0], e.target.value.split(':')[1]);
         eventStateSetter({...eventState, endTime: endTime.toISOString()});
     }
+    function handleTypeUpdate(e) {
+        let type = e.target.value;
+        eventStateSetter({...eventState, type: e.target.value});
+        if (type === 'course'){
+            setIsVisible(true);
+        }else{
+            setIsVisible(false);
+            eventStateSetter({...eventState, catalog:'', subject:''});
+            let removeData = {...eventState};
+            delete removeData.catalog;
+            delete removeData.subject;
+        }
+    }
+
+    const course = (
+        <React.Fragment>
+            <div style={{paddingTop: '10px'}}>
+                <TextField required
+                           id="outlined-required"
+                           label="subject"
+                           defaultValue="EX: SOEN"
+                           size="small"
+                           onChange={(e) => {
+                               eventStateSetter({...eventState, subject: e.target.value})}}
+                />
+                <TextField required
+                           id="outlined-required"
+                           label="catalog"
+                           defaultValue="EX: 385"
+                           size="small"
+                           onChange={(e) => {
+                               eventStateSetter({...eventState, catalog: e.target.value})}}
+                />
+            </div>
+        </React.Fragment>
+    )
 
     const eventForm = (
-        <div style={{paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px'}}>
+        <div>
+            <Typography style={{fontWeight: 'bold'}}>
+                Select the event category: {eventState.type}
+            </Typography>
+            <Stack direction="row" spacing={2} justifyContent="center">
+                <PrimaryButton2 width={'20vw'} colour={'#0072A8'} content="Course" value="course"
+                                onClick={handleTypeUpdate}/>
+                <PrimaryButton2 width={'20vw'} colour={'#8CC63E'} content="Study" value="study"
+                                onClick={handleTypeUpdate}/>
+                <PrimaryButton2 width={'20vw'} colour={'#DA3A16'} content="Workout" value="workout"
+                                onClick={handleTypeUpdate}/>
+                <PrimaryButton2 width={'20vw'} colour={'#DB0272'} content="Appointment" value="appointment"
+                                onClick={handleTypeUpdate}/>
+            </Stack>
+            {isVisible && course}
             <TextField
                 data_test="eventHeader"
                 id='eventHeader'
@@ -112,7 +164,7 @@ export function EventForm({eventState, eventStateSetter}) {
             />
 
             {/* * Event Start Date */}
-            <div style={{width: '100%', paddingTop: '15px', paddingBottom: '10px'}}>
+            <div style={{width: '100%', paddingTop: '15px', paddingBottom: '10px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                         key={"startDate"}
@@ -129,7 +181,7 @@ export function EventForm({eventState, eventStateSetter}) {
                 </LocalizationProvider>
             </div>
             <Grid direction={"column"} item spacing={1}
-                  style={{paddingRight: '10px', paddingTop: '15px', paddingBottom: '23px'}}>
+                  style={{paddingRight: '10px', paddingTop: '15px', paddingBottom: '5px'}}>
                 {/** Event Start Time */}
                 <TextField
                     id="startTime"
