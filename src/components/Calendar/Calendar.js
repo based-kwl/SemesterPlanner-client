@@ -98,7 +98,7 @@ export default function CalendarView() {
             <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
             <div style={{marginTop:"10px", margin: 'auto', width:'360px',display:"flex", justifyContent:"space-between"}}>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
-                              title={'Upload an Image'} content={<ImageUpload/>}/>
+                              title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
                               title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} />}/>
             </div>

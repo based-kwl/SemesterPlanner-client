@@ -72,12 +72,12 @@ export function EventForm({eventState, eventStateSetter}) {
     }
     function handleTypeUpdate(e) {
         let type = e.target.value;
-        eventStateSetter({...eventState, type: e.target.value});
         if (type === 'course'){
             setIsVisible(true);
+            eventStateSetter({...eventState, type: e.target.value});
         }else{
             setIsVisible(false);
-            eventStateSetter({...eventState, catalog:'', subject:''});
+            eventStateSetter({...eventState, type: e.target.value, catalog:'', subject:''});
             let removeData = {...eventState};
             delete removeData.catalog;
             delete removeData.subject;
