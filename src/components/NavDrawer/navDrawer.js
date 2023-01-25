@@ -113,7 +113,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/editProfile');
                 break;
             case 'Progress Report':
-                navigate('/'); //TODO: set the proper path to the progress report page once it is implemented
+                navigate('/progress-report-home');
                 break;
             case 'Study Groups':
                 navigate('/study-room-home');
