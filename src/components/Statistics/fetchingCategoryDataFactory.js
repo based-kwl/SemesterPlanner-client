@@ -5,7 +5,7 @@ export async function fetchData(api_link, setCourses) {
     var username = localStorage.getItem("username")
     username = username.substring(1);
     username = username.slice(0, -1)
-
+    var courseName
     await axios.get(`${process.env.REACT_APP_BASE_URL}events/${api_link}/${username}`)
         .then((response) => {
             var arr = response.data
@@ -13,15 +13,15 @@ export async function fetchData(api_link, setCourses) {
             arr.forEach((event) => {
                 if (api_link === 'events-monthly' || api_link === 'events-weekly') {
 
-                    var courseName = event.type
+                    courseName = event.type
                 }
                 else {
-                    var courseName = event.subject + event.catalog
+                    courseName = event.subject + event.catalog
                 }
 
                 if (courseList.some(e => e.name === courseName)) {
                     for (let i = 0; i < courseList.length; i++) {
-                        if (courseList[i].name == courseName) {
+                        if (courseList[i].name === courseName) {
                             courseList[i].expectedTime = courseList[i].expectedTime + diff_minutes(event.endTime, event.startTime)
                             if (event.actualEndTime && event.actualStartTime) {
                                 courseList[i].Actual = courseList[i].Actual + diff_minutes(event.actualEndTime, event.actualStartTime)
@@ -31,7 +31,7 @@ export async function fetchData(api_link, setCourses) {
                 }
                 else {
 
-                    if (event.actualEndTime && event.actualEndTime) {
+                    if (event.actualEndTime && event.actualStartTime) {
                         courseList.push({
                             name: courseName,
                             expectedTime: diff_minutes(event.endTime, event.startTime),
