@@ -14,7 +14,9 @@ import {EventForm} from '../Custom/CommonInputEventForm';
 import moment from "moment";
 
 export default function CreateEvent(props) {
+    const email = GetAuthentication().email;
     const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
         eventHeader: props.event ? props.event.name : '',
@@ -55,6 +57,19 @@ export default function CreateEvent(props) {
         </FormControl>
     );
 
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
+
+    function handleCourseList(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
+            .then(res => {
+                setCourse(res.data.courses);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
+    }
 
     function handleRecurrenceChange(e) {
         setEventData({ ...eventData, recurrence: e.target.value})
@@ -111,10 +126,9 @@ export default function CreateEvent(props) {
                     overflow: 'auto',
                     paddingTop: '10px',
                     width: '90vw',
-                    height: '70vh'
+                    height: '65vh'
                 }}>
-
-                    <EventForm eventState={eventData} eventStateSetter={setEventData}/>
+                    <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
                     <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
                         <Switch
                             sx={{color: '#912338'}}
@@ -123,11 +137,8 @@ export default function CreateEvent(props) {
                         />
                     }/>
                     {isRecurrent && recurrenceSelection}
-
-                    <div style={{ paddingTop: '20px'}}>{buttons}</div>
-
                 </div>
-
+                <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form>
         </React.Fragment>
     )
