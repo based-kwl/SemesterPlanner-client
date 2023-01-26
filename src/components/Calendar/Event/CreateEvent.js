@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Radio, RadioGroup, Typography, Stack} from "@mui/material";
 import TextField from '@mui/material/TextField';
-import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
-import {LocalizationProvider} from "@mui/x-date-pickers";
+ import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,21 +11,23 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
 import {EventForm} from '../Custom/CommonInputEventForm';
-
+import moment from "moment";
 
 export default function CreateEvent(props) {
+    const email = GetAuthentication().email;
     const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
-        eventHeader: '',
-        description: '',
+        eventHeader: props.event ? props.event.name : '',
+        description: props.event ? props.event.description : '',
         link: '',
-        startDate: new Date(),
+        startDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : new Date(),
         endDate: new Date(),
-        startTime: new Date(),
-        endTime: new Date(),
         actualStartTime: new Date(),
         actualEndTime: new Date(),
+        startTime: props.event ? props.event.startTime : new Date(),
+        endTime: props.event ? props.event.endTime : new Date(),
         recurrence: 'once',
         type:'',
         subject:'',
@@ -36,30 +38,43 @@ export default function CreateEvent(props) {
     const recurrenceSelection = (
         <FormControl>
             <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio/>} label="Every Day"/>
-                <FormControlLabel value="weekly" control={<Radio/>} label="Every Week"/>
-                <FormControlLabel value="monthly" control={<Radio/>} label="Every Month"/>
+                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
+                <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
+                <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
             </RadioGroup>
 
             {/** Event End Date */}
-            <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                <LocalizationProvider  dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                         key={"endDate"}
                         label="Ending date"
                         inputFormat="MM/DD/YYYY"
                         value={eventData.endDate}
                         onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params} sx={{width: '100%'}}/>}
+                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
                     />
                 </LocalizationProvider>
             </div>
         </FormControl>
     );
 
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
+
+    function handleCourseList(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
+            .then(res => {
+                setCourse(res.data.courses);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
+    }
 
     function handleRecurrenceChange(e) {
-        setEventData({...eventData, recurrence: e.target.value})
+        setEventData({ ...eventData, recurrence: e.target.value})
     }
 
     function handleEvent() {
@@ -72,8 +87,8 @@ export default function CreateEvent(props) {
                     props.onDrawerClose(res.data, 2);
             })
             .catch(err => {
-                setEventError({...eventError, message: "Error connecting to database. " + err});
-                setEventError({...eventError, hasError: true});
+                setEventError({ ...eventError, message: "Error connecting to database. " + err });
+                setEventError({ ...eventError, hasError: true });
             });
     }
 
@@ -88,7 +103,7 @@ export default function CreateEvent(props) {
     ) : null;
 
     function handleIsRecurrentChange() {
-        setIsRecurrent((prev) => !prev);
+        setIsRecurrent((prev) =>  !prev);
     }
 
     const buttons = (
@@ -106,17 +121,16 @@ export default function CreateEvent(props) {
 
     return (
         <React.Fragment>
-            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
-                <div style={{paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
+            <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
 
                 <div align='center' style={{
                     overflow: 'auto',
                     paddingTop: '10px',
                     width: '90vw',
-                    height: '70vh'
+                    height: '65vh'
                 }}>
-
-                    <EventForm eventState={eventData} eventStateSetter={setEventData}/>
+                    <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
                     <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
                         <Switch
                             sx={{color: '#912338'}}
@@ -125,11 +139,8 @@ export default function CreateEvent(props) {
                         />
                     }/>
                     {isRecurrent && recurrenceSelection}
-
-                    <div style={{ paddingTop: '20px'}}>{buttons}</div>
-
                 </div>
-
+                <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form>
         </React.Fragment>
     )

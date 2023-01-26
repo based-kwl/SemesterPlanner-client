@@ -2,8 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import Grid from "@mui/material/Grid";
-import {Button, Stack, Typography} from "@mui/material";
-import {Radio, RadioGroup} from "@mui/material";
+import {Button, Stack, Typography, Radio, RadioGroup} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -45,8 +44,10 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
     )
 }
 
-export function EventForm({eventState, eventStateSetter}) {
+export function EventForm({eventState, eventStateSetter, courseArray}) {
+    console.log('course Array', courseArray);
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isVisibleStudy, setIsVisibleStudy] = React.useState(false);
     function handleEditEventHeaderChange(e) {
         eventStateSetter({...eventState, eventHeader: e.target.value})
     }
@@ -72,16 +73,30 @@ export function EventForm({eventState, eventStateSetter}) {
     }
     function handleTypeUpdate(e) {
         let type = e.target.value;
-        eventStateSetter({...eventState, type: e.target.value});
         if (type === 'course'){
             setIsVisible(true);
-        }else{
+            setIsVisibleStudy(false)
+            eventStateSetter({...eventState, type: e.target.value});
+        }else if(type === 'study'){
+            eventStateSetter({...eventState, type: e.target.value});
             setIsVisible(false);
-            eventStateSetter({...eventState, catalog:'', subject:''});
+            setIsVisibleStudy(true);
+        }
+        else{
+            setIsVisible(false);
+            setIsVisibleStudy(false)
+            eventStateSetter({...eventState, type: e.target.value, catalog:'', subject:''});
             let removeData = {...eventState};
             delete removeData.catalog;
             delete removeData.subject;
         }
+    }
+    function handleStudyTypeCourse(e){
+        let value = e.target.value;
+        let index = value.indexOf(" ");
+        let subject = value.substring(0, index);
+        let catalog = value.substring(index+1);
+        eventStateSetter({...eventState, subject: subject, catalog: catalog});
     }
 
     const course = (
@@ -107,6 +122,18 @@ export function EventForm({eventState, eventStateSetter}) {
         </React.Fragment>
     )
 
+    const courseList = (
+            <FormControl >
+                <RadioGroup row onChange={handleStudyTypeCourse} >
+            {courseArray.map((course, index) =>(
+                 <div key={index}>
+                        <FormControlLabel control={<Radio size="small"/>} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
+                  </div>
+                ))}
+                </RadioGroup>
+            </FormControl>
+    )
+
     const eventForm = (
         <div>
             <Typography style={{fontWeight: 'bold'}}>
@@ -123,6 +150,7 @@ export function EventForm({eventState, eventStateSetter}) {
                                 onClick={handleTypeUpdate}/>
             </Stack>
             {isVisible && course}
+            {isVisibleStudy && courseList}
             <TextField
                 data_test="eventHeader"
                 id='eventHeader'
