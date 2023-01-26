@@ -96,10 +96,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
         let index = value.indexOf(" ");
         let subject = value.substring(0, index);
         let catalog = value.substring(index+1);
-        console.log('subject', subject, 'catalog',catalog);
         eventStateSetter({...eventState, subject: subject, catalog: catalog});
-        console.log(eventState.subject);
-        console.log(eventState.catalog);
     }
 
     const course = (
