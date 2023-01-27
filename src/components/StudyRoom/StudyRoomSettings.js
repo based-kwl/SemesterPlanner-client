@@ -54,8 +54,8 @@ export default function StudyRoomSettings() {
     }
 
     //deletes the room in db
-    function handleDelete(e){
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`,{email:roomData.owner, studyRoomID:roomData.studyRoomID})
+    function handleDelete(){
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room`, {data: {email: roomData.owner, studyRoomID: roomData.studyRoomID}})
             .then(() => {
                 navigate("/study-room-home");
             })

@@ -53,8 +53,8 @@ export function GetStudyRoomChat(){
         );
 
     function isMyMessage(message) {
-        const sender = JSON.parse(message.email);
-        return userEmail.current == `"${sender}"`;
+        const sender = message.email;
+        return userEmail.current === `"${sender}"`;
     }
 
     const MessagesBubbles = () => (React.useMemo(() => {
@@ -82,4 +82,4 @@ export function GetStudyRoomChat(){
     }, [messages]));
 
     return <MessagesBubbles />
-};
+}
