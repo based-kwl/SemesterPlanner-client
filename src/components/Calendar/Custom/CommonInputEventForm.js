@@ -44,8 +44,7 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
     )
 }
 
-export function EventForm({eventState, eventStateSetter, courseArray}) {
-    console.log('course Array', courseArray);
+export function EventForm({eventState, eventStateSetter, courseArray,value}) {
     const [isVisible, setIsVisible] = React.useState(false);
     const [isVisibleStudy, setIsVisibleStudy] = React.useState(false);
     function handleEditEventHeaderChange(e) {
@@ -103,18 +102,24 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
         <React.Fragment>
             <div style={{paddingTop: '10px'}}>
                 <TextField required
-                           id="outlined-required"
+                           data_test="courseSubject"
+                           id="subject"
                            label="subject"
+                           value={eventState.subject}
                            defaultValue="EX: SOEN"
                            size="small"
+                           margin="normal"
                            onChange={(e) => {
                                eventStateSetter({...eventState, subject: e.target.value})}}
                 />
                 <TextField required
-                           id="outlined-required"
+                           data_test="courseCatalog"
+                           id="catalog"
                            label="catalog"
+                           value={eventState.catalog}
                            defaultValue="EX: 385"
                            size="small"
+                           margin="normal"
                            onChange={(e) => {
                                eventStateSetter({...eventState, catalog: e.target.value})}}
                 />
@@ -124,10 +129,10 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
 
     const courseList = (
             <FormControl >
-                <RadioGroup row onChange={handleStudyTypeCourse} >
+                <RadioGroup row onChange={handleStudyTypeCourse}>
             {courseArray.map((course, index) =>(
                  <div key={index}>
-                        <FormControlLabel control={<Radio size="small"/>} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
+                        <FormControlLabel  control={<Radio size="small" />} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
                   </div>
                 ))}
                 </RadioGroup>
@@ -135,18 +140,18 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
     )
 
     const eventForm = (
-        <div>
+        <div style={{width:'90vw'}}>
             <Typography style={{fontWeight: 'bold'}}>
                 Select the event category: {eventState.type}
             </Typography>
-            <Stack direction="row" spacing={2} justifyContent="center">
-                <PrimaryButton2 width={'20vw'} colour={'#0072A8'} content="Course" value="course"
+            <Stack direction="row" spacing={1} justifyContent="center">
+                <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#8CC63E'} content="Study" value="study"
+                <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DA3A16'} content="Workout" value="workout"
+                <PrimaryButton2 minWidth={'19vw'} colour={'#DA3A16'} content="Workout" value="workout"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DB0272'} content="Appointment" value="appointment"
+                <PrimaryButton2 minWidth={'25vw'} colour={'#DB0272'} content="Appointment" value="appointment"
                                 onClick={handleTypeUpdate}/>
             </Stack>
             {isVisible && course}
@@ -225,6 +230,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                     data-test="eventStartTime"
                     onChange={handleEditStartTimeChange}
                     sx={{width: '260px'}}
+                    margin="normal"
                 />
 
                 {/** Event End Time */}
@@ -242,6 +248,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                     data-test="eventEndTime"
                     onChange={handleEditEndTimeChange}
                     sx={{width: '260px'}}
+                    margin="normal"
                 />
             </Grid>
         </div>
@@ -271,7 +278,7 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
 
     function handleRecurrenceChange(e) {
-        setRecurrenceState({...recurrenceState, reccurence: e.target.value})
+        setRecurrenceState({...recurrenceState, recurrence: e.target.value})
     }
 
     function handleIsReccurentChange() {
@@ -314,11 +321,11 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
         }/>
     )
 
-    const displayy = (
+    const display = (
         <React.Fragment>
             {recurrenceSwitch}
             <div>{isRecurrent && recurrenceOption}</div>
         </React.Fragment>
     )
-    return (displayy);
+    return (display);
 }

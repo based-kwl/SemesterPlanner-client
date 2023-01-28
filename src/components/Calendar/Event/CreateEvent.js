@@ -26,10 +26,12 @@ export default function CreateEvent(props) {
         endDate: new Date(),
         startTime: props.event ? props.event.startTime : new Date(),
         endTime: props.event ? props.event.endTime : new Date(),
+        actualStartTime: new Date(),
+        actualEndTime:  new Date(),
         recurrence: 'once',
-        type: '',
-        subject:'',
-        catalog:''
+        type: props.event ? props.event.type: '',
+        subject: props.event ? props.event.subject: '',
+        catalog:props.event ? props.event.catalog: ''
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
@@ -125,7 +127,7 @@ export default function CreateEvent(props) {
                 <div align='center' style={{
                     overflow: 'auto',
                     paddingTop: '10px',
-                    width: '90vw',
+                    width: '97vw',
                     height: '65vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
