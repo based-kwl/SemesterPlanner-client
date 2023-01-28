@@ -14,7 +14,9 @@ import {EventForm} from '../Custom/CommonInputEventForm';
 import moment from "moment";
 
 export default function CreateEvent(props) {
+    const email = GetAuthentication().email;
     const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
         eventHeader: props.event ? props.event.name : '',
@@ -24,10 +26,12 @@ export default function CreateEvent(props) {
         endDate: new Date(),
         startTime: props.event ? props.event.startTime : new Date(),
         endTime: props.event ? props.event.endTime : new Date(),
+        actualStartTime: new Date(),
+        actualEndTime:  new Date(),
         recurrence: 'once',
-        type: '',
-        subject:'',
-        catalog:''
+        type: props.event ? props.event.type: '',
+        subject: props.event ? props.event.subject: '',
+        catalog:props.event ? props.event.catalog: ''
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
@@ -55,6 +59,19 @@ export default function CreateEvent(props) {
         </FormControl>
     );
 
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
+
+    function handleCourseList(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
+            .then(res => {
+                setCourse(res.data.courses);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
+    }
 
     function handleRecurrenceChange(e) {
         setEventData({ ...eventData, recurrence: e.target.value})
@@ -110,11 +127,10 @@ export default function CreateEvent(props) {
                 <div align='center' style={{
                     overflow: 'auto',
                     paddingTop: '10px',
-                    width: '90vw',
-                    height: '70vh'
+                    width: '97vw',
+                    height: '65vh'
                 }}>
-
-                    <EventForm eventState={eventData} eventStateSetter={setEventData}/>
+                    <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
                     <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
                         <Switch
                             sx={{color: '#912338'}}
@@ -123,11 +139,8 @@ export default function CreateEvent(props) {
                         />
                     }/>
                     {isRecurrent && recurrenceSelection}
-
-                    <div style={{ paddingTop: '20px'}}>{buttons}</div>
-
                 </div>
-
+                <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form>
         </React.Fragment>
     )

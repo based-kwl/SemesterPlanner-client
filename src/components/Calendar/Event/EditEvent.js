@@ -1,14 +1,18 @@
 import * as React from 'react';
-import {Typography} from "@mui/material";
+import {Typography, Stack} from "@mui/material";
 import axios from "axios";
 import {RecurrenceSelection} from '../Custom/CommonInputEventForm';
 import {EventForm} from '../Custom/CommonInputEventForm';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
-import {Stack} from '@mui/system';
+import GetAuthentication from "../../Authentication/Authentification";
 
 export default function EditEvent(props) {
+
+    const email = GetAuthentication().email;
     const [eventData, setEventData] = React.useState(props.eventData);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
+    const [course, setCourse] = React.useState([])
+    const studyCourse = props.eventData.subject+' '+props.eventData.catalog
 
     const recurrenceSelection = () => {
         return RecurrenceSelection(eventData, setEventData);
@@ -28,7 +32,18 @@ export default function EditEvent(props) {
             });
 
     }
-
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
+    function handleCourseList(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
+            .then(res => {
+                setCourse(res.data.courses);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
+    }
     const PageError = eventError.hasError ? (
         <Typography align="center" color="#DA3A16">
             {eventError.message}
@@ -51,7 +66,7 @@ export default function EditEvent(props) {
 
     const editUpdateButtons = (
         <React.Fragment>
-            <Stack direction='row' spacing={7} marginTop={2}>
+            <Stack direction='row' spacing={3} marginTop={2} alignItems="center" justifyContent="center">
 
                 <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Update" onClick={handleEventUpdate}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Delete"
@@ -63,16 +78,23 @@ export default function EditEvent(props) {
 
     const editEventForm = (
         <React.Fragment>
-            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
-                <div style={{paddingTop: '0px', paddingBottom: '10px'}}>{PageError}</div>
-                <div align='center' style={{paddingTop: '16px', paddingBottom: '20px'}}>
 
-                    <EventForm eventState={eventData} eventStateSetter={setEventData}/>
+            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
+                <div style={{paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
+                <div align='center' style={{
+                    overflow: 'auto',
+                    paddingTop: '10px',
+                    width: '97vw',
+                    height: '65vh'
+                }}>
+                    <Typography>{eventData.type ==='study'?"Editing event for "+studyCourse : " "}</Typography>
+
+                    <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
+
                     <div>{recurrenceSelection()}</div>
 
-                    <div>{editUpdateButtons}</div>
                 </div>
-
+                <div>{editUpdateButtons}</div>
             </form>
         </React.Fragment>
     )
