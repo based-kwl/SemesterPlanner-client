@@ -6,8 +6,8 @@ export const ChatFooter = () => {
     const [message, setMessage] = useState('');
 
     const handleSendMessage = (e) => {
-        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         e.preventDefault();
+        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         const email = GetAuthentication().email;
         axios.post(`${process.env.REACT_APP_BASE_URL}message/send`, {
             studyRoomID: studyRoomId,
