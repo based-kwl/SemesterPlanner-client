@@ -2,8 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import Grid from "@mui/material/Grid";
-import {Button, Stack, Typography} from "@mui/material";
-import {Radio, RadioGroup} from "@mui/material";
+import {Button, Stack, Typography, Radio, RadioGroup} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -45,8 +44,9 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
     )
 }
 
-export function EventForm({eventState, eventStateSetter}) {
+export function EventForm({eventState, eventStateSetter, courseArray,value}) {
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isVisibleStudy, setIsVisibleStudy] = React.useState(false);
     function handleEditEventHeaderChange(e) {
         eventStateSetter({...eventState, eventHeader: e.target.value})
     }
@@ -74,32 +74,52 @@ export function EventForm({eventState, eventStateSetter}) {
         let type = e.target.value;
         if (type === 'course'){
             setIsVisible(true);
+            setIsVisibleStudy(false)
             eventStateSetter({...eventState, type: e.target.value});
-        }else{
+        }else if(type === 'study'){
+            eventStateSetter({...eventState, type: e.target.value});
             setIsVisible(false);
+            setIsVisibleStudy(true);
+        }
+        else{
+            setIsVisible(false);
+            setIsVisibleStudy(false)
             eventStateSetter({...eventState, type: e.target.value, catalog:'', subject:''});
             let removeData = {...eventState};
             delete removeData.catalog;
             delete removeData.subject;
         }
     }
+    function handleStudyTypeCourse(e){
+        let value = e.target.value;
+        let index = value.indexOf(" ");
+        let subject = value.substring(0, index);
+        let catalog = value.substring(index+1);
+        eventStateSetter({...eventState, subject: subject, catalog: catalog});
+    }
 
     const course = (
         <React.Fragment>
             <div style={{paddingTop: '10px'}}>
                 <TextField required
-                           id="outlined-required"
+                           data_test="courseSubject"
+                           id="subject"
                            label="subject"
+                           value={eventState.subject}
                            defaultValue="EX: SOEN"
                            size="small"
+                           margin="normal"
                            onChange={(e) => {
                                eventStateSetter({...eventState, subject: e.target.value})}}
                 />
                 <TextField required
-                           id="outlined-required"
+                           data_test="courseCatalog"
+                           id="catalog"
                            label="catalog"
+                           value={eventState.catalog}
                            defaultValue="EX: 385"
                            size="small"
+                           margin="normal"
                            onChange={(e) => {
                                eventStateSetter({...eventState, catalog: e.target.value})}}
                 />
@@ -107,22 +127,35 @@ export function EventForm({eventState, eventStateSetter}) {
         </React.Fragment>
     )
 
+    const courseList = (
+            <FormControl >
+                <RadioGroup row onChange={handleStudyTypeCourse}>
+            {courseArray.map((course, index) =>(
+                 <div key={index}>
+                        <FormControlLabel  control={<Radio size="small" />} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
+                  </div>
+                ))}
+                </RadioGroup>
+            </FormControl>
+    )
+
     const eventForm = (
-        <div>
+        <div style={{width:'90vw'}}>
             <Typography style={{fontWeight: 'bold'}}>
                 Select the event category: {eventState.type}
             </Typography>
-            <Stack direction="row" spacing={2} justifyContent="center">
-                <PrimaryButton2 width={'20vw'} colour={'#0072A8'} content="Course" value="course"
+            <Stack direction="row" spacing={1} justifyContent="center">
+                <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#8CC63E'} content="Study" value="study"
+                <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DA3A16'} content="Workout" value="workout"
+                <PrimaryButton2 minWidth={'19vw'} colour={'#DA3A16'} content="Workout" value="workout"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 width={'20vw'} colour={'#DB0272'} content="Appointment" value="appointment"
+                <PrimaryButton2 minWidth={'25vw'} colour={'#DB0272'} content="Appointment" value="appointment"
                                 onClick={handleTypeUpdate}/>
             </Stack>
             {isVisible && course}
+            {isVisibleStudy && courseList}
             <TextField
                 data_test="eventHeader"
                 id='eventHeader'
@@ -197,6 +230,7 @@ export function EventForm({eventState, eventStateSetter}) {
                     data-test="eventStartTime"
                     onChange={handleEditStartTimeChange}
                     sx={{width: '260px'}}
+                    margin="normal"
                 />
 
                 {/** Event End Time */}
@@ -214,6 +248,7 @@ export function EventForm({eventState, eventStateSetter}) {
                     data-test="eventEndTime"
                     onChange={handleEditEndTimeChange}
                     sx={{width: '260px'}}
+                    margin="normal"
                 />
             </Grid>
         </div>
@@ -243,7 +278,7 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
     const [isRecurrent, setIsRecurrent] = React.useState(false);
 
     function handleRecurrenceChange(e) {
-        setRecurrenceState({...recurrenceState, reccurence: e.target.value})
+        setRecurrenceState({...recurrenceState, recurrence: e.target.value})
     }
 
     function handleIsReccurentChange() {
@@ -286,11 +321,11 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
         }/>
     )
 
-    const displayy = (
+    const display = (
         <React.Fragment>
             {recurrenceSwitch}
             <div>{isRecurrent && recurrenceOption}</div>
         </React.Fragment>
     )
-    return (displayy);
+    return (display);
 }
