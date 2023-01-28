@@ -3,6 +3,7 @@ import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
+import GetAuthentication from "../../Authentication/Authentification";
 
 export function GetStudyRoomChat(){
 
@@ -10,7 +11,7 @@ export function GetStudyRoomChat(){
     const [messages, setMessages] = React.useState([]);
     const [messageCount, setMessageCount] = React.useState(0)
     React.useEffect(() => {
-        userEmail.current = localStorage.getItem("email");
+        userEmail.current = GetAuthentication().email;
         fetchMessages();
         socket.on("newMessage", listener)
         return () => {
@@ -26,7 +27,6 @@ export function GetStudyRoomChat(){
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         axios.get(`${process.env.REACT_APP_BASE_URL}message/bulk/${studyRoomId}/100`)
             .then(res => {
-                console.log(res.data)
                 const messageFromRoom = res.data;
                 const messageReverse = messageFromRoom.reverse();
                 setMessages(messageReverse);
@@ -54,7 +54,7 @@ export function GetStudyRoomChat(){
 
     function isMyMessage(message) {
         const sender = message.email;
-        return userEmail.current === `"${sender}"`;
+        return userEmail.current === `${sender}`;
     }
 
     const MessagesBubbles = () => (React.useMemo(() => {
