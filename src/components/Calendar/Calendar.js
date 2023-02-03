@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import {BackgroundCard, CustomWhiteCard, EventCard} from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, EventCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import GetAuthentication from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
@@ -22,8 +22,8 @@ export default function CalendarView() {
 
     const [date, setDate] = useState(new Date())
     const [events, setEvents] = useState([]);
-    const [academicEvents, setAcedemicEvents] = useState([]);
-    const [eventError, seteventError] = React.useState({message: "Error, please try again later", hasError: false});
+    const [academicEvents, setAcademicEvents] = useState([]);
+    const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
     const user = GetAuthentication();
 
     //  Get all Events by student username
@@ -33,17 +33,17 @@ export default function CalendarView() {
                     setEvents(res.data)
                 }
             ).catch((err) => {
-            seteventError({...eventError, message: err.message});
+            setEventError({...eventError, message: err.message});
         });
     }
 
     function fetchAcademicData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}opendata/importantdates/`)
             .then((res) => {
-                    setAcedemicEvents(res.data)
+                    setAcademicEvents(res.data)
                 }
             ).catch((err) => {
-            seteventError({...eventError, message: err.message});
+            setEventError({...eventError, message: err.message});
         });
 
     }
@@ -95,13 +95,19 @@ export default function CalendarView() {
 
     const calendarCard = (
         <React.Fragment>
-            <CustomWhiteCard width='360px' height='480px' marginTop='50px' content={calendarMonth} />
-            <div style={{marginTop:"10px", margin: 'auto', width:'360px',display:"flex", justifyContent:"space-between"}}>
+            <StudyRoomChatCard width='92vw' height='6vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{fontSize:'22px', fontWeight:'bold'}} ><Typography variant="1">Calendar</Typography></div>}/>
+            <StudyRoomChatCard width='92vw' height='fit-content' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={calendarMonth}/>
+            <StudyRoomChatCard width='92vw' height='6vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                               bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{width:'92vw', display:'flex', justifyContent:"space-between"}}>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
-                              title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} />}/>
-            </div>
+                title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} />}/>
+                </div>
+
+            }/>
         </React.Fragment>
     )
 
@@ -148,9 +154,9 @@ export default function CalendarView() {
         <>
             <EventCard
                 justifyContent='auto'
-                width='360px'
+                width='92vw'
                 height='30px'
-                marginTop='15px'
+                marginTop='5px'
                 overflow='initial'
                 content={<EventHeader content={"School"}/>}
                 backgroundColor='#0095FF'/>
@@ -160,8 +166,8 @@ export default function CalendarView() {
                     <EventCard
                         key={index}
                         justifyContent="left"
-                        width="360px"
-                        height='90px'
+                        width="92vw"
+                        height='fit-content'
                         marginTop='10px' overflow='hidden'
                         content={
                             <>
@@ -185,7 +191,7 @@ export default function CalendarView() {
     )
 
     const academicEventsDisplay = (
-      <> <EventCard justifyContent='auto' width='360px' height='30px' marginTop='15px' overflow='initial' 
+      <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='15px' overflow='initial'
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
@@ -194,8 +200,8 @@ export default function CalendarView() {
                     <EventCard
                         key={index}
                         justifyContent="left"
-                        width="360px"
-                        height='130px'
+                        width="92vw"
+                        height='fit-content'
                         marginTop='10px' overflow='hidden'
                         content={
                             <EventDisplay
@@ -236,7 +242,6 @@ export default function CalendarView() {
         return tileContent;
     }
 
-
     const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
         if (eventType === "Gym") {
@@ -267,8 +272,8 @@ export default function CalendarView() {
     return (
         <React.Fragment>
             <PersistentDrawerLeft />
-            <div style={{ paddingTop: '30px' }}>
-                <BackgroundCard width='372px' height='100%' content={calendarPageCards} />
+            <div style={{ paddingTop: '15px' }}>
+                <BackgroundCard width='96vw'  content={calendarPageCards} />
             </div>
         </React.Fragment>
     );
