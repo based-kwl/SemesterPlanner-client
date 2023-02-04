@@ -6,20 +6,79 @@ import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
+import { useState, useMemo, useEffect } from 'react';
 import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
-
+import { fetchData } from './fetchingCategoryDataFactory'
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'
 
 export default function ProgressReportHome(){
+    const [courses, setCourses] = useState([])
+    const [link, setLink] = useState('study-events-monthly')
     const [course, setCourse] = React.useState([])
     const [time, setTime] = React.useState('')
     const email = GetAuthentication().email;
 
 
     React.useEffect(()=>{
+        fetchData(link, setCourses)
         handleCourseList()
         handleTotalStudyTime()
-    },[])
+
+    },[link])
+
+
+    var data = {
+        labels: courses?.map((course) => course.name),
+        datasets: [{
+            label: "Recommanded",
+            backgroundColor: '#912338',
+            data: courses?.map((course) => course.expectedTime),
+        }, {
+            label: "Actual",
+            backgroundColor: '#E9E3D3',
+            data: courses?.map((course) => course.Actual),
+        }]
+    }
+
+    const monthly = (
+        <React.Fragment>
+            <div>
+                <Bar data={data} height={"600%"}
+                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
+            </div>
+        </React.Fragment>
+    )
+    const weekly = (
+        <React.Fragment>
+            <div>
+                <Bar data={data} height={"600%"}
+                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
+            </div>
+        </React.Fragment>
+    )
+
+    const categoryweekly = (
+        <React.Fragment>
+            <div>
+                <Bar data={data} height={"600%"}
+                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
+            </div>
+        </React.Fragment>
+    )
+
+    const categorymonthly = (
+        <React.Fragment>
+            <div>
+                <Bar data={data} height={"600%"}
+                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
+            </div>
+        </React.Fragment>
+    )
+
+
+
 
     function handleCourseList(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -90,26 +149,26 @@ export default function ProgressReportHome(){
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 1'} content={"feature 1"}/></div>}/>
+                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}  />}
+                               title={'Feature 1'} content={monthly}/></div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 2'} content={"feature 2"}/></div>}/>
+                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') }}/>}
+                               title={'Feature 2'} content={weekly}/></div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 3'} content={"feature 3"}/></div>}/>
+                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') } }/>}
+                               title={'Feature 3'} content={categorymonthly}/></div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 4'} content={"feature 4"}/></div>}/>
+                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') }} />}
+                               title={'Feature 4'} content={categoryweekly}/></div>}/>
 
             </div>
         </React.Fragment>
