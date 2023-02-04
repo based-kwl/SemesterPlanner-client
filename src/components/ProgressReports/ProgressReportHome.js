@@ -9,6 +9,7 @@ import axios from "axios";
 import { useState, useMemo, useEffect } from 'react';
 import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
+import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import { fetchData } from './fetchingCategoryDataFactory'
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto'
@@ -147,32 +148,40 @@ export default function ProgressReportHome(){
             {/*drawers for future features*/}
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}  />}
-                               title={'Feature 1'} content={monthly}/></div>}/>
+                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "flex", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="Monthly Courses Statistics" onClick={() => { setLink('study-events-monthly') }} />}
+                                       title={'Study Statistics'} content={monthly} ></BottomDrawer>
+                               </div> }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') }}/>}
-                               title={'Feature 2'} content={weekly}/></div>}/>
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "flex", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="Weekly Courses Statistics" onClick={() => { setLink('study-events-weekly') }} />}
+                                       title={'Study Statistics'} content={weekly} ></BottomDrawer>
+                               </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') } }/>}
-                               title={'Feature 3'} content={categorymonthly}/></div>}/>
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "flex", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="Weekly Category Statistics" onClick={() => { setLink('events-weekly') }} />}
+                                       title={'Category Statistics'} content={categoryweekly} ></BottomDrawer>
+                               </div>
+                   }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}} onClick={() => { setLink('events-weekly') }} />}
-                               title={'Feature 4'} content={categoryweekly}/></div>}/>
+                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "flex", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="Monthly Category Statistics" onClick={() => { setLink('events-monthly') }} />}
+                                       title={'Category Statistics'} content={categorymonthly} ></BottomDrawer>
+                               </div>}/>
 
             </div>
         </React.Fragment>
     )
 
-    return(<BackgroundCard width='96vw' height='99vh' content={studyEstimator}/>)
+    const statisticPageCards = useMemo(() => (
+        <React.Fragment>
+            {studyEstimator}
+
+        </React.Fragment>
+    ), [studyEstimator]);
+
+    return(<BackgroundCard width='96vw' height='99vh' content={statisticPageCards}/>)
 }
