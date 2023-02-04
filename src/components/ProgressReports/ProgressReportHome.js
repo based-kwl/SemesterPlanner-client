@@ -42,6 +42,14 @@ export default function ProgressReportHome(){
             data: courses?.map((course) => course.Actual),
         }]
     }
+    var data1 = {
+        labels: courses?.map((course) => course.name),
+        datasets: [{
+            label: "Actual",
+            backgroundColor: courses?.map((course) => course.colour),
+            data: courses?.map((course) => course.expectedTime),
+        }]
+    }
 
     const monthly = (
         <React.Fragment>
@@ -63,7 +71,7 @@ export default function ProgressReportHome(){
     const categoryweekly = (
         <React.Fragment>
             <div>
-                <Bar data={data} height={"600%"}
+                <Bar data={data1} height={"600%"}
                     options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
             </div>
         </React.Fragment>
@@ -72,7 +80,7 @@ export default function ProgressReportHome(){
     const categorymonthly = (
         <React.Fragment>
             <div>
-                <Bar data={data} height={"600%"}
+                <Bar data={data1} height={"600%"}
                     options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
             </div>
         </React.Fragment>
