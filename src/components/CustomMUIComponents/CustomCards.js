@@ -73,10 +73,45 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
 
         }} variant='outlined'>
             {content}
+
         </Card>
     );
 }
 
+function renderSwitch(type){
+    switch (type){
+        case 'course':
+            return '#0072A8'
+        case 'study':
+            return '#8CC63E'
+        case 'workout':
+            return '#DA3A16'
+        case 'appointment':
+            return '#DB0272'
+        default:
+            return 'black'
+    }
+}
+export const EventTypeCard = ({ width, height, marginTop, content }) => {
+    return (
+        <Card style={{
+            margin: 'auto',
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            backgroundColor: renderSwitch(content),
+            overflow: "hidden",
+
+        }} >
+           <Typography color="white" fontWeight={500} style={{
+               variant:'overline', fontFamily: 'Roboto', align: 'center', display: 'flex',
+           }}>
+           {content}
+           </Typography>
+
+        </Card>
+    );
+}
 export const ParticipantCard = ({width, height, content}) => {
     return (
         <Card variant='outlined' style={{

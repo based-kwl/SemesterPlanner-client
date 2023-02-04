@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import {BackgroundCard, EventCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import GetAuthentication from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
@@ -31,6 +31,7 @@ export default function CalendarView() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
                     setEvents(res.data)
+                console.log('events', events)
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
@@ -115,7 +116,7 @@ export default function CalendarView() {
         return(
         <React.Fragment>
             <CardContent>
-                <Typography color="#000000" fontWeight={500} style={{
+                <Typography color="white" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
                     {content}
@@ -142,8 +143,8 @@ export default function CalendarView() {
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary">
-
                     </Typography>
+
                 </div>
 
             </div>
@@ -152,16 +153,23 @@ export default function CalendarView() {
 
     const eventsDisplay = (
         <>
-            <EventCard
+
+            <EventTypeCard
                 justifyContent='auto'
                 width='92vw'
                 height='30px'
-                marginTop='5px'
-                overflow='initial'
-                content={<EventHeader content={"School"}/>}
-                backgroundColor='#0095FF'/>
+                marginTop='8px'
+                content={events[24].type}
+                />
+            {/*<EventCard*/}
+            {/*    justifyContent='auto'*/}
+            {/*    width='92vw'*/}
+            {/*    height='30px'*/}
+            {/*    marginTop='5px'*/}
+            {/*    overflow='initial'*/}
+            {/*    content={<EventHeader content={"School"}/>}*/}
+            {/*    backgroundColor='#0095FF'/>*/}
             <div className="events">
-
                 {events && events.map((e, index) => (
                     <EventCard
                         key={index}
