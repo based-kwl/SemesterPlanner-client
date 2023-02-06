@@ -2,7 +2,6 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SignIn from './components/Authentication/SignIn';
 import SignUp from './components/Authentication/SignUp';
-import Statistic from './components/Statistics/StatisticCharts';
 import EditProfile from "./components/Profile/EditProfile";
 import Calendar from './components/Calendar/Calendar';
 import CreateEvent from './components/Calendar/Event/CreateEvent';
@@ -34,7 +33,6 @@ function AppRoutes() {
             <Route path="/calendar" element={<React.StrictMode><Calendar /></React.StrictMode>} />
             <Route path="/editProfile" element={<React.StrictMode><EditProfile /></React.StrictMode>} />
             <Route path="/study-room/:studyRoomID" element={<StudyRoom />} />
-            <Route path="/statistic" element={<Statistic/>}/>
             <Route path="/study-room-home" element={<StudyRoomHome />} />
             <Route path="/friend-list-home" element={<FriendListHome />}/>
             <Route path="/progress-report-home" element={<ProgressReportHome />}/>
