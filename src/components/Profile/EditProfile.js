@@ -107,6 +107,9 @@ export default function EditProfile() {
             <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+                <Typography align='center' style={{padding:'10px', fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
+                    Edit Profile
+                </Typography>
                     <TextField
                         fullWidth
                         id='username'
@@ -160,20 +163,20 @@ export default function EditProfile() {
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
                     <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Update" onClick={handleEditProfile}/>
+                <PrimaryButton2 width='80vw' style={{position: 'absolute'}}  colour={'#912338'} content="Update" onClick={handleEditProfile}/>
             </form>
         </React.Fragment>
     )
 
     const InfoEdit = (
-        <CustomWhiteCard width='326px' height='780px' marginTop='30px' content={SignUpForm}/>
+        <CustomWhiteCard width='92vw' height='980px' marginTop='30px'  content={SignUpForm}/>
     )
 
     return (
         <React.Fragment>
             <PersistentDrawerLeft/>
             <div style={{paddingTop: '60px'}}>
-                <BackgroundCard width='372px' height='920px' content={InfoEdit}/>
+                <BackgroundCard  width='96vw' height='99vh' content={InfoEdit}/>
             </div>
         </React.Fragment>
     );
