@@ -8,6 +8,7 @@ import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
+import StudyRecap from "./StudyRecap";
 
 
 export default function ProgressReportHome(){
@@ -25,7 +26,6 @@ export default function ProgressReportHome(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
             .then(res => {
                 setCourse(res.data.courses);
-                console.log(res.data.courses)
             })
             .catch(err => {
                 console.log('Error', err);
@@ -109,7 +109,7 @@ export default function ProgressReportHome(){
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 4'} content={"feature 4"}/></div>}/>
+                               title={'Study Recap'} content={<StudyRecap/>}/></div>}/>
 
             </div>
         </React.Fragment>
