@@ -137,7 +137,7 @@ export default function StudyRecap(props) {
         <h3>Study Hours Today</h3>
         <div style={{color: 'red'}}>{errorMessage}</div>
         {eventsList.map((item, index) => {
-            return (<div key={index}>
+            return (<div key={item._id}>
                 <StudyRoomCard width={'100%'} height={'fit-content'} content={<div style={{
                     margin: '5px', display: 'flex', alignItems: 'center'
                 }}>
