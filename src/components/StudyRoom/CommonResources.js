@@ -100,9 +100,9 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
     )
 }
 
-export const StudyRoomCard = ({srckey, width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0'}) => {
+export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0'}) => {
     return (
-        <Card key={srckey} variant='outlined' style={{
+        <Card variant='outlined' style={{
             display: 'flex',
             flexDirection:'row',
             width: width,

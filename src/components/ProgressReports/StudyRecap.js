@@ -39,8 +39,7 @@ export default function StudyRecap(props) {
         const sTime = new Date(startTime);
         const eTime = new Date(endTime);
         let hourDiff = eTime.getHours() - sTime.getHours();
-        if (hourDiff < 0)
-            hourDiff += 24;
+        if (hourDiff < 0) hourDiff += 24;
         let minDiff = eTime.getMinutes() - sTime.getMinutes();
         if (minDiff < 0) {
             hourDiff -= 1;
@@ -63,8 +62,7 @@ export default function StudyRecap(props) {
             axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, event)
                 .then(() => {
                     if (eventsList.length - 1 === index) {
-                        if (props.notificationCount && props.notificationCountSetter)
-                            props.notificationCountSetter(props.notificationCount - 1);
+                        if (props.notificationCount && props.notificationCountSetter) props.notificationCountSetter(props.notificationCount - 1);
                         document.elementFromPoint(0, 0).click();
                     }
                 })
@@ -100,76 +98,67 @@ export default function StudyRecap(props) {
     const generateTimePicker = (index, onChange, mode = 'hours-minutes') => {
         const timeDiff = timeStringToDateObject(getTimeDifference(eventsList[index].actualStartTime, eventsList[index].actualEndTime));
 
-        return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                {mode === 'hours-minutes' || mode === 'hours' ?
-                    <TimePicker
-                        ampm={false}
-                        openTo="hours"
-                        views={['hours']}
-                        inputFormat="HH"
-                        mask="__"
-                        label="Hours"
-                        value={timeDiff}
-                        onChange={(e) => {
-                            onChange(index, e)
-                        }}
-                        renderInput={(params) => <TextField {...params}
-                                                            inputProps={{...params.inputProps, readOnly: true}}
-                                                            size='small' sx={{width: '10ch'}}/>}
-                    /> : null}
-                {mode === 'hours-minutes' || mode === 'minutes' ?
-                    <TimePicker
-                        ampm={false}
-                        openTo="minutes"
-                        views={['minutes']}
-                        inputFormat="mm"
-                        mask="__"
-                        label="Minutes"
-                        value={timeDiff}
-                        closeOnSelect={false}
-                        onChange={(e) => {
-                            onChange(index, e)
-                        }}
-                        renderInput={(params) => <TextField {...params}
-                                                            inputProps={{...params.inputProps, readOnly: true}}
-                                                            size='small' sx={{width: '10ch'}}/>}
-                    /> : null}
-            </LocalizationProvider>
-        );
+        return (<LocalizationProvider dateAdapter={AdapterDayjs}>
+            {mode === 'hours-minutes' || mode === 'hours' ? <TimePicker
+                ampm={false}
+                openTo="hours"
+                views={['hours']}
+                inputFormat="HH"
+                mask="__"
+                label="Hours"
+                value={timeDiff}
+                onChange={(e) => {
+                    onChange(index, e)
+                }}
+                renderInput={(params) => <TextField {...params}
+                                                    inputProps={{...params.inputProps, readOnly: true}}
+                                                    size='small' sx={{width: '10ch'}}/>}
+            /> : null}
+            {mode === 'hours-minutes' || mode === 'minutes' ? <TimePicker
+                ampm={false}
+                openTo="minutes"
+                views={['minutes']}
+                inputFormat="mm"
+                mask="__"
+                label="Minutes"
+                value={timeDiff}
+                closeOnSelect={false}
+                onChange={(e) => {
+                    onChange(index, e)
+                }}
+                renderInput={(params) => <TextField {...params}
+                                                    inputProps={{...params.inputProps, readOnly: true}}
+                                                    size='small' sx={{width: '10ch'}}/>}
+            /> : null}
+        </LocalizationProvider>);
     }
 
-    return (
-        <div style={{width: '90vw'}}>
-            <h3>Study Hours Today</h3>
-            <div style={{color: 'red'}}>{errorMessage}</div>
-            {eventsList.map((item, index) => {
-                return (
-                    <div><StudyRoomCard srckey={index} width={'100%'} height={'fit-content'} content={
-                        <div style={{
-                            margin: '5px',
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}>
-                            Event: {item.eventHeader} Course: {item.subject}{item.catalog} Study
-                            Time: {generateTimePicker(index, handleTimeChange, 'hours')}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
-                        </div>}/>
-                    </div>
-                )
-            })}
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                position: "fixed",
-                bottom: "30px",
-                background: "white"
-            }}>
-                <div id={"confirmStudyRecap"}>
-                    <PrimaryButton2 content={"Confirm"} colour={'#912338'} width={"90vw"}
-                                    onClick={handleStudyRecapConfirm}/>
-                </div>
+    return (<div style={{width: '90vw'}}>
+        <h3>Study Hours Today</h3>
+        <div style={{color: 'red'}}>{errorMessage}</div>
+        {eventsList.map((item, index) => {
+            return (<div key={index}>
+                <StudyRoomCard width={'100%'} height={'fit-content'} content={<div style={{
+                    margin: '5px', display: 'flex', alignItems: 'center'
+                }}>
+                    Event: {item.eventHeader} Course: {item.subject}{item.catalog} Study
+                    Time: {generateTimePicker(index, handleTimeChange, 'hours')}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
+                </div>}
+                />
+            </div>)
+        })}
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            position: "fixed",
+            bottom: "30px",
+            background: "white"
+        }}>
+            <div id={"confirmStudyRecap"}>
+                <PrimaryButton2 content={"Confirm"} colour={'#912338'} width={"90vw"}
+                                onClick={handleStudyRecapConfirm}/>
             </div>
         </div>
-    )
+    </div>)
 }
