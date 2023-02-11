@@ -145,7 +145,7 @@ export default function StudyRecap(props) {
             <div style={{color: 'red'}}>{errorMessage}</div>
             {eventsList.map((item, index) => {
                 return (
-                    <div><StudyRoomCard width={'100%'} height={'fit-content'} content={
+                    <div><StudyRoomCard srckey={index} width={'100%'} height={'fit-content'} content={
                         <div style={{
                             margin: '5px',
                             display: 'flex',

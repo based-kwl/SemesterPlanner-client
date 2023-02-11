@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 
 export function RoomDataComponents({roomState, roomStateSetter}) {
     function SetAvatarText(t) {
-        let finalText = '';
+        let finalText;
         let displayText = t.split(' ').map(word => word[0]).join('');
 
         if (displayText.length > 4) {
@@ -29,7 +29,7 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
         roomStateSetter({...roomState, description: e.target.value});
     }
 
-    const colourStack = (
+    return (
         <>
             <TextField
                 fullWidth
@@ -98,13 +98,11 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
             />
         </>
     )
-
-    return colourStack;
 }
 
-export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0'}) => {
+export const StudyRoomCard = ({srckey, width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0'}) => {
     return (
-        <Card variant='outlined' style={{
+        <Card key={srckey} variant='outlined' style={{
             display: 'flex',
             flexDirection:'row',
             width: width,
