@@ -10,8 +10,7 @@ import TextField from '@mui/material/TextField';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import axios from "axios";
 
-
-export default function StudyRecap() {
+export default function StudyRecap(props) {
     const [eventsList, setEventsList] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -59,10 +58,15 @@ export default function StudyRecap() {
         e.preventDefault();
 
         eventsList.forEach((event, index) => {
+            event.studyHoursConfirmed = true;
+
             axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, event)
                 .then(() => {
-                    if (eventsList.length - 1 === index)
+                    if (eventsList.length - 1 === index) {
+                        if (props.notificationCount && props.notificationCountSetter)
+                            props.notificationCountSetter(props.notificationCount - 1);
                         document.elementFromPoint(0, 0).click();
+                    }
                 })
                 .catch(err => {
                     setErrorMessage(err.message);
