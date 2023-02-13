@@ -23,7 +23,7 @@ export default function CreateEvent(props) {
         description: props.event ? props.event.description : '',
         link: '',
         startDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : props.date,
-        endDate: props.event ? moment(props.date, "DD/MM/YYYY").toDate() : props.date,
+        endDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : props.date,
         startTime: props.event ? props.event.startTime : new Date(),
         endTime: props.event ? props.event.endTime : new Date(),
         actualStartTime: new Date(),
