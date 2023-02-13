@@ -92,23 +92,22 @@ function renderSwitch(type){
             return 'black'
     }
 }
-export const EventTypeCard = ({ width, height, marginTop, content }) => {
+export const EventTypeCard = ({ width, height, marginTop, content, backgroundColor }) => {
     return (
         <Card style={{
+            borderRadius: '0px',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'auto',
+            paddingTop: '8px',
+            overflow: "initial",
             margin: 'auto',
             width: width,
             height: height,
             marginTop: marginTop,
-            backgroundColor: renderSwitch(content),
-            overflow: "hidden",
-
-        }} >
-           <Typography color="white" fontWeight={500} style={{
-               variant:'overline', fontFamily: 'Roboto', align: 'center', display: 'flex',
-           }}>
+            backgroundColor: renderSwitch(backgroundColor)
+        }} variant='outlined' >
            {content}
-           </Typography>
-
         </Card>
     );
 }
