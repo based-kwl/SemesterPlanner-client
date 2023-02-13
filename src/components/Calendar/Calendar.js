@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
 import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
-import {BackgroundCard, EventCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
+import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import GetAuthentication from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
@@ -19,13 +19,13 @@ import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
 
 export default function CalendarView() {
-
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(new Date());
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const user = GetAuthentication();
+    const categories = ['course', 'study', 'workout', 'appointment'];
 
+    const user = GetAuthentication();
     //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
@@ -51,7 +51,14 @@ export default function CalendarView() {
     React.useEffect(() => {
         fetchData();
         fetchAcademicData();
+
     }, [])
+
+    const isSameDate = (date1, date2) => (
+        date1.getFullYear() === date2.getFullYear()
+        && date1.getMonth() === date2.getMonth()
+        && date1.getDate() === date2.getDate()
+    )
 
     function setDates(d) {
         setDate(d);
@@ -104,7 +111,7 @@ export default function CalendarView() {
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
                 <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
-                title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} />}/>
+                title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} date={date}/>}/>
                 </div>
 
             }/>
@@ -115,7 +122,7 @@ export default function CalendarView() {
         return(
         <React.Fragment>
             <CardContent>
-                <Typography color="#000000" fontWeight={500} style={{
+                <Typography color="white" fontWeight={500} style={{
                     fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
                 }}>
                     {content}
@@ -123,6 +130,19 @@ export default function CalendarView() {
             </CardContent>
         </React.Fragment>
    ) }
+
+    const EventTypeHeader = ({content})=>{
+        return(
+            <React.Fragment>
+                <CardContent>
+                    <Typography color="white" fontWeight={500} style={{
+                        fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
+                    }}>
+                        {content}
+                    </Typography>
+                </CardContent>
+            </React.Fragment>
+        ) }
 
     const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
         const currentDate = new Date(startDate);
@@ -142,8 +162,8 @@ export default function CalendarView() {
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary">
-
                     </Typography>
+
                 </div>
 
             </div>
@@ -152,51 +172,57 @@ export default function CalendarView() {
 
     const eventsDisplay = (
         <>
-            <EventCard
-                justifyContent='auto'
-                width='92vw'
-                height='30px'
-                marginTop='5px'
-                overflow='initial'
-                content={<EventHeader content={"School"}/>}
-                backgroundColor='#0095FF'/>
-            <div className="events">
-
-                {events && events.map((e, index) => (
-                    <EventCard
-                        key={index}
-                        justifyContent="left"
-                        width="92vw"
-                        height='fit-content'
-                        marginTop='10px' overflow='hidden'
-                        content={
-                            <>
-                                <EventDisplay
-                                    startDate={e.startDate}
-                                    startTime={getTime(e.startTime)}
-                                    endTime={getTime(e.endTime)}
-                                    description={e.description}
-                                    header={e.eventHeader}
-                                    EventID={e._id}
-                                />
-                                <BottomDrawer icon={<EditIcon style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
-                                              title={'Edit Event'}
-                                              content={<EditEvent onDrawerClose={updateEventList} eventData={e}/>}/>
-                            </>
-                        }
-                    />
+            {categories.map(( item, index) =>(
+                <>
+                <EventTypeCard
+                    value={item}
+                    id={index}
+                    justifyContent='auto'
+                    width='92vw'
+                    height='30px'
+                    marginTop='5px'
+                    overflow='initial'
+                    content={<EventTypeHeader content={categories[index]}/>}
+                    backgroundColor={categories[index]}
+                />
+                        {events && events.map((e, index) => (
+                            <>{item === e.type && isSameDate(date, new Date(e.startDate)) ?
+                            <EventCard
+                                key={index}
+                                justifyContent="left"
+                                width="92vw"
+                                height='fit-content'
+                                marginTop='10px' overflow='hidden'
+                                content={
+                                        <>
+                                        <EventDisplay
+                                            startDate={e.startDate}
+                                            startTime={getTime(e.startTime)}
+                                            endTime={getTime(e.endTime)}
+                                            description={e.description}
+                                            header={e.eventHeader}
+                                            EventID={e._id}
+                                        />
+                                        <BottomDrawer icon={<EditIcon style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
+                                                      title={'Edit Event'}
+                                                      content={<EditEvent onDrawerClose={updateEventList} eventData={e}/>}/>
+                                        </>
+                                    }
+                            />
+                                :null}</>
+                        ))}
+                </>
                 ))}
-            </div>
         </>
     )
 
     const academicEventsDisplay = (
-      <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='15px' overflow='initial'
+      <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
                 {academicEvents && academicEvents.map((e, index) => (
-
+                    <>{isSameDate(date, new Date(e.date))?
                     <EventCard
                         key={index}
                         justifyContent="left"
@@ -212,15 +238,11 @@ export default function CalendarView() {
                                 EventID={e._id}
                             />
                         }/>
+                        :null
+                    }</>
                 ))}
             </div>
         </>
-    )
-
-    const isSameDate = (date1, date2) => (
-        date1.getFullYear() === date2.getFullYear()
-        && date1.getMonth() === date2.getMonth()
-        && date1.getDate() === date2.getDate()
     )
 
     const DayTile = ({ day }) => {
@@ -235,7 +257,7 @@ export default function CalendarView() {
             tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.eventHeader} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} />
             ))
         }
 
@@ -244,15 +266,17 @@ export default function CalendarView() {
 
     const CalendarDayEventIcon = ({ eventType }) => {
         let backgroundColor = "#0095FF"
-        if (eventType === "Gym") {
-            backgroundColor = "#735BF2"
-        } else if (eventType === "Exam") {
-            backgroundColor = "#00B383"
-        } else if (eventType === "Volunteering") {
-            backgroundColor = "#800410"
+        if (eventType === categories[0]) {
+            backgroundColor = "#0072A8"
+        } else if (eventType === categories[1]) {
+            backgroundColor = "#8CC63E"
+        } else if (eventType === categories[2]) {
+            backgroundColor = "#DA3A16"
+        } else if (eventType === categories[3]) {
+            backgroundColor = "#DB0272"
         }
 
-        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.25)" }} />
+        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.4)" }} />
 
         if (eventType === "none") {
             tileIcon = (<></>);

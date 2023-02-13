@@ -73,10 +73,44 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
 
         }} variant='outlined'>
             {content}
+
         </Card>
     );
 }
 
+function renderSwitch(type){
+    switch (type){
+        case 'course':
+            return '#0072A8'
+        case 'study':
+            return '#8CC63E'
+        case 'workout':
+            return '#DA3A16'
+        case 'appointment':
+            return '#DB0272'
+        default:
+            return 'black'
+    }
+}
+export const EventTypeCard = ({ width, height, marginTop, content, backgroundColor }) => {
+    return (
+        <Card style={{
+            borderRadius: '0px',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'auto',
+            paddingTop: '8px',
+            overflow: "initial",
+            margin: 'auto',
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            backgroundColor: renderSwitch(backgroundColor)
+        }} variant='outlined' >
+           {content}
+        </Card>
+    );
+}
 export const ParticipantCard = ({width, height, content}) => {
     return (
         <Card variant='outlined' style={{
