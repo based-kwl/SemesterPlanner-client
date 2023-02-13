@@ -54,7 +54,7 @@ export default function ProgressReportHome() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={
                 <div style={{overflow: 'auto', height: '60vh'}}>
                     <h3>Course Workload</h3>
-                    <div style={{overflow: 'auto', height: '32vh'}}>
+                    <div style={{height: '32vh'}}>
                         {course.map((course, index) => (
                             <div key={index}>
                                 <StudyRoomCard data-test={`${course}`} width={'81vw'} height={'40px'}

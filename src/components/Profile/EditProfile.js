@@ -6,7 +6,7 @@ import {InputAdornment, Typography} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
+import {BackgroundCard, StudyRoomChatCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useEffect, useRef} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
@@ -104,12 +104,11 @@ export default function EditProfile() {
 
     const SignUpForm = (
         <React.Fragment>
-            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
+          <div style={{overflow: 'auto', height: '80vh'}}>
+          <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
-                <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                <Typography align='center' style={{padding:'10px', fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Edit Profile
-                </Typography>
+                <div style={{paddingTop: '0px', paddingBottom: '10px'}}>
+          
                     <TextField
                         fullWidth
                         id='username'
@@ -165,18 +164,28 @@ export default function EditProfile() {
                 </div>
                 <PrimaryButton2 width='80vw' style={{position: 'absolute'}}  colour={'#912338'} content="Update" onClick={handleEditProfile}/>
             </form>
+          </div>
+            
         </React.Fragment>
     )
 
     const InfoEdit = (
-        <CustomWhiteCard width='92vw' height='980px' marginTop='30px'  content={SignUpForm}/>
+        
+        <StudyRoomChatCard width='92vw' height='85vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+        bottomLeftRadius='0px' bottomRightRadius='0px'content={SignUpForm}/>
     )
 
+    const TitleCard = (
+        <StudyRoomChatCard width='92vw' height='8vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
+        bottomLeftRadius='0px' bottomRightRadius='0px'
+        content={<div style={{fontSize: '22px', fontWeight: 'bold'}}><Typography variant="1">Edit Profile
+            </Typography></div>}/>
+    )
     return (
         <React.Fragment>
             <PersistentDrawerLeft/>
-            <div style={{paddingTop: '60px'}}>
-                <BackgroundCard  width='96vw' height='99vh' content={InfoEdit}/>
+            <div >
+                <BackgroundCard  width='96vw' height='auto' content={[TitleCard,InfoEdit]}/>
             </div>
         </React.Fragment>
     );
