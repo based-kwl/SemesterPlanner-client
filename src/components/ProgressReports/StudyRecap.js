@@ -18,9 +18,9 @@ export default function StudyRecap(props) {
         getEventList(GetAuthentication().username).then((res) => {
             let studyEventList = filterEventsByDate(res, new Date()).filter(item => item.type === 'study');
             studyEventList.forEach((item) => {
-                if (!item.actualStartTime) // default event actualStartTime to event startTime if actualStartTime is not set
+                if (!item.studyHoursConfirmed) // default event actualStartTime to event startTime if actualStartTime is not set
                     item.actualStartTime = item.startTime;
-                if (!item.actualEndTime) // default event actualEndTime to event endTime if actualEndTime is not set
+                if (!item.studyHoursConfirmed) // default event actualEndTime to event endTime if actualEndTime is not set
                     item.actualEndTime = item.endTime;
             })
             setEventsList([...studyEventList]);
