@@ -8,31 +8,32 @@ import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
+import StudyRecap from "./StudyRecap";
+import UpdateIcon from '@mui/icons-material/Update';
 
 
-export default function ProgressReportHome(){
+export default function ProgressReportHome() {
     const [course, setCourse] = React.useState([])
     const [time, setTime] = React.useState('')
     const email = GetAuthentication().email;
 
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         handleCourseList()
         handleTotalStudyTime()
-    },[])
+    }, [])
 
-    function handleCourseList(){
+    function handleCourseList() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
             .then(res => {
                 setCourse(res.data.courses);
-                console.log(res.data.courses)
             })
             .catch(err => {
                 console.log('Error', err);
             })
     }
 
-    function handleTotalStudyTime(){
+    function handleTotalStudyTime() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/studyhours/${email}`)
             .then(res => {
                 setTime(res.data.studyHours);
@@ -44,9 +45,11 @@ export default function ProgressReportHome(){
 
     const studyEstimator = (
         <React.Fragment>
-            <NavDrawer/>
+            <NavDrawer />
             <StudyRoomChatCard width='92vw' height='8vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
-                               bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{fontSize:'22px', fontWeight:'bold'}} ><Typography variant="1">Study Estimator</Typography></div>}/>
+                               bottomLeftRadius='0px' bottomRightRadius='0px'
+                               content={<div style={{fontSize: '22px', fontWeight: 'bold'}}><Typography variant="1">Study
+                                   Estimator</Typography></div>}/>
             <StudyRoomChatCard width='92vw' height='65vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={
                 <div style={{overflow: 'auto', height: '60vh'}}>
@@ -60,20 +63,24 @@ export default function ProgressReportHome(){
                                                                justifyContent="space-between"
                                                                spacing={20}>
                                                    <div style={{
-                                                       width:"60vw",
+                                                       width: "60vw",
                                                        margin: "0px",
                                                        display: 'flex',
-                                                       justifyItems: 'left'}}>{course.subject} {course.catalog} {course.title} </div>
+                                                       justifyItems: 'left'
+                                                   }}>{course.subject} {course.catalog} {course.title} </div>
                                                    <div style={{
-                                                       width:"10vw",
+                                                       width: "10vw",
                                                        margin: "0px",
                                                        display: 'flex',
-                                                       justifyItems: 'right'}}>credits: {course.classUnit}</div>
+                                                       justifyItems: 'right'
+                                                   }}>credits: {course.classUnit}</div>
                                                    <div style={{
-                                                       width:"11vw",
+                                                       width: "11vw",
                                                        margin: "0px",
                                                        display: 'flex',
-                                                       justifyItems: 'right'}}> study time: {course.studyHours} hrs</div>
+                                                       justifyItems: 'right'
+                                                   }}> study time: {course.studyHours} hrs
+                                                   </div>
                                                </Stack>}/>
                             </div>
                         ))}
@@ -108,12 +115,12 @@ export default function ProgressReportHome(){
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 4'} content={"feature 4"}/></div>}/>
+                ><BottomDrawer icon={<UpdateIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
+                               title={'Study Recap'} content={<StudyRecap/>}/></div>}/>
 
             </div>
         </React.Fragment>
     )
 
-    return(<BackgroundCard width='96vw' height='99vh' content={studyEstimator}/>)
+    return (<BackgroundCard width='96vw' height='99vh' content={studyEstimator}/>)
 }
