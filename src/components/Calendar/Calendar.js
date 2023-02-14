@@ -219,7 +219,7 @@ export default function CalendarView() {
     const academicEventsDisplay = (
       <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
-       <div className="events">
+       <div className="events" style={{overflowY:'auto'}}>
 
                 {academicEvents && academicEvents.map((e, index) => (
                     <>{isSameDate(date, new Date(e.date))?
@@ -288,8 +288,12 @@ export default function CalendarView() {
     const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
-            {eventsDisplay}
-            {academicEventsDisplay}
+            <div style={{paddingBottom:'10px'}}>
+                {eventsDisplay}
+                {academicEventsDisplay}
+            </div>
+
+
         </React.Fragment>
     ), [calendarCard, calendarMonth]);
 
@@ -297,7 +301,7 @@ export default function CalendarView() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '15px' }}>
-                <BackgroundCard width='96vw'  content={calendarPageCards} />
+                <BackgroundCard width='96vw' content={calendarPageCards} />
             </div>
         </React.Fragment>
     );
