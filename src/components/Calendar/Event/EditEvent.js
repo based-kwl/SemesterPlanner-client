@@ -91,7 +91,7 @@ export default function EditEvent(props) {
 
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
 
-                    <div> data-test="recurrence-end-date" {recurrenceSelection()}</div>
+                    <div> {recurrenceSelection()}</div>
 
                 </div>
                 <div>{editUpdateButtons}</div>
