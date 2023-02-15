@@ -44,7 +44,7 @@ export default function CreateEvent(props) {
             </RadioGroup>
 
             {/** Event End Date */}
-            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+            <div data-test="recurrence-end-date" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                 <LocalizationProvider  dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                         key={"endDate"}
@@ -113,7 +113,7 @@ export default function CreateEvent(props) {
                    spacing={3}
                    width='100%'
                    direction="row">
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
+                <PrimaryButton2 data_test={"addButton"} width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
