@@ -219,7 +219,7 @@ export default function CalendarView() {
     const academicEventsDisplay = (
       <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
-       <div className="events" style={{overflowY:'auto'}}>
+       <div className="events">
 
                 {academicEvents && academicEvents.map((e, index) => (
                     <>{isSameDate(date, new Date(e.date))?
