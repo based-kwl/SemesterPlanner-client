@@ -5,7 +5,7 @@ orbs:
   cypress: cypress-io/cypress@2
 
 jobs:
-  build_and_test: # this can be any name you choose
+  build: # this can be any name you choose
     docker:
       - image: cimg/node:17.2.0
     steps:
@@ -18,20 +18,15 @@ jobs:
       - run:
           command: npm run build
           name: Build Front-End Application
-      - run:
-          command: npx serve -s build -p 8000
-          name: Sever the build to a static server
-      - run:
-          name: Install Backend Server
-          command: git clone https://github.com/guaj/SemesterPlanner-Server.git
+
 
 
 workflows:
   test_my_app:
     jobs:
-      - build_and_test
+      - build
       - cypress/run:
           requires:
-            - build_and_test
-          start: node SemesterPlanner-Server/src/server.js
-          wait-on: 'http://localhost:3000'
+            - build
+          start: npx serve -s build -p 8000
+          wait-on: 'http://localhost:8000'
