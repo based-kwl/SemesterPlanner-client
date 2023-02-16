@@ -35,7 +35,7 @@ workflows:
       - build
       - cypress/install:
           pre-steps:
-            - run: ls
+            - checkout
             - run: npm install print-env
             - run: dpkg -s print-env
             - run: print-env CIRCLE
