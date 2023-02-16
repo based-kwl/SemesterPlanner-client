@@ -32,7 +32,6 @@ jobs:
           command: node SemesterPlanner-Server/src/server.js
 
 
-
 workflows:
   test_my_app:
     jobs:
