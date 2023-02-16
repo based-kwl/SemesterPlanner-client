@@ -37,7 +37,6 @@ workflows:
           pre-steps:
             - checkout
             - run: npm install print-env
-            - run: dpkg -s print-env
             - run: print-env CIRCLE
       - cypress/run:
           attach-workspace: true
