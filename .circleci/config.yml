@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@4.7.0
-
+  cypress: cypress-io/cypress@2
 
 jobs:
   build_and_test: # this can be any name you choose
