@@ -19,10 +19,7 @@ jobs:
           command: npm run build
           name: Build Front-End Application
       - run:
-          command: npm i serve
-          name: Install Serve package
-      - run:
-          command: serve -s build
+          command: npx serve -s build -p 8000
           name: Sever the build to a static server
       - run:
           name: Install Backend Server
@@ -34,5 +31,7 @@ workflows:
     jobs:
       - build_and_test
       - cypress/run:
+          requires:
+            - build_and_test
           start: node SemesterPlanner-Server/src/server.js
           wait-on: 'http://localhost:3000'
