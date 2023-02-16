@@ -3,7 +3,7 @@
  * It does not confirm that the server is function.
  */
 
-describe('Test Camera Best Event Creation [SP-21]', function() {
+describe('Test Camera Based Event Creation [SP-21]', function() {
 
     beforeEach(() => {
         cy.visit(Cypress.env('baseUrl'));
