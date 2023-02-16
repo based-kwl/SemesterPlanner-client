@@ -16,17 +16,17 @@ jobs:
           name: Install Dependencies
           command: npm i --legacy-peer-deps
       - run:
-          command: npm start
-          name: Start Front End Server
+          command: npm run build
+          name: Build Front-End Application
+      - run:
+          command: npm i serve
+          name: Install Serve package
       - run:
           command: serve -s build
           name: Sever the build to a static server
       - run:
           name: Install Backend Server
           command: git clone https://github.com/guaj/SemesterPlanner-Server.git
-      - run:
-          name: Start Backend Server
-          command: node SemesterPlanner-Server/src/server.js
 
 
 workflows:
@@ -34,4 +34,5 @@ workflows:
     jobs:
       - build_and_test
       - cypress/run:
+          start: node SemesterPlanner-Server/src/server.js
           wait-on: 'http://localhost:3000'
