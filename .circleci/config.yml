@@ -13,9 +13,6 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Install Dependencies
-          command: npm i --legacy-peer-deps
-      - run:
           command: npm run build
           name: Build Front-End Application
 
