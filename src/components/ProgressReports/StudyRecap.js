@@ -95,7 +95,7 @@ export default function StudyRecap(props) {
      * @param {String} mode, display mode for time picker; 'hours': displays hour picker only, 'minutes': displays minute picker only, 'hours-minutes'(default): displays both hour and minute pickers
      * @returns {JSX.Element}, returns the relevant time pickers populated with the time difference of the specified event's index
      */
-    const generateTimePicker = (index, onChange, mode = 'hours-minutes') => {
+    const generateTimePicker = (index, onChange, mode = 'hours-minutes',catalog) => {
         const timeDiff = timeStringToDateObject(getTimeDifference(eventsList[index].actualStartTime, eventsList[index].actualEndTime));
 
         return (<LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -110,7 +110,7 @@ export default function StudyRecap(props) {
                 onChange={(e) => {
                     onChange(index, e)
                 }}
-                renderInput={(params) => <TextField {...params}
+                renderInput={(params) => <TextField data-test={"timePicker"+catalog} {...params}
                                                     inputProps={{...params.inputProps, readOnly: true}}
                                                     size='small' sx={{width: '10ch'}}/>}
             /> : null}
@@ -142,7 +142,7 @@ export default function StudyRecap(props) {
                     margin: '5px', display: 'flex', alignItems: 'center'
                 }}>
                     Event: {item.eventHeader} Course: {item.subject}{item.catalog} Study
-                    Time: {generateTimePicker(index, handleTimeChange, 'hours')}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
+                    Time: {generateTimePicker(index, handleTimeChange, 'hours',item.catalog)}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
                 </div>}
                 />
             </div>)
