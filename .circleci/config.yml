@@ -30,11 +30,6 @@ jobs:
       - run:
           name: Start Backend Server
           command: node SemesterPlanner-Server/src/server.js
-      - cypress/install
-      - cypress/run:
-          requires: cypress/install
-          wait-on: 'http://localhost:3000'
-
 
 
 
@@ -42,3 +37,5 @@ workflows:
   test_my_app:
     jobs:
       - build_and_test
+      - cypress/run:
+          wait-on: 'http://localhost:3000'
