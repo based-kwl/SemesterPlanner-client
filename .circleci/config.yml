@@ -21,7 +21,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm install -g print-env
+          command: npm install print-env
           name: Installing print-env package from NPM
       - run:
           command: npm run build
