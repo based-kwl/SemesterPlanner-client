@@ -33,6 +33,7 @@ workflows:
   test_my_app:
     jobs:
       - build
+      - cypress/install
       - cypress/run:
           debug: 'cypress:cli'
           post-install:
@@ -41,5 +42,6 @@ workflows:
             - run: print-env CIRCLE
           requires:
             - build
+            - cypress/install
           start: npm start
           wait-on: 'http://localhost:3000'
