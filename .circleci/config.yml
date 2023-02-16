@@ -13,11 +13,29 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run test
-          name: Run tests
+          name: Install Dependencies
+          command: npm i --legacy-peer-deps
       - run:
           command: npm run build
           name: Build app
+      - run:
+          command: npm install -g serve
+          name: Installing Serve to run production build
+      - run:
+          command: serve -s build
+          name: Sever the build to a static server
+      - run:
+          name: Install Backend Server
+          command: git clone https://github.com/guaj/SemesterPlanner-Server.git
+      - run:
+          name: Start Backend Server
+          command: node SemesterPlanner-Server/src/server.js
+      - cypress/install
+      - cypress/run:
+          requires: cypress/install
+          wait-on: 'http://localhost:3000'
+
+
 
 
 workflows:
