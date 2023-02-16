@@ -16,6 +16,7 @@ jobs:
           CYPRESS_password2: test2
           CYPRESS_password3: test3
           CYPRESS_baseUrl: http://locahost:3000/
+          BAR: bar
     steps:
       - checkout
       - node/install-packages:
