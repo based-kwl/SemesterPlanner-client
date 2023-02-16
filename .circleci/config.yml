@@ -33,11 +33,15 @@ workflows:
   test_my_app:
     jobs:
       - build
-      - cypress/install
+      - cypress/install:
+          pre-steps:
+            - run: npm install print-env
+            - run: dpkg -s print-env
+            - run: print-env CIRCLE
       - cypress/run:
+          attach-workspace: true
           debug: 'cypress:cli'
           post-install:
-            - run: npm install -g print-env
             - run: dpkg -s print-env
             - run: print-env CIRCLE
           requires:
@@ -45,3 +49,4 @@ workflows:
             - cypress/install
           start: npm start
           wait-on: 'http://localhost:3000'
+
