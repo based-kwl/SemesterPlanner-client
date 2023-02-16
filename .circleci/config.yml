@@ -28,5 +28,5 @@ workflows:
       - cypress/run:
           requires:
             - build
-          start: npx serve -s build -p 8000
-          wait-on: 'http://localhost:8000'
+          start: npm start
+          wait-on: 'http://localhost:3000'
