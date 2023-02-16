@@ -34,9 +34,10 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_t
     );
 }
 
-export const FileSelectButton = ({width, onChange, name}) => {
+export const FileSelectButton = ({width, onChange, name,data_test}) => {
     return (
         <Button
+            data-test = {data_test}
             onClick={() => {
                 document.getElementById('fileSelectButton').click()
             }}
