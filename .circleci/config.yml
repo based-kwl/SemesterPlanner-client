@@ -31,9 +31,10 @@ workflows:
     jobs:
       - build
       - cypress/run:
+          debug: 'cypress:cli'
           post-install:
             - run: npm install -g print-env
-            - run: $(which print-env)
+            - run: dpkg -s print-env
             - run: print-env CIRCLE
           requires:
             - build
