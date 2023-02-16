@@ -19,7 +19,7 @@ describe('Test Course Study Hour Estimator [SP-29]', function() {
         cy.get('[data-test="navbar"]').click();
         cy.get('[data-test="Progress Report"]').click();
         //added data-test in CommonResources.js, ProfressReportHome.js
-        cy.get('[data-test="totalRecommendedStudyTime"]').should('have.text','Total recommended study time: 9 hrs');
+        cy.get('[data-test="totalRecommendedStudyTime"]').should('have.text',' Total recommended study time: 9 hrs');
         cy.wait(2000)
     })
 

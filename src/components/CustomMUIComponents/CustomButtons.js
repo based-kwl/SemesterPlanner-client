@@ -34,12 +34,13 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_t
     );
 }
 
-export const FileSelectButton = ({width, onChange, name}) => {
+export const FileSelectButton = ({width, onChange, name, data_test}) => {
     return (
         <Button
             onClick={() => {
                 document.getElementById('fileSelectButton').click()
             }}
+            data-test={data_test}
             variant="contained"
             style={{
                 paddingTop: '10px', paddingBottom: '10px',

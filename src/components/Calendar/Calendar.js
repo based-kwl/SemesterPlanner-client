@@ -108,7 +108,7 @@ export default function CalendarView() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={calendarMonth}/>
             <StudyRoomChatCard width='92vw' height='6vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{width:'92vw', display:'flex', justifyContent:"space-between"}}>
-                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
+                <BottomDrawer icon={<PrimaryButton2 data_test={"uploadPhotoEventButtonCalenderPage"} style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
                 <BottomDrawer icon={<PrimaryButton2 data_test={"addEventButtonCalendarPage"} style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
                 title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} date={date}/>}/>
