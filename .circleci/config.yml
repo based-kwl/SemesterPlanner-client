@@ -16,11 +16,8 @@ jobs:
           name: Install Dependencies
           command: npm i --legacy-peer-deps
       - run:
-          command: npm run build
-          name: Build app
-      - run:
-          command: npm install -g serve
-          name: Installing Serve to run production build
+          command: npm start
+          name: Start Front End Server
       - run:
           command: serve -s build
           name: Sever the build to a static server
