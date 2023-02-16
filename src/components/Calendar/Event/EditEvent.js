@@ -69,7 +69,7 @@ export default function EditEvent(props) {
             <Stack direction='row' spacing={3} marginTop={2} alignItems="center" justifyContent="center">
 
                 <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Update" onClick={handleEventUpdate}/>
-                <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Delete"
+                <PrimaryButton2 data_test={"deleteEventButton"} width={'41vw'} colour={'#C8C8C8'} content="Delete"
                                 onClick={handleEventDelete}/>
             </Stack>
 

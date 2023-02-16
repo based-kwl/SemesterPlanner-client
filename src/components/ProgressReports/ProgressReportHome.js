@@ -85,7 +85,7 @@ export default function ProgressReportHome() {
                             </div>
                         ))}
                     </div>
-                    <StudyRoomCard data-test={`${time}`} width={'81vw'} height={'40px'}
+                    <StudyRoomCard data_test={'totalRecommendedStudyTime'} width={'81vw'} height={'40px'}
                                    content={<> Total recommended study time: {time} hrs
                                    </>}/>
 
