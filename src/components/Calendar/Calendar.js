@@ -288,8 +288,12 @@ export default function CalendarView() {
     const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
-            {eventsDisplay}
-            {academicEventsDisplay}
+            <div style={{paddingBottom:'10px'}}>
+                {eventsDisplay}
+                {academicEventsDisplay}
+            </div>
+
+
         </React.Fragment>
     ), [calendarCard, calendarMonth]);
 
@@ -297,7 +301,7 @@ export default function CalendarView() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '15px' }}>
-                <BackgroundCard width='96vw'  content={calendarPageCards} />
+                <BackgroundCard width='96vw' content={calendarPageCards} />
             </div>
         </React.Fragment>
     );

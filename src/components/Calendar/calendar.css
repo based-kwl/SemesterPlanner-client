@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i');
 .events {
-    height: 300px;
+    max-height: 300px;
     overflow-y: scroll;
 }
 
@@ -28,7 +28,7 @@
     max-width: 100%;
     background: white;
     border: 1px solid #ffffff;
-    font-family: Roboto;
+    font-family: Roboto,serif;
 
     line-height: 1.125em;
   }
