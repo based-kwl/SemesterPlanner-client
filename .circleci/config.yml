@@ -23,15 +23,9 @@ workflows:
       - cypress/install:
           pre-steps:
             - checkout
-            - run:
-              command: node -v
-              name: Node Version
-            - run:
-                command: npm install -g n --legacy-peer-deps
-                name: Install N package
-            - run:
-                command: n 16.17.0
-                name: Install Node version 16.17.0
+            - run: node -vNode Version
+            - run: npm install -g n --legacy-peer-deps
+            - run: n 16.17.0
       - cypress/run:
           attach-workspace: true
           debug: 'cypress:cli'
