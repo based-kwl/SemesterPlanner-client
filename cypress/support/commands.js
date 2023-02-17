@@ -14,6 +14,7 @@ Cypress.Commands.add('login', (email, password) => {
  * logout a user
  */
 Cypress.Commands.add('logout', () => {
+    cy.wait(100);
     cy.get('[data-test="navbar"]').click();
     cy.get('[data-test="logout"]').click();
 })
