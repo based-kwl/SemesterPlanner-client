@@ -1,4 +1,5 @@
 import axios from "axios";
+import {cloneDeep} from "lodash"
 
 /**
  * method that takes JS Date object and returns a time string in the format "HH:mm" with appropriate padding for single digit hours/minutes
@@ -47,4 +48,74 @@ export const timeStringToDateObject = (time) => {
     let date = new Date();
     date.setHours(parseInt(time.split(':')[0]), parseInt(time.split(':')[1]));
     return date;
+}
+
+/**
+ * method that takes a 'condensed' list of events fetched from the backend and generated an expanded list taking event
+ * recurrence into account
+ * @param {Array} condensedEventList, array of events
+ * @returns {*}, returns a copy of the original condensed array after expanding it
+ */
+export const expandEventList = (condensedEventList) => {
+    let expandedEvents = cloneDeep(condensedEventList);
+    condensedEventList.forEach((event) => {
+        if (event.recurrence === 'daily') {
+            const startDate = new Date(event.startDate);
+            startDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            const endDate = new Date(event.endDate);
+            endDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            startDate.setDate(startDate.getDate() + 1);
+            while (startDate <= endDate) {
+                const temp = cloneDeep(event);
+                temp.startDate = cloneDeep(startDate);
+                expandedEvents.push(temp);
+                startDate.setDate(startDate.getDate() + 1);
+            }
+        } else if (event.recurrence === 'weekly') {
+            const startDate = new Date(event.startDate);
+            startDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            const endDate = new Date(event.endDate);
+            endDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            startDate.setDate(startDate.getDate() + 7);
+            while (startDate <= endDate) {
+                const temp = cloneDeep(event);
+                temp.startDate = cloneDeep(startDate);
+                expandedEvents.push(temp);
+                startDate.setDate(startDate.getDate() + 7);
+            }
+        } else if (event.recurrence === 'monthly') {
+            const startDate = new Date(event.startDate);
+            startDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            const endDate = new Date(event.endDate);
+            endDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
+            startDate.setMonth(startDate.getMonth() + 1);
+            while (startDate <= endDate) {
+                const temp = cloneDeep(event);
+                temp.startDate = cloneDeep(startDate);
+                expandedEvents.push(temp);
+                startDate.setMonth(startDate.getMonth() + 1);
+            }
+        }
+    })
+
+    return expandedEvents;
+}
+
+/**
+ * method that takes an array of events and sorts them chronologically by startDate
+ * @param {Array} eventsList, an array of events to be sorted
+ * @returns {*}, returns a copy of the original array after sorting it
+ */
+export const sortEventsByDate = (eventsList) => {
+    const events = cloneDeep(eventsList);
+    events.sort((a, b) => {
+        if (a.startDate < b.startDate)
+            return -1;
+        else if (a.startDate > b.startDate)
+            return 1;
+        else
+            return 0;
+    })
+
+    return events;
 }
