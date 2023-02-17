@@ -34,6 +34,7 @@ workflows:
             - run: apt-get update
             - run: apt-get install sudo
             - run: sudo apt install xsel
+            - run: ls
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           executor: with-chrome
@@ -44,5 +45,5 @@ workflows:
           requires:
             - build
             - cypress/install
-          start: npx serve -n -s build
+          start: cd .. && npx serve -n -s build
           wait-on: 'http://localhost:3000'
