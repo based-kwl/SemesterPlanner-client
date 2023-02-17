@@ -5,6 +5,7 @@ describe('Tests for the friend list functionality', function() {
 
     beforeEach(() => {
         cy.login('email2', 'password2');
+        cy.wait(50);
         cy.goToFriendList();
     })
 
@@ -46,7 +47,6 @@ describe('Tests for the friend list functionality', function() {
     })
 
     it('User can delete a friend', function () {
-        cy.wait(50);
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
         cy.wait(50);

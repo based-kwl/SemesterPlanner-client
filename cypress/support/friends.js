@@ -23,6 +23,7 @@ Cypress.Commands.add('searchUser', function(email) {
  */
 Cypress.Commands.add('addUser', function(email, isValid) {
     cy.searchUser(email);
+    cy.wait(50)
     if (isValid) {
         cy.get('[data-test="addFriend"]').click()
     } else {

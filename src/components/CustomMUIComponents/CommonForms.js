@@ -66,7 +66,7 @@ export const programs = {
 export const FacultySelect = ({userData, setUserData}) => (
     <Container maxWidth="md" component="main">
         <Grid container spacing={2} alignItems="flex-end">
-            {faculties.map((item) => (
+            {faculties?.map((item) => (
                 <Grid
                     item
                     key={item}
@@ -98,7 +98,7 @@ export const ProgramSelect = ({userData, handleProgramChange}) => (
             label="Program"
             onChange={handleProgramChange}
         >
-            {programs[userData.faculty].map((item) => (
+            {programs[userData.faculty]?.map((item) => (
                 <MenuItem key={item} value={item}>
                     <em>{item}</em>
                 </MenuItem>

@@ -7,5 +7,5 @@ module.exports = defineConfig({
     },
   },
   video: false,
-  screenshot: false
+  screenshot: true
 });
