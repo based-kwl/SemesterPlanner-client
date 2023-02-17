@@ -33,7 +33,6 @@ workflows:
             - run: node -v
             - run: apt-get update
             - run: apt-get install sudo
-            - run: usermod -aG sudo guaj
             - run: sudo apt install xsel
           install-command: npm i --legacy-peer-deps
       - cypress/run:
