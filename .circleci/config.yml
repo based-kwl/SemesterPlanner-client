@@ -8,14 +8,6 @@ jobs:
   build: # this can be any name you choose
     docker:
       - image: cimg/node:17.2.0
-        environment:
-          CYPRESS_email1: email1@gmail.com
-          CYPRESS_email2: email2@gmail.com
-          CYPRESS_email3: email3@gmail.com
-          CYPRESS_password1: test
-          CYPRESS_password2: test2
-          CYPRESS_password3: test3
-          CYPRESS_baseUrl: http://locahost:3000/
     steps:
       - checkout
       - node/install-packages:
@@ -36,17 +28,16 @@ workflows:
       - cypress/install:
           pre-steps:
             - checkout
-            - run: npm install print-env
-            - run: print-env CIRCLE
+            - run: 'echo "Base url: ${CYPRESS_baseUrl}" '
       - cypress/run:
           attach-workspace: true
           debug: 'cypress:cli'
           post-install:
-            - run: dpkg -s print-env
-            - run: print-env CIRCLE
+            - run : cypress run
           requires:
             - build
             - cypress/install
           start: npm start
           wait-on: 'http://localhost:3000'
+          command: "npx cypress run --env"
 
