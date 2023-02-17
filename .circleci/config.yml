@@ -14,9 +14,6 @@ jobs:
           command: npm install --legacy-peer-deps
           name: Installing NPM packages
       - run:
-          command: npm install print-env
-          name: Installing print-env package from NPM
-      - run:
           command: npm run build
           name: Build Front-End Application
 workflows:
