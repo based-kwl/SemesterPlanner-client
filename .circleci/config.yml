@@ -2,6 +2,10 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   cypress: cypress-io/cypress@2.2
+executors:
+  with-chrome:
+    docker:
+      - image: 'cypress/browsers:node-16.18.1-chrome-110.0.5481.96-1-ff-109.0-edge-110.0.1587.41-1'
 jobs:
   build: # this can be any name you choose
     docker:
@@ -29,7 +33,8 @@ workflows:
             - run: node -v
           install-command: npm i --legacy-peer-deps
       - cypress/run:
-          executor: cypress/base
+          executor: with-chrome
+          browser: chrome
           attach-workspace: true
           env: 'email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:3000/'
           debug: 'cypress:cli'
