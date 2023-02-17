@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
-  cypress: cypress-io/cypress@2.2
+  cypress: cypress-io/cypress@2
 executors:
   with-chrome:
     docker:
@@ -9,7 +9,7 @@ executors:
 jobs:
   build: # this can be any name you choose
     docker:
-      - image: cimg/node:17.2.0
+      - image: cimg/node:16.17.0
     steps:
       - checkout
       - node/install:
@@ -31,16 +31,12 @@ workflows:
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
             - run: node -v
-            - run: apt-get update
-            - run: apt-get install sudo
-            - run: sudo apt install xsel
-            - run: ls
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           executor: with-chrome
           browser: chrome
           attach-workspace: true
-          env: 'email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:3000/'
+          env: 'email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:3000/,api='
           debug: 'cypress:cli'
           requires:
             - build
