@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          - node-version: 16.17
+          node-version: 16.17
       - node/install-packages:
           pkg-manager: npm
       - run:
