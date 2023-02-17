@@ -26,7 +26,6 @@ workflows:
       - cypress/install:
           pre-steps:
             - checkout
-            - run: 'echo "Base url: ${CYPRESS_baseUrl}" '
       - cypress/run:
           attach-workspace: true
           debug: 'cypress:cli'
