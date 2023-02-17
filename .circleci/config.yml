@@ -6,7 +6,8 @@ orbs:
 
 jobs:
   build: # this can be any name you choose
-    executor: node/default
+    docker:
+      - image: cimg/node:17.2.0
     steps:
       - checkout
       - node/install-packages:
