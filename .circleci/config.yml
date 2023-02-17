@@ -23,7 +23,7 @@ workflows:
       - cypress/install:
           pre-steps:
             - checkout
-            - run: node -vNode Version
+            - run: node -v
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
       - cypress/run:
