@@ -21,7 +21,7 @@ jobs:
           command: npm run build
           name: Build Front-End Application
       - run:
-          commands: npm i -g serve
+          command: npm i -g serve
           name: Install serve package
 workflows:
   test_my_app:
