@@ -31,6 +31,7 @@ workflows:
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
             - run: node -v
+            - run: npx serve -n -s
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           executor: with-chrome
@@ -41,6 +42,5 @@ workflows:
           requires:
             - build
             - cypress/install
-          start: npx serve -n -s
+          start: npm start
           wait-on: 'http://localhost:3000'
-          command: npx cypress run --headed --env email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:3000/
