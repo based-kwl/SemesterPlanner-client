@@ -31,6 +31,7 @@ workflows:
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
             - run: node -v
+            - run: sudo apt install xsel
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           executor: with-chrome
