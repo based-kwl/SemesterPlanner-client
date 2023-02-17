@@ -33,6 +33,7 @@ workflows:
             - run: node -v
           install-command: npm i --legacy-peer-deps
       - cypress/run:
+          command: npx cypress run --headed
           executor: with-chrome
           browser: chrome
           attach-workspace: true
