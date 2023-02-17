@@ -30,7 +30,7 @@ workflows:
       - cypress/run:
           attach-workspace: true
           debug: 'cypress:cli'
-          post-install:
+          store_artifacts: true
           requires:
             - build
             - cypress/install
