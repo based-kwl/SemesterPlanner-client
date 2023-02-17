@@ -20,6 +20,9 @@ jobs:
       - run:
           command: npm run build
           name: Build Front-End Application
+      - run:
+          commands: npm i -g serve
+          name: Install serve package
 workflows:
   test_my_app:
     jobs:
@@ -41,5 +44,5 @@ workflows:
           requires:
             - build
             - cypress/install
-          start: npm start
+          start: serve -s build
           wait-on: 'http://localhost:3000'
