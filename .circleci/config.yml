@@ -45,5 +45,5 @@ workflows:
           requires:
             - build
             - cypress/install
-          start: cd .. && npx serve -n -s build
+          start: npx serve -n -s
           wait-on: 'http://localhost:3000'
