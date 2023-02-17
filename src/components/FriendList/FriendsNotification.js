@@ -65,7 +65,7 @@ export default function FriendNotification() {
         <React.Fragment>
             <Typography variant="body1" marginBottom="10px"> Friend Request Sent</Typography>
             <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px'}}>
-                {requestSent.map((sent, index) => (
+                {requestSent && requestSent.map((sent, index) => (
                     <div key={index}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {sent.receiverEmail}

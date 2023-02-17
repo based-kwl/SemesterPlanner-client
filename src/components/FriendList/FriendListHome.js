@@ -73,7 +73,7 @@ export default function FriendListHome(){
             <StudyRoomChatCard width='92vw' height='65vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
             bottomLeftRadius='0px' bottomRightRadius='0px' content={
                     <div style={{overflow: 'auto', height: '60vh'}}>
-                        {friends.map((friend, index) => (
+                        {friends && friends.map((friend, index) => (
                             <div key={index}>
                                 <StudyRoomCard data-test={`${friend}`} width={'81vw'} height={'40px'}
                                                content={<> {friend}
