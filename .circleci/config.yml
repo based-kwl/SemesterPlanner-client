@@ -31,7 +31,6 @@ workflows:
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
             - run: node -v
-            - run: npx serve -n -s
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           executor: with-chrome
