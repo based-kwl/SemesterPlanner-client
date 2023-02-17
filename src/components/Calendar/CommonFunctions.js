@@ -73,7 +73,9 @@ export const expandEventList = (condensedEventList) => {
                 if (startDate > endDate) // loop needs to be terminated this way to satisfy sonarcloud's expectation
                     break;
             }
-        } else if (event.recurrence === 'weekly') {
+        }
+
+        if (event.recurrence === 'weekly') {
             const startDate = new Date(event.startDate);
             startDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
             const endDate = new Date(event.endDate);
@@ -87,7 +89,9 @@ export const expandEventList = (condensedEventList) => {
                 if (startDate > endDate) // loop needs to be terminated this way to satisfy sonarcloud's expectation
                     break;
             }
-        } else if (event.recurrence === 'monthly') {
+        }
+
+        if (event.recurrence === 'monthly') {
             const startDate = new Date(event.startDate);
             startDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
             const endDate = new Date(event.endDate);
