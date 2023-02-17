@@ -26,6 +26,7 @@ workflows:
             - run: node -v
             - run: npm install -g n --legacy-peer-deps
             - run: n 16.17.0
+            - run: node -v
           install-command: npm i --legacy-peer-deps
       - cypress/run:
           attach-workspace: true
