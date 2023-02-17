@@ -23,6 +23,7 @@ workflows:
       - cypress/install:
           pre-steps:
             - checkout
+            - run: echo 'node --version'
       - cypress/run:
           attach-workspace: true
           debug: 'cypress:cli'
