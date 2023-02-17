@@ -65,11 +65,13 @@ export const expandEventList = (condensedEventList) => {
             const endDate = new Date(event.endDate);
             endDate.setHours(0, 0, 0, 0); // required to ignore time on date comparisons
             startDate.setDate(startDate.getDate() + 1);
-            while (startDate <= endDate) {
+            while (true) {
                 const temp = cloneDeep(event);
                 temp.startDate = cloneDeep(startDate);
                 expandedEvents.push(temp);
                 startDate.setDate(startDate.getDate() + 1);
+                if (startDate > endDate)
+                    break;
             }
         } else if (event.recurrence === 'weekly') {
             const startDate = new Date(event.startDate);
