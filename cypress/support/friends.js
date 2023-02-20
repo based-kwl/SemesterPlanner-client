@@ -2,8 +2,7 @@
  * Navigate to the friend list page with the menu.
  */
 Cypress.Commands.add('goToFriendList', () => {
-
-    cy.get('[data-test="navbar"]').click();
+    cy.get('[data-test="navbar"]').shadow().click();
     cy.get('[data-test="Friends List"]').click();
 })
 
