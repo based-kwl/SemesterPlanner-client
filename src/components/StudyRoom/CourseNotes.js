@@ -3,6 +3,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import {PrimaryButton2, FileSelectButton} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
 import {Buffer} from 'buffer'
@@ -14,6 +15,7 @@ export default function ParticipantsList() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
+    const [uploadInProgress, setUploadInProgress] = useState(false);
     const fileListTop = useRef(null);
 
     function getCourseNotes() {
@@ -47,17 +49,13 @@ export default function ParticipantsList() {
 
     async function handleUploadCourseNotes() {
         if (isFilePicked) {
+            setUploadInProgress(true);
             let formData = new FormData();
             formData.append('studyRoomID', studyRoomID);
             formData.append('email', JSON.parse(localStorage.getItem("email")));
             formData.append('file', selectedFile);
 
-            axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, formData, {
-                onUploadProgress: (progressEvent) => {
-                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    console.log("Upload: " + percentCompleted + "%");
-                }
-            })
+            axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, formData)
                 .then(() => {
                     setErrorMessage(null);
                     getCourseNotes();
@@ -66,6 +64,9 @@ export default function ParticipantsList() {
                 })
                 .catch(err => {
                     setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Request could not be sent' : `${err.response.data}`);
+                })
+                .finally(() => {
+                    setUploadInProgress(false);
                 });
         } else if (!isFilePicked)
             setErrorMessage("No file selected!");
@@ -75,6 +76,7 @@ export default function ParticipantsList() {
         if (event.target.files[0]) {
             setSelectedFile(event.target.files[0]);
             setIsFilePicked(true);
+            setErrorMessage(null);
         } else {
             setSelectedFile(null);
             setIsFilePicked(false);
@@ -82,12 +84,7 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`, {
-            onDownloadProgress: (progressEvent) => {
-                let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                console.log("Download: " + percentCompleted + "%");
-            }
-        })
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
             .then(res => {
                 setErrorMessage(null);
 
@@ -187,13 +184,18 @@ export default function ParticipantsList() {
                         </p>
                     </div>
                 ) : null}
-                <div style={{marginBottom: '10px'}}>
-                    <FileSelectButton width={"90vw"} onChange={handleFileSelect} name={'Select File'}/>
-                </div>
                 <div style={{color: 'red'}}>{errorMessage}</div>
+
+                <div style={{marginBottom: '10px'}}>
+                    <FileSelectButton width={"90vw"} disabled={uploadInProgress} onChange={handleFileSelect} name={'Select File'}/>
+                </div>
+                {/*<div style={{color: 'red'}}>{errorMessage}</div>*/}
                 <div id={"uploadButton"}>
-                    <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"}
+                    <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"} disable={uploadInProgress}
                                     onClick={handleUploadCourseNotes}/>
+                </div>
+                <div style={{marginTop: '10px'}}>
+                    {uploadInProgress ? <LinearProgress /> : <div style={{height: '4px'}}></div>}
                 </div>
             </div>
         </>

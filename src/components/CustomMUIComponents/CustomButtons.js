@@ -33,13 +33,14 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_t
     );
 }
 
-export const FileSelectButton = ({width, onChange, name}) => {
+export const FileSelectButton = ({width, onChange, name, disabled}) => {
     return (
         <Button
             onClick={() => {
                 document.getElementById('fileSelectButton').click()
             }}
             variant="contained"
+            disabled={disabled}
             style={{
                 paddingTop: '10px', paddingBottom: '10px',
                 width: width, backgroundColor: '#057D78'
