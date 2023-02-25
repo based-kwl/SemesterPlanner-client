@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useEffect, useMemo, useRef, useState} from "react";
 import Button from '@mui/material/Button';
 import ClearIcon from '@mui/icons-material/Clear';
+import CircularProgress from '@mui/material/CircularProgress';
 import {PrimaryButton2, FileSelectButton} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
 import {Buffer} from 'buffer'
@@ -19,6 +20,10 @@ export default function ParticipantsList() {
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
                 setErrorMessage(null);
+
+                res.data.forEach((item) => {
+                    item.inProgress = false;
+                })
 
                 setFileList(res.data.reverse());
             })
@@ -47,7 +52,12 @@ export default function ParticipantsList() {
             formData.append('email', JSON.parse(localStorage.getItem("email")));
             formData.append('file', selectedFile);
 
-            axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, formData)
+            axios.post(`${process.env.REACT_APP_BASE_URL}room/file`, formData, {
+                onUploadProgress: (progressEvent) => {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    console.log("Upload: " + percentCompleted + "%");
+                }
+            })
                 .then(() => {
                     setErrorMessage(null);
                     getCourseNotes();
@@ -72,7 +82,12 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`, {
+            onDownloadProgress: (progressEvent) => {
+                let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                console.log("Download: " + percentCompleted + "%");
+            }
+        })
             .then(res => {
                 setErrorMessage(null);
 
@@ -90,7 +105,16 @@ export default function ParticipantsList() {
             })
             .catch(err => {
                 setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Request could not be sent' : `${err.response.data}`)
+            })
+            .finally(() => {
+                toggleProgress(index);
             });
+    }
+
+    const toggleProgress = (index) => {
+        const tempFileList = [...fileList]
+        tempFileList[index].inProgress = !tempFileList[index].inProgress;
+        setFileList(tempFileList);
     }
 
     useEffect(() => {
@@ -115,6 +139,7 @@ export default function ParticipantsList() {
                                                                           width: '100%',
                                                                           color: 'black'
                                                                       }} onClick={() => {
+                                                                          toggleProgress(index);
                                                                           handleFileClick(index)
                                                                       }}>
                                                                           <div>
@@ -136,9 +161,12 @@ export default function ParticipantsList() {
                                                                           </div>
                                                                       </Button>
                                                                       <Button
+                                                                          disabled={file.inProgress}
                                                                           style={{color: "black", height: '100%'}}
-                                                                          onClick={() => handleDeleteCourseNotes(index)}><ClearIcon
-                                                                          style={{color: '#912338'}}/></Button></>}/>)}
+                                                                          onClick={() => {
+                                                                              handleDeleteCourseNotes(index);
+                                                                          }}>{file.inProgress ? <CircularProgress size={25} /> : <ClearIcon
+                                                                          style={{color: '#912338'}}/>}</Button></>}/>)}
                 </div>
             </div>
             <div style={{
