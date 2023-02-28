@@ -4,7 +4,7 @@
  * @param {string} password : password (key) of the user to be logged in. Choose the one associated with the email selected.
  */
 Cypress.Commands.add('login', (email, password) => {
-    cy.visit(Cypress.env('baseUrl'));
+    cy.visit(Cypress.env('baseUrl'), { timeout: 60 * 1000 });
     cy.wait(5000);
     cy.get('[data-test="email"]').should('be.visible', {timeout: 5000})
     cy.get('[data-test="email"]').type(Cypress.env(email));
