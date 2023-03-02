@@ -10,7 +10,6 @@ executors:
 workflows:
   test_my_app:
     jobs:
-      - Setup
       - cypress/install:
           pre-steps:
             - run: apt-get update
