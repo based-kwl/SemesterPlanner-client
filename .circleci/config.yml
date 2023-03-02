@@ -11,6 +11,9 @@ workflows:
   test_my_app:
     jobs:
       - cypress/install:
+          pre-steps:
+            - sudo apt-get update
+            - sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
           install-command: docker build -f Dockerfile -t client .
       - cypress/run:
           executor: with-chrome
