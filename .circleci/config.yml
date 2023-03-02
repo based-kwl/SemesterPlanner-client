@@ -15,8 +15,6 @@ jobs:
       - checkout
       - node/install:
           node-version: "16.17"
-      - run: apt-get update
-      - run: apt-get install -y sudo
       - run: sudo apt-get update
       - run: sudo apt-get remove docker docker-engine docker.io
       - run: sudo apt-get install docker.io docker -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef -y --allow-downgrades --allow-remove-essential --allow-change-held-packages
