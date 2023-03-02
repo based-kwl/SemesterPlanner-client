@@ -17,7 +17,7 @@ workflows:
             - run: sudo apt-get update
             - run: sudo apt-get remove docker docker-engine docker.io
             - run: sudo apt-get install docker.io docker -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef -y --allow-downgrades --allow-remove-essential --allow-change-held-packages
-            - run: systemctl start docker
+            - run: sudo service docker start
           install-command: docker build -f Dockerfile -t client .
       - cypress/run:
           executor: with-chrome
