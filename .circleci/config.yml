@@ -17,7 +17,7 @@ jobs:
           node-version: "16.17"
       - run: sudo apt-get update
       - run: docker build -f Dockerfile -t client .
-      - run: docker run -d -rm -p 4000:3000 client
+      - run: docker run -d --rm -p 4000:3000 client
       - setup_remote_docker:
           version: 20.10.14
 
