@@ -31,3 +31,12 @@ Every push / merge to main will be deployed into production.
 This is the app URL [https://main.d130dq3c8sh12x.amplifyapp.com/](https://main.d130dq3c8sh12x.amplifyapp.com/) 
 
 
+### Docker
+
+To build the docker image of the front end application run the following the command
+```docker build -f Dockerfile -t client . ```
+
+Then to run the image locally
+``` docker run -p 3000:3000 client ```
+
+

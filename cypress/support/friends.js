@@ -2,7 +2,7 @@
  * Navigate to the friend list page with the menu.
  */
 Cypress.Commands.add('goToFriendList', () => {
-    cy.get('[data-test="navbar"]').shadow().click();
+    cy.get('[data-test="navbar"]').click();
     cy.get('[data-test="Friends List"]').click();
 })
 
@@ -23,7 +23,6 @@ Cypress.Commands.add('searchUser', function(email) {
  */
 Cypress.Commands.add('addUser', function(email, isValid) {
     cy.searchUser(email);
-    cy.wait(50)
     if (isValid) {
         cy.get('[data-test="addFriend"]').click()
     } else {
@@ -39,7 +38,6 @@ Cypress.Commands.add('addUser', function(email, isValid) {
 Cypress.Commands.add('cancelRequest', function(email){
     cy.get('[data-test="friendRequestsLink"]').click();
     cy.get(`[data-test="cancel-request-${email}"]`).click();
-    cy.wait(150);
     cy.get(`[data-test="cancel-request-${email}"]`).should('not.exist');
 })
 

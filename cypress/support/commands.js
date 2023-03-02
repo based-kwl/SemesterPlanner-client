@@ -5,7 +5,6 @@
  */
 Cypress.Commands.add('login', (email, password) => {
     cy.visit(Cypress.env('baseUrl'), { timeout: 60 * 1000 });
-    cy.wait(5000);
     cy.get('[data-test="email"]').should('be.visible', {timeout: 5000})
     cy.get('[data-test="email"]').type(Cypress.env(email));
     cy.get('[data-test="password"]').type(Cypress.env(password));
@@ -16,7 +15,6 @@ Cypress.Commands.add('login', (email, password) => {
  * logout a user
  */
 Cypress.Commands.add('logout', () => {
-    cy.wait(1000);
     cy.get('[data-test="navbar"]').click();
     cy.get('[data-test="logout"]').click();
 })

@@ -5,12 +5,10 @@ describe('Tests for the friend list functionality', function() {
 
     beforeEach(() => {
         cy.login('email2', 'password2');
-        cy.wait(5000)
         cy.goToFriendList();
     })
 
     it('User search an existing user with a public profile and tries to add him', function() {
-        cy.wait(5000)
         cy.addUser(
             Cypress.env('email1'),
             true
@@ -19,7 +17,6 @@ describe('Tests for the friend list functionality', function() {
 
 
     it('User search an existing user with a private profile and tries to add him', function() {
-        cy.wait(5000)
         cy.addUser(
             Cypress.env('email3'),
             false
@@ -51,15 +48,11 @@ describe('Tests for the friend list functionality', function() {
     it('User can delete a friend', function () {
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).click();
-        cy.wait(50);
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).should('not.exist');
-        cy.wait(50);
         cy.get('[data-test="apply-changes"]').click();
-        cy.wait(50);
         cy.get(`[data-test="delete-friend-${Cypress.env('email1')}"]`).should('not.exist');
         cy.changeUser('email1', 'password1');
         cy.goToFriendList();
-        cy.wait(250);
         cy.get(`[data-test="delete-friend-${Cypress.env('email2')}"]`).should('not.exist');
     })
 

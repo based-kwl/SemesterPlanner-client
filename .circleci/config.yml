@@ -15,11 +15,8 @@ jobs:
       - node/install:
           node-version: "16.17"
       - run:
-          command: npm install --legacy-peer-deps
+          command: docker build -f Dockerfile -t client .
           name: Installing NPM packages
-      - run:
-          command: npm run build
-          name: Build Front-End Application
 workflows:
   test_my_app:
     jobs:
@@ -41,5 +38,5 @@ workflows:
           requires:
             - build
             - cypress/install
-          start: npm start
+          start: docker run -p 3000:3000 client
           wait-on: 'http://localhost:3000'
