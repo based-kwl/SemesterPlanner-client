@@ -6,29 +6,12 @@ executors:
   with-chrome:
     docker:
       - image: 'cypress/browsers:node-16.18.1-chrome-110.0.5481.96-1-ff-109.0-edge-110.0.1587.41-1'
-jobs:
-  build: # this can be any name you choose
-    docker:
-      - image: cimg/node:16.17.0
-    steps:
-      - checkout
-      - node/install:
-          node-version: "16.17"
-      - run:
-          command: docker build -f Dockerfile -t client .
-          name: Installing NPM packages
+
 workflows:
   test_my_app:
     jobs:
-      - build
       - cypress/install:
-          pre-steps:
-            - checkout
-            - run: node -v
-            - run: npm install -g n --legacy-peer-deps
-            - run: n 16.17.0
-            - run: node -v
-          install-command: npm i --legacy-peer-deps
+          install-command: docker build -f Dockerfile -t client .
       - cypress/run:
           executor: with-chrome
           browser: chrome
