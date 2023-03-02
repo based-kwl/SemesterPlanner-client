@@ -8,7 +8,7 @@ executors:
       - image: 'cypress/browsers:node-16.18.1-chrome-110.0.5481.96-1-ff-109.0-edge-110.0.1587.41-1'
 
 jobs:
-  build: # this can be any name you choose
+  build_and_test: # this can be any name you choose
     docker:
       - image: cimg/base:2022.06
     steps:
@@ -17,7 +17,9 @@ jobs:
           node-version: "16.17"
       - run: sudo apt-get update
       - run: docker build -f Dockerfile -t client .
-      - run: docker run -d --rm -p 4000:3000 client
+      - run: docker run -d --rm -p 3000:3000 client
+      - run: npx cypress install
+      - run: npx cypress run --browser chrome --env=email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:3000/
       - setup_remote_docker:
           version: 20.10.14
 
@@ -25,13 +27,4 @@ jobs:
 workflows:
   test_my_app:
     jobs:
-      - build
-      - cypress/run:
-          executor: with-chrome
-          browser: chrome
-          attach-workspace: true
-          env: 'email1=test@gmail.com,password1=test,email2=test2@gmail.com,password2=test2,email3=test3@gmail.com,password3=test3,baseUrl=http://localhost:4000/'
-          debug: 'cypress:cli'
-          requires:
-            - build
-          wait-on: 'http://localhost:4000'
+      - build_and_test
