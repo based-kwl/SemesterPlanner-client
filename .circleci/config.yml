@@ -15,7 +15,9 @@ workflows:
             - run: apt-get update
             - run: apt-get install -y sudo
             - run: sudo apt-get update
-            - run: sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            - run : sudo apt-get remove docker docker-engine docker.io
+            - run: sudo apt install docker.io
+            - run: sudo snap install docker
           install-command: docker build -f Dockerfile -t client .
       - cypress/run:
           executor: with-chrome
