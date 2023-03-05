@@ -24,12 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import {useNavigate} from "react-router";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Badge from '@mui/material/Badge';
-import axios from "axios";
-import BottomDrawer from "../StudyRoom/BottomDrawer";
-import FriendNotification from "../FriendList/FriendsNotification";
-import GetAuthentication from "../Authentication/Authentification";
+import NotificationMenu from "./NotificationMenu";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -47,7 +42,6 @@ const AppBar = styled(MuiAppBar, {
         duration: theme.transitions.duration.leavingScreen,
     }),
     ...(open && {
-        // width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: `${drawerWidth}px`,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
@@ -76,8 +70,6 @@ PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
 export default function PersistentDrawerLeft(params) {
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
-    const [count, setCount] = React.useState(0);
-    const email = GetAuthentication().email;
 
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
@@ -86,15 +78,6 @@ export default function PersistentDrawerLeft(params) {
     const handleDrawerClose = () => {
         setOpenDrawer(false);
     };
-
-    React.useEffect(()=> {
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${email}`)
-            .then(res => {
-                setCount(res.data.length);
-            })
-            .catch(err => {console.log('Error',err);})
-    },[])
-
 
     const navigate = useNavigate();
 
@@ -149,13 +132,7 @@ export default function PersistentDrawerLeft(params) {
                                 style={{font: 'Roboto', margin: 'auto', alignSelf: 'center'}}>
                         {params.navbarTitle}
                     </Typography>
-                        <BottomDrawer icon={<Badge badgeContent={count}  showZero   overlap="circular" sx={{
-                            "& .MuiBadge-badge": {
-                                color: "white",
-                                backgroundColor: "#000000"
-                            }}}>
-                            <NotificationsIcon style={{color: 'white', height: '3vh', width: '3vh'}}/></Badge>}
-                                      title={'Notifications'} content={<FriendNotification/>}/>
+                    <NotificationMenu />
                 </Toolbar>
             </AppBar>
             <Drawer

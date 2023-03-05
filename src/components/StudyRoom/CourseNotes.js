@@ -7,7 +7,7 @@ import axios from "axios";
 import {Buffer} from 'buffer'
 import {StudyRoomCard} from "./CommonResources";
 
-export default function ParticipantsList() {
+export default function CourseNotes() {
     const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
     const [fileList, setFileList] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
@@ -25,7 +25,7 @@ export default function ParticipantsList() {
 
     function handleDeleteCourseNotes(index) {
         axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
-            .then((res) => {
+            .then(() => {
                 getCourseNotes();
             })
             .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});

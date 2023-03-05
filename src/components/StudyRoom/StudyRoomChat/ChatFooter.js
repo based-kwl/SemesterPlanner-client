@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import axios from "axios";
+import GetAuthentication from "../../Authentication/Authentification";
 
 export const ChatFooter = () => {
     const [message, setMessage] = useState('');
 
     const handleSendMessage = (e) => {
-        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         e.preventDefault();
-        const email = localStorage.getItem('email')
-        axios.post(`${process.env.REACT_APP_BASE_URL}message/send`, {studyRoomID: studyRoomId, email    : email, content: message})
-            .then((res) => {console.log(res)})
-        setMessage('');
+        const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
+        const email = GetAuthentication().email;
+        axios.post(`${process.env.REACT_APP_BASE_URL}message/send`, {
+            studyRoomID: studyRoomId,
+            email: email,
+            content: message
+        })
+            .then(() => {
+                setMessage('');
+            })
     };
     return (
         <div className="chat__footer">
