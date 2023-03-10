@@ -117,3 +117,25 @@ export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgr
         </Card>
     )
 }
+
+export const CourseCard = ({width, height, content, backgroundColor='#F0F0F0'}) => {
+    return (
+        <Card variant='outlined' style={{
+            display: 'flex',
+            flexDirection:'row',
+            width: width,
+            height:  height,
+            backgroundColor: backgroundColor,
+            justifyContent:'space-between',
+            alignItems: 'center',
+            paddingTop:'2%',
+            paddingBottom:'2%',
+            paddingLeft:'1%',
+            paddingRight:'1%',
+            marginBottom:'4%'
+
+        }}>
+            {content}
+        </Card>
+    )
+}

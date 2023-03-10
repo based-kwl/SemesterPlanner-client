@@ -12,9 +12,16 @@ import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
 import {EventForm} from '../Custom/CommonInputEventForm';
 import moment from "moment";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useState} from "react";
+import ScheduleEvent from "./ScheduleEvent";
+import {styled} from "@mui/material/styles";
+import MuiToggleButton from "@mui/material/ToggleButton";
 
 export default function CreateEvent(props) {
     const email = GetAuthentication().email;
+    const [imageType, setImageType] = useState('event')
+    const [eventIsVisible,setEventIsVisible] = React.useState(true)
     const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
@@ -119,8 +126,52 @@ export default function CreateEvent(props) {
         </React.Fragment>
     );
 
+    React.useEffect(()=>{
+        handleImageType()
+    },[imageType,eventIsVisible])
+
+    function handleImageType(e, newImageType){
+        if(newImageType != null){
+            setImageType(newImageType)
+        }
+        if(imageType==='event'){
+            setEventIsVisible(true)
+        }
+        else if (imageType ==='schedule'){
+            setEventIsVisible(false)
+        }
+    }
+    const ToggleButton = styled(MuiToggleButton)({
+        "&.Mui-selected, &.Mui-selected:hover": {
+            color: "white",
+            backgroundColor: '#0072A8'
+        }
+    });
+
+    const toggleButton = (
+        <ToggleButtonGroup
+            size="small"
+            value={imageType}
+            exclusive
+            onChange={handleImageType}
+            aria-label="image_type"
+        >
+            <ToggleButton value="event" aria-label="event">
+                Event
+            </ToggleButton>
+            <ToggleButton value="schedule" aria-label="schedule">
+                Schedule
+            </ToggleButton>
+        </ToggleButtonGroup>
+    )
+
+
     return (
         <React.Fragment>
+            <div align='center'>
+            {toggleButton}
+            </div>
+            {eventIsVisible ?
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
 
@@ -128,7 +179,7 @@ export default function CreateEvent(props) {
                     overflow: 'auto',
                     paddingTop: '10px',
                     width: '97vw',
-                    height: '65vh'
+                    height: '60vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
                     <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
@@ -141,7 +192,7 @@ export default function CreateEvent(props) {
                     {isRecurrent && recurrenceSelection}
                 </div>
                 <div style={{ paddingTop: '20px'}}>{buttons}</div>
-            </form>
+            </form> : <ScheduleEvent/>}
         </React.Fragment>
     )
 }
