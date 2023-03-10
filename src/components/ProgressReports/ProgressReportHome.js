@@ -3,7 +3,6 @@ import NavDrawer from "../NavDrawer/navDrawer";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
-import AssessmentIcon from '@mui/icons-material/Assessment';
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
 import { useState, useMemo, useEffect } from 'react';
@@ -11,18 +10,20 @@ import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import { fetchData } from './fetchingCategoryDataFactory'
-import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto'
+import { Bar } from 'react-chartjs-2';
+import StudyRecap from "./StudyRecap";
+import UpdateIcon from '@mui/icons-material/Update';
 
 export default function ProgressReportHome(){
     const [courses, setCourses] = useState([])
     const [link, setLink] = useState('study-events-monthly')
-    const [course, setCourse] = React.useState([])
-    const [time, setTime] = React.useState('')
+    const [course, setCourse] = useState([])
+    const [time, setTime] = useState('')
     const email = GetAuthentication().email;
 
 
-    React.useEffect(()=>{
+    useEffect(()=>{
         fetchData(link, setCourses)
         handleCourseList()
         handleTotalStudyTime()
@@ -33,7 +34,7 @@ export default function ProgressReportHome(){
     var data = {
         labels: courses?.map((course) => course.name),
         datasets: [{
-            label: "Recommanded",
+            label: "Recommended",
             backgroundColor: '#912338',
             data: courses?.map((course) => course.expectedTime),
         }, {
@@ -159,7 +160,7 @@ export default function ProgressReportHome(){
             }/>
 
             {/*drawers for future features*/}
-            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
+            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '2vw', marginRight: '2vw'}}>
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Courses Statistics" onClick={() => { setLink('study-events-monthly') }} />}
@@ -180,10 +181,16 @@ export default function ProgressReportHome(){
                    }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Category Statistics" onClick={() => { setLink('events-weekly') }} />}
                                        title={'Category Statistics'} content={categoryweekly} ></BottomDrawer>
                                </div>}/>
+
+                <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                                   bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
+                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
+                ><BottomDrawer icon={<UpdateIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
+                               title={'Study Recap'} content={<StudyRecap/>}/></div>}/>
 
             </div>
         </React.Fragment>
