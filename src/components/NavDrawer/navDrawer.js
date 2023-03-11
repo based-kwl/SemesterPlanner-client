@@ -22,7 +22,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ForumIcon from '@mui/icons-material/Forum';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ShowChartIcon from '@mui/icons-material/ShowChart';
 import {useNavigate} from "react-router";
 import NotificationMenu from "./NotificationMenu";
 

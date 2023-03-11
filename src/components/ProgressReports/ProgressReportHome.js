@@ -9,8 +9,8 @@ import { useState, useMemo, useEffect } from 'react';
 import GetAuthentication from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
-import { fetchData } from './fetchingCategoryDataFactory'
-import { Chart as ChartJS } from 'chart.js/auto'
+import { fetchData } from './fetchingCategoryDataFactory';
+import 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import StudyRecap from "./StudyRecap";
 import UpdateIcon from '@mui/icons-material/Update';
@@ -31,7 +31,7 @@ export default function ProgressReportHome(){
     },[link])
 
 
-    var data = {
+    const data = {
         labels: courses?.map((course) => course.name),
         datasets: [{
             label: "Recommended",
@@ -43,7 +43,7 @@ export default function ProgressReportHome(){
             data: courses?.map((course) => course.Actual),
         }]
     }
-    var data1 = {
+    const data1 = {
         labels: courses?.map((course) => course.name),
         datasets: [{
             label: "Actual",

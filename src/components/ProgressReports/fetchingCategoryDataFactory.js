@@ -3,14 +3,14 @@ import GetAuthentication from "../Authentication/Authentification";
 import {expandEventList} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {
-    let username = GetAuthentication().username
+    const username = GetAuthentication().username
 
     await axios.get(`${process.env.REACT_APP_BASE_URL}events/${api_link}/${username}`)
         .then(async (response) => {
-            let arr = expandEventList(response.data)
+            const arr = expandEventList(response.data)
 
             if (api_link === 'events-monthly' || api_link === 'events-weekly') {
-                let categoryData = [{name: 'course', colour: '#0072A8', expectedTime: 0}, {
+                const categoryData = [{name: 'course', colour: '#0072A8', expectedTime: 0}, {
                     name: 'study',
                     colour: '#8CC63E',
                     expectedTime: 0
@@ -40,8 +40,8 @@ export async function fetchData(api_link, setCourses) {
                 })
                 setCourses(categoryData)
             } else {
-                let courseList = []
-                let listOfCourses = await handleCourseList()
+                const courseList = []
+                const listOfCourses = await handleCourseList()
                 let courseName
 
                 if ("study-events-monthly" === api_link) {
@@ -67,14 +67,14 @@ export async function fetchData(api_link, setCourses) {
                 arr.forEach((event) => {
                     courseName = event.subject + event.catalog
 
-                    for (let i = 0; i < courseList.length; i++) {
-                        if (courseList[i].name === courseName) {
+                    courseList.forEach((course) => {
+                        if (course.name === courseName) {
                             if (!event.studyHoursConfirmed)
-                                courseList[i].Actual = courseList[i].Actual + diff_minutes(event.endTime, event.startTime)
+                                course.Actual = course.Actual + diff_minutes(event.endTime, event.startTime)
                             else
-                                courseList[i].Actual = courseList[i].Actual + diff_minutes(event.actualEndTime, event.actualStartTime)
+                                course.Actual = course.Actual + diff_minutes(event.actualEndTime, event.actualStartTime)
                         }
-                    }
+                    })
                 })
                 setCourses(courseList)
             }
@@ -82,7 +82,7 @@ export async function fetchData(api_link, setCourses) {
 }
 
 function diff_minutes(dt2, dt1) {
-    let diff = (new Date(dt2).getTime() - new Date(dt1).getTime()) / 60000;
+    const diff = (new Date(dt2).getTime() - new Date(dt1).getTime()) / 60000;
     return Math.abs(Math.round(diff));
 }
 
