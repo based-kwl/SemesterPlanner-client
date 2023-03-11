@@ -162,7 +162,9 @@ export default function EditProfile() {
                 <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
                     <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
-                <PrimaryButton2 width='80vw' style={{position: 'absolute'}}  colour={'#912338'} content="Update" onClick={handleEditProfile}/>
+                <div align={'center'} >
+                <PrimaryButton2 width='80vw' style={{position: 'absolute'}} colour={'#912338'} content="Update" onClick={handleEditProfile}/>
+                </div>
             </form>
           </div>
             
