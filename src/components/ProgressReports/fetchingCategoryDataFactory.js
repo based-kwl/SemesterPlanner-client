@@ -1,12 +1,13 @@
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
+import {expandEventList} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {
     let username = GetAuthentication().username
 
     await axios.get(`${process.env.REACT_APP_BASE_URL}events/${api_link}/${username}`)
         .then(async (response) => {
-            let arr = response.data
+            let arr = expandEventList(response.data)
 
             if (api_link === 'events-monthly' || api_link === 'events-weekly') {
                 let categoryData = [{name: 'course', colour: '#0072A8', expectedTime: 0}, {
