@@ -12,8 +12,10 @@ import StudyRoomHome from "./components/StudyRoom/StudyRoomHome";
 import React from 'react';
 import FriendListHome from "./components/FriendList/FriendListHome";
 import ProgressReportHome from "./components/ProgressReports/ProgressReportHome";
+import {hotjar} from "react-hotjar";
 
 export default function App() {
+    hotjar.initialize(3399412, 6);
     return (
         <BrowserRouter>
             <AppRoutes />
