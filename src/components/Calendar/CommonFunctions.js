@@ -125,3 +125,23 @@ export const sortEventsByDate = (eventsList) => {
 
     return events;
 }
+
+/**
+ * Method to calculate the time difference between two time strings (endTime-startTime); does NOT take dates into account
+ * @param {String} startTime, start time for calculation in ISO date string format
+ * @param {String} endTime, end time for calculation in ISO date string format
+ * @returns {String}, string format "HH:mm", where "HH" is hour difference and "mm" is minute difference between startTime and endTime
+ */
+export const getTimeDifference = (startTime, endTime) => {
+    const sTime = new Date(startTime);
+    const eTime = new Date(endTime);
+    let hourDiff = eTime.getHours() - sTime.getHours();
+    if (hourDiff < 0) hourDiff += 24;
+    let minDiff = eTime.getMinutes() - sTime.getMinutes();
+    if (minDiff < 0) {
+        hourDiff -= 1;
+        minDiff += 60;
+    }
+
+    return `${hourDiff}:${minDiff}`;
+}
