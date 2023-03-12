@@ -1,7 +1,6 @@
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
-import {expandEventList} from "../Calendar/CommonFunctions";
-import {getTimeDifference} from "../Calendar/CommonFunctions";
+import {expandEventList, getTimeDifference} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {
     const username = GetAuthentication().username

@@ -1,5 +1,5 @@
 import GetAuthentication from "../Authentication/Authentification";
-import {filterEventsByDate, getEventList, timeStringToDateObject} from "../Calendar/CommonFunctions";
+import {filterEventsByDate, getEventList, timeStringToDateObject, getTimeDifference} from "../Calendar/CommonFunctions";
 import {useMemo, useState} from "react";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import {TimePicker} from '@mui/x-date-pickers/TimePicker';
@@ -8,7 +8,6 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import TextField from '@mui/material/TextField';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
-import {getTimeDifference} from "../Calendar/CommonFunctions";
 import axios from "axios";
 
 export default function StudyRecap(props) {
