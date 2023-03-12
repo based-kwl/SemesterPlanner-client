@@ -31,7 +31,7 @@ export default function ProgressReportHome(){
     },[link])
 
 
-    const data = {
+    const studyStatisticsData = {
         labels: courses?.map((course) => course.name),
         datasets: [{
             label: "Recommended",
@@ -43,52 +43,58 @@ export default function ProgressReportHome(){
             data: courses?.map((course) => course.Actual),
         }]
     }
-    const data1 = {
+
+    const categoryStatisticsData = {
         labels: courses?.map((course) => course.name),
         datasets: [{
-            label: "Actual",
+            // label: "Actual",
             backgroundColor: courses?.map((course) => course.colour),
             data: courses?.map((course) => course.expectedTime),
         }]
     }
 
-    const monthly = (
-        <React.Fragment>
-            <div>
-                <Bar data={data} height={"600%"}
-                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
-            </div>
-        </React.Fragment>
-    )
-    const weekly = (
-        <React.Fragment>
-            <div>
-                <Bar data={data} height={"600%"}
-                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
-            </div>
-        </React.Fragment>
-    )
+    const optionsStudyData = {
+        maintainAspectRatio: false,
+        responsive: false,
+        indexAxis: 'y',
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Hours'
+                }
+            }
+        }
+    };
 
-    const categoryweekly = (
-        <React.Fragment>
-            <div>
-                <Bar data={data1} height={"600%"}
-                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
-            </div>
-        </React.Fragment>
-    )
+    const optionsCategoryData = {
+        maintainAspectRatio: false,
+        responsive: false,
+        indexAxis: 'y',
+        plugins: {
+            legend: {
+                display: false,
+            },
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Hours'
+                }
+            }
+        }
+    };
 
-    const categorymonthly = (
-        <React.Fragment>
-            <div>
-                <Bar data={data1} height={"600%"}
-                    options={{ maintainAspectRatio: false, responsive: false, indexAxis: 'y' }}></Bar>
-            </div>
-        </React.Fragment>
-    )
-
-
-
+    const renderBarChart = (data, options) => {
+        return (
+            <React.Fragment>
+                <div>
+                    <Bar data={data} height={"600%"} options={options}></Bar>
+                </div>
+            </React.Fragment>
+        )
+    }
 
     function handleCourseList() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -164,26 +170,26 @@ export default function ProgressReportHome(){
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Courses Statistics" onClick={() => { setLink('study-events-monthly') }} />}
-                                       title={'Study Statistics'} content={monthly} ></BottomDrawer>
+                                       title={'Monthly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div> }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Courses Statistics" onClick={() => { setLink('study-events-weekly') }} />}
-                                       title={'Study Statistics'} content={weekly} ></BottomDrawer>
+                                       title={'Weekly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Category Statistics" onClick={() => { setLink('events-monthly') }} />}
-                                       title={'Category Statistics'} content={categorymonthly} ></BottomDrawer>
+                                       title={'Monthly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>
                    }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
                                    <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Category Statistics" onClick={() => { setLink('events-weekly') }} />}
-                                       title={'Category Statistics'} content={categoryweekly} ></BottomDrawer>
+                                       title={'Weekly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'

@@ -8,6 +8,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import TextField from '@mui/material/TextField';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
+import {getTimeDifference} from "../Calendar/CommonFunctions";
 import axios from "axios";
 
 export default function StudyRecap(props) {
@@ -28,26 +29,6 @@ export default function StudyRecap(props) {
             setErrorMessage(err.message);
         })
     }, [])
-
-    /**
-     * Method to calculate the time difference between two time strings (endTime-startTime); does NOT take dates into account
-     * @param {String} startTime, start time for calculation in string format "HH:mm"
-     * @param {String} endTime, start time for calculation in string format "HH:mm"
-     * @returns {String}, string format "HH:mm", where "HH" is hour difference and "mm" is minute difference between startTime and endTime
-     */
-    const getTimeDifference = (startTime, endTime) => {
-        const sTime = new Date(startTime);
-        const eTime = new Date(endTime);
-        let hourDiff = eTime.getHours() - sTime.getHours();
-        if (hourDiff < 0) hourDiff += 24;
-        let minDiff = eTime.getMinutes() - sTime.getMinutes();
-        if (minDiff < 0) {
-            hourDiff -= 1;
-            minDiff += 60;
-        }
-
-        return `${hourDiff}:${minDiff}`;
-    }
 
     /**
      * method to update events in the database on confirmation of study times

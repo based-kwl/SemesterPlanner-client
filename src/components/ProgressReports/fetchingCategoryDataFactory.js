@@ -1,6 +1,7 @@
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
 import {expandEventList} from "../Calendar/CommonFunctions";
+import {getTimeDifference} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {
     const username = GetAuthentication().username
@@ -17,11 +18,16 @@ export async function fetchData(api_link, setCourses) {
         })
 }
 
-function diff_minutes(dt2, dt1) {
-    const diff = (new Date(dt2).getTime() - new Date(dt1).getTime()) / 60000;
-    return Math.abs(Math.round(diff));
+/**
+ * Method to calculate the time difference between two time strings (endTime-startTime); does NOT take dates into account
+ * @param {String} endTime, end time for calculation in ISO date string format
+ * @param {String} startTime, start time for calculation in ISO date string format
+ * @returns {Number}, time difference in hours, where minute differences are represented as fractions
+ */
+function diff_minutes(endTime, startTime) {
+    const diff = getTimeDifference(startTime, endTime)
+    return (parseInt(diff.split(':')[0]) + (parseInt(diff.split(':')[1]) / 60))
 }
-
 
 async function handleCourseList() {
     const email = GetAuthentication().email;
@@ -77,7 +83,7 @@ async function generateStudyData(eventsList, api_link) {
             courseList.push({
                 colour: null,
                 name: item.subject + item.catalog,
-                expectedTime: item.studyHours * 60 * 4,
+                expectedTime: item.studyHours * 4,
                 Actual: 0
             })
         })
@@ -86,7 +92,7 @@ async function generateStudyData(eventsList, api_link) {
             courseList.push({
                 colour: null,
                 name: item.subject + item.catalog,
-                expectedTime: item.studyHours * 60,
+                expectedTime: item.studyHours,
                 Actual: 0
             })
         })
