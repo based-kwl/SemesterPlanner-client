@@ -6,7 +6,6 @@ import CreateEvent from "./Event/CreateEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
-
 export default function ImageUpload(props) {
     const [image, setImage] = useState();
     const [errorMessage, setErrorMessage] = useState('');
@@ -15,22 +14,20 @@ export default function ImageUpload(props) {
 
     function handleFile() {
         if (isFilePicked) {
-                let data = new FormData();
-                data.append('img', image);
-                axios.post(`${process.env.REACT_APP_BASE_URL}tesseract/`, data)
-                    .then((res) => {
-                        setEvent(res.data);
-                        setErrorMessage("Image uploaded!");
+            let data = new FormData();
+            data.append('img', image);
+            axios.post(`${process.env.REACT_APP_BASE_URL}tesseract/img`, data)
+                .then((res) => {
+                    setEvent(res.data);
+                    setErrorMessage("Image uploaded!");
 
-                        delay(0).then(() => { // delay call is needed for add event drawer to populate data properly
-                                document.getElementById('addEventDrawer').click();
-                        })
+                    delay(0).then(() => { // delay call is needed for add event drawer to populate data properly
+                        document.getElementById('addEventDrawer').click();
                     })
-                    .catch(err => {
-                        console.log('Error:', err)
-                    });
-        }
-            else {
+                })
+                .catch(err => {
+                });
+        } else {
             setErrorMessage("No image selected!");
         }
     }
@@ -48,10 +45,10 @@ export default function ImageUpload(props) {
 
     const imageUploadDrawer = (
         <>
-            <div style={{marginBottom: '30px', textAlign:'center'}}>
+            <div style={{marginBottom: '30px'}}>
                 <p>preview image</p>
                 <div style={{width: '90vw', height: '40vh', border: '1px solid black'}}>
-                    {isFilePicked ? <img src={URL.createObjectURL(image)} style={{height: '100%', width: '100%', objectFit:'contain'}}
+                    {isFilePicked ? <img src={URL.createObjectURL(image)} style={{height: '100%', width: 'auto'}}
                                          alt={"upload"}/> : <></>}
                 </div>
             </div>
@@ -67,6 +64,7 @@ export default function ImageUpload(props) {
                               content={<CreateEvent event={event} onDrawerClose={props.onDrawerClose}/>}/>
             </div>
         </>
+
     )
     return (
         imageUploadDrawer

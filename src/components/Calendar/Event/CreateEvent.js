@@ -1,16 +1,9 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography, Stack} from "@mui/material";
-import TextField from '@mui/material/TextField';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import {Typography, Stack} from "@mui/material";
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
- import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
-import {EventForm} from '../Custom/CommonInputEventForm';
+import {EventForm, RecurrenceSelection} from '../Custom/CommonInputEventForm';
 import moment from "moment";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import {useState} from "react";
@@ -22,7 +15,6 @@ export default function CreateEvent(props) {
     const email = GetAuthentication().email;
     const [imageType, setImageType] = useState('event')
     const [eventIsVisible,setEventIsVisible] = React.useState(true)
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
     const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
@@ -42,29 +34,9 @@ export default function CreateEvent(props) {
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
-    const recurrenceSelection = (
-        <FormControl>
-            <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
-                <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
-                <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
-            </RadioGroup>
-
-            {/** Event End Date */}
-            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        key={"endDate"}
-                        label="Ending date"
-                        inputFormat="MM/DD/YYYY"
-                        value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                    />
-                </LocalizationProvider>
-            </div>
-        </FormControl>
-    );
+    const recurrenceSelection = () => {
+        return RecurrenceSelection(eventData, setEventData);
+    };
 
     React.useEffect(()=>{
         handleCourseList()
@@ -78,10 +50,6 @@ export default function CreateEvent(props) {
             .catch(err => {
                 console.log('Error', err);
             })
-    }
-
-    function handleRecurrenceChange(e) {
-        setEventData({ ...eventData, recurrence: e.target.value})
     }
 
     function handleEvent() {
@@ -108,10 +76,6 @@ export default function CreateEvent(props) {
             {eventError.message}
         </Typography>
     ) : null;
-
-    function handleIsRecurrentChange() {
-        setIsRecurrent((prev) =>  !prev);
-    }
 
     const buttons = (
         <React.Fragment>
@@ -182,14 +146,7 @@ export default function CreateEvent(props) {
                     height: '60vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
-                    <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
-                        <Switch
-                            sx={{color: '#912338'}}
-                            checked={isRecurrent}
-                            onChange={handleIsRecurrentChange}
-                        />
-                    }/>
-                    {isRecurrent && recurrenceSelection}
+                    <div>{recurrenceSelection()}</div>
                 </div>
                 <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form> : <ScheduleEvent/>}

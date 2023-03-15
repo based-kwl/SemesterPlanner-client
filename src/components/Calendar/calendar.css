@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i');
 .events {
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto; /* prevents scrollbar from showing if max height is not reached */
 }
 
 .eventCard {
@@ -67,7 +67,7 @@
   .react-calendar__navigation button {
     min-width: 44px;
     background: none;
-        font-family: Roboto;
+        font-family: Roboto,serif;
 
     font-size: 22px;
     font-weight: bold;
@@ -95,7 +95,7 @@
     justify-content: center;
     font-size: 0.75em;
     font-weight: bold;
-    font-family: Roboto;
+    font-family: Roboto,serif;
 
   }
   .react-calendar__month-view__days__day--weekend {

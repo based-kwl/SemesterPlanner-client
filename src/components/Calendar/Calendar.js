@@ -10,7 +10,7 @@ import GetAuthentication from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
-import {getTime} from "./CommonFunctions";
+import {expandEventList, getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
@@ -21,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
+    const [condensedEventsList, setCondensedEventsList] = useState([]);
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
@@ -31,7 +32,8 @@ export default function CalendarView() {
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                    setEvents(res.data)
+                    setCondensedEventsList(res.data);
+                    setEvents(expandEventList(res.data));
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
@@ -71,7 +73,7 @@ export default function CalendarView() {
      * @param {int} type, type of update required; 0 = update, 1 = delete, 2 = add
      */
     async function updateEventList(eventData, type) {
-        const tempEvents = [...events];
+        const tempEvents = [...condensedEventsList];
 
         if (type === 0)
             tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
@@ -80,7 +82,8 @@ export default function CalendarView() {
         else if (type === 2)
             tempEvents.push(eventData);
 
-        setEvents(tempEvents);
+        setCondensedEventsList(tempEvents);
+        setEvents(expandEventList(tempEvents));
     }
 
     const AcademicEventsTile = ({ date }) => (

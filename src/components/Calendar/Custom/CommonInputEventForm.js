@@ -44,7 +44,7 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
     )
 }
 
-export function EventForm({eventState, eventStateSetter, courseArray,value}) {
+export function EventForm({eventState, eventStateSetter, courseArray}) {
     const [isVisible, setIsVisible] = React.useState(false);
     const [isVisibleStudy, setIsVisibleStudy] = React.useState(false);
     function handleEditEventHeaderChange(e) {
@@ -275,24 +275,30 @@ export const CalendarButton = ({content, disable, onClick, backgroundColor}) => 
 }
 
 export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [isRecurrent, setIsRecurrent] = React.useState(recurrenceState.recurrence !== 'once');
 
     function handleRecurrenceChange(e) {
         setRecurrenceState({...recurrenceState, recurrence: e.target.value})
     }
 
-    function handleIsReccurentChange() {
-        setIsRecurrent((prev) => !prev);
+    function handleIsRecurrentChange() {
+        setIsRecurrent((prev) => {
+            if (!prev)
+                setRecurrenceState({...recurrenceState, recurrence: 'daily'});
+            else
+                setRecurrenceState({...recurrenceState, recurrence: 'once'});
+            return !prev;
+        });
     }
 
     const recurrenceOption = (
 
         <FormControl>
             <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio data-test="everyDay"/>}
+                <FormControlLabel checked={(recurrenceState.recurrence === 'once' || recurrenceState.recurrence === 'daily')} value="daily" control={<Radio data-test="everyDay"/>}
                                   label="Every Day"/>
-                <FormControlLabel value="weekly" control={<Radio data-test="everyWeek"/>} label="Every Week"/>
-                <FormControlLabel value="monthly" control={<Radio data-test="everyMonth"/>} label="Every Month"/>
+                <FormControlLabel checked={recurrenceState.recurrence === 'weekly'} value="weekly" control={<Radio data-test="everyWeek"/>} label="Every Week"/>
+                <FormControlLabel checked={recurrenceState.recurrence === 'monthly'} value="monthly" control={<Radio data-test="everyMonth"/>} label="Every Month"/>
             </RadioGroup>
 
             {/** Event End Date */}
@@ -316,7 +322,7 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
                 data-test="eventSwitch"
                 sx={{color: '#912338'}}
                 checked={isRecurrent}
-                onChange={handleIsReccurentChange}
+                onChange={handleIsRecurrentChange}
             />
         }/>
     )
