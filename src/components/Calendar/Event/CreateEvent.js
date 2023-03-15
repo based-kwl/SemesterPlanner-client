@@ -40,7 +40,8 @@ export default function CreateEvent(props) {
 
     React.useEffect(()=>{
         handleCourseList()
-    },[])
+        handleImageType()
+    },[imageType,eventIsVisible])
 
     function handleCourseList(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -89,10 +90,6 @@ export default function CreateEvent(props) {
             </Stack>
         </React.Fragment>
     );
-
-    React.useEffect(()=>{
-        handleImageType()
-    },[imageType,eventIsVisible])
 
     function handleImageType(e, newImageType){
         if(newImageType != null){
@@ -146,7 +143,7 @@ export default function CreateEvent(props) {
                     height: '60vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
-                    <div>{recurrenceSelection()}</div>
+                    {/*<div>{RecurrenceSelection(eventData, setEventData)}</div>*/}
                 </div>
                 <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form> : <ScheduleEvent/>}
