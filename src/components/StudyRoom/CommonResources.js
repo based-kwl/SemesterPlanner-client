@@ -132,7 +132,7 @@ export const CourseCard = ({width, height, content, backgroundColor='#F0F0F0'}) 
             paddingBottom:'2%',
             paddingLeft:'1%',
             paddingRight:'1%',
-            marginBottom:'4%'
+            // marginBottom:'4%'
 
         }}>
             {content}

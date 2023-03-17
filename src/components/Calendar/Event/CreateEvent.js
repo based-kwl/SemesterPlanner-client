@@ -34,14 +34,15 @@ export default function CreateEvent(props) {
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
-    const recurrenceSelection = () => {
-        return RecurrenceSelection(eventData, setEventData);
-    };
-
     React.useEffect(()=>{
         handleCourseList()
         handleImageType()
     },[imageType,eventIsVisible])
+    const recurrenceSelection = () => {
+        return RecurrenceSelection(eventData, setEventData);
+    };
+
+
 
     function handleCourseList(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -126,13 +127,13 @@ export default function CreateEvent(props) {
         </ToggleButtonGroup>
     )
 
-
+    const recurrence = recurrenceSelection();
     return (
         <React.Fragment>
             <div align='center'>
             {toggleButton}
             </div>
-            {eventIsVisible ?
+            {eventIsVisible?
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
 
@@ -143,7 +144,7 @@ export default function CreateEvent(props) {
                     height: '60vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
-                    {/*<div>{RecurrenceSelection(eventData, setEventData)}</div>*/}
+                    <div> {recurrence} </div>
                 </div>
                 <div style={{ paddingTop: '20px'}}>{buttons}</div>
             </form> : <ScheduleEvent/>}

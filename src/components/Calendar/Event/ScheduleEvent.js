@@ -10,67 +10,108 @@ import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import GetAuthentication from "../../Authentication/Authentification";
-import moment from "moment/moment";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {CalendarDatePicker} from "../Custom/CommonInputEventForm";
 
 
 export default function ScheduleEvent() {
     const username = GetAuthentication().username;
     const [error, setError] = React.useState('')
-    const [validateCourse, setValidateCourse] = React.useState(false)
+    const [validateCourse, setValidateCourse] = React.useState(true)
     const [schedule, setSchedule] = React.useState([{
-        username: username,
-        eventHeader:'',
-        description:'',
-        recurrence:'weekly',
-        link:'',
-        type:'course',
-        subject:'ex:SOEN',
-        catalog:'ex:385',
-        day1:'Mo',
-        day2:'Mo',
-        startTime:new Date(),
-        endTime:new Date(),
-        actualStartTime:new Date(),
-        actualEndTime:new Date(),
-        startDate:'',
-        endDate:''
+        subject: 'ex:SOEN',
+        catalog: 'ex:385',
+        day1: 1,
+        day2: 8,
+        startTime: new Date(),
+        endTime: new Date(),
+        startDate: new Date(),
+        endDate: new Date()
     }]);
 
+    function newStartDay(day, startDate) {
+        const numDate = startDate.getDay()
+        let newStartDate = new Date(startDate)
+        if (day < numDate) {
+            newStartDate.setDate(startDate.getDate() + 7 - numDate + day)
+        } else if (day >= numDate) {
+            newStartDate.setDate(startDate.getDate() + day - numDate)
+        }
+        return newStartDate
+    }
+
     function handleEvent() {
-        setError('')
-        schedule.forEach((course)=>{
+        let day1 = ''
+        let day2 = ''
+        schedule.forEach((course) => {
             axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
                 .then((res) => {
-                    if(res.data){
-                        console.log(res.data.title)
-                        console.log('correct',course.subject, course.catalog)
-                        course.eventHeader = res.data.subject + ' ' + res.data.catalog
-                        course.description = res.data.title
-                        course.startDate = moment("DD/MM/YYYY").toDate()
-
-                    }else{
-                        console.log('not correct', course.subject, course.catalog)
-                        const error = 'invalid course: '+ course.subject+ ' '+course.catalog
+                    if (res.data == null) {
+                        let error = 'Invalid course: ' + course.subject + ' ' + course.catalog
                         setError(error)
-                        setValidateCourse(false)
+                    }else{
+                        let error = ''
+                        setError(error)
                     }
                 })
         })
-        console.log(schedule)
-        // if(validateCourse){
-        //     schedule.forEach((course)=>{
-        //         const newSchedule = [...schedule]
-        //         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, schedule)
-        //             .then((res) => {
-        //                 document.elementFromPoint(0, 0).click();
-        //             })
-        //             .catch(err => {
-        //
-        //             });
-        //
-        //     })
-        // }
+        // console.log(error)
+
+       if(error === ''){
+           schedule.forEach((course, index) => {
+               axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
+                   .then((res) => {
+                       if (res.data !== null) {
+                           if (course.day1 < 8 && course.day2 === 8) {
+                               day1 = newStartDay(course.day1, course.startDate)
+                               day2 = null
+                           } else {
+                               day1 = newStartDay(course.day1, course.startDate)
+                               day2 = newStartDay(course.day2, course.startDate)
+                           }
+                           const eventDay = {
+                               username: username,
+                               eventHeader: res.data.subject + ' ' + res.data.catalog,
+                               description: res.data.title,
+                               recurrence: 'weekly',
+                               link: '',
+                               type: 'course',
+                               subject: res.data.subject,
+                               catalog: res.data.catalog,
+                               startTime: course.startTime.toISOString(),
+                               endTime: course.endTime.toISOString(),
+                               actualStartTime: new Date().toISOString(),
+                               actualEndTime: new Date().toISOString(),
+                               startDate: day1.toISOString(), // needs to be calculated
+                               endDate: course.endDate.toISOString()
+                           }
+                           axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
+                               .then((res) => {
+                                   console.log(res.data)
+                                   if (day2 != null) {
+                                       eventDay.startDate = day2.toISOString()
+                                       axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
+                                           .then(() => {
+                                           })
+                                   }
+                               })
+
+                           console.log(index)
+                           handleDelete(index) //to remove the classes that were added
+                       }
+                       else{
+                           const error = 'Invalid course: ' + course.subject + ' ' + course.catalog
+                           setError(error)
+                       }
+
+                   })
+           })
+
+       }
+
     }
+
 
     function handleCancel() {
         document.elementFromPoint(0, 0).click();
@@ -78,110 +119,138 @@ export default function ScheduleEvent() {
 
     function handleDayChange(course, e) {
         const newSchedule = [...schedule]
-        if(e.target.name ==='day1'){
+        if (e.target.name === 'day1') {
             course.day1 = e.target.value
-        }else{
+        } else {
             course.day2 = e.target.value
         }
-        // newSchedule.push(course)
+
+        setSchedule(newSchedule)
+        setError('')
+        if(course.day1 >= course.day2){
+            const error = 'Invalid day format'
+            setError(error)
+            setValidateCourse(false)
+        }else{
+            setValidateCourse(true)
+        }
+    }
+
+    function handleDateChange(course,e, field) {
+        const newSchedule = [...schedule]
+        if (field === 'start'){
+            course.startDate = e.$d
+        }
+        else{
+            course.endDate = e.$d
+        }
         setSchedule(newSchedule)
     }
-    function handleTimeChange(course, e){
+
+    function handleTimeChange(course, e) {
         const newDate = new Date()
         newDate.setHours(e.target.value.split(':')[0])
         newDate.setMinutes(e.target.value.split(':')[1])
         const newTime = [...schedule]
-        if(e.target.id === 'startTime'){
+        if (e.target.id === 'startTime') {
             course.startTime = newDate
-        }else{
+        } else {
             course.endTime = newDate
         }
         setSchedule(newTime)
     }
-    function handleDelete(index){
-        const updatedList = schedule.filter((_, i) => i !== index);
-        setSchedule(updatedList)
 
+    function handleDelete(index) {
+        const updatedList = schedule.filter((_, i) => i !== index);
+        console.log(updatedList)
+        setSchedule(updatedList)
     }
-    function handleAdd(){
+
+    function handleAdd() {
         const addCourse = {
-            subject:'',
-            catalog:'',
-            day1:'Mo',
-            day2:'Mo',
-            startTime:new Date(),
-            endTime:new Date()
+            subject: '',
+            catalog: '',
+            day1: 1,
+            day2: 8,
+            startTime: new Date(),
+            endTime: new Date(),
+            startDate: new Date(),
+            endDate: new Date()
         }
         const newSchedule = [...schedule]
         newSchedule.push(addCourse)
         setSchedule(newSchedule);
-
     }
-    function handleCourse(e, course){
+
+    function handleCourse(e, course) {
         const newSchedule = [...schedule]
-        if(e.target.id === 'subject'){
+        if (e.target.id === 'subject') {
             course.subject = e.target.value
-        }else{
+        } else {
             course.catalog = e.target.value
         }
         setSchedule(newSchedule)
+
     }
-    const SelectDay = (course, onChange, name) =>{
-        return(
+
+    const SelectDay = (course, onChange, name) => {
+        return (
             <TextField
                 name={name}
                 id='day'
                 label="day"
+                size="small"
+                margin="none"
                 select
-                onChange={(e)=>onChange(course,e)}
-                value={name==='day1'?course.day1: course.day2}
-                sx={{
-                    width: '15vw', color: 'black',
-                    "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-                        {
-                            paddingLeft: '3px',
-                            paddingRight: '0',
-                        },
-                }}
+                onChange={(e) => onChange(course, e)}
+                value={name === 'day1' ? course.day1 : course.day2}
+                // sx={{
+                //     width: '15vw', color: 'black',
+                //     "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+                //         {
+                //             paddingLeft: '3px',
+                //             paddingRight: '0',
+                //         },
+                // }}
             >
-                <MenuItem value={"Mo"}>
+                <MenuItem value={1}>
                     Mo
                 </MenuItem>
-                <MenuItem value={"Tu"}>
+                <MenuItem value={2}>
                     Tu
                 </MenuItem>
-                <MenuItem value={"We"}>
+                <MenuItem value={3}>
                     We
                 </MenuItem>
-                <MenuItem value={"Th"}>
+                <MenuItem value={4}>
                     Th
                 </MenuItem>
-                <MenuItem value={"Fr"}>
+                <MenuItem value={5}>
                     Fr
                 </MenuItem>
-                <MenuItem value={"Sa"}>
+                <MenuItem value={6}>
                     Sa
                 </MenuItem>
-                <MenuItem value={"Su"}>
+                <MenuItem value={7}>
                     Su
                 </MenuItem>
-                <MenuItem value={"-"}>
+                <MenuItem value={8}>
                     -
                 </MenuItem>
             </TextField>
         )
-
     }
+
     const addCourse = (
         <React.Fragment>
-            <div style={{border:'1px solid blue', margin:'1%' }}>
+            <div style={{ margin: '1%'}}>
                 <Stack direction='row' justifyContent="flex-end">
                     <Button
-                        style={{backgroundColor:'#0072A8', color:'white'}}
+                        style={{backgroundColor: '#0072A8', color: 'white'}}
                         data-test={`add-courseSchedule`}
                         variant="text"
                         onClick={handleAdd}>
-                        <AddIcon style={{color:'white'}}/>
+                        <AddIcon style={{color: 'white'}}/>
                         Add another course
                     </Button>
                 </Stack>
@@ -192,88 +261,137 @@ export default function ScheduleEvent() {
     const coursesFound = (
         <React.Fragment>
             {schedule.map((course, index) => (
-                <div key={index} style={{width: '98%', textAlign: 'center', justifyContent:'center', margin:'1%'}}>
-                <CourseCard width={'100%'} height={'fit-content'}
-                               content={
-                                   <div   style={{width: '100%', textAlign: 'center'}}>
-                                       <Stack direction='row'  spacing={1} justifyContent='space-between' alignItems='center' marginBottom='5%' >
-                                           <TextField required
-                                                      data_test="courseSubject"
-                                                      id="subject"
-                                                      label="course code"
-                                                      value={course.subject}
-                                                      size="small"
-                                                      margin="none"
-                                                      onChange={(e)=>{handleCourse(e,course)}}
-                                           />
-                                           <TextField required
-                                                      data_test="courseCatalog"
-                                                      id="catalog"
-                                                      label="course number"
-                                                      value={course.catalog}
-                                                      size="small"
-                                                      margin="none"
-                                                      onChange={(e)=>{handleCourse(e, course)}}
-                                           />
-                                           <Button
-                                               sx={{marginRight:'0px'}}
-                                               data-test={`delete-courseSchedule-${course}`}
-                                               variant="text"
-                                               onClick={() => handleDelete(index)}>
-                                               <ClearIcon style={{color: '#912338'}}
-                                                          sx={{
-                                                              "& css-17nqgcs-MuiButtonBase-root-MuiButton-root":
-                                                                  {
-                                                                      padding: '0',
-                                                                      justifyContent:'end'
-                                                                  },
-                                                          }}
-                                               />
+                <div key={index} style={{
+                    width: '98%',
+                    height: 'fit-content',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    margin: '1%',
+                }}>
+                    <CourseCard width={'100%'} height={'fit-content'}
+                                content={
+                                    <div style={{width: '100%', textAlign: 'center'}}>
+                                        <Stack direction='row' justifyContent='space-between' alignItems='center' marginBottom='10px'>
+                                            <div style={{ width:'100%'}}>
+                                                <Stack direction='row' spacing={1}  alignItems='center'>
+                                            <TextField required
+                                                       data_test="courseSubject"
+                                                       id="subject"
+                                                       label="course code"
+                                                       value={course.subject}
+                                                       size="small"
+                                                       margin="none"
+                                                       onChange={(e) => {
+                                                           handleCourse(e, course)
+                                                       }}
+                                            />
+                                            <TextField required
+                                                       data_test="courseCatalog"
+                                                       id="catalog"
+                                                       label="course number"
+                                                       value={course.catalog}
+                                                       size="small"
+                                                       margin="none"
+                                                       onChange={(e) => {
+                                                           handleCourse(e, course)
+                                                       }}
+                                            />
+                                                </Stack>
+                                            </div>
+<div style={{justifyContent:'flex-end'}}>
+                                            <Button
+                                                sx={{marginRight: '0px', justifyContent:'flex-end'}}
+                                                data-test={`delete-courseSchedule-${course}`}
+                                                variant="text"
+                                                onClick={() => handleDelete(index)}>
+                                                <ClearIcon style={{color: '#912338'}}
+                                                           sx={{
+                                                               "& css-17nqgcs-MuiButtonBase-root-MuiButton-root":
+                                                                   {
+                                                                       padding: '0',
+                                                                       justifyContent: 'end'
+                                                                   },
+                                                           }}
+                                                />
+                                            </Button>
+</div>
+                                        </Stack>
 
-                                           </Button>
-                                       </Stack>
+                                        <Stack direction='row' spacing={1} marginTop={1} marginBottom='10px'
+                                               alignItems='center' justifyContent='space-between'>
+                                            {SelectDay(course, handleDayChange, 'day1')}
+                                            {SelectDay(course, handleDayChange, 'day2')}
+                                            <TextField
+                                                id="startTime"
+                                                label="Start Time"
+                                                type="time"
+                                                value={getTime(course.startTime)}
+                                                sx={{
+                                                    width: '29%',
+                                                    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                                                        {
+                                                            paddingLeft: '2px',
+                                                            paddingRight: '0'
+                                                        }
+                                                }}
+                                                data-test="eventStartTime"
+                                                onChange={(e) => {
+                                                    handleTimeChange(course, e)
+                                                }}
+                                                margin="normal"
+                                                size="small"
 
-                                       <Stack direction='row' spacing={1} marginTop={1}  justifyContent='space-between'>
-                                           {SelectDay(course, handleDayChange, 'day1')}
-                                           {SelectDay(course, handleDayChange, 'day2')}
-                                           <TextField
-                                               id="startTime"
-                                               label="Start Time"
-                                               type="time"
-                                               value={getTime(course.startTime)}
-                                               sx={{
-                                                   width: '29%',
-                                                   "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
-                                                       {
-                                                           paddingLeft: '2px',
-                                                           paddingRight: '0'
-                                                       }
-                                               }}
-                                               data-test="eventStartTime"
-                                               onChange={(e) => {handleTimeChange(course,e)}}
-                                               margin="normal"
-                                           />
-                                           <TextField
-                                               id="endTime"
-                                               label="End Time"
-                                               type="time"
-                                               value={getTime(course.endTime)}
-                                               sx={{
-                                                   width: '29%',
-                                                   "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
-                                                       {
-                                                           paddingLeft: '2px',
-                                                           paddingRight: '0'
-                                                       }
-                                               }}
+                                            />
+                                            <TextField
+                                                id="endTime"
+                                                label="End Time"
+                                                type="time"
+                                                value={getTime(course.endTime)}
+                                                sx={{
+                                                    width: '29%',
+                                                    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                                                        {
+                                                            paddingLeft: '2px',
+                                                            paddingRight: '0'
+                                                        }
+                                                }}
+                                                data-test="eventStartTime"
+                                                onChange={(e) => {
+                                                    handleTimeChange(course, e)
+                                                }}
+                                                margin="normal"
+                                                size="small"
+                                            />
 
-                                               data-test="eventStartTime"
-                                               onChange={(e) => {handleTimeChange(course,e)}}
-                                               margin="normal"
-                                           />
-                                       </Stack>
-                                   </div>}/>
-                    </div>
+                                        </Stack>
+                                        <Stack direction='row' spacing={1} alignItems='center'>
+
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <CalendarDatePicker
+                                                    data-test="eventStartDate"
+                                                    key={"startDate"}
+                                                    label="starting date"
+                                                    value={course.startDate}
+                                                    onChange={(e) =>{
+                                                        handleDateChange(course,e,'start')
+                                                    }}
+                                                />
+
+                                            </LocalizationProvider>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <CalendarDatePicker
+                                                    data-test="eventEndDate"
+                                                    key={"endDate"}
+                                                    label="Ending date"
+                                                    value={course.endDate}
+                                                    onChange={(e) =>{
+                                                        handleDateChange(course,e,'end')
+                                                    }}
+                                                />
+                                            </LocalizationProvider>
+                                        </Stack>
+                                    </div>}/>
+                </div>
             ))}
         </React.Fragment>
     )
@@ -285,18 +403,25 @@ export default function ScheduleEvent() {
                    spacing={3}
                    width='100%'
                    direction="column">
-                <PrimaryButton2 width={"96vw"} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
+                <PrimaryButton2  disable={!validateCourse} width={"96vw"} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
                 <PrimaryButton2 width={"96vw"} colour={'#912338'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
     )
     return (
         <React.Fragment>
-            <div style={{  width:'98vw', height:'50vh', overflowY:'auto', marginBottom:'10px', border:'1px solid black', marginTop:'10px'}}>
+            <div style={{
+                width: '98vw',
+                height: '50vh',
+                overflowY: 'auto',
+                marginBottom: '10px',
+                marginTop: '10px',
+                border:'1px solid black'
+            }}>
                 {coursesFound}
                 {addCourse}
             </div>
-            <div style={{color: 'red', height: '5vh'}}>{error}</div>
+            <div style={{border:'1px solid black', width:'98vw',color: 'red', height: '5vh', paddingLeft:'1%',}}>{error}</div>
             {buttons}
         </React.Fragment>
     )
