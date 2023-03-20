@@ -10,12 +10,14 @@ import BottomDrawer from "../StudyRoom/BottomDrawer";
 import FriendNotification from "../FriendList/FriendsNotification";
 import StudyRecap from "../ProgressReports/StudyRecap";
 import {filterEventsByDate, getEventList} from "../Calendar/CommonFunctions";
+import ExamNotification from "./examNotification";
 
 export default function NotificationMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [friendRequestCount, setFriendRequestCount] = React.useState(0);
     const [studyHourCount, setStudyHourCount] = React.useState(0);
+    const [examCount, setExamCount] = React.useState(1)
 
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${GetAuthentication().email}`)
@@ -56,6 +58,11 @@ export default function NotificationMenu() {
         document.getElementById('studyRecapDrawer').click();
     };
 
+    const handleExamNotificationClick = () => {
+        setAnchorEl(null);
+        document.getElementById('examNotificationDrawer').click();
+    };
+
     return (
         <div>
             <Button
@@ -65,7 +72,7 @@ export default function NotificationMenu() {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <Badge badgeContent={friendRequestCount + studyHourCount} showZero overlap="circular" sx={{
+                <Badge badgeContent={friendRequestCount + studyHourCount + examCount} showZero overlap="circular" sx={{
                     "& .MuiBadge-badge": {
                         color: "white",
                         backgroundColor: "#000000"
@@ -113,7 +120,19 @@ export default function NotificationMenu() {
                             }}/>
                         </div>
                     </MenuItem> : null}
-                {friendRequestCount <= 0 && studyHourCount <= 0 ?
+                {examCount > 0 ?
+                    <MenuItem onClick={handleExamNotificationClick}>
+                        <div style={{marginRight: '43px'}}>Exam Notification</div>
+                        <div>
+                            <Badge badgeContent={examCount} showZero overlap="circular" sx={{
+                                "& .MuiBadge-badge": {
+                                    color: "white",
+                                    backgroundColor: "#000000"
+                                }
+                            }}/>
+                        </div>
+                    </MenuItem> : null}
+                {friendRequestCount <= 0 && studyHourCount <= 0 && examCount <= 0 ?
                     <MenuItem style={{ backgroundColor: 'transparent' }} disableRipple={true}>
                         No notifications
                     </MenuItem>
@@ -125,6 +144,8 @@ export default function NotificationMenu() {
                                                    notificationCountSetter={setStudyHourCount}/>}/>
                 <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'friendRequestDrawer'}></div>} title={'Friend Requests'}
                               content={<FriendNotification/>}/>
+                <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'examNotificationDrawer'}></div>} title={'Exam Notification'}
+                              content={<ExamNotification/>}/>
             </div>
         </div>
     );

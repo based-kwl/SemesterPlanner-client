@@ -24,7 +24,7 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const categories = ['course', 'study', 'workout', 'appointment'];
+    const categories = ['course', 'study', 'workout', 'appointment', 'exam'];
 
     const user = GetAuthentication();
     //  Get all Events by student username
@@ -277,6 +277,8 @@ export default function CalendarView() {
             backgroundColor = "#DA3A16"
         } else if (eventType === categories[3]) {
             backgroundColor = "#DB0272"
+        } else if (eventType === categories[4]){
+            backgroundColor = "#912338"
         }
 
         let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.4)" }} />

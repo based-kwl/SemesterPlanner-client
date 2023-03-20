@@ -88,6 +88,8 @@ function renderSwitch(type){
             return '#DA3A16'
         case 'appointment':
             return '#DB0272'
+        case 'exam':
+            return '#912338'
         default:
             return 'black'
     }
@@ -213,4 +215,21 @@ export const ColorEventCard = ({  width, backgroundColor, content, height }) => 
         </Card>
     )
 }
+export const TimeCard = ({content,width}) => {
+    return (
+        <Card style={{
+            width:width,
+            backgroundColor:'#F0F0F0',
+            marginBottom: '10px',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            height: 'fit-content',
+            borderRadius:'5px'
 
+
+        }} variant='outlined'>
+            {content}
+        </Card>
+    );
+}

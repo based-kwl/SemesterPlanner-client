@@ -145,6 +145,8 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                 Select the event category: {eventState.type}
             </Typography>
             <Stack direction="row" spacing={1} justifyContent="center">
+                <PrimaryButton2 minWidth={'25vw'} colour={'#912338'} content="Exam" value="exam"
+                                onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
