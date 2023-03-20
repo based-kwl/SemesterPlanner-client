@@ -55,7 +55,6 @@ export default function CreateEvent(props) {
     }
 
     function handleEvent() {
-        // TODO:  validate user inputs if have time
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then((res) => {
                 document.elementFromPoint(0, 0).click();
