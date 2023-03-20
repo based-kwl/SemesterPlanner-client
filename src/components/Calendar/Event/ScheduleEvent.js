@@ -18,12 +18,14 @@ import {CalendarDatePicker} from "../Custom/CommonInputEventForm";
 export default function ScheduleEvent() {
     const username = GetAuthentication().username;
     const [error, setError] = React.useState('')
-    const [validateCourse, setValidateCourse] = React.useState(true)
+    const [validate, setValidate] = React.useState(true)
     const [schedule, setSchedule] = React.useState([{
         subject: 'ex:SOEN',
         catalog: 'ex:385',
         day1: 1,
         day2: 8,
+        validateDay:0,
+        validateCourse:1,
         startTime: new Date(),
         endTime: new Date(),
         startDate: new Date(),
@@ -44,22 +46,10 @@ export default function ScheduleEvent() {
     function handleEvent() {
         let day1 = ''
         let day2 = ''
-        schedule.forEach((course) => {
-            axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
-                .then((res) => {
-                    if (res.data == null) {
-                        let error = 'Invalid course: ' + course.subject + ' ' + course.catalog
-                        setError(error)
-                    }else{
-                        let error = ''
-                        setError(error)
-                    }
-                })
-        })
-        // console.log(error)
 
-       if(error === ''){
-           schedule.forEach((course, index) => {
+        const valid = validateCourse()
+       if(valid){
+           schedule.forEach((course) => {
                axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
                    .then((res) => {
                        if (res.data !== null) {
@@ -96,13 +86,6 @@ export default function ScheduleEvent() {
                                            })
                                    }
                                })
-
-                           console.log(index)
-                           handleDelete(index) //to remove the classes that were added
-                       }
-                       else{
-                           const error = 'Invalid course: ' + course.subject + ' ' + course.catalog
-                           setError(error)
                        }
 
                    })
@@ -124,17 +107,33 @@ export default function ScheduleEvent() {
         } else {
             course.day2 = e.target.value
         }
-
         setSchedule(newSchedule)
-        setError('')
         if(course.day1 >= course.day2){
-            const error = 'Invalid day format'
-            setError(error)
-            setValidateCourse(false)
+            course.validateDay = 1
         }else{
-            setValidateCourse(true)
+            course.validateDay = 0
+        }
+        console.log(schedule)
+
+       const valid = validateDay()
+        setValidate(valid)
+        if(valid){
+            setError('')
         }
     }
+
+    function validateDay(){
+        let count =0
+        for(let i=0;i<schedule.length;i++){
+            if(schedule[i].validateDay !==0){
+                    const error = 'Invalid day format for course '+ (i+1)
+                    setError(error)
+                count +=1
+            }
+        }
+        return count <= 0;
+    }
+
 
     function handleDateChange(course,e, field) {
         const newSchedule = [...schedule]
@@ -168,10 +167,12 @@ export default function ScheduleEvent() {
 
     function handleAdd() {
         const addCourse = {
-            subject: '',
-            catalog: '',
+            subject: 'ex SOEN',
+            catalog: 'ex 385',
             day1: 1,
             day2: 8,
+            validateDay:0,
+            validateCourse:1,
             startTime: new Date(),
             endTime: new Date(),
             startDate: new Date(),
@@ -185,12 +186,41 @@ export default function ScheduleEvent() {
     function handleCourse(e, course) {
         const newSchedule = [...schedule]
         if (e.target.id === 'subject') {
-            course.subject = e.target.value
+            course.subject = e.target.value.toUpperCase()
         } else {
             course.catalog = e.target.value
         }
         setSchedule(newSchedule)
+        console.log('text', course.subject, course.catalog)
+        if(course.subject && course.catalog !== ''){
+            axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
+                .then((res) => {
+                    if(res.data===null){
+                        console.log('bad', res.data)
+                        course.validateCourse = 1
+                    }else if(res.data.subject === course.subject && res.data.catalog === course.catalog){
+                        console.log('good',res.data)
+                        course.validateCourse =0
+                        setError('')
+                    }
+                })
+            setSchedule(newSchedule)
+            console.log('in course',schedule)
+        }
+    }
 
+    function validateCourse(){
+        console.log(schedule)
+        let count =0
+        for(let i=0;i<schedule.length;i++){
+            if(schedule[i].validateCourse !==0){
+                const error = 'Invalid format for course '+ (i+1)
+                setError(error)
+                count +=1
+            }
+        }
+        console.log(count)
+        return count <= 0;
     }
 
     const SelectDay = (course, onChange, name) => {
@@ -204,14 +234,6 @@ export default function ScheduleEvent() {
                 select
                 onChange={(e) => onChange(course, e)}
                 value={name === 'day1' ? course.day1 : course.day2}
-                // sx={{
-                //     width: '15vw', color: 'black',
-                //     "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-                //         {
-                //             paddingLeft: '3px',
-                //             paddingRight: '0',
-                //         },
-                // }}
             >
                 <MenuItem value={1}>
                     Mo
@@ -400,10 +422,10 @@ export default function ScheduleEvent() {
         <React.Fragment>
             <Stack justifyContent="center"
                    alignItems="center"
-                   spacing={3}
+                   spacing={1}
                    width='100%'
                    direction="column">
-                <PrimaryButton2  disable={!validateCourse} width={"96vw"} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
+                <PrimaryButton2  disable={!validate} width={"96vw"} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
                 <PrimaryButton2 width={"96vw"} colour={'#912338'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
