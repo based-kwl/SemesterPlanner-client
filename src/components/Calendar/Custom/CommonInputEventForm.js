@@ -12,24 +12,6 @@ import {getTime} from "../CommonFunctions";
 import {PrimaryButton2} from "../../CustomMUIComponents/CustomButtons";
 
 
-export const CalendarTextField = ({width, inputProps, id, value, label, variant, onChange, data_test}) => {
-    return (
-        <TextField
-            data-test={data_test}
-            fullWidth
-            id={id}
-            value={value || ''}
-            // required
-            label={label}
-            variant={variant}
-            onChange={onChange}
-            inputProps={inputProps}
-            width={width}
-            margin="normal"
-        />
-    )
-}
-
 export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) => {
     return (
         <MobileDatePicker
@@ -256,24 +238,6 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
     return (eventForm);
 }
 
-export const CalendarButton = ({content, disable, onClick, backgroundColor}) => {
-    return (
-        <div style={{paddingTop: '20px'}}>
-            <Button
-                disabled={disable}
-                onClick={onClick}
-                variant="contained"
-                style={{
-                    paddingTop: '10px', paddingBottom: '10px',
-                    width: '100%', backgroundColor: backgroundColor
-                }}>
-                {content}
-            </Button>
-        </div>
-
-    );
-}
-
 export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
     const [isRecurrent, setIsRecurrent] = React.useState(recurrenceState.recurrence !== 'once');
 
@@ -292,7 +256,6 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
     }
 
     const recurrenceOption = (
-
         <FormControl>
             <RadioGroup row onChange={handleRecurrenceChange}>
                 <FormControlLabel checked={(recurrenceState.recurrence === 'once' || recurrenceState.recurrence === 'daily')} value="daily" control={<Radio data-test="everyDay"/>}

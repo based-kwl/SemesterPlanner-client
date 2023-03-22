@@ -17,6 +17,7 @@ import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
@@ -113,7 +114,7 @@ export default function CalendarView() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{width:'92vw', display:'flex', justifyContent:"space-between"}}>
                 <BottomDrawer icon={<PrimaryButton2 data_test={"uploadPhotoEventButtonCalenderPage"} style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
-                <BottomDrawer icon={<PrimaryButton2 data_test={"addEventButtonCalendarPage"} style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} data_test={"addEventButtonCalendarPage"} colour={'#912338'} content={<AddIcon style={{color:'white'}}/>}/>}
                 title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} date={date}/>}/>
                 </div>
 
