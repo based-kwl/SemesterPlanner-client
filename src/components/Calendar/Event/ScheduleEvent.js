@@ -13,6 +13,7 @@ import GetAuthentication from "../../Authentication/Authentification";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {CalendarDatePicker} from "../Custom/CommonInputEventForm";
+import {delay} from "../../CommonHelperFunctions/CommonHelperFunctions";
 
 
 export default function ScheduleEvent() {
@@ -24,8 +25,8 @@ export default function ScheduleEvent() {
         catalog: 'ex:385',
         day1: 1,
         day2: 8,
-        validateDay:0,
-        validateCourse:1,
+        validateDay: 0,
+        validateCourse: 1,
         startTime: new Date(),
         endTime: new Date(),
         startDate: new Date(),
@@ -48,50 +49,74 @@ export default function ScheduleEvent() {
         let day2 = ''
 
         const valid = validateCourse()
-       if(valid){
-           schedule.forEach((course) => {
-               axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
-                   .then((res) => {
-                       if (res.data !== null) {
-                           if (course.day1 < 8 && course.day2 === 8) {
-                               day1 = newStartDay(course.day1, course.startDate)
-                               day2 = null
-                           } else {
-                               day1 = newStartDay(course.day1, course.startDate)
-                               day2 = newStartDay(course.day2, course.startDate)
-                           }
-                           const eventDay = {
-                               username: username,
-                               eventHeader: res.data.subject + ' ' + res.data.catalog,
-                               description: res.data.title,
-                               recurrence: 'weekly',
-                               link: '',
-                               type: 'course',
-                               subject: res.data.subject,
-                               catalog: res.data.catalog,
-                               startTime: course.startTime.toISOString(),
-                               endTime: course.endTime.toISOString(),
-                               actualStartTime: new Date().toISOString(),
-                               actualEndTime: new Date().toISOString(),
-                               startDate: day1.toISOString(), // needs to be calculated
-                               endDate: course.endDate.toISOString()
-                           }
-                           axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
-                               .then((res) => {
-                                   console.log(res.data)
-                                   if (day2 != null) {
-                                       eventDay.startDate = day2.toISOString()
-                                       axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
-                                           .then(() => {
-                                           })
-                                   }
-                               })
-                       }
+        if (valid) {
+            schedule.forEach((course) => {
+                console.log(course)
+                axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
+                    .then((res) => {
+                        if (res.data !== null) {
+                            if (course.day1 < 8 && course.day2 === 8) {
+                                day1 = newStartDay(course.day1, course.startDate)
+                                day2 = null
+                            } else {
+                                day1 = newStartDay(course.day1, course.startDate)
+                                day2 = newStartDay(course.day2, course.startDate)
 
-                   })
-           })
+                            }
+                            const eventDay = {
+                                username: username,
+                                eventHeader: res.data.subject + ' ' + res.data.catalog,
+                                description: res.data.title,
+                                recurrence: 'weekly',
+                                link: '',
+                                type: 'course',
+                                subject: res.data.subject,
+                                catalog: res.data.catalog,
+                                startTime: course.startTime.toISOString(),
+                                endTime: course.endTime.toISOString(),
+                                actualStartTime: new Date().toISOString(),
+                                actualEndTime: new Date().toISOString(),
+                                startDate: day1.toISOString(), // needs to be calculated
+                                endDate: course.endDate.toISOString()
+                            }
 
-       }
+                            axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
+                                .then(() => {
+                                }).catch((err) => console.log(err))
+
+                            if (day2 !== null) {
+                                const eventDay2 = {
+                                    username: username,
+                                    eventHeader: res.data.subject + ' ' + res.data.catalog,
+                                    description: res.data.title,
+                                    recurrence: 'weekly',
+                                    link: '',
+                                    type: 'course',
+                                    subject: res.data.subject,
+                                    catalog: res.data.catalog,
+                                    startTime: course.startTime.toISOString(),
+                                    endTime: course.endTime.toISOString(),
+                                    actualStartTime: new Date().toISOString(),
+                                    actualEndTime: new Date().toISOString(),
+                                    startDate: day2.toISOString(), // needs to be calculated
+                                    endDate: course.endDate.toISOString()
+                                }
+                                axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay2)
+                                    .then(() => {
+                                    }).catch((err) => {
+                                    console.log(err)
+                                })
+                            }
+                        }
+
+                    })
+            })
+            delay(500).then(()=>{
+                window.location.reload()
+            })
+
+
+        }
 
     }
 
@@ -108,39 +133,38 @@ export default function ScheduleEvent() {
             course.day2 = e.target.value
         }
         setSchedule(newSchedule)
-        if(course.day1 >= course.day2){
+        if (course.day1 >= course.day2) {
             course.validateDay = 1
-        }else{
+        } else {
             course.validateDay = 0
         }
         console.log(schedule)
 
-       const valid = validateDay()
+        const valid = validateDay()
         setValidate(valid)
-        if(valid){
+        if (valid) {
             setError('')
         }
     }
 
-    function validateDay(){
-        let count =0
-        for(let i=0;i<schedule.length;i++){
-            if(schedule[i].validateDay !==0){
-                    const error = 'Invalid day format for course '+ (i+1)
-                    setError(error)
-                count +=1
+    function validateDay() {
+        let count = 0
+        for (let i = 0; i < schedule.length; i++) {
+            if (schedule[i].validateDay !== 0) {
+                const error = 'Invalid day format for course ' + (i + 1)
+                setError(error)
+                count += 1
             }
         }
         return count <= 0;
     }
 
 
-    function handleDateChange(course,e, field) {
+    function handleDateChange(course, e, field) {
         const newSchedule = [...schedule]
-        if (field === 'start'){
+        if (field === 'start') {
             course.startDate = e.$d
-        }
-        else{
+        } else {
             course.endDate = e.$d
         }
         setSchedule(newSchedule)
@@ -171,8 +195,8 @@ export default function ScheduleEvent() {
             catalog: 'ex 385',
             day1: 1,
             day2: 8,
-            validateDay:0,
-            validateCourse:1,
+            validateDay: 0,
+            validateCourse: 1,
             startTime: new Date(),
             endTime: new Date(),
             startDate: new Date(),
@@ -192,34 +216,33 @@ export default function ScheduleEvent() {
         }
         setSchedule(newSchedule)
         console.log('text', course.subject, course.catalog)
-        if(course.subject && course.catalog !== ''){
+        if (course.subject && course.catalog !== '') {
             axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
                 .then((res) => {
-                    if(res.data===null){
+                    if (res.data === null) {
                         console.log('bad', res.data)
                         course.validateCourse = 1
-                    }else if(res.data.subject === course.subject && res.data.catalog === course.catalog){
-                        console.log('good',res.data)
-                        course.validateCourse =0
+                    } else if (res.data.subject === course.subject && res.data.catalog === course.catalog) {
+                        console.log('good', res.data)
+                        course.validateCourse = 0
                         setError('')
                     }
                 })
             setSchedule(newSchedule)
-            console.log('in course',schedule)
+            console.log('in course', schedule)
         }
     }
 
-    function validateCourse(){
+    function validateCourse() {
         console.log(schedule)
-        let count =0
-        for(let i=0;i<schedule.length;i++){
-            if(schedule[i].validateCourse !==0){
-                const error = 'Invalid format for course '+ (i+1)
+        let count = 0
+        for (let i = 0; i < schedule.length; i++) {
+            if (schedule[i].validateCourse !== 0) {
+                const error = 'Invalid format for course ' + (i + 1)
                 setError(error)
-                count +=1
+                count += 1
             }
         }
-        console.log(count)
         return count <= 0;
     }
 
@@ -265,7 +288,7 @@ export default function ScheduleEvent() {
 
     const addCourse = (
         <React.Fragment>
-            <div style={{ margin: '1%'}}>
+            <div style={{margin: '1%'}}>
                 <Stack direction='row' justifyContent="flex-end">
                     <Button
                         style={{backgroundColor: '#0072A8', color: 'white'}}
@@ -293,50 +316,51 @@ export default function ScheduleEvent() {
                     <CourseCard width={'100%'} height={'fit-content'}
                                 content={
                                     <div style={{width: '100%', textAlign: 'center'}}>
-                                        <Stack direction='row' justifyContent='space-between' alignItems='center' marginBottom='10px'>
-                                            <div style={{ width:'100%'}}>
-                                                <Stack direction='row' spacing={1}  alignItems='center'>
-                                            <TextField required
-                                                       data_test="courseSubject"
-                                                       id="subject"
-                                                       label="course code"
-                                                       value={course.subject}
-                                                       size="small"
-                                                       margin="none"
-                                                       onChange={(e) => {
-                                                           handleCourse(e, course)
-                                                       }}
-                                            />
-                                            <TextField required
-                                                       data_test="courseCatalog"
-                                                       id="catalog"
-                                                       label="course number"
-                                                       value={course.catalog}
-                                                       size="small"
-                                                       margin="none"
-                                                       onChange={(e) => {
-                                                           handleCourse(e, course)
-                                                       }}
-                                            />
+                                        <Stack direction='row' justifyContent='space-between' alignItems='center'
+                                               marginBottom='10px'>
+                                            <div style={{width: '100%'}}>
+                                                <Stack direction='row' spacing={1} alignItems='center'>
+                                                    <TextField required
+                                                               data_test="courseSubject"
+                                                               id="subject"
+                                                               label="course code"
+                                                               value={course.subject}
+                                                               size="small"
+                                                               margin="none"
+                                                               onChange={(e) => {
+                                                                   handleCourse(e, course)
+                                                               }}
+                                                    />
+                                                    <TextField required
+                                                               data_test="courseCatalog"
+                                                               id="catalog"
+                                                               label="course number"
+                                                               value={course.catalog}
+                                                               size="small"
+                                                               margin="none"
+                                                               onChange={(e) => {
+                                                                   handleCourse(e, course)
+                                                               }}
+                                                    />
                                                 </Stack>
                                             </div>
-<div style={{justifyContent:'flex-end'}}>
-                                            <Button
-                                                sx={{marginRight: '0px', justifyContent:'flex-end'}}
-                                                data-test={`delete-courseSchedule-${course}`}
-                                                variant="text"
-                                                onClick={() => handleDelete(index)}>
-                                                <ClearIcon style={{color: '#912338'}}
-                                                           sx={{
-                                                               "& css-17nqgcs-MuiButtonBase-root-MuiButton-root":
-                                                                   {
-                                                                       padding: '0',
-                                                                       justifyContent: 'end'
-                                                                   },
-                                                           }}
-                                                />
-                                            </Button>
-</div>
+                                            <div style={{justifyContent: 'flex-end'}}>
+                                                <Button
+                                                    sx={{marginRight: '0px', justifyContent: 'flex-end'}}
+                                                    data-test={`delete-courseSchedule-${course}`}
+                                                    variant="text"
+                                                    onClick={() => handleDelete(index)}>
+                                                    <ClearIcon style={{color: '#912338'}}
+                                                               sx={{
+                                                                   "& css-17nqgcs-MuiButtonBase-root-MuiButton-root":
+                                                                       {
+                                                                           padding: '0',
+                                                                           justifyContent: 'end'
+                                                                       },
+                                                               }}
+                                                    />
+                                                </Button>
+                                            </div>
                                         </Stack>
 
                                         <Stack direction='row' spacing={1} marginTop={1} marginBottom='10px'
@@ -394,8 +418,8 @@ export default function ScheduleEvent() {
                                                     key={"startDate"}
                                                     label="starting date"
                                                     value={course.startDate}
-                                                    onChange={(e) =>{
-                                                        handleDateChange(course,e,'start')
+                                                    onChange={(e) => {
+                                                        handleDateChange(course, e, 'start')
                                                     }}
                                                 />
 
@@ -406,8 +430,8 @@ export default function ScheduleEvent() {
                                                     key={"endDate"}
                                                     label="Ending date"
                                                     value={course.endDate}
-                                                    onChange={(e) =>{
-                                                        handleDateChange(course,e,'end')
+                                                    onChange={(e) => {
+                                                        handleDateChange(course, e, 'end')
                                                     }}
                                                 />
                                             </LocalizationProvider>
@@ -425,7 +449,8 @@ export default function ScheduleEvent() {
                    spacing={1}
                    width='100%'
                    direction="column">
-                <PrimaryButton2  disable={!validate} width={"96vw"} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
+                <PrimaryButton2 disable={!validate} width={"96vw"} colour={'#057D78'} content="Add to calendar"
+                                onClick={handleEvent}/>
                 <PrimaryButton2 width={"96vw"} colour={'#912338'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
@@ -438,12 +463,16 @@ export default function ScheduleEvent() {
                 overflowY: 'auto',
                 marginBottom: '10px',
                 marginTop: '10px',
-                border:'1px solid black'
             }}>
                 {coursesFound}
                 {addCourse}
             </div>
-            <div style={{border:'1px solid black', width:'98vw',color: 'red', height: '5vh', paddingLeft:'1%',}}>{error}</div>
+            <div style={{
+                width: '98vw',
+                color: 'red',
+                height: '5vh',
+                paddingLeft: '1%',
+            }}>{error}</div>
             {buttons}
         </React.Fragment>
     )
