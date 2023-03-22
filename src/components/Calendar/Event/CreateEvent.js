@@ -27,9 +27,11 @@ export default function CreateEvent(props) {
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
+
     const recurrenceSelection = () => {
         return RecurrenceSelection(eventData, setEventData);
     };
+
 
     React.useEffect(()=>{
         handleCourseList()
@@ -77,7 +79,7 @@ export default function CreateEvent(props) {
                    spacing={3}
                    width='100%'
                    direction="row">
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
+                <PrimaryButton2 data_test={"addButton"} width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
