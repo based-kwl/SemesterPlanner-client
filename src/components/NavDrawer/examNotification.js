@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Stack} from "@mui/material";
+import {InputAdornment, Stack} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -7,25 +7,100 @@ import MenuItem from "@mui/material/MenuItem";
 import {TimeCard} from "../CustomMUIComponents/CustomCards";
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
-export default function ExamNotification(){
-    function handleCancel(){}
+import {getTime} from "../Calendar/CommonFunctions";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import GetAuthentication from "../Authentication/Authentification";
+import axios from "axios";
+
+export default function ExamNotification(props){
+    const [timeSlot, setTimeSlot] = React.useState(60)
+    const [exams, setExams] = React.useState({
+        subject:props.subject,
+        catalog:props.catalog,
+        startTime: new Date(),
+        startDate: new Date(),
+        endDate: new Date()
+    })
+    const [availability, setAvailability] = React.useState({
+        startTime: new Date(),
+        endTime: new Date()
+    })
+
+
+    React.useEffect(()=>{
+        initTimes()
+    },[])
+
+    function initTimes(){
+        availability.startTime.setHours(9,0,0,0)
+        availability.endTime.setHours(18,0,0,0)
+    }
+    function handleCancel(){
+        document.elementFromPoint(0, 0).click();
+    }
     function handleDismiss(){}
-    function handleEvent(){}
-    function handleTimeChange(){}
-    function handleMenu(){}
-    function handleAddStudyTimeSlots(){}
+    function handleEvent() {
+        exams.forEach((exam) => {
+            const eventDay = {
+                username:GetAuthentication().username,
+                eventHeader: exam.subject + ' ' + exam.data.catalog,
+                description:'study for exam',
+                recurrence: 'once',
+                link: '',
+                type: 'exam',
+                subject: exam.subject,
+                catalog:exam.catalog,
+                startTime: exam.startTime.toISOString(),
+                endTime: exam.endTime.toISOString(),
+                actualStartTime: new Date().toISOString(),
+                actualEndTime: new Date().toISOString(),
+                startDate: exam.toISOString(), // needs to be calculated
+                endDate: exam.endDate.toISOString()
+            }
+            axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
+                .then((res) => {
+                    console.log(res.data)
+                })
+        })
+    }
+    function handleTimeChange(e){
+        console.log(e.target.id)
+        const newDate = new Date()
+        newDate.setHours(e.target.value.split(':')[0])
+        newDate.setMinutes(e.target.value.split(':')[1])
+
+        console.log(newDate)
+        if (e.target.id === 'startTime') {
+            setAvailability({...availability, startTime: newDate})
+        } else {
+            setAvailability({...availability, endTime: newDate})
+        }
+    }
+    function handleMenu(e){
+        setTimeSlot(e.target.value)
+        console.log(timeSlot)
+    }
+    function handleAddStudyTimeSlots(){
+
+    }
 
     const startTime = (
         <TextField
             id="startTime"
             type="time"
-            value='9'
+            value={getTime(availability.startTime)}
+            data-test="eventStartTime"
+            onChange={handleTimeChange}
             InputLabelProps={{
                 shrink: true,
             }}
-            data-test="eventStartTime"
-            onChange={handleTimeChange}
-            sx={{width: '100px'}}
+            sx={{
+            "& css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                {
+                    padding:'0',
+                }
+
+            }}
             margin="none"
         />
     )
@@ -33,92 +108,114 @@ export default function ExamNotification(){
         <TextField
             id="endTime"
             type="time"
-            value='9'
+            value={getTime(availability.endTime)}
+            data-test="eventendTime"
             InputLabelProps={{
                 shrink: true,
             }}
-            data-test="eventendTime"
             onChange={handleTimeChange}
-            sx={{width: '100px'}}
+            sx={{
+                "& css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
+                    {
+                        padding:'0',
+                    }
+
+            }}
             margin="none"
         />
     )
     const slotMenu = (
         <TextField
             name='slot'
-            id='day'
-            label="slot"
+            id='slot'
             size="small"
             margin="none"
             select
             onChange={handleMenu}
-            value={1}
+            value={timeSlot}
         >
-            <MenuItem value={1}>
+            <MenuItem value={60}>
                 60 min
             </MenuItem>
-            <MenuItem value={2}>
+            <MenuItem value={45}>
                 45 min
             </MenuItem>
-            <MenuItem value={3}>
+            <MenuItem value={30}>
                 30 min
             </MenuItem>
         </TextField>
     )
     const examName = (
         <div align='center' style={{marginBottom:'5px'}}>
-        <Typography variant="h5"> SOEN 345 EXAM ON MARCH 1</Typography>
+        <Typography variant="h5">  EXAM ON MARCH 1</Typography>
         </div>
     )
 
     const showAvailability = (
         <React.Fragment>
-            <Typography> show availability from {startTime} to {endTime}</Typography>
-            <Typography> display slots of {slotMenu} </Typography>
+            <div style={{width:'97vw', marginBottom:'5px', paddingLeft:'7px'}}>
+            <Typography> show availability from <p style={{alignItems:'center'}}>{startTime} to {endTime}</p></Typography>
+                <Typography> display slots of {slotMenu} </Typography>
+            </div>
+
         </React.Fragment>
     )
 
     const timeDisplay = (
-        <TimeCard width={'100%'} height={'fit-content'}
+        <TimeCard width={'100%'}
                        content={<>
-                           <Stack direction="row" spacing={1}>
-                               <p>TUE FEB 21</p>
+                           <Stack direction="row" alignItems='center' justifyContent='space-around' spacing={1}>
+                               <Typography variant="subtitle1">TUE FEB 21</Typography>
                                <TextField
-                                   id="endTime"
-                                   type="time"
-                                   value='9'
-                                   InputLabelProps={{
-                                       shrink: true,
+                                   id="courseStart"
+                                   type="text"
+                                   value='00:00'
+                                   size='small'
+                                   disabled
+                                   InputProps={{
+                                       endAdornment:(<InputAdornment position='end'>
+                                           <AccessTimeIcon/>
+                                           </InputAdornment>
+                                           ),
+                                   }}
+                                   sx={{
+                                       width:'25vw',
+                                       "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root":
+                                           {
+                                               paddingRight:'7px',
+                                           }
                                    }}
                                    data-test="eventendTime"
-                                   onChange={handleTimeChange}
-                                   sx={{width: '100px'}}
                                    margin="none"
                                />
                                <TextField
-                                   id="endTime"
-                                   type="time"
-                                   value='9'
-                                   InputLabelProps={{
-                                       shrink: true,
+                                   id="courseStart"
+                                   type="text"
+                                   value='00:00'
+                                   size='small'
+                                   disabled
+                                   InputProps={{
+                                       endAdornment:(<InputAdornment position='end'>
+                                               <AccessTimeIcon/>
+                                           </InputAdornment>
+                                       ),
+                                   }}
+                                   sx={{
+                                       width:'25vw',
+                                       "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root":
+                                           {
+                                               paddingRight:'7px',
+                                           }
                                    }}
                                    data-test="eventendTime"
-                                   onChange={handleTimeChange}
-                                   sx={{width: '100px'}}
                                    margin="none"
                                />
                                <Button
                                    data-test={`accept-request-`}
                                    variant="text"
                                    onClick={() => handleAddStudyTimeSlots()}><AddIcon
-                                   style={{color: '#057D78'}}/>
+                                   style={{color: '#057D78', margin:'0px'}}/>
                                </Button>
-                               {/*<Button*/}
-                               {/*    data-test={`decline-request-`}*/}
-                               {/*    variant="text"*/}
-                               {/*    onClick={() => handleAddStudyTimeSlots()}><ClearIcon*/}
-                               {/*    style={{color: '#912338'}}/>*/}
-                               {/*</Button>*/}
                            </Stack>
                        </>}>
         </TimeCard>
@@ -127,7 +224,7 @@ export default function ExamNotification(){
         <React.Fragment>
             <Stack justifyContent="center"
                    alignItems="center"
-                   spacing={2}
+                   spacing={1}
                    width='100%'
                    >
                 <PrimaryButton2 width={'97vw'} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
@@ -144,7 +241,7 @@ export default function ExamNotification(){
                 paddingTop: '10px',
                 marginBottom:'10px',
                 width: '97vw',
-                height: '40vh'}}>
+                height: '35vh'}}>
                 {timeDisplay}
                 {timeDisplay}
                 {timeDisplay}

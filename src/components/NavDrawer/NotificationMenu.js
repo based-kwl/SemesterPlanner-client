@@ -18,6 +18,22 @@ export default function NotificationMenu() {
     const [friendRequestCount, setFriendRequestCount] = React.useState(0);
     const [studyHourCount, setStudyHourCount] = React.useState(0);
     const [examCount, setExamCount] = React.useState(1)
+    const examEvent = [{
+        subject: 'SOEN',
+        catalog: '385',
+        startTime: new Date(),
+        startDate: new Date(),
+        endDate: new Date(),
+    },{
+        subject:'SOEN',
+        catalog:'422',
+        startTime: new Date(),
+        startDate: new Date(),
+        endDate: new Date(),
+    }]
+    // setExamCount(examEvent.length)
+    console.log(examCount)
+    console.log(examEvent)
 
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${GetAuthentication().email}`)
@@ -30,6 +46,9 @@ export default function NotificationMenu() {
 
         getEventList(GetAuthentication().username).then((res) => {
             let studyEventList = filterEventsByDate(res, new Date()).filter(item => item.type === 'study' && !item.studyHoursConfirmed);
+            // let examEventList = filterEventsByDate(res, new Date()+8).filter(item => item.type === 'exam')
+            // setExamCount(examEventList.length)
+            // setExamEvent(examEvent)
 
             if (studyEventList.length > 0) {
                 const currentTime = new Date();
@@ -121,8 +140,9 @@ export default function NotificationMenu() {
                         </div>
                     </MenuItem> : null}
                 {examCount > 0 ?
-                    <MenuItem onClick={handleExamNotificationClick}>
-                        <div style={{marginRight: '43px'}}>Exam Notification</div>
+                   <> {examEvent.map((exam,index)=>(
+                    <MenuItem  value={index} onClick={handleExamNotificationClick}>
+                        <div style={{marginRight: '43px'}}>Exam Notification {' '+ exam.subject+' '}{exam.catalog}</div>
                         <div>
                             <Badge badgeContent={examCount} showZero overlap="circular" sx={{
                                 "& .MuiBadge-badge": {
@@ -131,7 +151,7 @@ export default function NotificationMenu() {
                                 }
                             }}/>
                         </div>
-                    </MenuItem> : null}
+                    </MenuItem> ))}</> : null}
                 {friendRequestCount <= 0 && studyHourCount <= 0 && examCount <= 0 ?
                     <MenuItem style={{ backgroundColor: 'transparent' }} disableRipple={true}>
                         No notifications

@@ -219,15 +219,15 @@ export const TimeCard = ({content,width}) => {
     return (
         <Card style={{
             width:width,
+            paddingTop:'5px',
+            paddingBottom:'5px',
             backgroundColor:'#F0F0F0',
-            marginBottom: '10px',
-            alignItems: 'center',
+            marginBottom: '15px',
             display: 'flex',
-            justifyContent: 'space-between',
             height: 'fit-content',
-            borderRadius:'5px'
-
-
+            borderRadius:'5px',
+            alignItems:'center',
+            justifyContent:'center'
         }} variant='outlined'>
             {content}
         </Card>
