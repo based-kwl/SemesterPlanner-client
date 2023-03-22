@@ -173,13 +173,13 @@ export default function EditProfile() {
 
     const InfoEdit = (
         
-        <StudyRoomChatCard width='92vw' height='85vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-        bottomLeftRadius='0px' bottomRightRadius='0px'content={SignUpForm}/>
+        <StudyRoomChatCard width='92vw' height='auto' marginTop='2px' 
+       content={SignUpForm}/>
     )
 
     const TitleCard = (
         <StudyRoomChatCard width='92vw' height='8vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
-        bottomLeftRadius='0px' bottomRightRadius='0px'
+        
         content={<div style={{fontSize: '22px', fontWeight: 'bold'}}><Typography variant="1">Edit Profile
             </Typography></div>}/>
     )
@@ -187,7 +187,7 @@ export default function EditProfile() {
         <React.Fragment>
             <PersistentDrawerLeft/>
             <div >
-                <BackgroundCard  width='96vw' height='auto' content={[TitleCard,InfoEdit]}/>
+                <BackgroundCard  width='95vw' height='auto' content={[TitleCard,InfoEdit]}/>
             </div>
         </React.Fragment>
     );
