@@ -26,7 +26,6 @@ export default function ImageUpload(props) {
                     })
                 })
                 .catch(err => {
-                    console.log('Error:', err)
                 });
         } else {
             setErrorMessage("No image selected!");
