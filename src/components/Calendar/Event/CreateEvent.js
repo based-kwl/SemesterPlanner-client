@@ -42,7 +42,9 @@ export default function CreateEvent(props) {
         return RecurrenceSelection(eventData, setEventData);
     };
 
-
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
 
     function handleCourseList(){
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -85,7 +87,7 @@ export default function CreateEvent(props) {
                    spacing={3}
                    width='100%'
                    direction="row">
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
+                <PrimaryButton2 data_test={"addButton"} width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
