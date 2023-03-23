@@ -1,18 +1,16 @@
 import axios from "axios";
 import GetAuthentication from "../Authentication/Authentification";
-import {expandEventList, getTimeDifference} from "../Calendar/CommonFunctions";
+import {getTimeDifference} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {
     const username = GetAuthentication().username
 
     await axios.get(`${process.env.REACT_APP_BASE_URL}events/${api_link}/${username}`)
         .then(async (response) => {
-            const arr = expandEventList(response.data)
-
             if (api_link === 'events-monthly' || api_link === 'events-weekly') {
-                setCourses(generateEventData(arr))
+                setCourses(generateEventData(response.data))
             } else {
-                setCourses(await generateStudyData(arr, api_link))
+                setCourses(await generateStudyData(response.data, api_link))
             }
         })
 }
