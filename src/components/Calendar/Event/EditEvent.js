@@ -87,7 +87,7 @@ export default function EditEvent(props) {
                     width: '97vw',
                     height: '65vh'
                 }}>
-                    <Typography>{eventData.type ==='study'?"Editing event for "+studyCourse : " "}</Typography>
+                    <Typography>{eventData.type ==='study'|| eventData.type ==='exam'?"Editing event for "+studyCourse : " "}</Typography>
 
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
 

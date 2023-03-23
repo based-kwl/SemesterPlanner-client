@@ -14,26 +14,27 @@ import axios from "axios";
 
 export default function ExamNotification(props){
     const [timeSlot, setTimeSlot] = React.useState(60)
-    const [exams, setExams] = React.useState({
-        subject:props.subject,
-        catalog:props.catalog,
-        startTime: new Date(),
-        startDate: new Date(),
-        endDate: new Date()
-    })
+    const [exams, setExams] = React.useState(props.examData)
     const [availability, setAvailability] = React.useState({
         startTime: new Date(),
         endTime: new Date()
     })
 
+    console.log('exm',exams)
 
     React.useEffect(()=>{
         initTimes()
     },[])
 
     function initTimes(){
-        availability.startTime.setHours(9,0,0,0)
-        availability.endTime.setHours(18,0,0,0)
+        const newInitTime =
+            {
+                startTime: new Date(),
+                endTime: new Date()
+            }
+        newInitTime.startTime.setHours(9,0,0,0)
+        newInitTime.endTime.setHours(18,0,0,0)
+        setAvailability(newInitTime)
     }
     function handleCancel(){
         document.elementFromPoint(0, 0).click();

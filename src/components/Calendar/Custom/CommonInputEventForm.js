@@ -58,7 +58,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
             setIsVisible(true);
             setIsVisibleStudy(false)
             eventStateSetter({...eventState, type: e.target.value});
-        }else if(type === 'study'){
+        }else if(type === 'study' || type === 'exam' ) {
             eventStateSetter({...eventState, type: e.target.value});
             setIsVisible(false);
             setIsVisibleStudy(true);

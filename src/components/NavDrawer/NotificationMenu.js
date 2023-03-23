@@ -77,9 +77,10 @@ export default function NotificationMenu() {
         document.getElementById('studyRecapDrawer').click();
     };
 
-    const handleExamNotificationClick = () => {
+    const handleExamNotificationClick = (index) => {
         setAnchorEl(null);
-        document.getElementById('examNotificationDrawer').click();
+        document.getElementById(index.toString()).click();
+
     };
 
     return (
@@ -141,7 +142,7 @@ export default function NotificationMenu() {
                     </MenuItem> : null}
                 {examCount > 0 ?
                    <> {examEvent.map((exam,index)=>(
-                    <MenuItem  value={index} onClick={handleExamNotificationClick}>
+                    <MenuItem  onClick={()=>{handleExamNotificationClick(index)}}>
                         <div style={{marginRight: '43px'}}>Exam Notification {' '+ exam.subject+' '}{exam.catalog}</div>
                         <div>
                             <Badge badgeContent={examCount} showZero overlap="circular" sx={{
@@ -164,8 +165,12 @@ export default function NotificationMenu() {
                                                    notificationCountSetter={setStudyHourCount}/>}/>
                 <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'friendRequestDrawer'}></div>} title={'Friend Requests'}
                               content={<FriendNotification/>}/>
-                <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'examNotificationDrawer'}></div>} title={'Exam Notification'}
-                              content={<ExamNotification/>}/>
+                {examEvent.map((exam, index)=>{
+
+                    return ( <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={exam.catalog+exam.subject}
+                                  content={<ExamNotification examData={exam}/>}/>)
+                })}
+
             </div>
         </div>
     );
