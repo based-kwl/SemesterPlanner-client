@@ -17,23 +17,14 @@ export default function NotificationMenu() {
     const open = Boolean(anchorEl);
     const [friendRequestCount, setFriendRequestCount] = React.useState(0);
     const [studyHourCount, setStudyHourCount] = React.useState(0);
-    const [examCount, setExamCount] = React.useState(1)
-    const examEvent = [{
-        subject: 'SOEN',
-        catalog: '385',
-        startTime: new Date(),
+    const [examCount, setExamCount] = React.useState(0)
+    const [exam, setExam] = React.useState([{
+        subject: '',
+        catalog: '',
+        eventID: '',
         startDate: new Date(),
-        endDate: new Date(),
-    },{
-        subject:'SOEN',
-        catalog:'422',
-        startTime: new Date(),
-        startDate: new Date(),
-        endDate: new Date(),
-    }]
-    // setExamCount(examEvent.length)
-    console.log(examCount)
-    console.log(examEvent)
+        studyHoursConfirmed:''
+    }]);
 
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${GetAuthentication().email}`)
@@ -46,19 +37,24 @@ export default function NotificationMenu() {
 
         getEventList(GetAuthentication().username).then((res) => {
             let studyEventList = filterEventsByDate(res, new Date()).filter(item => item.type === 'study' && !item.studyHoursConfirmed);
-            // let examEventList = filterEventsByDate(res, new Date()+8).filter(item => item.type === 'exam')
-            // setExamCount(examEventList.length)
-            // setExamEvent(examEvent)
+            let today = new Date()
+            let examDate = new Date(today)
+            examDate.setDate(today.getDate()+7)
+            const examEventList = filterEventsByDate(res, examDate).filter(item => item.type === 'exam' && !item.studyHoursConfirmed)
+            setExam(examEventList)
 
             if (studyEventList.length > 0) {
                 const currentTime = new Date();
                 if (currentTime.getHours() >= 21)
                     setStudyHourCount(studyHourCount + 1);
             }
+            let len = exam.length
+            setExamCount(len)
         }).catch((err) => {
             console.log(err.message);
         })
-    }, [])
+    }, [examCount,exam.length])
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -141,11 +137,11 @@ export default function NotificationMenu() {
                         </div>
                     </MenuItem> : null}
                 {examCount > 0 ?
-                   <> {examEvent.map((exam,index)=>(
+                   <> {exam.map((exam,index)=>(
                     <MenuItem  onClick={()=>{handleExamNotificationClick(index)}}>
                         <div style={{marginRight: '43px'}}>Exam Notification {' '+ exam.subject+' '}{exam.catalog}</div>
                         <div>
-                            <Badge badgeContent={examCount} showZero overlap="circular" sx={{
+                            <Badge badgeContent={1} showZero overlap="circular" sx={{
                                 "& .MuiBadge-badge": {
                                     color: "white",
                                     backgroundColor: "#000000"
@@ -165,9 +161,8 @@ export default function NotificationMenu() {
                                                    notificationCountSetter={setStudyHourCount}/>}/>
                 <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'friendRequestDrawer'}></div>} title={'Friend Requests'}
                               content={<FriendNotification/>}/>
-                {examEvent.map((exam, index)=>{
-
-                    return ( <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={exam.catalog+exam.subject}
+                {exam.map((exam, index)=>{
+                    return ( <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={'Exam Notification'}
                                   content={<ExamNotification examData={exam}/>}/>)
                 })}
 

@@ -11,16 +11,20 @@ import {getTime} from "../Calendar/CommonFunctions";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import GetAuthentication from "../Authentication/Authentification";
 import axios from "axios";
+import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
 export default function ExamNotification(props){
     const [timeSlot, setTimeSlot] = React.useState(60)
-    const [exams, setExams] = React.useState(props.examData)
+    const [exams] = React.useState(props.examData)
     const [availability, setAvailability] = React.useState({
         startTime: new Date(),
         endTime: new Date()
     })
+    const options = { month: "long" };
+    let date = new Date(exams.startDate)
+    let date2 = new Intl.DateTimeFormat('en-us',options).format(date).toUpperCase()
+    let date3 = date.getDate()
 
-    console.log('exm',exams)
 
     React.useEffect(()=>{
         initTimes()
@@ -39,7 +43,20 @@ export default function ExamNotification(props){
     function handleCancel(){
         document.elementFromPoint(0, 0).click();
     }
-    function handleDismiss(){}
+    function handleDismiss(){
+        exams.studyHoursConfirmed = true
+
+        axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, exams)
+                .then(() => {
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        delay(200).then(()=>{
+            window.location.reload()
+        })
+    }
+
     function handleEvent() {
         exams.forEach((exam) => {
             const eventDay = {
@@ -100,7 +117,6 @@ export default function ExamNotification(props){
                 {
                     padding:'0',
                 }
-
             }}
             margin="none"
         />
@@ -110,7 +126,7 @@ export default function ExamNotification(props){
             id="endTime"
             type="time"
             value={getTime(availability.endTime)}
-            data-test="eventendTime"
+            data-test="eventEndTime"
             InputLabelProps={{
                 shrink: true,
             }}
@@ -148,7 +164,7 @@ export default function ExamNotification(props){
     )
     const examName = (
         <div align='center' style={{marginBottom:'5px'}}>
-        <Typography variant="h5">  EXAM ON MARCH 1</Typography>
+        <Typography variant="h5"> {exams.subject+' '+exams.catalog} EXAM ON {date2} {date3}</Typography>
         </div>
     )
 
@@ -186,7 +202,7 @@ export default function ExamNotification(props){
                                                paddingRight:'7px',
                                            }
                                    }}
-                                   data-test="eventendTime"
+                                   data-test="eventEndTime"
                                    margin="none"
                                />
                                <TextField
@@ -208,7 +224,7 @@ export default function ExamNotification(props){
                                                paddingRight:'7px',
                                            }
                                    }}
-                                   data-test="eventendTime"
+                                   data-test="eventEndTime"
                                    margin="none"
                                />
                                <Button
