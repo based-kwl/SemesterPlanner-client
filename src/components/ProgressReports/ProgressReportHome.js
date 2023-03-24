@@ -22,12 +22,10 @@ export default function ProgressReportHome(){
     const [time, setTime] = useState('')
     const email = GetAuthentication().email;
 
-
     useEffect(()=>{
         fetchData(link, setCourses)
         handleCourseList()
         handleTotalStudyTime()
-
     },[link])
 
 
@@ -47,7 +45,7 @@ export default function ProgressReportHome(){
     const categoryStatisticsData = {
         labels: courses?.map((course) => course.name),
         datasets: [{
-            // label: "Actual",
+            label: "Time (hours)",
             backgroundColor: courses?.map((course) => course.colour),
             data: courses?.map((course) => course.expectedTime),
         }]

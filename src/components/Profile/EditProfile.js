@@ -54,10 +54,7 @@ export default function EditProfile() {
     },[])
 
     function handleEditProfile() {
-        const config = {
-            headers: {authorization: `Bearer ${auth.token}`}
-        }
-        axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData, config)
+        axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData)
             .then(() => {
                 localStorage.setItem("username", JSON.stringify(userData.username))
                 navigate('/calendar');

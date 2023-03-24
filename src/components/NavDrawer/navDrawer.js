@@ -24,6 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from "react-router";
 import NotificationMenu from "./NotificationMenu";
+import axios from "axios";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -81,10 +82,14 @@ export default function PersistentDrawerLeft(params) {
     const navigate = useNavigate();
 
     function handleLogout() {
-        localStorage.removeItem("token");
         localStorage.removeItem("email");
         localStorage.removeItem("username");
-        navigate('/login');
+
+        axios.get(`${process.env.REACT_APP_BASE_URL}login/logout`)
+            .then(() => {
+                navigate('/login');
+            })
+            .catch(err => {console.log(err)});
     }
 
     const redirect = (buttonName) => {
