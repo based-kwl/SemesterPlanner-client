@@ -2,33 +2,59 @@ import GetAuthentication from "../Authentication/Authentification";
 import axios from 'axios';
 
 
-
 async function getEventsByUsername(user_name, futureTimestamp) {
   try {
     console.log(`${process.env.REACT_APP_BASE_URL}events/${user_name}`)
 
-    // Convert futureTimestamp to UTC time
-    const futureUtcTimestamp = new Date(futureTimestamp).toUTCString();
+    const easternTimeZone = "America/New_York";
 
-    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}events/${user_name}`);
-    console.log(response)
-
-    const events = response.data.filter((event) => {
-      return new Date(event.startDate) >= new Date() && new Date(event.startDate) <= new Date(futureUtcTimestamp);
+    // Combine start date and start time into a single string
+    const eventsResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}events/${user_name}`);
+    const eventsData = eventsResponse.data;
+    const events = eventsData.filter((event) => {
+      const startDate = new Date(event.startDate);
+      const startTime = new Date(event.startTime);
+      const startDateTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
+                                      startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
+                                      startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+      return new Date(startDateTime) >= new Date() && new Date(startDateTime) <= new Date(futureTimestamp);
     });
 
     const eventTimes = events.map((event) => {
-      const startTime = new Date(event.startTime).toLocaleString("en-US", { timeZone: "America/New_York" });
-      const endTime = new Date(event.endTime).toLocaleString("en-US", { timeZone: "America/New_York" });
-      return [new Date(startTime), new Date(endTime)];
+      // Convert start and end times to UTC
+      const startDate = new Date(event.startDate);
+      const startTime = new Date(event.startTime);
+      const startDateTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
+                                      startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
+                                      startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+      const startTimeUTC = new Date(startDateTime).toUTCString();
+
+      const endDate = new Date(event.endDate);
+      const endTime = new Date(event.endTime);
+      const endDateTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(),
+                                    endTime.getHours(), endTime.getMinutes(), endTime.getSeconds(),
+                                    endTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+      const endTimeUTC = new Date(endDateTime).toUTCString();
+
+      return [new Date(startTimeUTC), new Date(endTimeUTC)];
     });
 
-    return eventTimes;
+    // Convert all event times to Eastern time
+    const easternEventTimes = eventTimes.map((eventTime) => {
+      const startDateTime = new Date(eventTime[0]).toLocaleString("en-US", { timeZone: easternTimeZone });
+      const startTimeEastern = new Date(startDateTime);
+      const endDateTime = new Date(eventTime[1]).toLocaleString("en-US", { timeZone: easternTimeZone });
+      const endTimeEastern = new Date(endDateTime);
+      return [startTimeEastern, endTimeEastern];
+    });
+
+    return easternEventTimes;
   } catch (error) {
     console.error(error);
     return [];
   }
 }
+
 
 
 
