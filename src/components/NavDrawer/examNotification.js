@@ -31,11 +31,25 @@ export default function ExamNotification(props) {
 
 
     React.useEffect(() => {
-        console.log(exams.startTime)
-        const examTime = new Date(exams.startDate).toLocaleString('en-US', { timeZone: 'America/New_York' });
+
+
+
+        // Convert strings to Date objects
+        const date_1 = new Date(exams.startDate);
+        const date_2 = new Date(exams.startTime);
+
+        // Extract the date from date1 and time from date2
+        const newDate = new Date(date_1.getFullYear(), date_1.getMonth(), date_1.getDate(), date_2.getHours(), date_2.getMinutes(), date_2.getSeconds(), date_2.getMilliseconds());
+
+        // Convert the new Date object back to an ISO formatted string
+        const newTimestamp = newDate.toISOString();
+
+
+        const examTime = new Date(newTimestamp).toLocaleString('en-US', { timeZone: 'America/New_York' });
+
         const dateNow = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-        getHoursBetweenTimestamps( dateNow , examTime, setTimeSlot, timePeriod)
-        console.log(timeSlot)
+        getHoursBetweenTimestamps(dateNow, examTime, setTimeSlot, timePeriod)
+
         initTimes()
     }, [timePeriod])
 
@@ -71,8 +85,8 @@ export default function ExamNotification(props) {
         studyTimes.forEach((studyTime) => {
             const dateepoch = new Date(studyTime[0]);
             const isoStartTimestampString = dateepoch.toISOString();
-            const dateepochend= new Date(studyTime[1]);
-            const isoEndTimestampString =dateepochend.toISOString();
+            const dateepochend = new Date(studyTime[1]);
+            const isoEndTimestampString = dateepochend.toISOString();
 
             const eventDay = {
                 username: GetAuthentication().username,
@@ -88,7 +102,7 @@ export default function ExamNotification(props) {
                 actualStartTime: new Date().toISOString(),
                 actualEndTime: new Date().toISOString(),
                 startDate: isoStartTimestampString, // needs to be calculated
-                endDate:isoEndTimestampString
+                endDate: isoEndTimestampString
             }
             axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
                 .then((res) => {
@@ -97,12 +111,10 @@ export default function ExamNotification(props) {
         })
     }
     function handleTimeChange(e) {
-        console.log(e.target.id)
         const newDate = new Date()
         newDate.setHours(e.target.value.split(':')[0])
         newDate.setMinutes(e.target.value.split(':')[1])
 
-        console.log(newDate)
         if (e.target.id === 'startTime') {
             setAvailability({ ...availability, startTime: newDate })
         } else {
@@ -112,7 +124,7 @@ export default function ExamNotification(props) {
     function handleMenu(e) {
         setStudyTimes([])
         setTimePeriod(e.target.value)
-        console.log(timeSlot)
+
     }
 
     const startTime = (
@@ -192,14 +204,14 @@ export default function ExamNotification(props) {
         const startDate = new Date(startTime);
         const endDate = new Date(startDate.getTime() + (timePeriod === 60 ? 60 : 30) * 60 * 1000);
         setStudyTimes([...studyTimes, [startDate.getTime(), endDate.getTime()]]);
-        console.log(studyTimes)
+
     };
-    
+
     const handleRemoveStudyTimeSlots = (startTime) => {
         setStudyTimes(studyTimes.filter(time => time[0] !== startTime));
-        console.log(studyTimes)
+
     };
-    
+
     const timeDisplay = timeSlot
         .filter((startTime) => {
             const date = new Date(startTime);
@@ -289,7 +301,7 @@ export default function ExamNotification(props) {
                 />
             );
         });
-    
+
 
     const buttons = (
         <React.Fragment>
@@ -307,7 +319,7 @@ export default function ExamNotification(props) {
     const examNotification = (
         <React.Fragment>
             {examName}
-            {showAvailability}
+            {showAvailability} 
             <div align='center' style={{
                 border: '1px black solid', overflow: 'auto',
                 paddingTop: '10px',

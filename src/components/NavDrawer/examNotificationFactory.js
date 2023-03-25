@@ -6,23 +6,23 @@ import axios from 'axios';
 async function getEventsByUsername(user_name, futureTimestamp) {
   try {
     console.log(`${process.env.REACT_APP_BASE_URL}events/${user_name}`)
-    
+
     // Convert futureTimestamp to UTC time
     const futureUtcTimestamp = new Date(futureTimestamp).toUTCString();
-    
+
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}events/${user_name}`);
     console.log(response)
-    
+
     const events = response.data.filter((event) => {
       return new Date(event.startDate) >= new Date() && new Date(event.startDate) <= new Date(futureUtcTimestamp);
     });
-    
+
     const eventTimes = events.map((event) => {
-      const startTime = new Date(event.startTime).toLocaleString("en-US", {timeZone: "America/New_York"});
-      const endTime = new Date(event.endTime).toLocaleString("en-US", {timeZone: "America/New_York"});
+      const startTime = new Date(event.startTime).toLocaleString("en-US", { timeZone: "America/New_York" });
+      const endTime = new Date(event.endTime).toLocaleString("en-US", { timeZone: "America/New_York" });
       return [new Date(startTime), new Date(endTime)];
     });
-    
+
     return eventTimes;
   } catch (error) {
     console.error(error);
@@ -37,10 +37,7 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
   // Convert start and end timestamps to JavaScript Date objects
   const username = GetAuthentication().username
   console.log(username)
-  const excludedTimes = await getEventsByUsername(username, "2023-03-31");
-  console.log(excludedTimes)
-  console.log(excludedTimes)
-  console.log(excludedTimes)
+  const excludedTimes = await getEventsByUsername(username, endTimestamp);
   const startDate = new Date(startTimestamp);
   const endDate = new Date(endTimestamp);
 
