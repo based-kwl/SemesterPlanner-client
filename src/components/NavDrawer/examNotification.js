@@ -16,7 +16,7 @@ import { delay } from "../CommonHelperFunctions/CommonHelperFunctions";
 import { getHoursBetweenTimestamps } from "./examNotificationFactory";
 
 export default function ExamNotification(props) {
-    const [studyTimes, setStudyTimes] = React.useState([[]])
+    const [studyTimes, setStudyTimes] = React.useState([])
     const [timeSlot, setTimeSlot] = React.useState([])
     const [timePeriod, setTimePeriod] = React.useState(60)
     const [exams] = React.useState(props.examData)
@@ -31,7 +31,10 @@ export default function ExamNotification(props) {
 
 
     React.useEffect(() => {
-        getHoursBetweenTimestamps("2023-03-24", "2023-03-31", setTimeSlot, timePeriod)
+        console.log(exams.startTime)
+        const examTime = new Date(exams.startDate).toLocaleString('en-US', { timeZone: 'America/New_York' });
+        const dateNow = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+        getHoursBetweenTimestamps( dateNow , examTime, setTimeSlot, timePeriod)
         console.log(timeSlot)
         initTimes()
     }, [timePeriod])
@@ -65,22 +68,27 @@ export default function ExamNotification(props) {
 
 
     function handleEvent() {
-        exams.forEach((exam) => {
+        studyTimes.forEach((studyTime) => {
+            const dateepoch = new Date(studyTime[0]);
+            const isoStartTimestampString = dateepoch.toISOString();
+            const dateepochend= new Date(studyTime[1]);
+            const isoEndTimestampString =dateepochend.toISOString();
+
             const eventDay = {
                 username: GetAuthentication().username,
-                eventHeader: exam.subject + ' ' + exam.data.catalog,
+                eventHeader: exams.subject + ' ' + exams.catalog,
                 description: 'study for exam',
                 recurrence: 'once',
                 link: '',
-                type: 'exam',
-                subject: exam.subject,
-                catalog: exam.catalog,
-                startTime: exam.startTime.toISOString(),
-                endTime: exam.endTime.toISOString(),
+                type: 'study',
+                subject: exams.subject,
+                catalog: exams.catalog,
+                startTime: isoStartTimestampString,
+                endTime: isoEndTimestampString,
                 actualStartTime: new Date().toISOString(),
                 actualEndTime: new Date().toISOString(),
-                startDate: exam.toISOString(), // needs to be calculated
-                endDate: exam.endDate.toISOString()
+                startDate: isoStartTimestampString, // needs to be calculated
+                endDate:isoEndTimestampString
             }
             axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
                 .then((res) => {
@@ -102,6 +110,7 @@ export default function ExamNotification(props) {
         }
     }
     function handleMenu(e) {
+        setStudyTimes([])
         setTimePeriod(e.target.value)
         console.log(timeSlot)
     }
@@ -179,20 +188,18 @@ export default function ExamNotification(props) {
         </React.Fragment>
     )
 
-
-
-
-
     const handleAddStudyTimeSlots = (startTime) => {
-        const endTime = new Date(startTime);
-        endTime.setMinutes(endTime.getMinutes() + (timePeriod === 60 ? 60 : 30));
-        setStudyTimes([...studyTimes, [startTime, endTime]]);
+        const startDate = new Date(startTime);
+        const endDate = new Date(startDate.getTime() + (timePeriod === 60 ? 60 : 30) * 60 * 1000);
+        setStudyTimes([...studyTimes, [startDate.getTime(), endDate.getTime()]]);
         console.log(studyTimes)
     };
+    
     const handleRemoveStudyTimeSlots = (startTime) => {
         setStudyTimes(studyTimes.filter(time => time[0] !== startTime));
         console.log(studyTimes)
     };
+    
     const timeDisplay = timeSlot
         .filter((startTime) => {
             const date = new Date(startTime);
@@ -204,11 +211,11 @@ export default function ExamNotification(props) {
         .map((startTime, index) => {
             const date = new Date(startTime);
             const dateString = `${date.toLocaleString('default', { weekday: 'short' }).toUpperCase()} ${date.toLocaleString('default', { month: 'short' }).toUpperCase()} ${date.getDate()}`;
-            const endTime = new Date(startTime);
-            endTime.setMinutes(endTime.getMinutes() + (timePeriod === 60 ? 60 : 30));
-            const endTimeString = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const startTimeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const isTimeSelected = studyTimes.some(time => time[0] === startTime);
+            const startDate = new Date(startTime);
+            const endDate = new Date(startDate.getTime() + (timePeriod === 60 ? 60 : 30) * 60 * 1000);
+            const endTimeString = endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const startTimeString = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const isTimeSelected = studyTimes.some(time => time[0] === startDate.getTime());
             return (
                 <TimeCard
                     key={index}
@@ -264,7 +271,7 @@ export default function ExamNotification(props) {
                                 {isTimeSelected ?
                                     <Button
                                         variant="text"
-                                        onClick={() => handleRemoveStudyTimeSlots(startTime)}
+                                        onClick={() => handleRemoveStudyTimeSlots(startDate.getTime())}
                                     >
                                         <CheckIcon />
                                     </Button>
@@ -282,9 +289,7 @@ export default function ExamNotification(props) {
                 />
             );
         });
-
-
-
+    
 
     const buttons = (
         <React.Fragment>
