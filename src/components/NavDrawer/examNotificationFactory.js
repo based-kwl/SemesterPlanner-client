@@ -75,7 +75,10 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
 
   // Loop through each time segment between the start and end dates
   let currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
+  const maxIterations = 1000; // Maximum number of iterations allowed
+  let numIterations = 0; // Counter for the number of iterations
+
+  while (currentDate <= endDate && numIterations < maxIterations) {
     const currentTimestamp = currentDate.toISOString();
 
     // Check if the current time segment is excluded
@@ -101,6 +104,7 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
 
     // Move to the next time segment
     currentDate.setMinutes(currentDate.getMinutes() + segment);
+    numIterations++;
   }
   timeslots(hoursBetween)
   return hoursBetween;
