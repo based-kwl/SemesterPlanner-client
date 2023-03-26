@@ -1,4 +1,4 @@
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {filterEventsByDate, getEventList, timeStringToDateObject, getTimeDifference} from "../Calendar/CommonFunctions";
 import {useMemo, useState} from "react";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";

@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import Grid from "@mui/material/Grid";
-import {Button, Stack, Typography, Radio, RadioGroup} from "@mui/material";
+import {Stack, Typography, Radio, RadioGroup} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -265,10 +265,9 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
             </RadioGroup>
 
             {/** Event End Date */}
-            <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+            <div data-test="recurrence-end-date" style={{paddingTop: '10px', paddingBottom: '10px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <CalendarDatePicker
-                        data-test="eventEndDate"
                         key={"endDate"}
                         label="Ending date"
                         value={recurrenceState.endDate}

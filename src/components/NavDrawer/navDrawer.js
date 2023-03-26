@@ -24,6 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from "react-router";
 import NotificationMenu from "./NotificationMenu";
+import {HandleLogout} from "../Authentication/Authentification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -80,13 +81,6 @@ export default function PersistentDrawerLeft(params) {
 
     const navigate = useNavigate();
 
-    function handleLogout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("username");
-        navigate('/login');
-    }
-
     const redirect = (buttonName) => {
         switch (buttonName) {
             case 'Home':
@@ -105,7 +99,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/friend-list-home');
                 break;
             case 'Logout':
-                handleLogout();
+                HandleLogout();
                 break;
             default:
                 break;
