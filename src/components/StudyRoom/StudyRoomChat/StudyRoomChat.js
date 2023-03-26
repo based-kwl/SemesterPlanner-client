@@ -3,7 +3,7 @@ import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
 
 export function GetStudyRoomChat(){
 

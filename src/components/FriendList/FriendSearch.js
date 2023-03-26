@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function FriendSearch() {

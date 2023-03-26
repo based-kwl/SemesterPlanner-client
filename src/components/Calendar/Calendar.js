@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
