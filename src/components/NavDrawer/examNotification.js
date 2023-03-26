@@ -31,22 +31,14 @@ export default function ExamNotification(props) {
 
 
     React.useEffect(() => {
-
-
-
         // Convert strings to Date objects
         const date_1 = new Date(exams.startDate);
         const date_2 = new Date(exams.startTime);
-
         // Extract the date from date1 and time from date2
         const newDate = new Date(date_1.getFullYear(), date_1.getMonth(), date_1.getDate(), date_2.getHours(), date_2.getMinutes(), date_2.getSeconds(), date_2.getMilliseconds());
-
         // Convert the new Date object back to an ISO formatted string
         const newTimestamp = newDate.toISOString();
-
-
         const examTime = new Date(newTimestamp).toLocaleString('en-US', { timeZone: 'America/New_York' });
-
         const dateNow = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
         getHoursBetweenTimestamps(dateNow, examTime, setTimeSlot, timePeriod)
 
@@ -106,7 +98,7 @@ export default function ExamNotification(props) {
             }
             axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
                 .then((res) => {
-                    console.log(res.data)
+
                 })
         })
     }
@@ -216,9 +208,12 @@ export default function ExamNotification(props) {
         .filter((startTime) => {
             const date = new Date(startTime);
             const startHour = availability.startTime.getHours();
-            const endHour = availability.endTime.getHours();
+            let endHour = availability.endTime.getHours();
+            if (endHour < startHour) {
+                endHour = 24;
+            }
             const currentHour = date.getHours();
-            return currentHour >= startHour && currentHour < endHour;
+            return currentHour >= startHour && (currentHour < endHour || (currentHour === 0 && endHour === 24));
         })
         .map((startTime, index) => {
             const date = new Date(startTime);
@@ -319,7 +314,7 @@ export default function ExamNotification(props) {
     const examNotification = (
         <React.Fragment>
             {examName}
-            {showAvailability} 
+            {showAvailability}
             <div align='center' style={{
                 border: '1px black solid', overflow: 'auto',
                 paddingTop: '10px',

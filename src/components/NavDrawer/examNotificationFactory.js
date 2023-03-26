@@ -15,8 +15,8 @@ async function getEventsByUsername(user_name, futureTimestamp) {
       const startDate = new Date(event.startDate);
       const startTime = new Date(event.startTime);
       const startDateTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
-                                      startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
-                                      startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+        startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
+        startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
       return new Date(startDateTime) >= new Date() && new Date(startDateTime) <= new Date(futureTimestamp);
     });
 
@@ -25,15 +25,15 @@ async function getEventsByUsername(user_name, futureTimestamp) {
       const startDate = new Date(event.startDate);
       const startTime = new Date(event.startTime);
       const startDateTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
-                                      startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
-                                      startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+        startTime.getHours(), startTime.getMinutes(), startTime.getSeconds(),
+        startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
       const startTimeUTC = new Date(startDateTime).toUTCString();
 
       const endDate = new Date(event.endDate);
       const endTime = new Date(event.endTime);
       const endDateTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(),
-                                    endTime.getHours(), endTime.getMinutes(), endTime.getSeconds(),
-                                    endTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
+        endTime.getHours(), endTime.getMinutes(), endTime.getSeconds(),
+        endTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
       const endTimeUTC = new Date(endDateTime).toUTCString();
 
       return [new Date(startTimeUTC), new Date(endTimeUTC)];
