@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
 
 export const ChatFooter = () => {
     const [message, setMessage] = useState('');

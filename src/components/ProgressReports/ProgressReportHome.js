@@ -6,7 +6,7 @@ import BottomDrawer from "../StudyRoom/BottomDrawer";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
 import { useState, useMemo, useEffect } from 'react';
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
 import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import { fetchData } from './fetchingCategoryDataFactory';

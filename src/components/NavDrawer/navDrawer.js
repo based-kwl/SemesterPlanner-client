@@ -24,7 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from "react-router";
 import NotificationMenu from "./NotificationMenu";
-import axios from "axios";
+import {HandleLogout} from "../Authentication/Authentification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -81,16 +81,16 @@ export default function PersistentDrawerLeft(params) {
 
     const navigate = useNavigate();
 
-    function handleLogout() {
-        localStorage.removeItem("email");
-        localStorage.removeItem("username");
-
-        axios.get(`${process.env.REACT_APP_BASE_URL}login/logout`)
-            .then(() => {
-                navigate('/login');
-            })
-            .catch(err => {console.log(err)});
-    }
+    // function handleLogout() {
+    //     localStorage.removeItem("email");
+    //     localStorage.removeItem("username");
+    //
+    //     axios.get(`${process.env.REACT_APP_BASE_URL}login/logout`)
+    //         .then(() => {
+    //             navigate('/login');
+    //         })
+    //         .catch(err => {console.log(err)});
+    // }
 
     const redirect = (buttonName) => {
         switch (buttonName) {
@@ -110,7 +110,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/friend-list-home');
                 break;
             case 'Logout':
-                handleLogout();
+                HandleLogout();
                 break;
             default:
                 break;

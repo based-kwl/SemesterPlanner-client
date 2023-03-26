@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Typography, Stack} from "@mui/material";
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
 import {EventForm, RecurrenceSelection} from '../Custom/CommonInputEventForm';
 import moment from "moment";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";

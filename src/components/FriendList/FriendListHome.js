@@ -15,7 +15,7 @@ import axios from "axios";
 import {useCallback, useState} from "react";
 import FriendNotification from "./FriendsNotification";
 import GroupIcon from '@mui/icons-material/Group';
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function FriendListHome(){

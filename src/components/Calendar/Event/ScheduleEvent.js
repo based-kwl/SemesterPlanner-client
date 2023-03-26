@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {CalendarDatePicker} from "../Custom/CommonInputEventForm";

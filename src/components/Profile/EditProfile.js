@@ -10,7 +10,7 @@ import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCard
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useEffect, useRef} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function EditProfile() {

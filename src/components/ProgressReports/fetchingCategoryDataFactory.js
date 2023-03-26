@@ -1,5 +1,5 @@
 import axios from "axios";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {getTimeDifference} from "../Calendar/CommonFunctions";
 
 export async function fetchData(api_link, setCourses) {

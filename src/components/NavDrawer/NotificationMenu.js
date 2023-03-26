@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from "@mui/material/Badge";
 import axios from "axios";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import FriendNotification from "../FriendList/FriendsNotification";
 import StudyRecap from "../ProgressReports/StudyRecap";
