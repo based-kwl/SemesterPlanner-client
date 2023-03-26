@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
 import {StudyRoomCard} from "./CommonResources";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function ParticipantsList() {
