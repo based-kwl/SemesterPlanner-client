@@ -81,17 +81,6 @@ export default function PersistentDrawerLeft(params) {
 
     const navigate = useNavigate();
 
-    // function handleLogout() {
-    //     localStorage.removeItem("email");
-    //     localStorage.removeItem("username");
-    //
-    //     axios.get(`${process.env.REACT_APP_BASE_URL}login/logout`)
-    //         .then(() => {
-    //             navigate('/login');
-    //         })
-    //         .catch(err => {console.log(err)});
-    // }
-
     const redirect = (buttonName) => {
         switch (buttonName) {
             case 'Home':
