@@ -26,12 +26,11 @@ export default function FriendListHome(){
 
 
     // sends the updated friend list to database
-    function handleUpdate(){
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`,{email:email, friends: friends})
-            .then(() => setFriends((prevState) => {
-                // keep only friends that are in the updated friends array
-                prevState.filter((friend) => friends.some((el) => el === friend))
-            }))
+    function handleUpdate() {
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`, {email: email, friends: friends})
+            .then().catch(err => {
+            console.log('Error', err);
+        })
     }
 
     function handleCancel(){
@@ -126,7 +125,7 @@ export default function FriendListHome(){
                     <GroupIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>
                 </Badge>
                 }
-                               title={'Requests Notification'} content={<FriendNotification/>}/></div>}/>
+                               title={'Requests Notification'} content={<FriendNotification friends={friends} setFriends={setFriends} />}/></div>}/>
             </div>
 
             </React.Fragment>

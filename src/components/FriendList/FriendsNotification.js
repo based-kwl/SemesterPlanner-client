@@ -9,7 +9,7 @@ import axios from "axios";
 import {GetAuthentication} from "../Authentication/Authentification";
 
 
-export default function FriendNotification() {
+export default function FriendNotification(props) {
     const [requestSent, setRequestSent] = React.useState([]);
     const [requestReceived, setRequestReceived] = React.useState([]);
     const ownerEmail = GetAuthentication().email;
@@ -34,8 +34,11 @@ export default function FriendNotification() {
 
     function handleAccept(index){
         const id = requestReceived[index]._id;
+        console.log(requestReceived[index])
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted",email: ownerEmail, requestId:id})
             .then(() => {
+                setRequestReceived((prevState) => prevState.filter((request) => request._id !== requestReceived[index]._id))
+                props.setFriends([...props.friends, requestReceived[index].senderEmail])
             })
             .catch(err => {console.log('Error:', err)});
     }
@@ -56,7 +59,7 @@ export default function FriendNotification() {
     const friendNotification = (
         <React.Fragment>
             <Typography variant="body1" marginBottom="10px"> Friend Request Sent</Typography>
-            <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px'}}>
+            <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px', width: '81vw'}}>
                 {requestSent.map((sent, index) => (
                     <div key={index}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
