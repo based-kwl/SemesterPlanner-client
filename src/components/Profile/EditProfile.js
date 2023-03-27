@@ -56,7 +56,6 @@ export default function EditProfile() {
     function handleEditProfile() {
         axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData)
             .then(() => {
-                localStorage.setItem("username", JSON.stringify(userData.username))
                 navigate('/calendar');
             })
             .catch(err => {
@@ -110,9 +109,9 @@ export default function EditProfile() {
                         fullWidth
                         id='username'
                         value={userData.username}
-                        required
                         label="Username"
                         variant='outlined'
+                        disabled={true}
                         onChange={handleUsernameChange}
                         size="small"
                     />
