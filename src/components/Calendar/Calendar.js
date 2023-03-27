@@ -6,20 +6,22 @@ import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
-import {getTime} from "./CommonFunctions";
+import {expandEventList, getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
+    const [condensedEventsList, setCondensedEventsList] = useState([]);
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
@@ -30,7 +32,8 @@ export default function CalendarView() {
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                    setEvents(res.data)
+                    setCondensedEventsList(res.data);
+                    setEvents(expandEventList(res.data));
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
@@ -70,7 +73,7 @@ export default function CalendarView() {
      * @param {int} type, type of update required; 0 = update, 1 = delete, 2 = add
      */
     async function updateEventList(eventData, type) {
-        const tempEvents = [...events];
+        const tempEvents = [...condensedEventsList];
 
         if (type === 0)
             tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
@@ -79,7 +82,8 @@ export default function CalendarView() {
         else if (type === 2)
             tempEvents.push(eventData);
 
-        setEvents(tempEvents);
+        setCondensedEventsList(tempEvents);
+        setEvents(expandEventList(tempEvents));
     }
 
     const AcademicEventsTile = ({ date }) => (
@@ -108,9 +112,9 @@ export default function CalendarView() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={calendarMonth}/>
             <StudyRoomChatCard width='92vw' height='6vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{width:'92vw', display:'flex', justifyContent:"space-between"}}>
-                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
+                <BottomDrawer icon={<PrimaryButton2 data_test={"uploadPhotoEventButtonCalenderPage"} style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
-                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} data_test={"addEventButtonCalendarPage"} colour={'#912338'} content={<AddIcon style={{color:'white'}}/>}/>}
                 title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} date={date}/>}/>
                 </div>
 
@@ -153,7 +157,7 @@ export default function CalendarView() {
                     <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
                         {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
                     </Typography>
-                    <Typography sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
+                    <Typography data-test={header} sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
                         {header}
                     </Typography>
 
@@ -203,7 +207,7 @@ export default function CalendarView() {
                                             header={e.eventHeader}
                                             EventID={e._id}
                                         />
-                                        <BottomDrawer icon={<EditIcon style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
+                                        <BottomDrawer icon={<EditIcon data-test={"editButton_"+e.eventHeader} style={{color: '#912338', height: '2vh', width: '2vh'}}/>}
                                                       title={'Edit Event'}
                                                       content={<EditEvent onDrawerClose={updateEventList} eventData={e}/>}/>
                                         </>
@@ -288,8 +292,12 @@ export default function CalendarView() {
     const calendarPageCards = useMemo(() => (
         <React.Fragment>
             {calendarCard}
-            {eventsDisplay}
-            {academicEventsDisplay}
+            <div style={{paddingBottom:'10px'}}>
+                {eventsDisplay}
+                {academicEventsDisplay}
+            </div>
+
+
         </React.Fragment>
     ), [calendarCard, calendarMonth]);
 
@@ -297,7 +305,7 @@ export default function CalendarView() {
         <React.Fragment>
             <PersistentDrawerLeft />
             <div style={{ paddingTop: '15px' }}>
-                <BackgroundCard width='96vw'  content={calendarPageCards} />
+                <BackgroundCard width='96vw' content={calendarPageCards} />
             </div>
         </React.Fragment>
     );

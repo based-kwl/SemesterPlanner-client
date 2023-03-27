@@ -26,7 +26,6 @@ export default function ImageUpload(props) {
                     })
                 })
                 .catch(err => {
-                    console.log('Error:', err)
                 });
         } else {
             setErrorMessage("No image selected!");
@@ -55,10 +54,10 @@ export default function ImageUpload(props) {
             </div>
             <div style={{color: 'red', height: '5vh'}}>{errorMessage}</div>
             <div style={{marginBottom: '10px'}}>
-                <FileSelectButton width={"90vw"} onChange={handleFilePreview} name={'Select Image'}/>
+                <FileSelectButton data_test={"selectImageButton"} width={"90vw"} onChange={handleFilePreview} name={'Select Image'}/>
             </div>
             <div id={"uploadButton"} style={{marginBottom: '10px'}}>
-                <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"} onClick={handleFile}/>
+                <PrimaryButton2 data_test={"uploadButton"} content={"Upload"} colour={'#912338'} width={"90vw"} onClick={handleFile}/>
             </div>
             <div style={{visibility: 'hidden'}}>
                 <BottomDrawer icon={<button id={'addEventDrawer'}></button>} title={'Add Event'}

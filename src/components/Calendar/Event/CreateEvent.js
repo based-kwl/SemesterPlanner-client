@@ -1,21 +1,20 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography, Stack} from "@mui/material";
-import TextField from '@mui/material/TextField';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import {Typography, Stack} from "@mui/material";
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
- import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
-import {EventForm} from '../Custom/CommonInputEventForm';
+import {GetAuthentication} from "../../Authentication/Authentification";
+import {EventForm, RecurrenceSelection} from '../Custom/CommonInputEventForm';
 import moment from "moment";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useState} from "react";
+import ScheduleEvent from "./ScheduleEvent";
+import {styled} from "@mui/material/styles";
+import MuiToggleButton from "@mui/material/ToggleButton";
 
 export default function CreateEvent(props) {
     const email = GetAuthentication().email;
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [imageType, setImageType] = useState('event')
+    const [eventIsVisible,setEventIsVisible] = React.useState(true)
     const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
@@ -35,29 +34,13 @@ export default function CreateEvent(props) {
     })
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
-    const recurrenceSelection = (
-        <FormControl>
-            <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
-                <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
-                <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
-            </RadioGroup>
-
-            {/** Event End Date */}
-            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        key={"endDate"}
-                        label="Ending date"
-                        inputFormat="MM/DD/YYYY"
-                        value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                    />
-                </LocalizationProvider>
-            </div>
-        </FormControl>
-    );
+    React.useEffect(()=>{
+        handleCourseList()
+        handleImageType()
+    },[imageType,eventIsVisible])
+    const recurrenceSelection = () => {
+        return RecurrenceSelection(eventData, setEventData);
+    };
 
     React.useEffect(()=>{
         handleCourseList()
@@ -73,12 +56,7 @@ export default function CreateEvent(props) {
             })
     }
 
-    function handleRecurrenceChange(e) {
-        setEventData({ ...eventData, recurrence: e.target.value})
-    }
-
     function handleEvent() {
-        // TODO:  validate user inputs if have time
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
             .then((res) => {
                 document.elementFromPoint(0, 0).click();
@@ -102,10 +80,6 @@ export default function CreateEvent(props) {
         </Typography>
     ) : null;
 
-    function handleIsRecurrentChange() {
-        setIsRecurrent((prev) =>  !prev);
-    }
-
     const buttons = (
         <React.Fragment>
             <Stack justifyContent="center"
@@ -113,14 +87,54 @@ export default function CreateEvent(props) {
                    spacing={3}
                    width='100%'
                    direction="row">
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
+                <PrimaryButton2 data_test={"addButton"} width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
                 <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel}/>
             </Stack>
         </React.Fragment>
     );
 
+    function handleImageType(e, newImageType){
+        if(newImageType != null){
+            setImageType(newImageType)
+        }
+        if(imageType==='event'){
+            setEventIsVisible(true)
+        }
+        else if (imageType ==='schedule'){
+            setEventIsVisible(false)
+        }
+    }
+    const ToggleButton = styled(MuiToggleButton)({
+        "&.Mui-selected, &.Mui-selected:hover": {
+            color: "white",
+            backgroundColor: '#0072A8'
+        }
+    });
+
+    const toggleButton = (
+        <ToggleButtonGroup
+            size="small"
+            value={imageType}
+            exclusive
+            onChange={handleImageType}
+            aria-label="image_type"
+        >
+            <ToggleButton value="event" aria-label="event">
+                Event
+            </ToggleButton>
+            <ToggleButton value="schedule" aria-label="schedule">
+                Schedule
+            </ToggleButton>
+        </ToggleButtonGroup>
+    )
+
+    const recurrence = recurrenceSelection();
     return (
         <React.Fragment>
+            <div align='center'>
+            {toggleButton}
+            </div>
+            {eventIsVisible?
             <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
 
@@ -128,20 +142,13 @@ export default function CreateEvent(props) {
                     overflow: 'auto',
                     paddingTop: '10px',
                     width: '97vw',
-                    height: '65vh'
+                    height: '60vh'
                 }}>
                     <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
-                    <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
-                        <Switch
-                            sx={{color: '#912338'}}
-                            checked={isRecurrent}
-                            onChange={handleIsRecurrentChange}
-                        />
-                    }/>
-                    {isRecurrent && recurrenceSelection}
+                    <div> {recurrence} </div>
                 </div>
                 <div style={{ paddingTop: '20px'}}>{buttons}</div>
-            </form>
+            </form> : <ScheduleEvent/>}
         </React.Fragment>
     )
 }

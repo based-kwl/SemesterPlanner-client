@@ -24,6 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {useNavigate} from "react-router";
 import NotificationMenu from "./NotificationMenu";
+import {HandleLogout} from "../Authentication/Authentification";
 
 /**
  * USAGE: import NavDrawer from "insertRelativePathHere" and insert <NavDrawer navbarTitle={'insertPageTitleHere'}/>
@@ -61,7 +62,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 const ListIconsA = [<CalendarViewMonthIcon style={{color: '#912338'}}/>,
     <PersonOutlineIcon style={{color: '#057D78'}}/>, <BarChartIcon style={{color: '#0072A8'}}/>,
     <ForumIcon style={{color: '#573996'}}/>,
-    <GroupIcon style={{color:'E5A712'}}/>]
+    <GroupIcon style={{color:'E5A712'}}/> ]
 const ListIconsB = [<LogoutIcon style={{color: '#6e6e6e'}}/>]
 
 PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
@@ -79,13 +80,6 @@ export default function PersistentDrawerLeft(params) {
     };
 
     const navigate = useNavigate();
-
-    function handleLogout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("username");
-        navigate('/login');
-    }
 
     const redirect = (buttonName) => {
         switch (buttonName) {
@@ -105,7 +99,7 @@ export default function PersistentDrawerLeft(params) {
                 navigate('/friend-list-home');
                 break;
             case 'Logout':
-                handleLogout();
+                HandleLogout();
                 break;
             default:
                 break;

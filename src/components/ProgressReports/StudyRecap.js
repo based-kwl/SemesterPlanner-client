@@ -1,5 +1,5 @@
-import GetAuthentication from "../Authentication/Authentification";
-import {filterEventsByDate, getEventList, timeStringToDateObject} from "../Calendar/CommonFunctions";
+import {GetAuthentication} from "../Authentication/Authentification";
+import {filterEventsByDate, getEventList, timeStringToDateObject, getTimeDifference} from "../Calendar/CommonFunctions";
 import {useMemo, useState} from "react";
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import {TimePicker} from '@mui/x-date-pickers/TimePicker';
@@ -28,26 +28,6 @@ export default function StudyRecap(props) {
             setErrorMessage(err.message);
         })
     }, [])
-
-    /**
-     * Method to calculate the time difference between two time strings (endTime-startTime); does NOT take dates into account
-     * @param {String} startTime, start time for calculation in string format "HH:mm"
-     * @param {String} endTime, start time for calculation in string format "HH:mm"
-     * @returns {String}, string format "HH:mm", where "HH" is hour difference and "mm" is minute difference between startTime and endTime
-     */
-    const getTimeDifference = (startTime, endTime) => {
-        const sTime = new Date(startTime);
-        const eTime = new Date(endTime);
-        let hourDiff = eTime.getHours() - sTime.getHours();
-        if (hourDiff < 0) hourDiff += 24;
-        let minDiff = eTime.getMinutes() - sTime.getMinutes();
-        if (minDiff < 0) {
-            hourDiff -= 1;
-            minDiff += 60;
-        }
-
-        return `${hourDiff}:${minDiff}`;
-    }
 
     /**
      * method to update events in the database on confirmation of study times

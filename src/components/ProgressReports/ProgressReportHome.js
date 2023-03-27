@@ -3,25 +3,96 @@ import NavDrawer from "../NavDrawer/navDrawer";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
-import AssessmentIcon from '@mui/icons-material/Assessment';
 import {StudyRoomCard} from "../StudyRoom/CommonResources";
 import axios from "axios";
-import GetAuthentication from "../Authentication/Authentification";
+import { useState, useMemo, useEffect } from 'react';
+import {GetAuthentication} from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
+import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
+import { fetchData } from './fetchingCategoryDataFactory';
+import 'chart.js/auto';
+import { Bar } from 'react-chartjs-2';
 import StudyRecap from "./StudyRecap";
 import UpdateIcon from '@mui/icons-material/Update';
 
-
-export default function ProgressReportHome() {
-    const [course, setCourse] = React.useState([])
-    const [time, setTime] = React.useState('')
+export default function ProgressReportHome(){
+    const [courses, setCourses] = useState([])
+    const [link, setLink] = useState('study-events-monthly')
+    const [course, setCourse] = useState([])
+    const [time, setTime] = useState('')
     const email = GetAuthentication().email;
 
-
-    React.useEffect(() => {
+    useEffect(()=>{
+        fetchData(link, setCourses)
         handleCourseList()
         handleTotalStudyTime()
-    }, [])
+    },[link])
+
+
+    const studyStatisticsData = {
+        labels: courses?.map((course) => course.name),
+        datasets: [{
+            label: "Recommended",
+            backgroundColor: '#912338',
+            data: courses?.map((course) => course.expectedTime),
+        }, {
+            label: "Actual",
+            backgroundColor: '#E9E3D3',
+            data: courses?.map((course) => course.Actual),
+        }]
+    }
+
+    const categoryStatisticsData = {
+        labels: courses?.map((course) => course.name),
+        datasets: [{
+            label: "Time (hours)",
+            backgroundColor: courses?.map((course) => course.colour),
+            data: courses?.map((course) => course.expectedTime),
+        }]
+    }
+
+    const optionsStudyData = {
+        maintainAspectRatio: false,
+        responsive: false,
+        indexAxis: 'y',
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Hours'
+                }
+            }
+        }
+    };
+
+    const optionsCategoryData = {
+        maintainAspectRatio: false,
+        responsive: false,
+        indexAxis: 'y',
+        plugins: {
+            legend: {
+                display: false,
+            },
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Hours'
+                }
+            }
+        }
+    };
+
+    const renderBarChart = (data, options) => {
+        return (
+            <React.Fragment>
+                <div>
+                    <Bar data={data} height={"600%"} options={options}></Bar>
+                </div>
+            </React.Fragment>
+        )
+    }
 
     function handleCourseList() {
         axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
@@ -85,7 +156,7 @@ export default function ProgressReportHome() {
                             </div>
                         ))}
                     </div>
-                    <StudyRoomCard data-test={`${time}`} width={'81vw'} height={'40px'}
+                    <StudyRoomCard data_test={'totalRecommendedStudyTime'} width={'81vw'} height={'40px'}
                                    content={<> Total recommended study time: {time} hrs
                                    </>}/>
 
@@ -93,24 +164,31 @@ export default function ProgressReportHome() {
             }/>
 
             {/*drawers for future features*/}
-            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
+            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '2vw', marginRight: '2vw'}}>
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 1'} content={"feature 1"}/></div>}/>
+                                   bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Courses Statistics" onClick={() => { setLink('study-events-monthly') }} />}
+                                       title={'Monthly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
+                               </div> }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 2'} content={"feature 2"}/></div>}/>
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Courses Statistics" onClick={() => { setLink('study-events-weekly') }} />}
+                                       title={'Weekly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
+                               </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
-                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
-                    style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<AssessmentIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
-                               title={'Feature 3'} content={"feature 3"}/></div>}/>
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Category Statistics" onClick={() => { setLink('events-monthly') }} />}
+                                       title={'Monthly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
+                               </div>
+                   }/>
+
+                <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
+                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Category Statistics" onClick={() => { setLink('events-weekly') }} />}
+                                       title={'Weekly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
+                               </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
@@ -122,5 +200,12 @@ export default function ProgressReportHome() {
         </React.Fragment>
     )
 
-    return (<BackgroundCard width='96vw' height='99vh' content={studyEstimator}/>)
+    const statisticPageCards = useMemo(() => (
+        <React.Fragment>
+            {studyEstimator}
+
+        </React.Fragment>
+    ), [studyEstimator]);
+
+    return(<BackgroundCard width='96vw' height='99vh' content={statisticPageCards}/>)
 }
