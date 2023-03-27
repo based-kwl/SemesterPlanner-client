@@ -65,7 +65,7 @@ export default function RoomCreation() {
         <React.Fragment>
             <form style={{alignItems: 'center'}} onSubmit={handleRoomCreation}>
                 <RoomDataComponents roomState={roomData} roomStateSetter={setRoomData} />
-                <div style={{width: '90vw', height: '45vh', marginTop: '10px'}}>
+                <div style={{width: '90vw', height: '35vh', marginTop: '10px'}}>
                     <Typography style={{fontWeight: 'bold'}}>
                         Select group members:
                     </Typography>
