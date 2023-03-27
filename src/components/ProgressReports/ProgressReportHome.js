@@ -8,12 +8,13 @@ import axios from "axios";
 import { useState, useMemo, useEffect } from 'react';
 import {GetAuthentication} from "../Authentication/Authentification";
 import {Stack} from "@mui/system";
-import { PrimaryButton2 } from '../CustomMUIComponents/CustomButtons';
 import { fetchData } from './fetchingCategoryDataFactory';
 import 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import StudyRecap from "./StudyRecap";
 import UpdateIcon from '@mui/icons-material/Update';
+import CategoryIcon from '@mui/icons-material/Category';
+import SchoolIcon from '@mui/icons-material/School';
 
 export default function ProgressReportHome(){
     const [courses, setCourses] = useState([])
@@ -128,35 +129,30 @@ export default function ProgressReportHome(){
                     <div style={{overflow: 'auto', height: '32vh'}}>
                         {course.map((course, index) => (
                             <div key={index}>
-                                <StudyRoomCard data-test={`${course}`} width={'81vw'} height={'40px'}
+                                <StudyRoomCard data-test={`${course}`} width={'85vw'} height={'fit-content'}
 
                                                content={<Stack direction="row"
                                                                justifyContent="space-between"
-                                                               spacing={20}>
+                                                               >
                                                    <div style={{
-                                                       width: "60vw",
+                                                       width: "50vw",
                                                        margin: "0px",
-                                                       display: 'flex',
-                                                       justifyItems: 'left'
                                                    }}>{course.subject} {course.catalog} {course.title} </div>
                                                    <div style={{
-                                                       width: "10vw",
+                                                       width: "15vw",
                                                        margin: "0px",
-                                                       display: 'flex',
-                                                       justifyItems: 'right'
                                                    }}>credits: {course.classUnit}</div>
                                                    <div style={{
-                                                       width: "11vw",
+                                                       width: "15vw",
                                                        margin: "0px",
-                                                       display: 'flex',
-                                                       justifyItems: 'right'
+
                                                    }}> study time: {course.studyHours} hrs
                                                    </div>
                                                </Stack>}/>
                             </div>
                         ))}
                     </div>
-                    <StudyRoomCard data_test={'totalRecommendedStudyTime'} width={'81vw'} height={'40px'}
+                    <StudyRoomCard data_test={'totalRecommendedStudyTime'} width={'85vw'} height={'40px'}
                                    content={<> Total recommended study time: {time} hrs
                                    </>}/>
 
@@ -167,33 +163,33 @@ export default function ProgressReportHome(){
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '2vw', marginRight: '2vw'}}>
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Courses Statistics" onClick={() => { setLink('study-events-monthly') }} />}
+                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} onClick={() => { setLink('study-events-monthly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
                                        title={'Monthly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div> }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Courses Statistics" onClick={() => { setLink('study-events-weekly') }} />}
+                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} onClick={() => { setLink('study-events-weekly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
                                        title={'Weekly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Monthly Category Statistics" onClick={() => { setLink('events-monthly') }} />}
+                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} onClick={() => { setLink('events-monthly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
                                        title={'Monthly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>
                    }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<PrimaryButton2  colour={'#912338'} content="Weekly Category Statistics" onClick={() => { setLink('events-weekly') }} />}
+                    <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} onClick={() => { setLink('events-weekly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
                                        title={'Weekly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<UpdateIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>}
+                ><BottomDrawer icon={<Stack style={{width:'110%', height:'100%'}} direction="column" alignItems="center" justifyContent="center"><UpdateIcon style={{color: '#912338'}}/> <Typography variant="body2" style={{color:'#912338'}}>Recaps</Typography></Stack>}
                                title={'Study Recap'} content={<StudyRecap/>}/></div>}/>
 
             </div>
