@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {BackgroundCard, SnippetCard} from "../CustomMUIComponents/CustomCards";
+import {BackgroundCard, SnippetCard, StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
 import * as React from "react";
 import NavDrawer from "../NavDrawer/navDrawer";
 import BottomDrawer from "./BottomDrawer";
@@ -43,7 +43,9 @@ export default function StudyRoomHome() {
         const studyGroups = (
             <React.Fragment>
                 <NavDrawer/>
-                <div style={{overflow: 'scroll', height: '80vh', marginTop: '70px'}}>
+                <StudyRoomChatCard width='92vw' height='10vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{fontSize:'22px', fontWeight:'bold'}} ><Typography variant="1">Study Rooms</Typography></div>}/>
+                <div style={{overflow: 'scroll', height: '70vh', marginTop: '15px'}}>
 
                     {roomData.map((item, index) => (
                         <div  onClick={ () => handleDestination( item.studyRoomID)}>
