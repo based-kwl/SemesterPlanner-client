@@ -1,4 +1,4 @@
-import { GetAuthentication } from '../Authentication/Authentification';
+import GetAuthentication from "../Authentication/Authentification";
 import axios from 'axios';
 
 
@@ -74,38 +74,34 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
   const hoursBetween = [];
 
   // Loop through each time segment between the start and end dates
-
   let currentDate = new Date(startDate);
   while (currentDate <= endDate) {
     const currentTimestamp = currentDate.toISOString();
+
     // Check if the current time segment is excluded
     let isExcluded = false;
     for (let i = 0; i < excludedTimes.length; i++) {
       const startExcluded = new Date(excludedTimes[i][0]);
       const endExcluded = new Date(excludedTimes[i][1]);
+
       // Floor the start time and ceil the end time
       startExcluded.setMinutes(Math.floor(startExcluded.getMinutes() / segment) * segment, 0, 0);
       endExcluded.setMinutes(Math.ceil(endExcluded.getMinutes() / segment) * segment, 0, 0);
+
       if (currentDate >= startExcluded && currentDate < endExcluded) {
         isExcluded = true;
         break;
       }
     }
+
     // Add the current time segment to the results if it's not excluded
     if (!isExcluded) {
       hoursBetween.push(currentTimestamp);
     }
-    // Move to the next time segment if currentDate is less than endDate
-    if (currentDate < endDate) {
-      currentDate.setMinutes(currentDate.getMinutes() + segment);
-    } else {
-      break; // exit the loop if currentDate is greater than or equal to endDate
-    }
+
+    // Move to the next time segment
+    currentDate.setMinutes(currentDate.getMinutes() + segment);
   }
-  timeslots(hoursBetween);
-  return hoursBetween;
-  
   timeslots(hoursBetween)
   return hoursBetween;
 }
-
