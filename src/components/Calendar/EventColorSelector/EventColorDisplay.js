@@ -1,6 +1,6 @@
 import Card from '@mui/material/Card';
 import * as React from 'react';
-import { BackgroundCard, ColorEventCard, CustomWhiteCard, EventCard } from '../../CustomMUIComponents/CustomCards';
+import { BackgroundCard, ColorEventCard} from '../../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
 import { EditButton} from '../../CustomMUIComponents/CustomButtons'
 import { useNavigate } from "react-router";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 export default function EventColorDisplay() {
     const navigate = useNavigate();
  
-    function editEventColor(e) {
+    function editEventColor() {
         navigate('/colorselector');
     }
 

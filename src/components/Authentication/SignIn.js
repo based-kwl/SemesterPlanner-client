@@ -15,7 +15,6 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-    // const [login, setLogin] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
