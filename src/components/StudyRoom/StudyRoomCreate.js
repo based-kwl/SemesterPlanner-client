@@ -7,7 +7,7 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import {useState} from "react";
 import {RoomDataComponents, StudyRoomCard} from "./CommonResources";
-
+import {GetAuthentication} from "../Authentication/Authentification";
 
 export default function RoomCreation() {
     const navigate = useNavigate();
@@ -22,18 +22,18 @@ export default function RoomCreation() {
         participants:[],
         createdAt:''
     });
+    const user = GetAuthentication();
 
     React.useEffect(()=> {
-        let email = JSON.parse(localStorage.getItem("email"));
-        setRoomData({...roomData, owner: email})
+        setRoomData({...roomData, owner: user.email})
         fetchData();
         },[])
-    // API call to get the list of friends for the logged in user
+    // API call to get the list of friends for the logged-in user
     function fetchData() {
-        const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${user.email}`)
             .then(res => {
                 setFriends( res.data);
+                console.log(res.data)
             })
     }
     const handleCheck =(e) =>{
