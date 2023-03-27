@@ -19,7 +19,7 @@ export default function StudyRoomHome() {
 
     useEffect(() => {
         getData();
-    })
+    },[])
 
     //API call to get all the rooms that the logged-in user participates in
     const getData = () => {
