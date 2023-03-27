@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import { getTime } from "../Calendar/CommonFunctions";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import GetAuthentication from "../Authentication/Authentification";
+import { GetAuthentication } from '../Authentication/Authentification';
 import axios from "axios";
 import { delay } from "../CommonHelperFunctions/CommonHelperFunctions";
 import { getHoursBetweenTimestamps } from "./examNotificationFactory";
