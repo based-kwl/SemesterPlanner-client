@@ -1,4 +1,4 @@
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from '../Authentication/Authentification';
 import axios from 'axios';
 
 
