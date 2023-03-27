@@ -6,7 +6,7 @@ import {InputAdornment, Typography} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {BackgroundCard, StudyRoomChatCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
+import {BackgroundCard, StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useEffect, useRef} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
@@ -114,6 +114,7 @@ export default function EditProfile() {
                         label="Username"
                         variant='outlined'
                         onChange={handleUsernameChange}
+                        size="small"
                     />
                 </div>
 
@@ -125,6 +126,7 @@ export default function EditProfile() {
                                label="New Password"
                                variant='outlined'
                                onChange={handlePasswordChange}
+                               size="small"
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -139,6 +141,7 @@ export default function EditProfile() {
                                label="Confirm Password"
                                variant='outlined'
                                onChange={handleConfirmPasswordChange}
+                               size="small"
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -156,7 +159,7 @@ export default function EditProfile() {
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
-                <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
+                <div style={{paddingTop: '10px', paddingBottom: '5px'}}>
                     <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
                 <div align={'center'} >
@@ -170,7 +173,7 @@ export default function EditProfile() {
 
     const InfoEdit = (
         
-        <StudyRoomChatCard width='92vw' height='auto' marginTop='2px' 
+        <StudyRoomChatCard width='92vw' height='auto' marginTop='2px'
        content={SignUpForm}/>
     )
 
@@ -184,7 +187,7 @@ export default function EditProfile() {
         <React.Fragment>
             <PersistentDrawerLeft/>
             <div >
-                <BackgroundCard  width='95vw' height='auto' content={[TitleCard,InfoEdit]}/>
+                <BackgroundCard  width='95vw' height='99vh' content={[TitleCard,InfoEdit]}/>
             </div>
         </React.Fragment>
     );
