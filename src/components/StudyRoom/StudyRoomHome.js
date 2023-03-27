@@ -53,7 +53,7 @@ export default function StudyRoomHome() {
                                 value={item}
                                 key={index}
                                 width='92vw'
-                                borderRadius='10px'
+                                borderRadius='5px'
                                 height='12vh'
                                 marginBottom='15px'
                                 content={
