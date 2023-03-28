@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
 import {getTime} from "../Calendar/CommonFunctions";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import axios from "axios";
 import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
