@@ -24,12 +24,13 @@ export default function ExamNotification(props) {
         startTime: new Date(),
         endTime: new Date()
     })
+    const [error, setError] = React.useState('')
     const options = { month: "long" };
     let date = new Date(exams.startDate)
     let date2 = new Intl.DateTimeFormat('en-us', options).format(date).toUpperCase()
     let date3 = date.getDate()
 
-
+console.log(studyTimes)
     React.useEffect(() => {
         // Convert strings to Date objects
         const date_1 = new Date(exams.startDate);
@@ -74,6 +75,10 @@ export default function ExamNotification(props) {
 
 
     function handleEvent() {
+        console.log(studyTimes)
+        if(studyTimes.length === 0)
+            setError('Confirm Study Sessions')
+        else{
         studyTimes.forEach((studyTime) => {
             const dateepoch = new Date(studyTime[0]);
             const isoStartTimestampString = dateepoch.toISOString();
@@ -97,10 +102,12 @@ export default function ExamNotification(props) {
                 endDate: isoEndTimestampString
             }
             axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventDay)
-                .then((res) => {
+                .then(() => {
 
                 })
+
         })
+        handleDismiss()}
     }
     function handleTimeChange(e) {
         const newDate = new Date()
@@ -177,14 +184,17 @@ export default function ExamNotification(props) {
         </TextField>
     )
     const examName = (
-        <div align='center' style={{ marginBottom: '5px' }}>
+        <div align='center' >
             <Typography variant="h5"> {exams.subject + ' ' + exams.catalog} EXAM ON {date2} {date3}</Typography>
         </div>
+    )
+    const errorField = (
+        <div style={{color:'red'}}>{error}</div>
     )
 
     const showAvailability = (
         <React.Fragment>
-            <div style={{ width: '97vw', marginBottom: '5px', paddingLeft: '7px' }}>
+            <div style={{ width: '97vw', paddingLeft: '7px' }}>
                 <Typography> show availability from <p style={{ alignItems: 'center' }}>{startTime} to {endTime}</p></Typography>
                 <Typography> display slots of {slotMenu} </Typography>
             </div>
@@ -193,6 +203,7 @@ export default function ExamNotification(props) {
     )
 
     const handleAddStudyTimeSlots = (startTime) => {
+        setError('')
         const startDate = new Date(startTime);
         const endDate = new Date(startDate.getTime() + (timePeriod === 60 ? 60 : 30) * 60 * 1000);
         setStudyTimes([...studyTimes, [startDate.getTime(), endDate.getTime()]]);
@@ -280,14 +291,14 @@ export default function ExamNotification(props) {
                                         variant="text"
                                         onClick={() => handleRemoveStudyTimeSlots(startDate.getTime())}
                                     >
-                                        <CheckIcon style={{ color: 'green' }}/>
+                                        <CheckIcon style={{ color: '#057D78' }}/>
                                     </Button>
                                     :
                                     <Button
                                         variant="text"
                                         onClick={() => handleAddStudyTimeSlots(startTime)}
                                     >
-                                        <AddIcon style={{ color: 'green' }} />
+                                        <AddIcon style={{ color: '#057D78' }} />
                                     </Button>
                                 }
                             </Stack>
@@ -313,14 +324,18 @@ export default function ExamNotification(props) {
     )
     const examNotification = (
         <React.Fragment>
+            <div style={{height:'fit-content', width: '97vw',}}>
             {examName}
             {showAvailability}
+            </div>
+            <div style={{height:'3vh', width: '97vw',}}>
+            {errorField}
+            </div>
             <div align='center' style={{
                 border: '1px black solid', overflow: 'auto',
-                paddingTop: '10px',
-                marginBottom: '10px',
                 width: '97vw',
-                height: '35vh'
+                height: '30vh',
+                marginBottom:'5px'
             }}>
                 {timeDisplay}
 
