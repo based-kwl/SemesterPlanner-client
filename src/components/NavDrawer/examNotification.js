@@ -280,14 +280,14 @@ export default function ExamNotification(props) {
                                         variant="text"
                                         onClick={() => handleRemoveStudyTimeSlots(startDate.getTime())}
                                     >
-                                        <CheckIcon />
+                                        <CheckIcon style={{ color: 'green' }}/>
                                     </Button>
                                     :
                                     <Button
                                         variant="text"
                                         onClick={() => handleAddStudyTimeSlots(startTime)}
                                     >
-                                        <AddIcon />
+                                        <AddIcon style={{ color: 'green' }} />
                                     </Button>
                                 }
                             </Stack>
