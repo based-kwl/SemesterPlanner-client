@@ -13,7 +13,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm --passWithNoTests test
+          command: npm run --passWithNoTests
           name: Run tests
       - run:
           command: npm run build
