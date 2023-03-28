@@ -138,7 +138,7 @@ export default function NotificationMenu() {
                     </MenuItem> : null}
                 {examCount > 0 ?
                    <> {exam.map((exam,index)=>(
-                    <MenuItem  onClick={()=>{handleExamNotificationClick(index)}}>
+                    <MenuItem key={exam.eventID} onClick={()=>{handleExamNotificationClick(index)}}>
                         <div style={{marginRight: '43px'}}>Exam Notification {' '+ exam.subject+' '}{exam.catalog}</div>
                         <div>
                             <Badge badgeContent={1} showZero overlap="circular" sx={{
@@ -162,7 +162,7 @@ export default function NotificationMenu() {
                 <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'friendRequestDrawer'}></div>} title={'Friend Requests'}
                               content={<FriendNotification/>}/>
                 {exam.map((exam, index)=>{
-                    return ( <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={'Exam Notification'}
+                    return ( <BottomDrawer key={exam.eventID} icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={'Exam Notification'}
                                   content={<ExamNotification examData={exam}/>}/>)
                 })}
 
