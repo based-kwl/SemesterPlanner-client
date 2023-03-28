@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {Typography, Stack} from "@mui/material";
 import axios from "axios";
-import {RecurrenceSelection} from '../Custom/CommonInputEventForm';
-import {EventForm} from '../Custom/CommonInputEventForm';
+import {RecurrenceSelection, EventForm} from '../Custom/CommonInputEventForm';
 import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
 import {GetAuthentication} from "../../Authentication/Authentification";
 
