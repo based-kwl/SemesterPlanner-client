@@ -6,7 +6,7 @@ import {InputAdornment, Typography} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {BackgroundCard, CustomWhiteCard} from "../CustomMUIComponents/CustomCards";
+import {BackgroundCard, StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {useEffect, useRef} from "react";
 import {FacultySelect, ProfileToggle, ProgramSelect} from "../CustomMUIComponents/CommonForms";
@@ -56,7 +56,6 @@ export default function EditProfile() {
     function handleEditProfile() {
         axios.post(`${process.env.REACT_APP_BASE_URL}student/update`, userData)
             .then(() => {
-                localStorage.setItem("username", JSON.stringify(userData.username))
                 navigate('/calendar');
             })
             .catch(err => {
@@ -101,20 +100,20 @@ export default function EditProfile() {
 
     const SignUpForm = (
         <React.Fragment>
-            <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
+          <div style={{overflow: 'auto', height: '80vh'}}>
+          <form style={{paddingLeft: '10px', paddingRight: '10px'}}>
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>{PageError}</div>
-                <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
-                <Typography align='center' style={{padding:'10px', fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Edit Profile
-                </Typography>
+                <div style={{paddingTop: '0px', paddingBottom: '10px'}}>
+          
                     <TextField
                         fullWidth
                         id='username'
                         value={userData.username}
-                        required
                         label="Username"
                         variant='outlined'
+                        disabled={true}
                         onChange={handleUsernameChange}
+                        size="small"
                     />
                 </div>
 
@@ -126,6 +125,7 @@ export default function EditProfile() {
                                label="New Password"
                                variant='outlined'
                                onChange={handlePasswordChange}
+                               size="small"
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -140,6 +140,7 @@ export default function EditProfile() {
                                label="Confirm Password"
                                variant='outlined'
                                onChange={handleConfirmPasswordChange}
+                               size="small"
                                InputProps={{
                                    endAdornment: <InputAdornment
                                        position="end"><VisibilityIcon/></InputAdornment>,
@@ -157,23 +158,35 @@ export default function EditProfile() {
                 <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
                     <ProgramSelect userData={userData} handleProgramChange={handleProgramChange} />
                 </div>
-                <div style={{paddingTop: '10px', paddingBottom: '30px'}}>
+                <div style={{paddingTop: '10px', paddingBottom: '5px'}}>
                     <ProfileToggle userData={userData} handlePrivacyChange={handlePrivacyChange} />
                 </div>
-                <PrimaryButton2 width='80vw' style={{position: 'absolute'}}  colour={'#912338'} content="Update" onClick={handleEditProfile}/>
+                <div align={'center'} >
+                <PrimaryButton2 width='80vw' style={{position: 'absolute'}} colour={'#912338'} content="Update" onClick={handleEditProfile}/>
+                </div>
             </form>
+          </div>
+            
         </React.Fragment>
     )
 
     const InfoEdit = (
-        <CustomWhiteCard width='92vw' height='980px' marginTop='30px'  content={SignUpForm}/>
+        
+        <StudyRoomChatCard width='92vw' height='auto' marginTop='2px'
+       content={SignUpForm}/>
     )
 
+    const TitleCard = (
+        <StudyRoomChatCard width='92vw' height='8vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
+        
+        content={<div style={{fontSize: '22px', fontWeight: 'bold'}}><Typography variant="1">Edit Profile
+            </Typography></div>}/>
+    )
     return (
         <React.Fragment>
             <PersistentDrawerLeft/>
-            <div style={{paddingTop: '60px'}}>
-                <BackgroundCard  width='96vw' height='99vh' content={InfoEdit}/>
+            <div >
+                <BackgroundCard  width='95vw' height='99vh' content={[TitleCard,InfoEdit]}/>
             </div>
         </React.Fragment>
     );

@@ -52,19 +52,6 @@ export const FileSelectButton = ({width, onChange, name, data_test}) => {
     );
 }
 
-export const SecondaryButton2 = ({content, width, onClick}) => {
-    return (
-        <Button
-            onClick={onClick}
-            variant="contained"
-            style={{
-                paddingTop: '10px', paddingBottom: '10px',
-                width: width, backgroundColor: '#C8C8C8'
-            }}>
-            {content}
-        </Button>
-    );
-}
 
 export const EditButton = ({content, width, onClick}) => {
     return (
@@ -82,7 +69,7 @@ export const EditButton = ({content, width, onClick}) => {
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {
-        return (!(content === userData.faculty) ? '#057D78' : '#CBB576');
+        return (content !== userData.faculty ? '#057D78' : '#CBB576');
     }
 
     function handleButtonSelect() {

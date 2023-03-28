@@ -148,7 +148,7 @@ export default function CalendarView() {
             </React.Fragment>
         ) }
 
-    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
+    const EventDisplay = ({startTime, endTime, header, description, startDate, link}) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
@@ -166,6 +166,7 @@ export default function CalendarView() {
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary">
+                        <a href={link}>{link}</a>
                     </Typography>
 
                 </div>
@@ -204,6 +205,7 @@ export default function CalendarView() {
                                             startTime={getTime(e.startTime)}
                                             endTime={getTime(e.endTime)}
                                             description={e.description}
+                                            link={e.link}
                                             header={e.eventHeader}
                                             EventID={e._id}
                                         />

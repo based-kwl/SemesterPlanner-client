@@ -1,14 +1,16 @@
 import {useNavigate} from "react-router";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import * as React from "react";
 import axios from "axios";
 import {Stack} from "@mui/material";
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import {RoomDataComponents} from "./CommonResources";
+import {GetAuthentication} from "../Authentication/Authentification";
+
 
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
-    const[loading,setLoading] = useState(true);
+    const[loading,setLoading] = React.useState(true);
     const [roomData, setRoomData] = React.useState({
         owner:'',
         studyRoomID:'',
@@ -18,6 +20,7 @@ export default function StudyRoomSettings() {
         description:'',
         participants:[],
     });
+    const user = GetAuthentication();
 
     const fetchData = useCallback(( ) => {
         const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length-1];
@@ -33,13 +36,8 @@ export default function StudyRoomSettings() {
 
     React.useEffect(()=>{
         fetchData();
-        let email = JSON.parse(localStorage.getItem("email"));
-        //user needs to be logged in to access
-        if(email === undefined || email === ''){
-            navigate("/login");
-        }
         // only an owner can access the settings page
-        if(roomData.owner !== email && roomData.owner !== ''){
+        if(roomData.owner !== user.email && roomData.owner !== ''){
             navigate("/study-room-home");
         }
     },[loading])
