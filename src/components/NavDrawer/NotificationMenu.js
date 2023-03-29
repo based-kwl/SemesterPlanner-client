@@ -10,12 +10,21 @@ import BottomDrawer from "../StudyRoom/BottomDrawer";
 import FriendNotification from "../FriendList/FriendsNotification";
 import StudyRecap from "../ProgressReports/StudyRecap";
 import {filterEventsByDate, getEventList} from "../Calendar/CommonFunctions";
+import ExamNotification from "./examNotification";
 
 export default function NotificationMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [friendRequestCount, setFriendRequestCount] = React.useState(0);
     const [studyHourCount, setStudyHourCount] = React.useState(0);
+    const [examCount, setExamCount] = React.useState(0)
+    const [exam, setExam] = React.useState([{
+        subject: '',
+        catalog: '',
+        eventID: '',
+        startDate: new Date(),
+        studyHoursConfirmed:''
+    }]);
 
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${GetAuthentication().email}`)
@@ -28,16 +37,24 @@ export default function NotificationMenu() {
 
         getEventList(GetAuthentication().username).then((res) => {
             let studyEventList = filterEventsByDate(res, new Date()).filter(item => item.type === 'study' && !item.studyHoursConfirmed);
+            let today = new Date()
+            let examDate = new Date(today)
+            examDate.setDate(today.getDate()+7)
+            const examEventList = filterEventsByDate(res, examDate).filter(item => item.type === 'exam' && !item.studyHoursConfirmed)
+            setExam(examEventList)
 
             if (studyEventList.length > 0) {
                 const currentTime = new Date();
                 if (currentTime.getHours() >= 21)
                     setStudyHourCount(studyHourCount + 1);
             }
+            let len = exam.length
+            setExamCount(len)
         }).catch((err) => {
             console.log(err.message);
         })
-    }, [])
+    }, [examCount,exam.length])
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -56,6 +73,12 @@ export default function NotificationMenu() {
         document.getElementById('studyRecapDrawer').click();
     };
 
+    const handleExamNotificationClick = (index) => {
+        setAnchorEl(null);
+        document.getElementById(index.toString()).click();
+
+    };
+
     return (
         <div>
             <Button
@@ -65,7 +88,7 @@ export default function NotificationMenu() {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <Badge badgeContent={friendRequestCount + studyHourCount} showZero overlap="circular" sx={{
+                <Badge badgeContent={friendRequestCount + studyHourCount + examCount} showZero overlap="circular" sx={{
                     "& .MuiBadge-badge": {
                         color: "white",
                         backgroundColor: "#000000"
@@ -113,7 +136,20 @@ export default function NotificationMenu() {
                             }}/>
                         </div>
                     </MenuItem> : null}
-                {friendRequestCount <= 0 && studyHourCount <= 0 ?
+                {examCount > 0 ?
+                   <> {exam.map((exam,index)=>(
+                    <MenuItem key={exam.eventID} onClick={()=>{handleExamNotificationClick(index)}}>
+                        <div style={{marginRight: '43px'}}>Exam Notification {' '+ exam.subject+' '}{exam.catalog}</div>
+                        <div>
+                            <Badge badgeContent={1} showZero overlap="circular" sx={{
+                                "& .MuiBadge-badge": {
+                                    color: "white",
+                                    backgroundColor: "#000000"
+                                }
+                            }}/>
+                        </div>
+                    </MenuItem> ))}</> : null}
+                {friendRequestCount <= 0 && studyHourCount <= 0 && examCount <= 0 ?
                     <MenuItem style={{ backgroundColor: 'transparent' }} disableRipple={true}>
                         No notifications
                     </MenuItem>
@@ -125,6 +161,11 @@ export default function NotificationMenu() {
                                                    notificationCountSetter={setStudyHourCount}/>}/>
                 <BottomDrawer icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={'friendRequestDrawer'}></div>} title={'Friend Requests'}
                               content={<FriendNotification/>}/>
+                {exam.map((exam, index)=>{
+                    return ( <BottomDrawer key={exam.eventID} icon={<div style={{visibility: 'hidden', height: '0px', width: '0px'}} id={index.toString()}></div>} title={'Exam Notification'}
+                                  content={<ExamNotification examData={exam}/>}/>)
+                })}
+
             </div>
         </div>
     );
