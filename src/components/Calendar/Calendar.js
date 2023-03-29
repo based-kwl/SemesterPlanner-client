@@ -28,7 +28,6 @@ export default function CalendarView() {
     const categories = ['course', 'study', 'workout', 'appointment', 'exam'];
 
     const user = GetAuthentication();
-    //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
