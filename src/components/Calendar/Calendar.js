@@ -6,31 +6,33 @@ import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
 import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
-import {getTime} from "./CommonFunctions";
+import {expandEventList, getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
 import EditEvent from "./Event/EditEvent";
 import BottomDrawer from "../StudyRoom/BottomDrawer";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
+    const [condensedEventsList, setCondensedEventsList] = useState([]);
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const categories = ['course', 'study', 'workout', 'appointment'];
+    const categories = ['course', 'study', 'workout', 'appointment', 'exam'];
 
     const user = GetAuthentication();
-    //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
-                    setEvents(res.data)
+                    setCondensedEventsList(res.data);
+                    setEvents(expandEventList(res.data));
                 }
             ).catch((err) => {
             setEventError({...eventError, message: err.message});
@@ -70,7 +72,7 @@ export default function CalendarView() {
      * @param {int} type, type of update required; 0 = update, 1 = delete, 2 = add
      */
     async function updateEventList(eventData, type) {
-        const tempEvents = [...events];
+        const tempEvents = [...condensedEventsList];
 
         if (type === 0)
             tempEvents[tempEvents.findIndex((e) => e._id === eventData._id)] = eventData;
@@ -79,7 +81,8 @@ export default function CalendarView() {
         else if (type === 2)
             tempEvents.push(eventData);
 
-        setEvents(tempEvents);
+        setCondensedEventsList(tempEvents);
+        setEvents(expandEventList(tempEvents));
     }
 
     const AcademicEventsTile = ({ date }) => (
@@ -110,7 +113,7 @@ export default function CalendarView() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{width:'92vw', display:'flex', justifyContent:"space-between"}}>
                 <BottomDrawer icon={<PrimaryButton2 data_test={"uploadPhotoEventButtonCalenderPage"} style={{ margin: 'auto' }} colour={'#057D78'} content={<AddAPhotoIcon/>}/>}
                               title={'Upload an Image'} content={<ImageUpload onDrawerClose={updateEventList}/>}/>
-                <BottomDrawer icon={<PrimaryButton2 data_test={"addEventButtonCalendarPage"} style={{ margin: 'auto' }} colour={'#912338'} content="+"/>}
+                <BottomDrawer icon={<PrimaryButton2 style={{ margin: 'auto' }} data_test={"addEventButtonCalendarPage"} colour={'#912338'} content={<AddIcon style={{color:'white'}}/>}/>}
                 title={'Add Event'} content={<CreateEvent onDrawerClose={updateEventList} date={date}/>}/>
                 </div>
 
@@ -144,7 +147,7 @@ export default function CalendarView() {
             </React.Fragment>
         ) }
 
-    const EventDisplay = ({startTime, endTime, header, description, startDate}) => {
+    const EventDisplay = ({startTime, endTime, header, description, startDate, link}) => {
         const currentDate = new Date(startDate);
         return (
             <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
@@ -162,6 +165,7 @@ export default function CalendarView() {
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary">
+                        <a href={link}>{link}</a>
                     </Typography>
 
                 </div>
@@ -185,10 +189,10 @@ export default function CalendarView() {
                     content={<EventTypeHeader content={categories[index]}/>}
                     backgroundColor={categories[index]}
                 />
-                        {events && events.map((e, index) => (
+                        {events && events.map((e) => (
                             <>{item === e.type && isSameDate(date, new Date(e.startDate)) ?
                             <EventCard
-                                key={index}
+                                key={e.eventID}
                                 justifyContent="left"
                                 width="92vw"
                                 height='fit-content'
@@ -200,6 +204,7 @@ export default function CalendarView() {
                                             startTime={getTime(e.startTime)}
                                             endTime={getTime(e.endTime)}
                                             description={e.description}
+                                            link={e.link}
                                             header={e.eventHeader}
                                             EventID={e._id}
                                         />
@@ -221,10 +226,10 @@ export default function CalendarView() {
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
-                {academicEvents && academicEvents.map((e, index) => (
+                {academicEvents && academicEvents.map((e) => (
                     <>{isSameDate(date, new Date(e.date))?
                     <EventCard
-                        key={index}
+                        key={academicEvents._id}
                         justifyContent="left"
                         width="92vw"
                         height='fit-content'
@@ -274,6 +279,8 @@ export default function CalendarView() {
             backgroundColor = "#DA3A16"
         } else if (eventType === categories[3]) {
             backgroundColor = "#DB0272"
+        } else if (eventType === categories[4]){
+            backgroundColor = "#912338"
         }
 
         let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.4)" }} />

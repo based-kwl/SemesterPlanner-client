@@ -140,7 +140,7 @@ export default function SignUp() {
                                id='confirmPassword'
                                type='password'
                                required
-                               error={!confirmPassword.isEqualToPassword && !(confirmPassword.password === '')}
+                               error={!confirmPassword.isEqualToPassword && confirmPassword.password !== ''}
                                helperText={confirmPassword.isEqualToPassword || confirmPassword.password === '' ? '' : 'Passwords must match'}
                                label="Confirm Password"
                                variant='outlined'

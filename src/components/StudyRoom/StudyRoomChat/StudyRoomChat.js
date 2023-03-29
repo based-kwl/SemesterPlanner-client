@@ -3,7 +3,7 @@ import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
 
 export function GetStudyRoomChat(){
 
@@ -68,9 +68,9 @@ export function GetStudyRoomChat(){
                 flexDirection: 'column-reverse'}} // scroll down to last message
             >
                 <Grid container>
-                    {messages.map((message, index) => {
+                    {messages.map((message) => {
                         return  (
-                            <Grid item key={index} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
+                            <Grid item key={messages.messageID} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
                                 { isMyMessage(message) ? <MyMessage props={message}/> : <OthersMessage props={message}/> }
                             </Grid>
                         )

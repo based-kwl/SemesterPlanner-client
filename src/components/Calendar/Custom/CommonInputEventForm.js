@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {MobileDatePicker} from '@mui/x-date-pickers/MobileDatePicker';
 import Grid from "@mui/material/Grid";
-import {Button, Stack, Typography, Radio, RadioGroup} from "@mui/material";
+import {Stack, Typography, Radio, RadioGroup} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Switch from "@mui/material/Switch";
@@ -11,24 +11,6 @@ import FormControl from "@mui/material/FormControl";
 import {getTime} from "../CommonFunctions";
 import {PrimaryButton2} from "../../CustomMUIComponents/CustomButtons";
 
-
-export const CalendarTextField = ({width, inputProps, id, value, label, variant, onChange, data_test}) => {
-    return (
-        <TextField
-            data-test={data_test}
-            fullWidth
-            id={id}
-            value={value || ''}
-            // required
-            label={label}
-            variant={variant}
-            onChange={onChange}
-            inputProps={inputProps}
-            width={width}
-            margin="normal"
-        />
-    )
-}
 
 export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) => {
     return (
@@ -44,7 +26,7 @@ export const CalendarDatePicker = ({inputProps, key, value, label, onChange}) =>
     )
 }
 
-export function EventForm({eventState, eventStateSetter, courseArray,value}) {
+export function EventForm({eventState, eventStateSetter, courseArray}) {
     const [isVisible, setIsVisible] = React.useState(false);
     const [isVisibleStudy, setIsVisibleStudy] = React.useState(false);
     function handleEditEventHeaderChange(e) {
@@ -76,7 +58,7 @@ export function EventForm({eventState, eventStateSetter, courseArray,value}) {
             setIsVisible(true);
             setIsVisibleStudy(false)
             eventStateSetter({...eventState, type: e.target.value});
-        }else if(type === 'study'){
+        }else if(type === 'study' || type === 'exam' ) {
             eventStateSetter({...eventState, type: e.target.value});
             setIsVisible(false);
             setIsVisibleStudy(true);
@@ -131,8 +113,8 @@ export function EventForm({eventState, eventStateSetter, courseArray,value}) {
             <FormControl >
                 <RadioGroup row onChange={handleStudyTypeCourse}>
             {courseArray.map((course, index) =>(
-                 <div key={index}>
-                        <FormControlLabel data-test={courseArray[index].subject+''+courseArray[index].catalog} control={<Radio size="small" />} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
+                 <div key={course.eventID}>
+                        <FormControlLabel  control={<Radio size="small" />} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
                   </div>
                 ))}
                 </RadioGroup>
@@ -145,6 +127,8 @@ export function EventForm({eventState, eventStateSetter, courseArray,value}) {
                 Select the event category: {eventState.type}
             </Typography>
             <Stack direction="row" spacing={1} justifyContent="center">
+                <PrimaryButton2 minWidth={'25vw'} colour={'#912338'} content="Exam" value="exam"
+                                onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
@@ -256,50 +240,36 @@ export function EventForm({eventState, eventStateSetter, courseArray,value}) {
     return (eventForm);
 }
 
-export const CalendarButton = ({content, disable, onClick, backgroundColor}) => {
-    return (
-        <div style={{paddingTop: '20px'}}>
-            <Button
-                disabled={disable}
-                onClick={onClick}
-                variant="contained"
-                style={{
-                    paddingTop: '10px', paddingBottom: '10px',
-                    width: '100%', backgroundColor: backgroundColor
-                }}>
-                {content}
-            </Button>
-        </div>
-
-    );
-}
-
 export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
+    const [isRecurrent, setIsRecurrent] = React.useState(recurrenceState.recurrence !== 'once');
 
     function handleRecurrenceChange(e) {
         setRecurrenceState({...recurrenceState, recurrence: e.target.value})
     }
 
-    function handleIsReccurentChange() {
-        setIsRecurrent((prev) => !prev);
+    function handleIsRecurrentChange() {
+        setIsRecurrent((prev) => {
+            if (!prev)
+                setRecurrenceState({...recurrenceState, recurrence: 'daily'});
+            else
+                setRecurrenceState({...recurrenceState, recurrence: 'once'});
+            return !prev;
+        });
     }
 
     const recurrenceOption = (
-
         <FormControl>
             <RadioGroup row onChange={handleRecurrenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio data-test="everyDay"/>}
+                <FormControlLabel checked={(recurrenceState.recurrence === 'once' || recurrenceState.recurrence === 'daily')} value="daily" control={<Radio data-test="everyDay"/>}
                                   label="Every Day"/>
-                <FormControlLabel value="weekly" control={<Radio data-test="everyWeek"/>} label="Every Week"/>
-                <FormControlLabel value="monthly" control={<Radio data-test="everyMonth"/>} label="Every Month"/>
+                <FormControlLabel checked={recurrenceState.recurrence === 'weekly'} value="weekly" control={<Radio data-test="everyWeek"/>} label="Every Week"/>
+                <FormControlLabel checked={recurrenceState.recurrence === 'monthly'} value="monthly" control={<Radio data-test="everyMonth"/>} label="Every Month"/>
             </RadioGroup>
 
             {/** Event End Date */}
-            <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+            <div data-test="recurrence-end-date" style={{paddingTop: '10px', paddingBottom: '10px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <CalendarDatePicker
-                        data-test="eventEndDate"
                         key={"endDate"}
                         label="Ending date"
                         value={recurrenceState.endDate}
@@ -316,7 +286,7 @@ export function RecurrenceSelection(recurrenceState, setRecurrenceState) {
                 data-test="eventSwitch"
                 sx={{color: '#912338'}}
                 checked={isRecurrent}
-                onChange={handleIsReccurentChange}
+                onChange={handleIsRecurrentChange}
             />
         }/>
     )

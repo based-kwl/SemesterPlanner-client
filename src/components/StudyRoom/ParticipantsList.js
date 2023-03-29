@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons"
 import axios from "axios";
 import {StudyRoomCard} from "./CommonResources";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function ParticipantsList() {
@@ -22,20 +23,14 @@ export default function ParticipantsList() {
     function handleDelete(index) {
         const emailToRemove = participants[index];
         axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email:emailToRemove, studyRoomID:studyRoomID})
-            .then(res => {
-                setParticipants(res.data.participants);
-                getParticipants();
-            })
+            .then(getParticipants)
             .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     function handleAdd(index) {
         const emailToAdd = availableFriends[index];
         axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:emailToAdd, studyRoomID:studyRoomID})
-            .then(res => {
-                setParticipants(res.data.participants);
-                getParticipants();
-            })
+            .then(getParticipants)
             .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
@@ -49,22 +44,21 @@ export default function ParticipantsList() {
                 const newOwner = res.data.owner;
                 setOwner(newOwner);
                 const newParticipants = [owner !== '' ? owner.toString() : [], res.data.participants ? res.data.participants.filter((participant) => participant !== owner.toString()) : []].flat();
-                setParticipants(newParticipants)
+
+                // obtain friend list, remove current participants from friend list, then set current participants and available friends to add
+                const email = GetAuthentication().email
+                axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${email}`)
+                    .then(res => {
+                        let newAvailableFriends = (newParticipants ? res.data.friends.filter((email) => !newParticipants.includes(email)) : res.data.friends);
+                        setParticipants(newParticipants);
+                        setAvailableFriends(newAvailableFriends);
+                    })
+                    .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
             })
             .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
     }
 
     useMemo(getParticipants,[])
-
-    useMemo(() => {
-        let email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}student/email/${email}`)
-            .then(res => {
-                let newAvailableFriends = (participants ? res.data.friends.filter((email) => !participants.includes(email)) : res.data.friends);
-                setAvailableFriends(newAvailableFriends);
-            })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
-    }, [participants])
 
     const participantsList = (
         <>

@@ -21,6 +21,7 @@ Cypress.Commands.add('logout', () => {
 Cypress.Commands.add('changeUser', (newEmail, newPassword) => {
     cy.visit(Cypress.env('baseUrl'));
     cy.logout();
+    cy.wait(100)
     cy.login(newEmail, newPassword);
 })
 

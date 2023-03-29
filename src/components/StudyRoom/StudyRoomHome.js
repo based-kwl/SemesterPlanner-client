@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {BackgroundCard, SnippetCard} from "../CustomMUIComponents/CustomCards";
+import {BackgroundCard, SnippetCard, StudyRoomChatCard} from "../CustomMUIComponents/CustomCards";
 import * as React from "react";
 import NavDrawer from "../NavDrawer/navDrawer";
 import BottomDrawer from "./BottomDrawer";
@@ -10,26 +10,20 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import {useNavigate} from "react-router";
 import axios from "axios";
-
-
+import {GetAuthentication} from "../Authentication/Authentification";
 
 export default function StudyRoomHome() {
     const navigate = useNavigate();
     const [roomData, setRoomData] = React.useState([]);
-    const email = JSON.parse(localStorage.getItem("email"));
+    const user = GetAuthentication();
 
     useEffect(() => {
-        //user needs to be logged in to access
-        if (email === undefined || email === '') {
-            navigate("/login");
-        }
         getData();
-    }, [email])
+    },[])
 
-    //API call to get all the rooms that the logged in user participates in
+    //API call to get all the rooms that the logged-in user participates in
     const getData = () => {
-        const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/${user.email}`)
             .then(res => {
                 setRoomData(res.data);
             })
@@ -43,15 +37,16 @@ export default function StudyRoomHome() {
         const studyGroups = (
             <React.Fragment>
                 <NavDrawer/>
-                <div style={{overflow: 'scroll', height: '80vh', marginTop: '70px'}}>
+                <StudyRoomChatCard width='92vw' height='10vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
+                                   bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{fontSize:'22px', fontWeight:'bold'}} ><Typography variant="1">Study Rooms</Typography></div>}/>
+                <div style={{overflow: 'scroll', height: '70vh', marginTop: '15px'}}>
 
-                    {roomData.map((item, index) => (
-                        <div  onClick={ () => handleDestination( item.studyRoomID)}>
+                    {roomData.map((item) => (
+                        <div key={item.studyRoomID}  onClick={ () => handleDestination( item.studyRoomID)}>
                             <SnippetCard
                                 value={item}
-                                key={index}
                                 width='92vw'
-                                borderRadius='10px'
+                                borderRadius='5px'
                                 height='12vh'
                                 marginBottom='15px'
                                 content={
