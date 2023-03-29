@@ -1,16 +1,16 @@
 import * as React from "react";
-import { InputAdornment, Stack } from "@mui/material";
-import { PrimaryButton2 } from "../CustomMUIComponents/CustomButtons";
+import {InputAdornment, Stack} from "@mui/material";
+import {PrimaryButton2} from "../CustomMUIComponents/CustomButtons";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { TimeCard } from "../CustomMUIComponents/CustomCards";
+import {TimeCard} from "../CustomMUIComponents/CustomCards";
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import { getTime } from "../Calendar/CommonFunctions";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { GetAuthentication } from '../Authentication/Authentification';
+import {GetAuthentication} from "../Authentication/Authentification";
 import axios from "axios";
 import { delay } from "../CommonHelperFunctions/CommonHelperFunctions";
 import { getHoursBetweenTimestamps } from "./examNotificationFactory";
@@ -27,7 +27,7 @@ export default function ExamNotification(props) {
     const [error, setError] = React.useState('')
     const options = { month: "long" };
     let date = new Date(exams.startDate)
-    let date2 = new Intl.DateTimeFormat('en-us', options).format(date).toUpperCase()
+    let date2 = new Intl.DateTimeFormat('en-us',options).format(date).toUpperCase()
     let date3 = date.getDate()
 
     React.useEffect(() => {
@@ -45,33 +45,32 @@ export default function ExamNotification(props) {
         initTimes()
     }, [timePeriod])
 
-    function initTimes() {
+    function initTimes(){
         const newInitTime =
-        {
-            startTime: new Date(),
-            endTime: new Date()
-        }
-        newInitTime.startTime.setHours(9, 0, 0, 0)
-        newInitTime.endTime.setHours(18, 0, 0, 0)
+            {
+                startTime: new Date(),
+                endTime: new Date()
+            }
+        newInitTime.startTime.setHours(9,0,0,0)
+        newInitTime.endTime.setHours(18,0,0,0)
         setAvailability(newInitTime)
     }
-    function handleCancel() {
+    function handleCancel(){
         document.elementFromPoint(0, 0).click();
     }
-    function handleDismiss() {
+    function handleDismiss(){
         exams.studyHoursConfirmed = true
 
         axios.post(`${process.env.REACT_APP_BASE_URL}events/update`, exams)
-            .then(() => {
-            })
-            .catch(err => {
-                console.log(err)
-            });
-        delay(200).then(() => {
+                .then(() => {
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        delay(200).then(()=>{
             window.location.reload()
         })
     }
-
 
     function handleEvent() {
         if(studyTimes.length === 0)
@@ -103,7 +102,6 @@ export default function ExamNotification(props) {
                 .then(() => {
 
                 })
-
         })
         handleDismiss()}
     }
@@ -113,9 +111,9 @@ export default function ExamNotification(props) {
         newDate.setMinutes(e.target.value.split(':')[1])
 
         if (e.target.id === 'startTime') {
-            setAvailability({ ...availability, startTime: newDate })
+            setAvailability({...availability, startTime: newDate})
         } else {
-            setAvailability({ ...availability, endTime: newDate })
+            setAvailability({...availability, endTime: newDate})
         }
     }
     function handleMenu(e) {
@@ -137,7 +135,7 @@ export default function ExamNotification(props) {
             sx={{
                 "& css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
                 {
-                    padding: '0',
+                    padding:'0',
                 }
             }}
             margin="none"
@@ -155,9 +153,9 @@ export default function ExamNotification(props) {
             onChange={handleTimeChange}
             sx={{
                 "& css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input":
-                {
-                    padding: '0',
-                }
+                    {
+                        padding:'0',
+                    }
 
             }}
             margin="none"
@@ -311,13 +309,13 @@ export default function ExamNotification(props) {
     const buttons = (
         <React.Fragment>
             <Stack justifyContent="center"
-                alignItems="center"
-                spacing={1}
-                width='100%'
-            >
-                <PrimaryButton2 width={'97vw'} colour={'#057D78'} content="Add to calendar" onClick={handleEvent} />
-                <PrimaryButton2 width={'97vw'} colour={'#912338'} content="Cancel" onClick={handleCancel} />
-                <PrimaryButton2 width={'97vw'} colour={'#0072A8'} content="Dismiss notification" onClick={handleDismiss} />
+                   alignItems="center"
+                   spacing={1}
+                   width='100%'
+                   >
+                <PrimaryButton2 width={'97vw'} colour={'#057D78'} content="Add to calendar" onClick={handleEvent}/>
+                <PrimaryButton2 width={'97vw'} colour={'#912338'} content="Cancel" onClick={handleCancel}/>
+                <PrimaryButton2 width={'97vw'} colour={'#0072A8'} content="Dismiss notification" onClick={handleDismiss}/>
             </Stack>
         </React.Fragment>
     )
@@ -337,12 +335,11 @@ export default function ExamNotification(props) {
                 marginBottom:'5px'
             }}>
                 {timeDisplay}
-
             </div>
             {buttons}
 
 
         </React.Fragment>
     )
-    return (examNotification)
+    return(examNotification)
 }
