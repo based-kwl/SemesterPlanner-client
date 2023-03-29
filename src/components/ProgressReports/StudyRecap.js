@@ -122,7 +122,7 @@ export default function StudyRecap(props) {
                     margin: '5px', display: 'flex', alignItems: 'center'
                 }}>
                     Event: {item.eventHeader} Course: {item.subject}{item.catalog} Study
-                    Time: {generateTimePicker(index, handleTimeChange, 'hours',item.catalog)}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
+                    Time: {generateTimePicker(index, handleTimeChange,item.catalog,'hours')}hours {generateTimePicker(index, handleTimeChange,'', 'minutes')}minutes
                 </div>}
                 />
             </div>)
