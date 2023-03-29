@@ -1,11 +1,15 @@
 describe('Test Course Study Hour Estimator [SP-29]', function() {
 
     beforeEach(() => {
-        cy.visit(Cypress.env('baseUrl'));
         cy.login("testEmail_1","testPassword_1");
     })
 
+    after(() => {
+        cy.wait(2000);
+    })
+
     it('Add Course Soen 331', function() {
+
         cy.addCourseEvent('Soen','331','Intro Formal Methods for Software Engineering','11:45:00','13:00:00',true,'month');
     })
 
@@ -17,6 +21,7 @@ describe('Test Course Study Hour Estimator [SP-29]', function() {
         cy.get('[data-test="navbar"]').click();
         cy.get('[data-test="Progress Report"]').click();
         cy.get('[data-test="totalRecommendedStudyTime"]').should('have.text',' Total recommended study time: 9 hrs');
+        cy.logout();
     })
 
     it('Delete Course Event Soen 331', function(){

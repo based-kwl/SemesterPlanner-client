@@ -5,6 +5,10 @@ describe('Test Course Study Hour Estimator [SP-29]', function() {
         cy.login("testEmail_1","testPassword_1");
     })
 
+    after(() => {
+        cy.wait(2000);
+    })
+
     it('Confirm start date for Spring Break 2023', function() {
         cy.get('.react-calendar__navigation__label__labelText').click(); // select month and year title
         cy.get('.react-calendar__year-view__months > :nth-child(2)').click(); //choose Feb

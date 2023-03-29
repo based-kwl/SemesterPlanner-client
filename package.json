@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@mui/material": "^5.10.8",
-    "cypress": "^10.11.0",
+    "cypress": "^12.9.0",
     "jest": "^27.5.1",
     "react-router-dom": "^6.4.2",
     "react-test-renderer": "^18.2.0"

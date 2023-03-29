@@ -6,5 +6,4 @@ describe('Authentication', function() {
     cy.logout();
     cy.url().should('eq', `${Cypress.env('baseUrl')}login`);
   })
-
 })

@@ -5,23 +5,27 @@
  */
 Cypress.Commands.add('login', (email, password) => {
     cy.visit(Cypress.env('baseUrl'));
+    cy.wait(2000);
     cy.get('[data-test="email"]').type(Cypress.env(email));
     cy.get('[data-test="password"]').type(Cypress.env(password));
     cy.get('[data-test="login"]').click();
+    cy.wait(1000);
 })
 
 /**
  * logout a user
  */
 Cypress.Commands.add('logout', () => {
+    cy.wait(2000);
     cy.get('[data-test="navbar"]').click();
     cy.get('[data-test="logout"]').click();
+    cy.wait(2000);
 })
 
 Cypress.Commands.add('changeUser', (newEmail, newPassword) => {
     cy.visit(Cypress.env('baseUrl'));
+    cy.wait(1000)
     cy.logout();
-    cy.wait(100)
     cy.login(newEmail, newPassword);
 })
 
@@ -70,6 +74,7 @@ Cypress.Commands.add('addCourseEvent',
         cy.get('#startTime').click().type(startTime);
         cy.get('#endTime').click().type(endTime);
         cy.get('[data-test="addButton"]').click();
+        cy.wait(1000);
         //check if new event is present under calendar
         cy.get('[data-test="'+eventHeader+'"]').should('exist'); //inside typography of eventDisplay
     })
@@ -79,9 +84,11 @@ Cypress.Commands.add('addCourseEvent',
  * eventHeader: String
  */
 Cypress.Commands.add('deleteEvent', (eventHeader)=>{
+    cy.wait(1000);
     cy.get('[data-test="'+eventHeader+'"]').should('have.text',eventHeader);
     cy.get('[data-test="editButton_'+eventHeader+'"]').click();
     cy.get('[data-test="deleteEventButton"]').click();
+    cy.wait(1000);
     cy.get('[data-test="'+eventHeader+'"]').should('not.exist');
 })
 
