@@ -63,6 +63,7 @@ export default function FriendSearch() {
             axios.post(`${process.env.REACT_APP_BASE_URL}friend/search`, {searchInput: searchName})
                 .then(res => {
                     const isInFriends = list.indexOf(res.data.email)
+                    console.log(isInFriends)
                     switch (isInFriends)
                     {
                         case 0:
