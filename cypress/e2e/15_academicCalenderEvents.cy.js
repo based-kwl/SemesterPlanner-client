@@ -3,7 +3,6 @@ describe('Test Course Study Hour Estimator [SP-29]', function() {
     beforeEach(() => {
         cy.visit(Cypress.env('baseUrl'));
         cy.login("testEmail_1","testPassword_1");
-
     })
 
     it('Confirm start date for Spring Break 2023', function() {
