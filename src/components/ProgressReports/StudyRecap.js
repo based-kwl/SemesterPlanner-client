@@ -75,7 +75,7 @@ export default function StudyRecap(props) {
      * @param {String} mode, display mode for time picker; 'hours': displays hour picker only, 'minutes': displays minute picker only, 'hours-minutes'(default): displays both hour and minute pickers
      * @returns {JSX.Element}, returns the relevant time pickers populated with the time difference of the specified event's index
      */
-    const generateTimePicker = (index, onChange, mode = 'hours-minutes',catalog) => {
+    const generateTimePicker = (index, onChange,catalog, mode = 'hours-minutes') => {
         const timeDiff = timeStringToDateObject(getTimeDifference(eventsList[index].actualStartTime, eventsList[index].actualEndTime));
 
         return (<LocalizationProvider dateAdapter={AdapterDayjs}>
