@@ -71,7 +71,7 @@ export default function RoomCreation() {
                     </Typography>
                     <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'30vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {friends.map((friend,index) => (
-                            <div key={index} style={{ margin:'-5px'}}>
+                            <div key={friends[index]} style={{ margin:'-5px'}}>
                                 <StudyRoomCard width={'81vw'} height={'40px'}
                                                  content={<> {friend}
                                                      <Checkbox

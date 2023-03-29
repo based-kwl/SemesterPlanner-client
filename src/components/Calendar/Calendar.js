@@ -8,7 +8,6 @@ import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../Cu
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {GetAuthentication} from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
-import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
 import {expandEventList, getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,6 +17,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
 import AddIcon from "@mui/icons-material/Add";
+import {CalendarDayEventIcon} from "./Custom/CalendarComponent";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
@@ -25,10 +25,9 @@ export default function CalendarView() {
     const [events, setEvents] = useState([]);
     const [academicEvents, setAcademicEvents] = useState([]);
     const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
-    const categories = ['course', 'study', 'workout', 'appointment'];
+    const categories = ['course', 'study', 'workout', 'appointment', 'exam'];
 
     const user = GetAuthentication();
-    //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
@@ -190,10 +189,10 @@ export default function CalendarView() {
                     content={<EventTypeHeader content={categories[index]}/>}
                     backgroundColor={categories[index]}
                 />
-                        {events && events.map((e, index) => (
+                        {events && events.map((e) => (
                             <>{item === e.type && isSameDate(date, new Date(e.startDate)) ?
                             <EventCard
-                                key={index}
+                                key={e.eventID}
                                 justifyContent="left"
                                 width="92vw"
                                 height='fit-content'
@@ -227,10 +226,10 @@ export default function CalendarView() {
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
-                {academicEvents && academicEvents.map((e, index) => (
+                {academicEvents && academicEvents.map((e) => (
                     <>{isSameDate(date, new Date(e.date))?
                     <EventCard
-                        key={index}
+                        key={academicEvents._id}
                         justifyContent="left"
                         width="92vw"
                         height='fit-content'
@@ -260,35 +259,14 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} categories={categories} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} categories={categories}/>
             ))
         }
 
         return tileContent;
-    }
-
-    const CalendarDayEventIcon = ({ eventType }) => {
-        let backgroundColor = "#0095FF"
-        if (eventType === categories[0]) {
-            backgroundColor = "#0072A8"
-        } else if (eventType === categories[1]) {
-            backgroundColor = "#8CC63E"
-        } else if (eventType === categories[2]) {
-            backgroundColor = "#DA3A16"
-        } else if (eventType === categories[3]) {
-            backgroundColor = "#DB0272"
-        }
-
-        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.4)" }} />
-
-        if (eventType === "none") {
-            tileIcon = (<></>);
-        }
-
-        return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
     const calendarPageCards = useMemo(() => (

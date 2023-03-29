@@ -51,18 +51,12 @@ export default function ScheduleEvent() {
         const valid = validateCourse()
         if (valid) {
             schedule.forEach((course) => {
-                console.log(course)
                 axios.get(`${process.env.REACT_APP_BASE_URL}opendata/course/${course.subject}/${course.catalog}`)
                     .then((res) => {
                         if (res.data !== null) {
-                            if (course.day1 < 8 && course.day2 === 8) {
-                                day1 = newStartDay(course.day1, course.startDate)
-                                day2 = null
-                            } else {
                                 day1 = newStartDay(course.day1, course.startDate)
                                 day2 = newStartDay(course.day2, course.startDate)
 
-                            }
                             const eventDay = {
                                 username: username,
                                 eventHeader: res.data.subject + ' ' + res.data.catalog,
@@ -84,7 +78,7 @@ export default function ScheduleEvent() {
                                 .then(() => {
                                 }).catch((err) => console.log(err))
 
-                            if (day2 !== null) {
+                            if (course.day2 !== 8) {
                                 const eventDay2 = {
                                     username: username,
                                     eventHeader: res.data.subject + ' ' + res.data.catalog,
@@ -108,16 +102,12 @@ export default function ScheduleEvent() {
                                 })
                             }
                         }
-
                     })
             })
             delay(500).then(()=>{
                 window.location.reload()
             })
-
-
         }
-
     }
 
 
