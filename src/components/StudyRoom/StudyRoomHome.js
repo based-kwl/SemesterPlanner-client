@@ -11,6 +11,7 @@ import Divider from "@mui/material/Divider";
 import {useNavigate} from "react-router";
 import axios from "axios";
 import {GetAuthentication} from "../Authentication/Authentification";
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 export default function StudyRoomHome() {
     const navigate = useNavigate();
@@ -39,8 +40,8 @@ export default function StudyRoomHome() {
                 <NavDrawer/>
                 <StudyRoomChatCard width='92vw' height='10vh' marginTop='70px' topLeftRadius='10px' topRightRadius='10px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{fontSize:'22px', fontWeight:'bold'}} ><Typography variant="1">Study Rooms</Typography></div>}/>
-                <div style={{overflow: 'scroll', height: '70vh', marginTop: '15px'}}>
-
+                {/*<div style={{overflow: 'scroll', height: '70vh', marginTop: '15px'}}>*/}
+<PerfectScrollbar style={{height:'70vh', marginTop:'15px'}}>
                     {roomData.map((item) => (
                         <div key={item.studyRoomID}  onClick={ () => handleDestination( item.studyRoomID)}>
                             <SnippetCard
@@ -70,7 +71,8 @@ export default function StudyRoomHome() {
                                     </>}
                             /></div> )
                     )}
-                </div>
+</PerfectScrollbar>
+                {/*</div>*/}
                 <div>
                     <BottomDrawer icon={<PrimaryButton width={'99vw'} content={"Create New Room"}/>}
                                   title={'create a study room'} content={<RoomCreation/>}/>
