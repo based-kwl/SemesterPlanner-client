@@ -42,10 +42,9 @@ export default function StudyRoomHome() {
                 <div style={{overflow: 'scroll', height: '70vh', marginTop: '15px'}}>
 
                     {roomData.map((item) => (
-                        <div  onClick={ () => handleDestination( item.studyRoomID)}>
+                        <div key={item.studyRoomID}  onClick={ () => handleDestination( item.studyRoomID)}>
                             <SnippetCard
                                 value={item}
-                                key={item.studyRoomID}
                                 width='92vw'
                                 borderRadius='5px'
                                 height='12vh'

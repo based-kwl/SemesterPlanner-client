@@ -113,7 +113,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
             <FormControl >
                 <RadioGroup row onChange={handleStudyTypeCourse}>
             {courseArray.map((course, index) =>(
-                 <div key={index}>
+                 <div key={course.eventID}>
                         <FormControlLabel  control={<Radio size="small" />} id={index} value={courseArray[index].subject +' '+ courseArray[index].catalog} label={courseArray[index].subject + courseArray[index].catalog}/>
                   </div>
                 ))}

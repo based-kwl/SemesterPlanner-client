@@ -28,7 +28,6 @@ export default function CalendarView() {
     const categories = ['course', 'study', 'workout', 'appointment', 'exam'];
 
     const user = GetAuthentication();
-    //  Get all Events by student username
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}events/${user.username}`)
             .then((res) => {
@@ -190,10 +189,10 @@ export default function CalendarView() {
                     content={<EventTypeHeader content={categories[index]}/>}
                     backgroundColor={categories[index]}
                 />
-                        {events && events.map((e, index) => (
+                        {events && events.map((e) => (
                             <>{item === e.type && isSameDate(date, new Date(e.startDate)) ?
                             <EventCard
-                                key={index}
+                                key={e.eventID}
                                 justifyContent="left"
                                 width="92vw"
                                 height='fit-content'
@@ -227,10 +226,10 @@ export default function CalendarView() {
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
-                {academicEvents && academicEvents.map((e, index) => (
+                {academicEvents && academicEvents.map((e) => (
                     <>{isSameDate(date, new Date(e.date))?
                     <EventCard
-                        key={index}
+                        key={academicEvents._id}
                         justifyContent="left"
                         width="92vw"
                         height='fit-content'
