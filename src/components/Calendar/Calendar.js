@@ -8,7 +8,6 @@ import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../Cu
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
 import {GetAuthentication} from "../Authentication/Authentification";
 import {PrimaryButton2} from '../CustomMUIComponents/CustomButtons';
-import TripOriginIcon from '@mui/icons-material/TripOrigin';
 import axios from "axios";
 import {expandEventList, getTime} from "./CommonFunctions";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,6 +17,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
 import AddIcon from "@mui/icons-material/Add";
+import {CalendarDayEventIcon} from "./Custom/CalendarComponent";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
@@ -259,37 +259,14 @@ export default function CalendarView() {
         let tileContent;
 
         if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} />);
+            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} categories={categories} />);
         } else {
             tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} />
+                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} categories={categories}/>
             ))
         }
 
         return tileContent;
-    }
-
-    const CalendarDayEventIcon = ({ eventType }) => {
-        let backgroundColor = "#0095FF"
-        if (eventType === categories[0]) {
-            backgroundColor = "#0072A8"
-        } else if (eventType === categories[1]) {
-            backgroundColor = "#8CC63E"
-        } else if (eventType === categories[2]) {
-            backgroundColor = "#DA3A16"
-        } else if (eventType === categories[3]) {
-            backgroundColor = "#DB0272"
-        } else if (eventType === categories[4]){
-            backgroundColor = "#912338"
-        }
-
-        let tileIcon = <TripOriginIcon sx={{ color: backgroundColor, transform: "scale(0.4)" }} />
-
-        if (eventType === "none") {
-            tileIcon = (<></>);
-        }
-
-        return (<div style={{ width: "40px", height: "40px" }}><br />{tileIcon}</div>);
     }
 
     const calendarPageCards = useMemo(() => (
