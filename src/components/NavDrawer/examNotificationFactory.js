@@ -1,5 +1,6 @@
 import {GetAuthentication} from '../Authentication/Authentification';
 import axios from 'axios';
+import {expandEventList} from "../Calendar/CommonFunctions";
 
 
 async function getEventsByUsername(user_name, futureTimestamp) {
@@ -10,7 +11,7 @@ async function getEventsByUsername(user_name, futureTimestamp) {
 
     // Combine start date and start time into a single string
     const eventsResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}events/${user_name}`);
-    const eventsData = eventsResponse.data;
+    const eventsData = expandEventList(eventsResponse.data)
     const events = eventsData.filter((event) => {
       const startDate = new Date(event.startDate);
       const startTime = new Date(event.startTime);
@@ -29,7 +30,7 @@ async function getEventsByUsername(user_name, futureTimestamp) {
         startTime.getMilliseconds()).toLocaleString("en-US", { timeZone: easternTimeZone });
       const startTimeUTC = new Date(startDateTime).toUTCString();
 
-      const endDate = new Date(event.endDate);
+      const endDate = new Date(event.startDate)
       const endTime = new Date(event.endTime);
       const endDateTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(),
         endTime.getHours(), endTime.getMinutes(), endTime.getSeconds(),
@@ -82,9 +83,9 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
       const currentTimestamp = currentDate.toISOString();
       // Check if the current time segment is excluded
         let isExcluded = false;
-        for (let i = 0; i < excludedTimes.length; i++) {
-          const startExcluded = new Date(excludedTimes[i][0]);
-          const endExcluded = new Date(excludedTimes[i][1]);
+        for (const excludedTime of excludedTimes) {
+          const startExcluded = new Date(excludedTime[0]);
+          const endExcluded = new Date(excludedTime[1]);
 
           // Floor the start time and ceil the end time
           startExcluded.setMinutes(Math.floor(startExcluded.getMinutes() / segment) * segment, 0, 0);

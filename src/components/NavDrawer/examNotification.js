@@ -235,7 +235,7 @@ export default function ExamNotification(props) {
             const isTimeSelected = studyTimes.some(time => time[0] === startDate.getTime());
             return (
                 <TimeCard
-                    key={index}
+                    key={`loc-${index}`}
                     width={'100%'}
                     content={
                         <>
