@@ -13,11 +13,11 @@ describe('Test Daily Study Recaps [SP-26]', function() {
         cy.addCourseEvent('Soen','385','Applied Systems and Applications','10:15:00','11:30:00',true,'month');
     })
 
-    it('Add 2 hours study time for Soen 331', function(){
+    it('Add 3 hours study time for Soen 331', function(){
         cy.addStudyTimeEvent('SOEN','331','Study Session #1','14:00:00','17:00:00');
     })
 
-    it('Add 3 hours study time for Soen 385', function(){
+    it('Add 2 hours study time for Soen 385', function(){
         cy.addStudyTimeEvent('SOEN','385','Study Session #2','18:00:00','20:00:00');
     })
 
@@ -29,10 +29,8 @@ describe('Test Daily Study Recaps [SP-26]', function() {
         cy.get('[data-test="SOEN331"]').contains('SOEN331');
         cy.get('[data-test="SOEN385"]').contains('SOEN385');
         //confirm time box using catalog #
-        // NOT able to confirm accurate time
         cy.get('[data-test="timePicker331"]').should("exist");
         cy.get('[data-test="timePicker385"]').should("exist");
-        cy.wait(2000)
     })
 
     it('Delete Course Event Soen 331', function(){
