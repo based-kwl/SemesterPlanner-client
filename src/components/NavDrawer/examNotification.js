@@ -74,7 +74,6 @@ export default function ExamNotification(props) {
 
 
     function handleEvent() {
-        console.log(studyTimes)
         if(studyTimes.length === 0)
             setError('Confirm Study Sessions')
         else{
@@ -226,6 +225,7 @@ export default function ExamNotification(props) {
             return currentHour >= startHour && (currentHour < endHour || (currentHour === 0 && endHour === 24));
         })
         .map((startTime, index) => {
+            let keyValue = index
             const date = new Date(startTime);
             const dateString = `${date.toLocaleString('default', { weekday: 'short' }).toUpperCase()} ${date.toLocaleString('default', { month: 'short' }).toUpperCase()} ${date.getDate()}`;
             const startDate = new Date(startTime);
@@ -235,7 +235,7 @@ export default function ExamNotification(props) {
             const isTimeSelected = studyTimes.some(time => time[0] === startDate.getTime());
             return (
                 <TimeCard
-                    key={`loc-${index}`}
+                    key={keyValue}
                     width={'100%'}
                     content={
                         <>

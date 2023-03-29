@@ -5,8 +5,6 @@ import {expandEventList} from "../Calendar/CommonFunctions";
 
 async function getEventsByUsername(user_name, futureTimestamp) {
   try {
-    console.log(`${process.env.REACT_APP_BASE_URL}events/${user_name}`)
-
     const easternTimeZone = "America/New_York";
 
     // Combine start date and start time into a single string
@@ -63,7 +61,6 @@ async function getEventsByUsername(user_name, futureTimestamp) {
 export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, timeslots, segment) {
   // Convert start and end timestamps to JavaScript Date objects
   const username = GetAuthentication().username
-  console.log(username)
   const excludedTimes = await getEventsByUsername(username, endTimestamp);
   const startDate = new Date(startTimestamp);
   const endDate = new Date(endTimestamp);
