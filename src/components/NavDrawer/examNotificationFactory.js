@@ -75,32 +75,33 @@ export async function getHoursBetweenTimestamps(startTimestamp, endTimestamp, ti
 
   // Loop through each time segment between the start and end dates
   let currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    const currentTimestamp = currentDate.toISOString();
+  while(true){
+    if(currentDate >= endDate)
+      break;
+    else{
+      const currentTimestamp = currentDate.toISOString();
+      // Check if the current time segment is excluded
+        let isExcluded = false;
+        for (let i = 0; i < excludedTimes.length; i++) {
+          const startExcluded = new Date(excludedTimes[i][0]);
+          const endExcluded = new Date(excludedTimes[i][1]);
 
-    // Check if the current time segment is excluded
-    let isExcluded = false;
-    for (let i = 0; i < excludedTimes.length; i++) {
-      const startExcluded = new Date(excludedTimes[i][0]);
-      const endExcluded = new Date(excludedTimes[i][1]);
+          // Floor the start time and ceil the end time
+          startExcluded.setMinutes(Math.floor(startExcluded.getMinutes() / segment) * segment, 0, 0);
+          endExcluded.setMinutes(Math.ceil(endExcluded.getMinutes() / segment) * segment, 0, 0);
 
-      // Floor the start time and ceil the end time
-      startExcluded.setMinutes(Math.floor(startExcluded.getMinutes() / segment) * segment, 0, 0);
-      endExcluded.setMinutes(Math.ceil(endExcluded.getMinutes() / segment) * segment, 0, 0);
-
-      if (currentDate >= startExcluded && currentDate < endExcluded) {
-        isExcluded = true;
-        break;
+          if (currentDate >= startExcluded && currentDate < endExcluded) {
+            isExcluded = true;
+            break;
+          }
+        }
+      // Add the current time segment to the results if it's not excluded
+      if (!isExcluded) {
+        hoursBetween.push(currentTimestamp);
       }
+      // Move to the next time segment
+      currentDate.setMinutes(currentDate.getMinutes() + segment);
     }
-
-    // Add the current time segment to the results if it's not excluded
-    if (!isExcluded) {
-      hoursBetween.push(currentTimestamp);
-    }
-
-    // Move to the next time segment
-    currentDate.setMinutes(currentDate.getMinutes() + segment);
   }
   timeslots(hoursBetween)
   return hoursBetween;

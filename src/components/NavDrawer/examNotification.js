@@ -30,7 +30,6 @@ export default function ExamNotification(props) {
     let date2 = new Intl.DateTimeFormat('en-us', options).format(date).toUpperCase()
     let date3 = date.getDate()
 
-console.log(studyTimes)
     React.useEffect(() => {
         // Convert strings to Date objects
         const date_1 = new Date(exams.startDate);
