@@ -67,9 +67,18 @@ export default function FriendSearch() {
                     {
                         case 0:
                         setText('already a friend')
-                        break;
+
+                            break;
                         case -1:
-                            validateFriend(res.data.email)
+
+
+                            if(res.data.email){
+                                setFriend(res.data.email)
+                                setFound(true)
+                            }else{
+                                setFound(false)
+                                setText("no user with this name")
+                            }
                             break;
                         default:
                             setFound(false)
@@ -79,16 +88,6 @@ export default function FriendSearch() {
                     setText(err);
                 })
         }
-    }
-    function validateFriend(emailData){
-        if(emailData){
-            setFriend(emailData)
-            setFound(true)
-        }else{
-            setFound(false)
-            setText("no user with this name")
-        }
-
     }
 
     const friendAdd = (
