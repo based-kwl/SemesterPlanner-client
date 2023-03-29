@@ -60,16 +60,6 @@ export const EventTypeHeader = ({content})=>{
                 </Typography>
             </CardContent>
     ) }
-export const EventHeader = ({content})=>{
-    return(
-            <CardContent>
-                <Typography color="white" fontWeight={500} style={{
-                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
-                }}>
-                    {content}
-                </Typography>
-            </CardContent>
-    ) }
 
 export const isSameDate = (date1, date2) => (
     date1.getFullYear() === date2.getFullYear()

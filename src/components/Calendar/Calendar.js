@@ -19,7 +19,6 @@ import AddIcon from "@mui/icons-material/Add";
 import {
     EventDisplay,
     EventTypeHeader,
-    EventHeader,
     isSameDate,
     DayTile
 } from "./Custom/CalendarComponent";
@@ -171,7 +170,7 @@ export default function CalendarView() {
 
     const academicEventsDisplay = (
       <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
-        content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
+        content={<EventTypeHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
        <div className="events">
 
                 {academicEvents && academicEvents.map((e) => (
