@@ -58,7 +58,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
             setIsVisible(true);
             setIsVisibleStudy(false)
             eventStateSetter({...eventState, type: e.target.value});
-        }else if(type === 'study'){
+        }else if(type === 'study' || type === 'exam' ) {
             eventStateSetter({...eventState, type: e.target.value});
             setIsVisible(false);
             setIsVisibleStudy(true);
@@ -127,6 +127,8 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                 Select the event category: {eventState.type}
             </Typography>
             <Stack direction="row" spacing={1} justifyContent="center">
+                <PrimaryButton2 minWidth={'25vw'} colour={'#912338'} content="Exam" value="exam"
+                                onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
