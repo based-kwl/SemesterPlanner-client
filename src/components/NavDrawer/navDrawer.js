@@ -59,11 +59,12 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
-const ListIconsA = [<CalendarViewMonthIcon style={{color: '#912338'}}/>,
-    <PersonOutlineIcon style={{color: '#057D78'}}/>, <BarChartIcon style={{color: '#0072A8'}}/>,
-    <ForumIcon style={{color: '#573996'}}/>,
-    <GroupIcon style={{color:'E5A712'}}/> ]
-const ListIconsB = [<LogoutIcon style={{color: '#6e6e6e'}}/>]
+const ListIconsA = [<CalendarViewMonthIcon key={'home'} style={{color: '#912338'}}/>,
+    <PersonOutlineIcon key={'profile'} style={{color: '#057D78'}}/>,
+    <BarChartIcon key={'stats'} style={{color: '#0072A8'}}/>,
+    <ForumIcon key={'groups'} style={{color: '#573996'}}/>,
+    <GroupIcon key={'friends'} style={{color:'E5A712'}}/> ]
+const ListIconsB = [<LogoutIcon key={'logout'} style={{color: '#6e6e6e'}}/>]
 
 PersistentDrawerLeft.defaultProps = {navbarTitle: ''}
 
