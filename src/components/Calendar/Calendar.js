@@ -18,6 +18,7 @@ import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
 import AddIcon from "@mui/icons-material/Add";
 import {CalendarDayEventIcon} from "./Custom/CalendarComponent";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 export default function CalendarView() {
     const [date, setDate] = useState(new Date());
@@ -224,8 +225,7 @@ export default function CalendarView() {
     const academicEventsDisplay = (
       <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
         content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
-       <div className="events">
-
+<PerfectScrollbar style={{maxHeight: '300px'}}>
                 {academicEvents && academicEvents.map((e) => (
                     <>{isSameDate(date, new Date(e.date))?
                     <EventCard
@@ -246,7 +246,7 @@ export default function CalendarView() {
                         :null
                     }</>
                 ))}
-            </div>
+</PerfectScrollbar>
         </>
     )
 
