@@ -22,23 +22,27 @@ export default function ParticipantsList() {
 
     function handleDelete(index) {
         const emailToRemove = participants[index];
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email:emailToRemove, studyRoomID:studyRoomID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/remove`, {email: emailToRemove, studyRoomID: studyRoomID})
             .then(getParticipants)
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
     }
 
     function handleAdd(index) {
         const emailToAdd = availableFriends[index];
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email:emailToAdd, studyRoomID:studyRoomID})
+        axios.post(`${process.env.REACT_APP_BASE_URL}room/add`, {email: emailToAdd, studyRoomID: studyRoomID})
             .then(getParticipants)
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
     }
 
     function handleDone() {
-        document.elementFromPoint(0,0).click();
+        document.elementFromPoint(0, 0).click();
     }
 
-    function getParticipants(){
+    function getParticipants() {
         axios.get(`${process.env.REACT_APP_BASE_URL}room/fetch/${studyRoomID}`)
             .then(res => {
                 const newOwner = res.data.owner;
@@ -53,36 +57,47 @@ export default function ParticipantsList() {
                         setParticipants(newParticipants);
                         setAvailableFriends(newAvailableFriends);
                     })
-                    .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+                    .catch(err => {
+                        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                    });
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {
+                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+            });
     }
 
-    useMemo(getParticipants,[])
+    useMemo(getParticipants, [])
 
     const participantsList = (
         <>
-            <div style={{width:'90vw'}}>
+            <div style={{width: '90vw'}}>
                 <div><h4>Current Participants:</h4></div>
-                <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {participants ? participants.map((participant, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
-                                                                               height={'40px'}
-                                                                               content={<>{participant}{participant !== owner ? <Button
-                                                                                   variant="text"
-                                                                                   sx={{borderColor: "none"}}
-                                                                                   onClick={() => handleDelete(index)}><ClearIcon
-                                                                                   style={{color: '#912338'}}/></Button> : <></>}</>}/>) : <></>}
+                <div style={{overflow: "auto", maxHeight: "26vh"}}>
+                    {participants ? participants.map((participant, index) => {
+                        let keyValue = participant[index]
+                        return (<StudyRoomCard id={index} key={keyValue} width={'90vw'}
+                                               height={'40px'}
+                                               content={<>{participant}{participant !== owner ? <Button
+                                                   variant="text"
+                                                   sx={{borderColor: "none"}}
+                                                   onClick={() => handleDelete(index)}><ClearIcon
+                                                   style={{color: '#912338'}}/></Button> : <></>}</>}/>)
+                    }) : <></>}
                 </div>
                 <div><h4>Friends:</h4></div>
-                <div style={{overflow:"auto", maxHeight:"26vh"}}>
-                    {availableFriends ? availableFriends.map((availableFriend, index) => <StudyRoomCard id={index} key={index}
-                                                                                       width={'90vw'}
-                                                                                       height={'40px'}
-                                                                                       content={<>{availableFriend}<Button
-                                                                                           variant="text"
-                                                                                           sx={{borderColor: "none"}}
-                                                                                           onClick={() => handleAdd(index)}><AddIcon
-                                                                                           style={{color: '#057D78'}}/></Button></>}/>) : <></>}
+                <div style={{overflow: "auto", maxHeight: "26vh"}}>
+                    {availableFriends ? availableFriends.map((availableFriend, index) => {
+                        let keyValue = availableFriend[index]
+                            return(
+                        <StudyRoomCard id={index}
+                                                                                                        key={keyValue}
+                                                                                                        width={'90vw'}
+                                                                                                        height={'40px'}
+                                                                                                        content={<>{availableFriend}<Button
+                                                                                                            variant="text"
+                                                                                                            sx={{borderColor: "none"}}
+                                                                                                            onClick={() => handleAdd(index)}><AddIcon
+                                                                                                            style={{color: '#057D78'}}/></Button></>}/>)}) : <></>}
                 </div>
             </div>
             <div style={{

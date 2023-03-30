@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useState, useMemo} from 'react';
 import {Typography} from "@mui/material";
 import Calendar from 'react-calendar';
-import CardContent from '@mui/material/CardContent';
 import '../Calendar/calendar.css'
 import {BackgroundCard, EventCard, EventTypeCard, StudyRoomChatCard} from '../CustomMUIComponents/CustomCards';
 import PersistentDrawerLeft from "../NavDrawer/navDrawer";
@@ -17,6 +16,12 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ImageUpload from "./ImageUpload";
 import CreateEvent from "./Event/CreateEvent";
 import AddIcon from "@mui/icons-material/Add";
+import {
+    EventDisplay,
+    EventTypeHeader,
+    isSameDate,
+    DayTile
+} from "./Custom/CalendarComponent";
 import {CalendarDayEventIcon} from "./Custom/CalendarComponent";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -57,12 +62,6 @@ export default function CalendarView() {
 
     }, [])
 
-    const isSameDate = (date1, date2) => (
-        date1.getFullYear() === date2.getFullYear()
-        && date1.getMonth() === date2.getMonth()
-        && date1.getDate() === date2.getDate()
-    )
-
     function setDates(d) {
         setDate(d);
     }
@@ -91,11 +90,13 @@ export default function CalendarView() {
             ? "academicHighlight"
             : ""
     );
-    
-    const calendarMonth = (
+
+    const calendarMonth =(
         <React.Fragment>
             <Calendar
-                tileContent={({ date }) => <DayTile key={date} day={date} />}
+
+                tileContent={({date}) => <DayTile key={date} day={date} events={events} categories={categories} />}
+                // tileContent={<CalendarDate date={date} events={events} categories={categories}/>}
                 tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}
@@ -121,59 +122,6 @@ export default function CalendarView() {
             }/>
         </React.Fragment>
     )
-
-    const EventHeader = ({content})=>{
-        return(
-        <React.Fragment>
-            <CardContent>
-                <Typography color="white" fontWeight={500} style={{
-                    fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
-                }}>
-                    {content}
-                </Typography>
-            </CardContent>
-        </React.Fragment>
-   ) }
-
-    const EventTypeHeader = ({content})=>{
-        return(
-            <React.Fragment>
-                <CardContent>
-                    <Typography color="white" fontWeight={500} style={{
-                        fontFamily: 'Roboto', alignItems: 'center', display: 'flex',
-                    }}>
-                        {content}
-                    </Typography>
-                </CardContent>
-            </React.Fragment>
-        ) }
-
-    const EventDisplay = ({startTime, endTime, header, description, startDate, link}) => {
-        const currentDate = new Date(startDate);
-        return (
-            <div style={{paddingBottom: 0, paddingTop: 0, width: '100%', display: 'flow'}}>
-
-                <div style={{display: 'inline-block', paddingLeft: '10px'}}>
-                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                        {startTime + "-" + endTime}, {currentDate.getFullYear()} - {currentDate.getMonth() < 9 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1} - {currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()}
-                    </Typography>
-                    <Typography data-test={header} sx={{mb: 1.5}} color="#000000" fontWeight={500} style={{fontFamily: 'Roboto'}}>
-                        {header}
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary">
-                        {description}
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary">
-                        <a href={link}>{link}</a>
-                    </Typography>
-
-                </div>
-
-            </div>
-        )
-    }
 
     const eventsDisplay = (
         <>
@@ -224,50 +172,32 @@ export default function CalendarView() {
 
     const academicEventsDisplay = (
       <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
-        content={<EventHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
-<PerfectScrollbar style={{maxHeight: '300px'}}>
-                {academicEvents && academicEvents.map((e) => (
-                    <>{isSameDate(date, new Date(e.date))?
-                    <EventCard
-                        key={academicEvents._id}
-                        justifyContent="left"
-                        width="92vw"
-                        height='fit-content'
-                        marginTop='10px' overflow='hidden'
-                        content={
-                            <EventDisplay
-                                startDate={e.date}
-                                startTime={"00:00"}
-                                endTime={"23:59"}
-                                header={e.description}
-                                EventID={e._id}
-                            />
-                        }/>
-                        :null
-                    }</>
-                ))}
-</PerfectScrollbar>
+        content={<EventTypeHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
+       <div className="events">
+           <PerfectScrollbar style={{maxHeight: '300px'}}>
+               {academicEvents && academicEvents.map((e) => (
+                   <>{isSameDate(date, new Date(e.date)) ?
+                       <EventCard
+                           key={academicEvents._id}
+                           justifyContent="left"
+                           width="92vw"
+                           height='fit-content'
+                           marginTop='10px' overflow='hidden'
+                           content={
+                               <EventDisplay
+                                   startDate={e.date}
+                                   startTime={"00:00"}
+                                   endTime={"23:59"}
+                                   header={e.description}
+                                   EventID={e._id}
+                               />
+                           }/>
+                       : null
+                   }</>
+               ))}
+           </PerfectScrollbar>
         </>
     )
-
-    const DayTile = ({ day }) => {
-        const eventsThisDay = events.filter((e) => {
-            const event = new Date(e.startDate);
-            return isSameDate(event, day)
-        });
-
-        let tileContent;
-
-        if (eventsThisDay.length < 1) {
-            tileContent = (<CalendarDayEventIcon key={day} eventType={"none"} categories={categories} />);
-        } else {
-            tileContent = eventsThisDay.map((e) => (
-                <CalendarDayEventIcon key={`day-${e._id}`} eventType={e.type} categories={categories}/>
-            ))
-        }
-
-        return tileContent;
-    }
 
     const calendarPageCards = useMemo(() => (
         <React.Fragment>
