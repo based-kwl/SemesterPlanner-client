@@ -14,6 +14,7 @@ export default function FriendNotification(props) {
     const [requestReceived, setRequestReceived] = React.useState([]);
     const ownerEmail = GetAuthentication().email;
 
+    console.log(requestReceived, requestSent)
     function handleCancel(index){
         const id = requestSent[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{ requestId: id, email: ownerEmail })
@@ -61,7 +62,7 @@ export default function FriendNotification(props) {
             <Typography variant="body1" marginBottom="10px"> Friend Request Sent</Typography>
             <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px', width: '81vw'}}>
                 {requestSent.map((sent, index) => (
-                    <div key={index}>
+                    <div key={sent._id}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {sent.receiverEmail}
                                            <Button
@@ -79,7 +80,7 @@ export default function FriendNotification(props) {
 
             <div style={{overflow: 'auto', height: '30vh'}}>
                 {requestReceived && requestReceived.map((received, index) => (
-                    <div key={index}>
+                    <div key={received._id}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {received.senderEmail}
                                        <Stack direction="row" >

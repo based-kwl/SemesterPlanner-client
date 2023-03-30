@@ -63,30 +63,30 @@ export default function FriendSearch() {
             axios.post(`${process.env.REACT_APP_BASE_URL}friend/search`, {searchInput: searchName})
                 .then(res => {
                     const isInFriends = list.indexOf(res.data.email)
-                    switch (isInFriends)
-                    {
-                        case 0:
-                        setText('already a friend')
-
-                            break;
-                        case -1:
-
-
-                            if(res.data.email){
-                                setFriend(res.data.email)
-                                setFound(true)
-                            }else{
-                                setFound(false)
-                                setText("no user with this name")
-                            }
-                            break;
-                        default:
-                            setFound(false)
-                    }
+                   validateFriend(isInFriends, res.data.email)
                 })
                 .catch(err => {
                     setText(err);
                 })
+        }
+    }
+    function validateFriend(isFriend, data){
+        switch (isFriend)
+        {
+            case 0:
+                setText('already a friend')
+                break;
+            case -1:
+                if(data){
+                    setFriend(data)
+                    setFound(true)
+                }else{
+                    setFound(false)
+                    setText("no user with this name")
+                }
+                break;
+            default:
+                setFound(false)
         }
     }
 
