@@ -1,6 +1,8 @@
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import {Typography} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 export const CalendarDayEventIcon = ({eventType, categories}) => {
     let backgroundColor = "#0095FF"
@@ -86,4 +88,44 @@ export const DayTile = ({ day, events, categories }) => {
         ))
     }
     return tileContent;
+}
+
+export const SelectDay = (course, onChange, name) => {
+    return (
+        <TextField
+            name={name}
+            id='day'
+            label="day"
+            size="small"
+            margin="none"
+            select
+            onChange={(e) => onChange(course, e)}
+            value={name === 'day1' ? course.day1 : course.day2}
+        >
+            <MenuItem value={1}>
+                Mo
+            </MenuItem>
+            <MenuItem value={2}>
+                Tu
+            </MenuItem>
+            <MenuItem value={3}>
+                We
+            </MenuItem>
+            <MenuItem value={4}>
+                Th
+            </MenuItem>
+            <MenuItem value={5}>
+                Fr
+            </MenuItem>
+            <MenuItem value={6}>
+                Sa
+            </MenuItem>
+            <MenuItem value={7}>
+                Su
+            </MenuItem>
+            <MenuItem value={8}>
+                -
+            </MenuItem>
+        </TextField>
+    )
 }
