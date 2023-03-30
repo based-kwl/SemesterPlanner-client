@@ -109,7 +109,7 @@ export default function CourseNotes() {
             <div style={{width:'90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
-                    {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
+                    {fileList.map((file, index) => <StudyRoomCard id={index} key={file._id} width={'90vw'}
                                                              height={'80px'}
                                                              content={<>
                                                                  <Button style={{

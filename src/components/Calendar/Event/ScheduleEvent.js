@@ -2,7 +2,6 @@ import * as React from "react";
 import {Stack} from "@mui/material";
 import {PrimaryButton2} from "../../CustomMUIComponents/CustomButtons";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import {getTime} from "../CommonFunctions";
 import {CourseCard} from "../../StudyRoom/CommonResources";
 import Button from "@mui/material/Button";
@@ -14,6 +13,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {CalendarDatePicker} from "../Custom/CommonInputEventForm";
 import {delay} from "../../CommonHelperFunctions/CommonHelperFunctions";
+import {SelectDay} from "../Custom/CalendarComponent";
 
 
 export default function ScheduleEvent() {
@@ -236,46 +236,6 @@ export default function ScheduleEvent() {
         return count <= 0;
     }
 
-    const SelectDay = (course, onChange, name) => {
-        return (
-            <TextField
-                name={name}
-                id='day'
-                label="day"
-                size="small"
-                margin="none"
-                select
-                onChange={(e) => onChange(course, e)}
-                value={name === 'day1' ? course.day1 : course.day2}
-            >
-                <MenuItem value={1}>
-                    Mo
-                </MenuItem>
-                <MenuItem value={2}>
-                    Tu
-                </MenuItem>
-                <MenuItem value={3}>
-                    We
-                </MenuItem>
-                <MenuItem value={4}>
-                    Th
-                </MenuItem>
-                <MenuItem value={5}>
-                    Fr
-                </MenuItem>
-                <MenuItem value={6}>
-                    Sa
-                </MenuItem>
-                <MenuItem value={7}>
-                    Su
-                </MenuItem>
-                <MenuItem value={8}>
-                    -
-                </MenuItem>
-            </TextField>
-        )
-    }
-
     const addCourse = (
         <React.Fragment>
             <div style={{margin: '1%'}}>
@@ -295,8 +255,10 @@ export default function ScheduleEvent() {
 
     const coursesFound = (
         <React.Fragment>
-            {schedule.map((course, index) => (
-                <div key={index} style={{
+            {schedule.map((course, index) => {
+                let keyValue = course[index]
+                    return(
+                <div key={keyValue} style={{
                     width: '98%',
                     height: 'fit-content',
                     textAlign: 'center',
@@ -427,8 +389,8 @@ export default function ScheduleEvent() {
                                             </LocalizationProvider>
                                         </Stack>
                                     </div>}/>
-                </div>
-            ))}
+                </div>)
+            })}
         </React.Fragment>
     )
 
