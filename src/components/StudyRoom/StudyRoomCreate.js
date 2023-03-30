@@ -10,9 +10,10 @@ import {RoomDataComponents, StudyRoomCard} from "./CommonResources";
 import {GetAuthentication} from "../Authentication/Authentification";
 
 export default function RoomCreation() {
+    const user = GetAuthentication();
     const navigate = useNavigate();
     const [friends, setFriends] = useState([])
-    const [checked, setChecked] = React.useState([]);
+    const [checked, setChecked] = React.useState([GetAuthentication().email]);
     const [roomData, setRoomData] = React.useState({
         title:'',
         owner:'',
@@ -22,7 +23,6 @@ export default function RoomCreation() {
         participants:[],
         createdAt:''
     });
-    const user = GetAuthentication();
 
     React.useEffect(()=> {
         setRoomData({...roomData, owner: user.email})
@@ -33,7 +33,6 @@ export default function RoomCreation() {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/${user.email}`)
             .then(res => {
                 setFriends( res.data);
-                console.log(res.data)
             })
     }
     const handleCheck =(e) =>{
@@ -50,7 +49,7 @@ export default function RoomCreation() {
     const handleRoomCreation = (e) =>{
         e.preventDefault();
         //add the owner to the list
-        roomData.participants.push(roomData.owner);
+        // roomData.participants.push(roomData.owner);
 
         //API call the post study room info to create a new room
         axios.post(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
