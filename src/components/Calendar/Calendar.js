@@ -283,10 +283,10 @@ export default function CalendarView() {
 
     return (
         <React.Fragment>
-            <PersistentDrawerLeft />
-            <div style={{ paddingTop: '15px' }}>
-                <BackgroundCard width='96vw' content={calendarPageCards} />
-            </div>
+            <PerfectScrollbar style={{maxHeight: '100vh', paddingTop: '15px'}}>
+                <PersistentDrawerLeft/>
+                <BackgroundCard width='96vw' content={calendarPageCards}/>
+            </PerfectScrollbar>
         </React.Fragment>
     );
 }
