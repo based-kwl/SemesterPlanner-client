@@ -17,10 +17,10 @@ export default function RoomCreation() {
     const [roomData, setRoomData] = React.useState({
         title:'',
         owner:'',
-        color: '',
+        color: '#912338',
         avatarText:'',
         description:'',
-        participants:[],
+        participants:[GetAuthentication().email],
         createdAt:''
     });
 
@@ -28,6 +28,7 @@ export default function RoomCreation() {
         setRoomData({...roomData, owner: user.email})
         fetchData();
         },[])
+
     // API call to get the list of friends for the logged-in user
     function fetchData() {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/${user.email}`)
@@ -44,13 +45,11 @@ export default function RoomCreation() {
         }
         setChecked(updatedList);
         setRoomData({...roomData, participants:updatedList});
+        console.log(updatedList)
     }
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
-        //add the owner to the list
-        // roomData.participants.push(roomData.owner);
-
         //API call the post study room info to create a new room
         axios.post(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
             .then(() => {
