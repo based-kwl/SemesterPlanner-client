@@ -22,7 +22,6 @@ import {
     isSameDate,
     DayTile
 } from "./Custom/CalendarComponent";
-import {CalendarDayEventIcon} from "./Custom/CalendarComponent";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 export default function CalendarView() {
@@ -171,31 +170,32 @@ export default function CalendarView() {
     )
 
     const academicEventsDisplay = (
-      <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
-        content={<EventTypeHeader content={"Important Academic Events"}/>}  backgroundColor='#E5A712' />
-       <div className="events">
-           <PerfectScrollbar style={{maxHeight: '300px'}}>
-               {academicEvents && academicEvents.map((e) => (
-                   <>{isSameDate(date, new Date(e.date)) ?
-                       <EventCard
-                           key={academicEvents._id}
-                           justifyContent="left"
-                           width="92vw"
-                           height='fit-content'
-                           marginTop='10px' overflow='hidden'
-                           content={
-                               <EventDisplay
-                                   startDate={e.date}
-                                   startTime={"00:00"}
-                                   endTime={"23:59"}
-                                   header={e.description}
-                                   EventID={e._id}
-                               />
-                           }/>
-                       : null
-                   }</>
-               ))}
-           </PerfectScrollbar>
+        <> <EventCard justifyContent='auto' width='92vw' height='30px' marginTop='5px' overflow='initial'
+                      content={<EventTypeHeader content={"Important Academic Events"}/>} backgroundColor='#E5A712'/>
+            <div className="events">
+                <PerfectScrollbar style={{maxHeight: '300px'}}>
+                    {academicEvents && academicEvents.map((e) => (
+                        <>{isSameDate(date, new Date(e.date)) ?
+                            <EventCard
+                                key={academicEvents._id}
+                                justifyContent="left"
+                                width="92vw"
+                                height='fit-content'
+                                marginTop='10px' overflow='hidden'
+                                content={
+                                    <EventDisplay
+                                        startDate={e.date}
+                                        startTime={"00:00"}
+                                        endTime={"23:59"}
+                                        header={e.description}
+                                        EventID={e._id}
+                                    />
+                                }/>
+                            : null
+                        }</>
+                    ))}
+                </PerfectScrollbar>
+            </div>
         </>
     )
 
