@@ -14,7 +14,6 @@ export default function FriendNotification(props) {
     const [requestReceived, setRequestReceived] = React.useState([]);
     const ownerEmail = GetAuthentication().email;
 
-    console.log(requestReceived, requestSent)
     function handleCancel(index){
         const id = requestSent[index]._id;
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/cancel-request`,{ requestId: id, email: ownerEmail })
