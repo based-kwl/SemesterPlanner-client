@@ -32,7 +32,7 @@ export default function SignUp() {
                 navigate('/calendar');
             })
             .catch(err => {
-                setRegistrationError({ ...registrationError, message: err.message});
+                setRegistrationError({ ...registrationError, message: err.response.data.errors[0]});
         });
     }
 

@@ -42,9 +42,9 @@ export default function FriendSearch() {
     function handleAdd(e) {
         if (friend !== '') {
             e.preventDefault();
-            setAdded(true);
             axios.post(`${process.env.REACT_APP_BASE_URL}friend/add`, {senderEmail: ownerEmail, receiverEmail: friend})
                 .then(() => {
+                    setAdded(true);
                 })
                 .catch(err => {
                     console.log('Error:', err)
