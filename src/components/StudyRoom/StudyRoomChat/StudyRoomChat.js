@@ -1,9 +1,9 @@
 import React from 'react';
-import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
 import {GetAuthentication} from "../../Authentication/Authentification";
+import {MyMessage, OthersMessage} from "./ChatComponents";
 
 export function GetStudyRoomChat(){
 
@@ -37,20 +37,6 @@ export function GetStudyRoomChat(){
                 console.log('Error', err);
             })
     }
-
-    const OthersMessage = (data) =>
-        (
-            <div style={{paddingLeft: "10px"}}>
-                <ChatMessagesCard content={data} userType="others"  />
-            </div>
-        );
-
-    const MyMessage = (data) =>
-        (
-            <div style={{paddingLeft: "80px"}}>
-                <ChatMessagesCard content={data} userType="you"  />
-            </div>
-        );
 
     function isMyMessage(message) {
         return userEmail.current === message.email;
