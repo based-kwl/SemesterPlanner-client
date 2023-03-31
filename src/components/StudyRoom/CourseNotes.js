@@ -15,12 +15,15 @@ export default function CourseNotes() {
     const [isFilePicked, setIsFilePicked] = useState(false);
     const fileListTop = useRef(null);
 
+    function handleErrorMessage(err){
+        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+    }
     function getCourseNotes(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
                 setFileList(res.data.reverse());
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {handleErrorMessage(err)});
     }
 
     function handleDeleteCourseNotes(index) {
@@ -28,7 +31,7 @@ export default function CourseNotes() {
             .then(() => {
                 getCourseNotes();
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {handleErrorMessage(err)});
         getCourseNotes();
     }
 
@@ -56,7 +59,7 @@ export default function CourseNotes() {
                         setIsFilePicked(false);
                     })
                     .catch(err => {
-                        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                        handleErrorMessage(err)
                     });
             }
         } else if (!isFilePicked) {
@@ -92,7 +95,7 @@ export default function CourseNotes() {
                 element.click();
             })
             .catch(err => {
-                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                handleErrorMessage(err)
             });
     }
 

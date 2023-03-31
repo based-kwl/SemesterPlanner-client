@@ -95,7 +95,6 @@ export default function CalendarView() {
             <Calendar
 
                 tileContent={({date}) => <DayTile key={date} day={date} events={events} categories={categories} />}
-                // tileContent={<CalendarDate date={date} events={events} categories={categories}/>}
                 tileClassName={AcademicEventsTile}
                 onChange={setDates}
                 value={date}

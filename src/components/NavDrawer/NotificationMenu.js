@@ -26,6 +26,7 @@ export default function NotificationMenu() {
         studyHoursConfirmed:''
     }]);
 
+
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_BASE_URL}friend/incoming-requests/${GetAuthentication().email}`)
             .then(res => {
@@ -45,15 +46,14 @@ export default function NotificationMenu() {
 
             if (studyEventList.length > 0) {
                 const currentTime = new Date();
-                if (currentTime.getHours() >= 21)
+                if (currentTime.getHours() >= 21 && studyHourCount <1)
                     setStudyHourCount(studyHourCount + 1);
             }
-            let len = exam.length
-            setExamCount(len)
+            setExamCount(exam.length)
         }).catch((err) => {
             console.log(err.message);
         })
-    }, [examCount,exam.length])
+    }, [examCount])
 
 
     const handleClick = (event) => {
