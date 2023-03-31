@@ -11,6 +11,7 @@ import {GetAuthentication} from "../Authentication/Authentification";
 export default function StudyRoomSettings() {
     const navigate = useNavigate();
     const[loading,setLoading] = React.useState(true);
+    const [isOwner, setIsOwner] = React.useState(false);
     const [roomData, setRoomData] = React.useState({
         owner:'',
         studyRoomID:'',
@@ -20,6 +21,7 @@ export default function StudyRoomSettings() {
         description:'',
         participants:[],
     });
+    const [error, setError] = React.useState('');
     const user = GetAuthentication();
 
     const fetchData = useCallback(( ) => {
@@ -29,26 +31,31 @@ export default function StudyRoomSettings() {
             .then(res => {
                 const data = res.data;
                 setRoomData(data);
+                if(data.owner === user.email){ // set room settings to visible if the user is the room owner
+                    setIsOwner(true);
+                }
             })
-            .catch(err => {console.log('Error:', err)});
+            .catch(err => {
+                console.log('Error:', err)
+                setError(err.message);
+            });
         setLoading(false);
      },[])
 
     React.useEffect(()=>{
         fetchData();
-        // only an owner can access the settings page
-        if(roomData.owner !== user.email && roomData.owner !== ''){
-            navigate("/study-room-home");
-        }
     },[loading])
 
     // sends updated field to db
     function handleUpdate(e) {
         e.preventDefault();
 
-        axios.put(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
-            .catch(err => {console.log('Error:', err)});
-        window.location.reload();
+        axios.put(`${process.env.REACT_APP_BASE_URL}room/`, roomData).then(() => {
+            window.location.reload();
+        })
+            .catch(err => {
+                setError(err.response.data.errors[0]);
+            });
     }
 
     //deletes the room in db
@@ -57,24 +64,32 @@ export default function StudyRoomSettings() {
             .then(() => {
                 navigate("/study-room-home");
             })
-            .catch(err => {console.log('Error:', err)});
+            .catch(err => {
+                setError(err.message);
+                console.log('Error:', err);
+            });
     }
 
     const updateRoom = (
-        <div style={{height:'50vh'}}>
-        <React.Fragment>
-            <form style={{alignItems: 'center'}} >
-                <div style={{width: '85vw', height: '65vh', marginTop: '10px'}}>
-                    <RoomDataComponents roomState={roomData} roomStateSetter={setRoomData}/>
-                </div>
-                <div>
-                <Stack direction='row' spacing={7} marginTop={2}>
-                <PrimaryButton2 width={'41vw'} colour={'#057D78'} content="Update" onClick={handleUpdate} />
-                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Delete" onClick={handleDelete}/>
-                </Stack>
-                </div>
-            </form>
-        </React.Fragment>
+        <div style={{height: '50vh'}}>
+            {isOwner ?
+                (<React.Fragment>
+                    <form style={{alignItems: 'center'}}>
+                        <div style={{width: '85vw', height: '65vh', marginTop: '10px'}}>
+                            <RoomDataComponents roomState={roomData} roomStateSetter={setRoomData}/>
+                        </div>
+                        <div style={{color: 'red'}}>{error}</div>
+                        <div>
+                            <Stack direction='row' spacing={7} marginTop={2}>
+                                <PrimaryButton2 width={'41vw'} colour={'#057D78'} content="Update"
+                                                onClick={handleUpdate}/>
+                                <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Delete"
+                                                onClick={handleDelete}/>
+                            </Stack>
+                        </div>
+                    </form>
+                </React.Fragment>) :
+                <div style={{color: 'red'}}>Room settings can only be accessed by the room owner.</div>}
         </div>
     )
     return(updateRoom);
