@@ -15,12 +15,15 @@ export default function CourseNotes() {
     const [isFilePicked, setIsFilePicked] = useState(false);
     const fileListTop = useRef(null);
 
+    function handleErrorMessage(err){
+        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+    }
     function getCourseNotes(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
                 setFileList(res.data.reverse());
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {handleErrorMessage(err)});
     }
 
     function handleDeleteCourseNotes(index) {
@@ -28,7 +31,7 @@ export default function CourseNotes() {
             .then(() => {
                 getCourseNotes();
             })
-            .catch(err => {setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)});
+            .catch(err => {handleErrorMessage(err)});
         getCourseNotes();
     }
 
@@ -56,7 +59,7 @@ export default function CourseNotes() {
                         setIsFilePicked(false);
                     })
                     .catch(err => {
-                        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                        handleErrorMessage(err)
                     });
             }
         } else if (!isFilePicked) {
@@ -92,7 +95,7 @@ export default function CourseNotes() {
                 element.click();
             })
             .catch(err => {
-                setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+                handleErrorMessage(err)
             });
     }
 
@@ -109,7 +112,7 @@ export default function CourseNotes() {
             <div style={{width:'90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
-                    {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
+                    {fileList.map((file, index) => <StudyRoomCard id={index} key={file._id} width={'90vw'}
                                                              height={'80px'}
                                                              content={<>
                                                                  <Button style={{

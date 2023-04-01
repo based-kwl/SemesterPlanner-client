@@ -127,8 +127,10 @@ export default function ProgressReportHome(){
                 <div style={{overflow: 'auto', height: '60vh'}}>
                     <h3>Course Workload</h3>
                     <div style={{overflow: 'auto', height: '32vh'}}>
-                        {course.map((course, index) => (
-                            <div key={index}>
+                        {course.map((course, index) => {
+                            let keyValue = course[index]
+                           return(
+                            <div key={keyValue}>
                                 <StudyRoomCard data-test={`${course}`} width={'85vw'} height={'fit-content'}
 
                                                content={<Stack direction="row"
@@ -149,8 +151,8 @@ export default function ProgressReportHome(){
                                                    }}> study time: {course.studyHours} hrs
                                                    </div>
                                                </Stack>}/>
-                            </div>
-                        ))}
+                            </div>)}
+                        )}
                     </div>
                     <StudyRoomCard data_test={'totalRecommendedStudyTime'} width={'85vw'} height={'40px'}
                                    content={<> Total recommended study time: {time} hrs
