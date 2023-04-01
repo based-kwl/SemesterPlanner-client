@@ -87,7 +87,7 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                            data_test="courseSubject"
                            id="subject"
                            label="subject"
-                           value={eventState.subject}
+                           value={eventState.subject.toUpperCase()}
                            defaultValue="EX: SOEN"
                            size="small"
                            margin="normal"
@@ -127,12 +127,12 @@ export function EventForm({eventState, eventStateSetter, courseArray}) {
                 Select the event category: {eventState.type}
             </Typography>
             <Stack direction="row" spacing={1} justifyContent="center">
-                <PrimaryButton2 minWidth={'25vw'} colour={'#912338'} content="Exam" value="exam"
-                                onClick={handleTypeUpdate}/>
+                {courseArray.length !== 0 && <PrimaryButton2 minWidth={'25vw'} colour={'#912338'} content="Exam" value="exam"
+                                onClick={handleTypeUpdate}/>}
                 <PrimaryButton2 minWidth={'12vw'} colour={'#0072A8'} content="Course" value="course"
                                 onClick={handleTypeUpdate}/>
-                <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
-                                onClick={handleTypeUpdate}/>
+                {courseArray.length !== 0 && <PrimaryButton2 minWidth={'8vw'} colour={'#8CC63E'} content="Study" value="study"
+                                onClick={handleTypeUpdate}/>}
                 <PrimaryButton2 minWidth={'19vw'} colour={'#DA3A16'} content="Workout" value="workout"
                                 onClick={handleTypeUpdate}/>
                 <PrimaryButton2 minWidth={'25vw'} colour={'#DB0272'} content="Appointment" value="appointment"
