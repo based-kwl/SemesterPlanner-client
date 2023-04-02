@@ -69,9 +69,6 @@ export const isSameDate = (date1, date2) => (
     && date1.getDate() === date2.getDate()
 )
 
-export const CalendarDate= ({events, categories}) =>
-{return ({date})=> <DayTile key={date} day={date} event={events} categories={categories}/>}
-
 export const DayTile = ({ day, events, categories }) => {
     const eventsThisDay = events.filter((e) => {
         const event = new Date(e.startDate);

@@ -18,6 +18,7 @@ export default function ImageUpload(props) {
             data.append('img', image);
             axios.post(`${process.env.REACT_APP_BASE_URL}tesseract/img`, data)
                 .then((res) => {
+                    res.data.subject = '';
                     setEvent(res.data);
                     setErrorMessage("Image uploaded!");
 
