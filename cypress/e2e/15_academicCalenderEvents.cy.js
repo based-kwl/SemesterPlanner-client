@@ -11,7 +11,7 @@ describe('Test Course Study Hour Estimator [SP-29]', function() {
 
     it('Confirm start date for Spring Break 2023', function() {
         cy.viewport(500,1000);
-        cy.get('.react-calendar__navigation__label__labelText').click();
+        cy.get('.react-calendar__navigation__label__labelText').click();  //
         cy.get('.react-calendar__year-view__months > :nth-child(2)').click(); //choose Feb
         cy.get('.react-calendar__month-view__days > :nth-child(29)').click(); // Feb 27
         cy.get('[data-test="Start of mid-term break"]').should('exist'); // check event exists
