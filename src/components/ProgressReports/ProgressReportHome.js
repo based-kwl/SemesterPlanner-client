@@ -165,26 +165,26 @@ export default function ProgressReportHome(){
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '2vw', marginRight: '2vw'}}>
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={  <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} onClick={() => { setLink('study-events-monthly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
+                                   <BottomDrawer icon={<Stack sx={{width: '23vw'}} onClick={() => { setLink('study-events-monthly') }} direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} /> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
                                        title={'Monthly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div> }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} onClick={() => { setLink('study-events-weekly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
+                                   <BottomDrawer icon={<Stack sx={{width: '23vw'}} onClick={() => { setLink('study-events-weekly') }} direction="column" alignItems="center" justifyContent="center"> <SchoolIcon style={{color:'#912338'}} /> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
                                        title={'Weekly Study Statistics'} content={renderBarChart(studyStatisticsData, optionsStudyData)} ></BottomDrawer>
                                </div>}/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                                   <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} onClick={() => { setLink('events-monthly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
+                                   <BottomDrawer icon={<Stack sx={{width: '23vw'}} onClick={() => { setLink('events-monthly') }} direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} /> <Typography variant="body2" style={{color:'#912338'}}>Monthly</Typography></Stack>}
                                        title={'Monthly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>
                    }/>
 
                 <StudyRoomChatCard width='23vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={ <div style={{ marginTop: "10px", margin: 'auto', width: '360px', display: "block", justifyContent: "space-between" }}>
-                    <BottomDrawer icon={<Stack direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} onClick={() => { setLink('events-weekly') }}/> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
+                    <BottomDrawer icon={<Stack sx={{width: '23vw'}} onClick={() => { setLink('events-weekly') }} direction="column" alignItems="center" justifyContent="center"> <CategoryIcon style={{color:'#912338'}} /> <Typography variant="body2" style={{color:'#912338'}}>Weekly</Typography></Stack>}
                                        title={'Weekly Category Statistics'} content={renderBarChart(categoryStatisticsData, optionsCategoryData)} ></BottomDrawer>
                                </div>}/>
 

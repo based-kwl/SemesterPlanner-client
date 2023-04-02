@@ -119,10 +119,24 @@ export default function StudyRecap(props) {
         {eventsList.map((item, index) => {
             return (<div key={item._id}>
                 <StudyRoomCard width={'100%'} height={'fit-content'} content={<div style={{
-                    margin: '5px', display: 'flex', alignItems: 'center'
+                    margin: '5px', display: 'flex', alignItems: 'left', flexWrap:'wrap'
                 }}>
-                    Event: {item.eventHeader} Course: {item.subject}{item.catalog} Study
-                    Time: {generateTimePicker(index, handleTimeChange, 'hours')}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
+                    <div>
+                    <div style={{marginRight:'5px'}}>
+                    Event: {item.eventHeader}
+                    </div>
+                    <div style={{marginRight:'5px'}}>
+                    Course: {item.subject} {item.catalog}
+                    </div>
+                    <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                        <div>
+                        Study Time:
+                        </div>
+                        <div>
+                            {generateTimePicker(index, handleTimeChange, 'hours')}hours {generateTimePicker(index, handleTimeChange, 'minutes')}minutes
+                        </div>
+                    </div>
+                    </div>
                 </div>}
                 />
             </div>)
