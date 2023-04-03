@@ -63,7 +63,7 @@ export default function ParticipantsList() {
                     setIsFilePicked(false);
                 })
                 .catch(err => {
-                    setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Request could not be sent' : `${err.response.data}`);
+                    setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'Request could not be sent' : `${err.response.data.message}`);
                 })
                 .finally(() => {
                     setUploadInProgress(false);
