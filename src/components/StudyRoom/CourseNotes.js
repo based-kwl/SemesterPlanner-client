@@ -18,10 +18,6 @@ export default function CourseNotes() {
     const [uploadInProgress, setUploadInProgress] = useState(false);
     const fileListTop = useRef(null);
 
-    function handleErrorMessage(err){
-        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
-    }
-
     function getCourseNotes(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
@@ -39,7 +35,7 @@ export default function CourseNotes() {
     }
 
     function handleDeleteCourseNotes(index) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
             .then(() => {
                 setErrorMessage(null);
 
@@ -88,7 +84,7 @@ export default function CourseNotes() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
             .then(res => {
                 setErrorMessage(null);
 
@@ -119,8 +115,9 @@ export default function CourseNotes() {
     }
 
     useEffect(() => {
-        fileListTop.current?.scrollIntoView({behavior: 'smooth'})
-    }, [fileList])
+        if (!uploadInProgress && !errorMessage)
+            fileListTop.current?.scrollIntoView({behavior: 'smooth'})
+    }, [uploadInProgress])
 
     useMemo(() => {
         getCourseNotes();
@@ -183,7 +180,7 @@ export default function CourseNotes() {
                     <div>
                         <p>Filename: {selectedFile.name}</p>
                         <p>Filetype: {selectedFile.type}</p>
-                        <p>Size: {selectedFile.size} KB</p>
+                        <p>Size: {parseFloat(selectedFile.size / 1024).toFixed(1).toString()} KB</p>
                         <p>
                             Last Modified: {selectedFile.lastModifiedDate.toLocaleDateString()}
                         </p>
@@ -194,7 +191,6 @@ export default function CourseNotes() {
                 <div style={{marginBottom: '10px'}}>
                     <FileSelectButton width={"90vw"} disabled={uploadInProgress} onChange={handleFileSelect} name={'Select File'}/>
                 </div>
-                {/*<div style={{color: 'red'}}>{errorMessage}</div>*/}
                 <div id={"uploadButton"}>
                     <PrimaryButton2 content={"Upload"} colour={'#912338'} width={"90vw"} disable={uploadInProgress}
                                     onClick={handleUploadCourseNotes}/>

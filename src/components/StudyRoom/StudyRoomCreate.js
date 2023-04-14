@@ -83,7 +83,7 @@ export default function RoomCreation() {
                         ))}
                     </div>
                 </div>
-                <PrimaryButton width={'90vw'} content="Create" />
+                <PrimaryButton data_test={'Create'} width={'90vw'} content="Create" />
             </form>
         </React.Fragment>
     )

@@ -27,7 +27,7 @@ describe('Tests for the study room file functionality', function() {
         cy.reload();
         cy.get('[data-test="Settings"]').click();
         cy.get('[data-test="Delete"]').click();
-        cy.wait(1000);
+        cy.wait(2000);
     });
 
     it('Upload a file to a study room', function() {
@@ -57,10 +57,4 @@ describe('Tests for the study room file functionality', function() {
         cy.wait(1000);
         cy.get('[data-test="Delete-test_file.txt"]').should('not.exist');
     })
-
-    // it('Delete the study room', function() {
-    //     cy.get('[data-test="Settings"]').click();
-    //     cy.get('[data-test="Delete"]').click();
-    //     cy.wait(1000);
-    // })
 })
