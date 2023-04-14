@@ -130,7 +130,7 @@ export default function ParticipantsList() {
                     {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
                                                                   height={'80px'}
                                                                   content={<>
-                                                                      <Button style={{
+                                                                      <Button data-test={`${file.filename}`} style={{
                                                                           display: 'flex',
                                                                           justifyContent: 'left',
                                                                           width: '100%',
@@ -158,6 +158,7 @@ export default function ParticipantsList() {
                                                                           </div>
                                                                       </Button>
                                                                       <Button
+                                                                          data-test={`Delete-${file.filename}`}
                                                                           disabled={file.inProgress}
                                                                           style={{color: "black", height: '100%'}}
                                                                           onClick={() => {

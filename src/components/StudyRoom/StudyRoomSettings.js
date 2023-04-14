@@ -54,8 +54,8 @@ export default function StudyRoomSettings() {
     }
 
     //deletes the room in db
-    function handleDelete(e){
-        axios.post(`${process.env.REACT_APP_BASE_URL}room/delete`,{email:roomData.owner, studyRoomID:roomData.studyRoomID})
+    function handleDelete(){
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/`,{data: {email:roomData.owner, studyRoomID:roomData.studyRoomID}})
             .then(() => {
                 navigate("/study-room-home");
             })
@@ -72,7 +72,9 @@ export default function StudyRoomSettings() {
                 <div>
                 <Stack direction='row' spacing={7} marginTop={2}>
                 <PrimaryButton2 width={'41vw'} colour={'#057D78'} content="Update" onClick={handleUpdate} />
+                    <div data-test={'Delete'}>
                 <PrimaryButton2 width={'41vw'} colour={'#912338'} content="Delete" onClick={handleDelete}/>
+                    </div>
                 </Stack>
                 </div>
             </form>

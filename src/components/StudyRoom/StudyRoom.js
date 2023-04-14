@@ -74,26 +74,32 @@ export default function StudyRoom() {
                                bottomLeftRadius='0px' bottomRightRadius='0px' content={<ChatFooter />}/>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1.8vw', marginRight: '1.8vw'}}>
 
-                { /* Drawer left icon */ }
-                <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                { /* Drawer left icon */}
+
+                <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px'
+                                   topRightRadius='0px'
                                    bottomLeftRadius='10px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<DescriptionIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'Course Notes'} content={<CourseNotes />}/></div>}/>
+                ><BottomDrawer icon={<div data-test={'Files'}><DescriptionIcon
+                    style={{color: '#912338', height: '4vh', width: '4vh'}}/></div>}
+                               title={'Course Notes'} content={<CourseNotes/>}/></div>}/>
 
-                { /* Drawer middle icon */ }
+                { /* Drawer middle icon */}
                 <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='0px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
                 ><BottomDrawer icon={<GroupsIcon style={{color: '#912338', height: '6vh', width: '6vh'}}/>}
                                title={'Participants'} content={<ParticipantsList/>}/></div>}/>
 
-                { /* Drawer right icon */ }
-                <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
+                { /* Drawer right icon */}
+
+                <StudyRoomChatCard width='30.5vw' height='7vh' marginTop='2px' topLeftRadius='0px'
+                                   topRightRadius='0px'
                                    bottomLeftRadius='0px' bottomRightRadius='10px' content={<div
                     style={{width: '100%', height: '100%', background: 'none', border: 'none'}}
-                ><BottomDrawer icon={<SettingsIcon style={{color: '#912338', height: '4vh', width: '4vh'}}/>}
-                               title={'settings page'} content={<StudyRoomSettings/>}/>  asda  </div>}/>
+                ><BottomDrawer icon={<div data-test={'Settings'}><SettingsIcon
+                    style={{color: '#912338', height: '4vh', width: '4vh'}}/></div>}
+                               title={'settings page'} content={<StudyRoomSettings/>}/></div>}/>
             </div>
         </React.Fragment>
     ), [roomData]);
