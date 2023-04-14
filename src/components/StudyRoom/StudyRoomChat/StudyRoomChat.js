@@ -1,8 +1,9 @@
 import React from 'react';
-import { ChatMessagesCard } from '../../CustomMUIComponents/CustomCards';
 import Grid from "@mui/material/Grid";
 import { socket } from './Sockets';
 import axios from "axios";
+import {GetAuthentication} from "../../Authentication/Authentification";
+import {MyMessage, OthersMessage} from "./ChatComponents";
 
 export function GetStudyRoomChat(){
 
@@ -10,7 +11,7 @@ export function GetStudyRoomChat(){
     const [messages, setMessages] = React.useState([]);
     const [messageCount, setMessageCount] = React.useState(0)
     React.useEffect(() => {
-        userEmail.current = localStorage.getItem("email");
+        userEmail.current = GetAuthentication().email;
         fetchMessages();
         socket.on("newMessage", listener)
         return () => {
@@ -26,7 +27,6 @@ export function GetStudyRoomChat(){
         const studyRoomId = window.location.href.split("/")[window.location.href.split("/").length - 1];
         axios.get(`${process.env.REACT_APP_BASE_URL}message/bulk/${studyRoomId}/100`)
             .then(res => {
-                console.log(res.data)
                 const messageFromRoom = res.data;
                 const messageReverse = messageFromRoom.reverse();
                 setMessages(messageReverse);
@@ -38,23 +38,8 @@ export function GetStudyRoomChat(){
             })
     }
 
-    const OthersMessage = (data) =>
-        (
-            <div style={{paddingLeft: "10px"}}>
-                <ChatMessagesCard content={data} userType="others"  />
-            </div>
-        );
-
-    const MyMessage = (data) =>
-        (
-            <div style={{paddingLeft: "80px"}}>
-                <ChatMessagesCard content={data} userType="you"  />
-            </div>
-        );
-
     function isMyMessage(message) {
-        const sender = JSON.parse(message.email);
-        return userEmail.current == `"${sender}"`;
+        return userEmail.current === message.email;
     }
 
     const MessagesBubbles = () => (React.useMemo(() => {
@@ -69,9 +54,9 @@ export function GetStudyRoomChat(){
                 flexDirection: 'column-reverse'}} // scroll down to last message
             >
                 <Grid container>
-                    {messages.map((message, index) => {
+                    {messages.map((message) => {
                         return  (
-                            <Grid item key={index} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
+                            <Grid item key={messages.messageID} message sm={12} md={12} sx={{paddingBottom: '12px'}}>
                                 { isMyMessage(message) ? <MyMessage props={message}/> : <OthersMessage props={message}/> }
                             </Grid>
                         )
@@ -82,4 +67,4 @@ export function GetStudyRoomChat(){
     }, [messages]));
 
     return <MessagesBubbles />
-};
+}

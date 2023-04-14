@@ -7,31 +7,31 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import {useState} from "react";
 import {RoomDataComponents, StudyRoomCard} from "./CommonResources";
-
+import {GetAuthentication} from "../Authentication/Authentification";
 
 export default function RoomCreation() {
+    const user = GetAuthentication();
     const navigate = useNavigate();
     const [friends, setFriends] = useState([])
-    const [checked, setChecked] = React.useState([]);
+    const [checked, setChecked] = React.useState([GetAuthentication().email]);
     const [roomData, setRoomData] = React.useState({
         title:'',
         owner:'',
-        color: '',
+        color: '#912338',
         avatarText:'',
         description:'',
-        participants:[],
+        participants:[GetAuthentication().email],
         createdAt:''
     });
 
     React.useEffect(()=> {
-        let email = JSON.parse(localStorage.getItem("email"));
-        setRoomData({...roomData, owner: email})
+        setRoomData({...roomData, owner: user.email})
         fetchData();
         },[])
-    // API call to get the list of friends for the logged in user
+
+    // API call to get the list of friends for the logged-in user
     function fetchData() {
-        const email = JSON.parse(localStorage.getItem("email"));
-        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${email}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}friend/${user.email}`)
             .then(res => {
                 setFriends( res.data);
             })
@@ -45,13 +45,11 @@ export default function RoomCreation() {
         }
         setChecked(updatedList);
         setRoomData({...roomData, participants:updatedList});
+        console.log(updatedList)
     }
 
     const handleRoomCreation = (e) =>{
         e.preventDefault();
-        //add the owner to the list
-        roomData.participants.push(roomData.owner);
-
         //API call the post study room info to create a new room
         axios.post(`${process.env.REACT_APP_BASE_URL}room/`,roomData)
             .then(() => {
@@ -65,13 +63,13 @@ export default function RoomCreation() {
         <React.Fragment>
             <form style={{alignItems: 'center'}} onSubmit={handleRoomCreation}>
                 <RoomDataComponents roomState={roomData} roomStateSetter={setRoomData} />
-                <div style={{width: '90vw', height: '45vh', marginTop: '10px'}}>
+                <div style={{width: '90vw', height: '35vh', marginTop: '10px'}}>
                     <Typography style={{fontWeight: 'bold'}}>
                         Select group members:
                     </Typography>
                     <div style={{display:'flex',flexDirection:'column',alignItems:'center', overflow:'auto', height:'30vh', border:'3px solid rgba(0, 0, 0, 0.05'}}>
                         {friends.map((friend,index) => (
-                            <div key={index} style={{ margin:'-5px'}}>
+                            <div key={friends[index]} style={{ margin:'-5px'}}>
                                 <StudyRoomCard width={'81vw'} height={'40px'}
                                                  content={<> {friend}
                                                      <Checkbox

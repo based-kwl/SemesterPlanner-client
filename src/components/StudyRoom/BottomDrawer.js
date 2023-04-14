@@ -7,10 +7,11 @@ import {grey} from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import {delay} from "../CommonHelperFunctions/CommonHelperFunctions";
 
 const drawerBleeding = 0;
 
-const Root = styled('div')(({theme}) => ({
+const Root = styled('div')(() => ({
     height: '100%'
 }));
 
@@ -32,18 +33,12 @@ function SwipeableEdgeDrawer(props) {
     const toggleDrawer = (newOpen) => async () => {
         setOpen(newOpen);
 
-        if (globalCSS) // if global CSS is set (i.e. drawer is open), wait for 300ms until bottom drawer dismisses before removing global CSS
+        if (globalCSS) { // if global CSS is set (i.e. drawer is open), wait for 300ms until bottom drawer dismisses before removing global CSS
             await delay(300);
-        if (globalCSS) // disabling global CSS when bottom drawer is closed and enabling it when bottom drawer is open
-            setGlobalCSS(false);
-        else
+            setGlobalCSS(false); // disabling global CSS when bottom drawer is closed and enabling it when bottom drawer is open
+        } else
             setGlobalCSS(true);
     };
-
-    // method to create delays in the code
-    const delay = ms => new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
 
     // This is used only for the example
     const container = window !== undefined ? () => window().document.body : undefined;

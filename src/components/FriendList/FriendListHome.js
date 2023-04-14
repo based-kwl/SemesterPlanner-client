@@ -15,7 +15,7 @@ import axios from "axios";
 import {useCallback, useState} from "react";
 import FriendNotification from "./FriendsNotification";
 import GroupIcon from '@mui/icons-material/Group';
-import GetAuthentication from "../Authentication/Authentification";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
 export default function FriendListHome(){
@@ -26,12 +26,11 @@ export default function FriendListHome(){
 
 
     // sends the updated friend list to database
-    function handleUpdate(){
-        axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`,{email:email, friends: friends})
-            .then(() => setFriends((prevState) => {
-                // keep only friends that are in the updated friends array
-                prevState.filter((friend) => friends.some((el) => el === friend))
-            }))
+    function handleUpdate() {
+        axios.post(`${process.env.REACT_APP_BASE_URL}friend/updateFriendList`, {email: email, friends: friends})
+            .then().catch(err => {
+            console.log('Error', err);
+        })
     }
 
     function handleCancel(){
@@ -73,8 +72,10 @@ export default function FriendListHome(){
             <StudyRoomChatCard width='92vw' height='65vh' marginTop='2px' topLeftRadius='0px' topRightRadius='0px'
             bottomLeftRadius='0px' bottomRightRadius='0px' content={
                     <div style={{overflow: 'auto', height: '60vh'}}>
-                        {friends.map((friend, index) => (
-                            <div key={index}>
+                        {friends.map((friend, index) => {
+                            let keyValue = friend[index]
+                            return(
+                            <div key={keyValue}>
                                 <StudyRoomCard data-test={`${friend}`} width={'81vw'} height={'40px'}
                                                content={<> {friend}
                                                    <Button
@@ -84,8 +85,8 @@ export default function FriendListHome(){
                                                        style={{color: '#912338'}}/>
                                                    </Button>
                                                </>}/>
-                            </div>
-                        ))}
+                            </div>)
+                        })}
                     </div>
             }/>
 
@@ -126,7 +127,7 @@ export default function FriendListHome(){
                     <GroupIcon style={{color: '#912338', height: '5vh', width: '5vh'}}/>
                 </Badge>
                 }
-                               title={'Requests Notification'} content={<FriendNotification/>}/></div>}/>
+                               title={'Requests Notification'} content={<FriendNotification friends={friends} setFriends={setFriends} />}/></div>}/>
             </div>
 
             </React.Fragment>

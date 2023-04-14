@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i');
 .events {
-    height: 300px;
-    overflow-y: scroll;
+    max-height: 300px;
+    overflow-y: auto; /* prevents scrollbar from showing if max height is not reached */
 }
 
 .eventCard {
@@ -28,7 +28,7 @@
     max-width: 100%;
     background: white;
     border: 1px solid #ffffff;
-    font-family: Roboto;
+    font-family: Roboto,serif;
 
     line-height: 1.125em;
   }
@@ -67,7 +67,7 @@
   .react-calendar__navigation button {
     min-width: 44px;
     background: none;
-        font-family: Roboto;
+        font-family: Roboto,serif;
 
     font-size: 22px;
     font-weight: bold;
@@ -95,7 +95,7 @@
     justify-content: center;
     font-size: 0.75em;
     font-weight: bold;
-    font-family: Roboto;
+    font-family: Roboto,serif;
 
   }
   .react-calendar__month-view__days__day--weekend {
@@ -107,8 +107,6 @@
   }
   .react-calendar__year-view .react-calendar__tile,
   .react-calendar__decade-view .react-calendar__tile,
-  .react-calendar__century-view .react-calendar__tile {
-  }
 
   .react-calendar .academicHighlight {
     background: #E5A712;
@@ -125,12 +123,9 @@
     background-color: #f0f0f0;
   }
   .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-  }
   .react-calendar__tile--now {
     background: #00ADEF;
     border-radius: 15px;
-
   }
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
@@ -154,16 +149,10 @@
   .react-calendar__tile--active:enabled:focus {
     background: #8e7bee;
   }
-  .react-calendar--selectRange .react-calendar__tile--hover {
-  }
-
   .button_updates{
     color:rgb(87, 84, 84);
     background-color: white; 
     border: 1px solid rgb(204, 198, 198);
-
-
-
   }
   .button_updates:hover {
     background-color: rgb(192, 188, 188); 

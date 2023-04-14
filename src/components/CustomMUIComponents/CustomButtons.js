@@ -17,10 +17,11 @@ export const PrimaryButton = ({content, width, data_test}) => {
 }
 
 
-export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_test}) => {
+export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_test, value}) => {
     return (
         <Button
             data-test={data_test}
+            value={value}
             disabled={disable}
             onClick={onClick}
             variant="contained"
@@ -33,12 +34,13 @@ export const PrimaryButton2 = ({content, width, onClick, colour, disable, data_t
     );
 }
 
-export const FileSelectButton = ({width, onChange, name, disabled}) => {
+export const FileSelectButton = ({width, onChange, name, data_test, disabled}) => {
     return (
         <Button
             onClick={() => {
                 document.getElementById('fileSelectButton').click()
             }}
+            data-test={data_test}
             variant="contained"
             disabled={disabled}
             style={{
@@ -51,19 +53,6 @@ export const FileSelectButton = ({width, onChange, name, disabled}) => {
     );
 }
 
-export const SecondaryButton2 = ({content, width, onClick}) => {
-    return (
-        <Button
-            onClick={onClick}
-            variant="contained"
-            style={{
-                paddingTop: '10px', paddingBottom: '10px',
-                width: width, backgroundColor: '#C8C8C8'
-            }}>
-            {content}
-        </Button>
-    );
-}
 
 export const EditButton = ({content, width, onClick}) => {
     return (
@@ -81,7 +70,7 @@ export const EditButton = ({content, width, onClick}) => {
 export const SelectButton = ({ content, userData, setUserData}) => {
 
     const buttonColor = () => {
-        return (!(content === userData.faculty) ? '#057D78' : '#CBB576');
+        return (content !== userData.faculty ? '#057D78' : '#CBB576');
     }
 
     function handleButtonSelect() {

@@ -1,73 +1,68 @@
 import * as React from 'react';
-import {Radio, RadioGroup, Typography} from "@mui/material";
-import { BackgroundCard, CustomWhiteCard } from '../../CustomMUIComponents/CustomCards';
-import PersistentDrawerLeft from '../../NavDrawer/navDrawer'
-import TextField from '@mui/material/TextField';
-import { useNavigate } from "react-router";
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import {PrimaryButton2, SecondaryButton2 } from '../../CustomMUIComponents/CustomButtons';
-import Grid from "@mui/material/Grid";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import {Typography, Stack} from "@mui/material";
+import {PrimaryButton2} from '../../CustomMUIComponents/CustomButtons';
 import axios from "axios";
-import GetAuthentication from "../../Authentication/Authentification";
+import {GetAuthentication} from "../../Authentication/Authentification";
+import {EventForm, RecurrenceSelection} from '../Custom/CommonInputEventForm';
+import moment from "moment";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useState} from "react";
+import ScheduleEvent from "./ScheduleEvent";
+import {styled} from "@mui/material/styles";
+import MuiToggleButton from "@mui/material/ToggleButton";
 
-
-export default function CreateEvent() {
-    const [isRecurrent, setIsRecurrent] = React.useState(false);
+export default function CreateEvent(props) {
+    const email = GetAuthentication().email;
+    const [imageType, setImageType] = useState('event')
+    const [eventIsVisible,setEventIsVisible] = React.useState(true)
+    const [course, setCourse] = React.useState([]);
     const [eventData, setEventData] = React.useState({
         username: GetAuthentication().username,
-        eventHeader: '',
-        description: '',
+        eventHeader: props.event ? props.event.name : '',
+        description: props.event ? props.event.description : '',
         link: '',
-        startDate: new Date(),
-        endDate: new Date(),
-        startTime: '12:00',
-        endTime: '12:00',
-        reccurence: 'once'
+        startDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : props.date,
+        endDate: props.event ? moment(props.event.date, "DD/MM/YYYY").toDate() : props.date,
+        startTime: props.event ? props.event.startTime : new Date(),
+        endTime: props.event ? props.event.endTime : new Date(),
+        actualStartTime: new Date(),
+        actualEndTime:  new Date(),
+        recurrence: 'once',
+        type: props.event ? props.event.type: '',
+        subject: props.event ? props.event.subject: '',
+        catalog:props.event ? props.event.catalog: ''
     })
-    const [eventError, setEventError] = React.useState({ message: "Error, please try again later", hasError: false });
-    const navigate = useNavigate();
+    const [eventError, setEventError] = React.useState({message: "Error, please try again later", hasError: false});
 
-    const recurrenceSelection = (
-        <FormControl>
-            <RadioGroup row onChange={handleReccurenceChange}>
-                <FormControlLabel defaultChecked={true} value="daily" control={<Radio />} label="Every Day" />
-                <FormControlLabel value="weekly" control={<Radio />} label="Every Week" />
-                <FormControlLabel value="monthly" control={<Radio />} label="Every Month" />
-            </RadioGroup>
+    React.useEffect(()=>{
+        handleCourseList()
+        handleImageType()
+    },[imageType,eventIsVisible])
+    const recurrenceSelection = () => {
+        return RecurrenceSelection(eventData, setEventData);
+    };
 
-            {/** Event End Date */}
-            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        key={"endDate"}
-                        label="Ending date"
-                        inputFormat="MM/DD/YYYY"
-                        value={eventData.endDate}
-                        onChange={(e) => setEventData({...eventData, endDate: e.$d})}
-                        renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                    />
-                </LocalizationProvider>
-            </div>
-        </FormControl>
-    );
+    React.useEffect(()=>{
+        handleCourseList()
+    },[])
 
-
-
-    function handleReccurenceChange(e) {
-        setEventData({ ...eventData, reccurence: e.target.value})
+    function handleCourseList(){
+        axios.get(`${process.env.REACT_APP_BASE_URL}student/courses/${email}`)
+            .then(res => {
+                setCourse(res.data.courses);
+            })
+            .catch(err => {
+                console.log('Error', err);
+            })
     }
 
     function handleEvent() {
-        // TODO:  validate user inputs if have time
-        navigate('/calendar');
         axios.post(`${process.env.REACT_APP_BASE_URL}events/add`, eventData)
-            .then(() => {
-                navigate('/calendar');
+            .then((res) => {
+                document.elementFromPoint(0, 0).click();
+
+                if (props.onDrawerClose)
+                    props.onDrawerClose(res.data, 2);
             })
             .catch(err => {
                 setEventError({ ...eventError, message: "Error connecting to database. " + err });
@@ -76,29 +71,8 @@ export default function CreateEvent() {
     }
 
     function handleCancel() {
-        navigate('/calendar')
+        document.elementFromPoint(0, 0).click();
     }
-
-    function handleEventHeaderChange(e) {
-        setEventData( {...eventData, eventHeader: e.target.value })
-    }
-
-    function handleDescriptionChange(e) {
-        setEventData({ ...eventData, description: e.target.value })
-    }
-
-    function handleStartDateChange(e) {
-        setEventData({ ...eventData, startDate: e.$d })
-    }
-
-    function handleStartTimeChange(e) {
-        setEventData({ ...eventData, startTime: e.target.value })
-    }
-
-    function handleEndTimeChange(e) {
-        setEventData({ ...eventData, endTime: e.target.value })
-    }
-
 
     const PageError = eventError.hasError ? (
         <Typography align="center" color="#DA3A16">
@@ -106,150 +80,75 @@ export default function CreateEvent() {
         </Typography>
     ) : null;
 
-    function handleIsReccurentChange() {
-        setIsRecurrent((prev) =>  !prev);
-    }
-
     const buttons = (
         <React.Fragment>
-            <div style={{ paddingTop: '20px'}}>
-                <PrimaryButton2 width='305px' colour={'#912338'} content="Add" onClick={handleEvent} />
-            </div>
-            <div style={{ paddingTop: '20px'}}>
-                <SecondaryButton2 width='305px' content="Cancel" onClick={handleCancel} />
-            </div>
+            <Stack justifyContent="center"
+                   alignItems="center"
+                   spacing={3}
+                   width='100%'
+                   direction="row">
+                <PrimaryButton2 data_test={"addButton"} width={'41vw'} colour={'#912338'} content="Add" onClick={handleEvent}/>
+                <PrimaryButton2 width={'41vw'} colour={'#C8C8C8'} content="Cancel" onClick={handleCancel}/>
+            </Stack>
         </React.Fragment>
     );
 
+    function handleImageType(e, newImageType){
+        if(newImageType != null){
+            setImageType(newImageType)
+        }
+        if(imageType==='event'){
+            setEventIsVisible(true)
+        }
+        else if (imageType ==='schedule'){
+            setEventIsVisible(false)
+        }
+    }
+    const ToggleButton = styled(MuiToggleButton)({
+        "&.Mui-selected, &.Mui-selected:hover": {
+            color: "white",
+            backgroundColor: '#0072A8'
+        }
+    });
 
-    const addEventForm = (
-        <React.Fragment>
-            <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
-                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
-                <Typography align='center' style={{ fontFamily: 'Roboto', fontSize: '30px', fontWeight: 'bold' }}>
-                    Add New Event
-                </Typography>
-                <div align='center' style={{ paddingTop: '16px', paddingBottom: '20px' }}>
-
-                    {/** Event name */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='eventHeader'
-                            value={eventData.eventHeader}
-                            required
-                            label="Event Name"
-                            variant='outlined'
-                            onChange={handleEventHeaderChange}
-                        />
-                    </div>
-
-                    {/** Event description */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='description'
-                            value={eventData.description}
-                            label="Description"
-                            variant='outlined'
-                            onChange={handleDescriptionChange}
-                        />
-                    </div>
-
-                    {/** Event link */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <TextField
-                            fullWidth
-                            id='eventLink'
-                            value={eventData.link}
-                            required
-                            label="Event Link"
-                            variant='outlined'
-                            onChange={(e) => setEventData({ ...eventData, link: e.target.value})}
-                        />
-                    </div>
-
-
-                    {/** Event Start Date */}
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                        <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                            <MobileDatePicker
-                                key={"startDate"}
-                                label="Starting date"
-                                inputFormat="MM/DD/YYYY"
-                                value={eventData.startDate}
-                                onChange={handleStartDateChange}
-                                renderInput={(params) => <TextField {...params}  sx={{width: '100%'}}/>}
-                            />
-                        </LocalizationProvider>
-                    </div>
-
-                    <div style={{ paddingTop: '10px', paddingBottom: '10px'}}>
-                        <Grid container spacing={2} alignItems="flex-end">
-                            {/** Event Start Time */}
-                            <Grid item sm={6} xs={6} md={6} key={1}>
-                                    <TextField
-                                        id="startTime"
-                                        label="Start Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleStartTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
-
-                            {/** Event End Time */}
-                            <Grid item sm={6} xs={6} md={6} key={2}>
-                                    <TextField
-                                        id="endTime"
-                                        label="EndTime Time"
-                                        type="time"
-                                        defaultValue="12:00"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        inputProps={{
-                                            step: 300, // 5 min
-                                        }}
-                                        onChange={handleEndTimeChange}
-                                        sx={{ width: '100%'}}
-                                    />
-                                </Grid>
-                        </Grid>
-                    </div>
-                </div>
-
-                <FormControlLabel sx={{display: 'block'}} label="Recurrent" control={
-                    <Switch
-                        sx={{color: '#912338'}}
-                        checked={isRecurrent}
-                        onChange={handleIsReccurentChange}
-                    />
-                }/>
-                <div>{ isRecurrent && recurrenceSelection }</div>
-                <div>{ buttons }</div>
-            </form>
-        </React.Fragment>
+    const toggleButton = (
+        <ToggleButtonGroup
+            size="small"
+            value={imageType}
+            exclusive
+            onChange={handleImageType}
+            aria-label="image_type"
+        >
+            <ToggleButton value="event" aria-label="event">
+                Event
+            </ToggleButton>
+            <ToggleButton value="schedule" aria-label="schedule">
+                Schedule
+            </ToggleButton>
+        </ToggleButtonGroup>
     )
 
-    const addEventCard = (
-        <React.Fragment>
-            <CustomWhiteCard width='326px' height='840px' marginTop='50px' content={addEventForm} />
-        </React.Fragment>
-    )
-
+    const recurrence = recurrenceSelection();
     return (
         <React.Fragment>
-            <PersistentDrawerLeft />
-            <div style={{ paddingTop: '60px' }}>
-                <BackgroundCard width='372px' height='900px'  content={addEventCard} />
+            <div align='center'>
+            {toggleButton}
             </div>
+            {eventIsVisible?
+            <form style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>{PageError}</div>
+
+                <div align='center' style={{
+                    overflow: 'auto',
+                    paddingTop: '10px',
+                    width: '97vw',
+                    height: '60vh'
+                }}>
+                    <EventForm eventState={eventData} eventStateSetter={setEventData} courseArray={course}/>
+                    <div> {recurrence} </div>
+                </div>
+                <div style={{ paddingTop: '20px'}}>{buttons}</div>
+            </form> : <ScheduleEvent/>}
         </React.Fragment>
-    );
+    )
 }

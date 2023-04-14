@@ -9,7 +9,7 @@ import axios from "axios";
 import {Buffer} from 'buffer'
 import {StudyRoomCard} from "./CommonResources";
 
-export default function ParticipantsList() {
+export default function CourseNotes() {
     const studyRoomID = window.location.href.split("/")[window.location.href.split("/").length - 1];
     const [fileList, setFileList] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
@@ -18,7 +18,11 @@ export default function ParticipantsList() {
     const [uploadInProgress, setUploadInProgress] = useState(false);
     const fileListTop = useRef(null);
 
-    function getCourseNotes() {
+    function handleErrorMessage(err){
+        setErrorMessage(`${err}`.substring(44) === (401).toString() ? 'request could not be sent' : `${err}`)
+    }
+
+    function getCourseNotes(){
         axios.get(`${process.env.REACT_APP_BASE_URL}room/files/${studyRoomID}`)
             .then(res => {
                 setErrorMessage(null);
@@ -35,7 +39,7 @@ export default function ParticipantsList() {
     }
 
     function handleDeleteCourseNotes(index) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
             .then(() => {
                 setErrorMessage(null);
 
@@ -84,7 +88,7 @@ export default function ParticipantsList() {
     };
 
     function handleFileClick(index) {
-        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNoteID}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}room/file/${fileList[index].courseNotesID}`)
             .then(res => {
                 setErrorMessage(null);
 
@@ -127,44 +131,44 @@ export default function ParticipantsList() {
             <div style={{width: '90vw'}}>
                 <div style={{overflow: "auto", maxHeight: `${isFilePicked ? "43vh" : "60vh"}`}}>
                     <div ref={fileListTop}/>
-                    {fileList.map((file, index) => <StudyRoomCard id={index} key={index} width={'90vw'}
-                                                                  height={'80px'}
-                                                                  content={<>
-                                                                      <Button data-test={`${file.filename}`} style={{
-                                                                          display: 'flex',
-                                                                          justifyContent: 'left',
-                                                                          width: '100%',
-                                                                          color: 'black'
-                                                                      }} onClick={() => {
-                                                                          toggleProgress(index);
-                                                                          handleFileClick(index)
-                                                                      }}>
-                                                                          <div>
-                                                                              <p style={{
-                                                                                  margin: "0px",
-                                                                                  display: 'flex',
-                                                                                  alignContent: 'left'
-                                                                              }}>name: {file.filename}</p>
-                                                                              <p style={{
-                                                                                  margin: "0px",
-                                                                                  display: 'flex',
-                                                                                  alignContent: 'left'
-                                                                              }}>size: {parseFloat(file.filesize).toFixed(1).toString()} KB</p>
-                                                                              <p style={{
-                                                                                  margin: "0px",
-                                                                                  display: 'flex',
-                                                                                  alignContent: 'left'
-                                                                              }}>uploaded: {file.createdAt.split("T")[0]}</p>
-                                                                          </div>
-                                                                      </Button>
-                                                                      <Button
-                                                                          data-test={`Delete-${file.filename}`}
-                                                                          disabled={file.inProgress}
-                                                                          style={{color: "black", height: '100%'}}
-                                                                          onClick={() => {
-                                                                              handleDeleteCourseNotes(index);
-                                                                          }}>{file.inProgress ? <CircularProgress size={25} /> : <ClearIcon
-                                                                          style={{color: '#912338'}}/>}</Button></>}/>)}
+                    {fileList.map((file, index) => <StudyRoomCard id={index} key={file._id} width={'90vw'}
+                                                             height={'80px'}
+                                                             content={<>
+                                                                 <Button data-test={`${file.filename}`} style={{
+                                                                     display: 'flex',
+                                                                     justifyContent: 'left',
+                                                                     width: '100%',
+                                                                     color: 'black'
+                                                                 }} onClick={() => {
+                                                                     toggleProgress(index);
+                                                                     handleFileClick(index);
+                                                                 }}>
+                                                                     <div>
+                                                                         <p style={{
+                                                                             margin: "0px",
+                                                                             display: 'flex',
+                                                                             alignContent: 'left'
+                                                                         }}>name: {file.filename}</p>
+                                                                         <p style={{
+                                                                             margin: "0px",
+                                                                             display: 'flex',
+                                                                             alignContent: 'left'
+                                                                         }}>size: {parseFloat(file.filesize).toFixed(1).toString()} KB</p>
+                                                                         <p style={{
+                                                                             margin: "0px",
+                                                                             display: 'flex',
+                                                                             alignContent: 'left'
+                                                                         }}>uploaded: {file.createdAt.split("T")[0]}</p>
+                                                                     </div>
+                                                                 </Button>
+                                                                 <Button
+                                                                     data-test={`Delete-${file.filename}`}
+                                                                     disabled={file.inProgress}
+                                                                     style={{color: "black", height: '100%'}}
+                                                                     onClick={() => {
+                                                                         handleDeleteCourseNotes(index);
+                                                                     }}>{file.inProgress ? <CircularProgress size={25} /> : <ClearIcon
+                                                                     style={{color: '#912338'}}/>}</Button></>}/>)}
                 </div>
             </div>
             <div style={{
@@ -179,7 +183,7 @@ export default function ParticipantsList() {
                     <div>
                         <p>Filename: {selectedFile.name}</p>
                         <p>Filetype: {selectedFile.type}</p>
-                        <p>Size: {(selectedFile.size / 1024).toFixed(1).toString()} KB</p>
+                        <p>Size: {selectedFile.size} KB</p>
                         <p>
                             Last Modified: {selectedFile.lastModifiedDate.toLocaleDateString()}
                         </p>

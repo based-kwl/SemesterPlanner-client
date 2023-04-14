@@ -6,16 +6,12 @@ import Button from "@mui/material/Button";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
-import GetAuthentication from "../Authentication/Authentification";
-import {useState} from "react";
+import {GetAuthentication} from "../Authentication/Authentification";
 
 
-export default function FriendNotification() {
+export default function FriendNotification(props) {
     const [requestSent, setRequestSent] = React.useState([]);
     const [requestReceived, setRequestReceived] = React.useState([]);
-    const [loadingCancel,setLoadingCancel] = useState(false);
-    const [loadingReject,setLoadingReject] = useState(false);
-    const [loadingAccept,setLoadingAccept] = useState(false);
     const ownerEmail = GetAuthentication().email;
 
     function handleCancel(index){
@@ -25,8 +21,6 @@ export default function FriendNotification() {
                 setRequestSent((prevState) => prevState.filter(request => request !== requestSent[index]))
             })
             .catch(err => {console.log('Error:', err)});
-        setLoadingCancel(true);
-
     }
 
     function handleReject(index){
@@ -36,16 +30,17 @@ export default function FriendNotification() {
                 setRequestReceived((prevState) => prevState.filter((request) => request._id !== requestReceived[index]._id))
             })
             .catch(err => {console.log('Error:', err)});
-        setLoadingReject(true);
     }
 
     function handleAccept(index){
         const id = requestReceived[index]._id;
+        console.log(requestReceived[index])
         axios.post(`${process.env.REACT_APP_BASE_URL}friend/answerFriendRequest`, {answer:"accepted",email: ownerEmail, requestId:id})
             .then(() => {
+                setRequestReceived((prevState) => prevState.filter((request) => request._id !== requestReceived[index]._id))
+                props.setFriends([...props.friends, requestReceived[index].senderEmail])
             })
             .catch(err => {console.log('Error:', err)});
-        setLoadingAccept(true);
     }
 
     React.useEffect( ()=>{
@@ -64,9 +59,9 @@ export default function FriendNotification() {
     const friendNotification = (
         <React.Fragment>
             <Typography variant="body1" marginBottom="10px"> Friend Request Sent</Typography>
-            <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px'}}>
+            <div style={{overflow: 'auto', height: '30vh', marginBottom:'25px', width: '81vw'}}>
                 {requestSent.map((sent, index) => (
-                    <div key={index}>
+                    <div key={sent._id}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {sent.receiverEmail}
                                            <Button
@@ -84,7 +79,7 @@ export default function FriendNotification() {
 
             <div style={{overflow: 'auto', height: '30vh'}}>
                 {requestReceived && requestReceived.map((received, index) => (
-                    <div key={index}>
+                    <div key={received._id}>
                         <StudyRoomCard width={'81vw'} height={'40px'}
                                        content={<> {received.senderEmail}
                                        <Stack direction="row" >

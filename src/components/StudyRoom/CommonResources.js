@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 
 export function RoomDataComponents({roomState, roomStateSetter}) {
     function SetAvatarText(t) {
-        let finalText = '';
+        let finalText;
         let displayText = t.split(' ').map(word => word[0]).join('');
 
         if (displayText.length > 4) {
@@ -29,7 +29,7 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
         roomStateSetter({...roomState, description: e.target.value});
     }
 
-    const colourStack = (
+    return (
         <>
             <TextField
                 fullWidth
@@ -98,13 +98,13 @@ export function RoomDataComponents({roomState, roomStateSetter}) {
             />
         </>
     )
-
-    return colourStack;
 }
 
-export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0'}) => {
+export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgroundColor='#F0F0F0',data_test}) => {
     return (
-        <Card variant='outlined' style={{
+        <Card variant='outlined'
+              data-test={data_test}
+              style={{
             display: 'flex',
             flexDirection:'row',
             width: width,
@@ -114,6 +114,28 @@ export const StudyRoomCard = ({width, height, content,paddingLeft='10px', backgr
             paddingLeft: paddingLeft,
             justifyContent:'space-between',
             alignItems: 'center',
+        }}>
+            {content}
+        </Card>
+    )
+}
+
+export const CourseCard = ({width, height, content, backgroundColor='#F0F0F0'}) => {
+    return (
+        <Card variant='outlined' style={{
+            display: 'flex',
+            flexDirection:'row',
+            width: width,
+            height:  height,
+            backgroundColor: backgroundColor,
+            justifyContent:'space-between',
+            alignItems: 'center',
+            paddingTop:'2%',
+            paddingBottom:'2%',
+            paddingLeft:'1%',
+            paddingRight:'1%',
+            // marginBottom:'4%'
+
         }}>
             {content}
         </Card>

@@ -59,7 +59,7 @@ export const StudyRoomChatCard = ({width, height, marginTop,topLeftRadius, topRi
 export const EventCard = ({ width, height, marginTop, justifyContent, content, backgroundColor }) => {
     return (
         <Card style={{
-            borderRadius: '15px',
+            borderRadius: '0px',
             margin: 'auto',
             alignItems: 'center',
             display: 'flex',
@@ -73,10 +73,46 @@ export const EventCard = ({ width, height, marginTop, justifyContent, content, b
 
         }} variant='outlined'>
             {content}
+
         </Card>
     );
 }
 
+function renderSwitch(type){
+    switch (type){
+        case 'course':
+            return '#0072A8'
+        case 'study':
+            return '#8CC63E'
+        case 'workout':
+            return '#DA3A16'
+        case 'appointment':
+            return '#DB0272'
+        case 'exam':
+            return '#912338'
+        default:
+            return 'black'
+    }
+}
+export const EventTypeCard = ({ width, height, marginTop, content, backgroundColor }) => {
+    return (
+        <Card style={{
+            borderRadius: '0px',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'auto',
+            paddingTop: '8px',
+            overflow: "initial",
+            margin: 'auto',
+            width: width,
+            height: height,
+            marginTop: marginTop,
+            backgroundColor: renderSwitch(backgroundColor)
+        }} variant='outlined' >
+           {content}
+        </Card>
+    );
+}
 export const ParticipantCard = ({width, height, content}) => {
     return (
         <Card variant='outlined' style={{
@@ -122,7 +158,7 @@ export const ChatMessagesCard = (props) => {
     let textColor;
     let textSenderColor;
 
-    if (props.userType == "others") {
+    if (props.userType === "others") {
         backgroundColor = "#F0F0F0"
         textColor = "#000000"
         textSenderColor = "#E5A712"
@@ -179,4 +215,21 @@ export const ColorEventCard = ({  width, backgroundColor, content, height }) => 
         </Card>
     )
 }
-
+export const TimeCard = ({content,width}) => {
+    return (
+        <Card style={{
+            width:width,
+            paddingTop:'5px',
+            paddingBottom:'5px',
+            backgroundColor:'#F0F0F0',
+            marginBottom: '15px',
+            display: 'flex',
+            height: 'fit-content',
+            borderRadius:'5px',
+            alignItems:'center',
+            justifyContent:'center'
+        }} variant='outlined'>
+            {content}
+        </Card>
+    );
+}

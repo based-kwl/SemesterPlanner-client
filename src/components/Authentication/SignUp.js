@@ -27,10 +27,12 @@ export default function SignUp() {
     function handleRegistration() {
         axios.post(`${process.env.REACT_APP_BASE_URL}student/add`, userData)
             .then(()=> {
-                navigate('/login');
+                localStorage.setItem("username", JSON.stringify(userData.username));
+                localStorage.setItem("email", JSON.stringify(userData.email));
+                navigate('/calendar');
             })
             .catch(err => {
-                setRegistrationError({ ...registrationError, message: err.message});
+                setRegistrationError({ ...registrationError, message: err.response.data.errors[0]});
         });
     }
 
@@ -140,7 +142,7 @@ export default function SignUp() {
                                id='confirmPassword'
                                type='password'
                                required
-                               error={!confirmPassword.isEqualToPassword && !(confirmPassword.password === '')}
+                               error={!confirmPassword.isEqualToPassword && confirmPassword.password !== ''}
                                helperText={confirmPassword.isEqualToPassword || confirmPassword.password === '' ? '' : 'Passwords must match'}
                                label="Confirm Password"
                                variant='outlined'

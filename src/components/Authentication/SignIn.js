@@ -15,7 +15,6 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-    // const [login, setLogin] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,8 +29,9 @@ export default function SignIn() {
             email,
             password,
         }
-
+    
         //API call
+      
         axios.post(`${process.env.REACT_APP_BASE_URL}login/`, user)
             .then(res => {
                 SetLocalStorage(res);
@@ -120,5 +120,4 @@ export default function SignIn() {
 export function SetLocalStorage(res) {
     localStorage.setItem("username", JSON.stringify(res.data.profile.username));
     localStorage.setItem("email", JSON.stringify(res.data.profile.email));
-    localStorage.setItem("token", JSON.stringify(res.data.token));
 }
